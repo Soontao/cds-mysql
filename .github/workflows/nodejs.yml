@@ -55,7 +55,7 @@ jobs:
         env:
           CI: true
           MYSQL_HOST: "127.0.0.1"
-          MYSQL_PORT: "3306"
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
 
       - name: upload coverage
         uses: codecov/codecov-action@v1
