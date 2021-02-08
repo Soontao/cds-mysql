@@ -127,7 +127,8 @@ export class MySQLDatabase extends DatabaseService {
    * deploy
    */
   // REVISIT: make tenant aware
-  async deploy(model, options: any = {}) {
+  async deploy(model: import("@sap/cds/apis/csn").CSN, options: any = {}) {
+
     const createEntities = cds.compile.to.sql(model);
     if (!createEntities || createEntities.length === 0) return; // > nothing to deploy
 

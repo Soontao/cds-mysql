@@ -1,6 +1,6 @@
-const SelectBuilder = require('@sap/cds-runtime/lib/db/sql-builder').SelectBuilder;
+import { SelectBuilder } from '@sap/cds-runtime/lib/db/sql-builder';
 
-class CustomSelectBuilder extends SelectBuilder {
+export class CustomSelectBuilder extends SelectBuilder {
   get ReferenceBuilder() {
     const ReferenceBuilder = require('./CustomReferenceBuilder');
     Object.defineProperty(this, 'ReferenceBuilder', { value: ReferenceBuilder });
@@ -33,4 +33,3 @@ class CustomSelectBuilder extends SelectBuilder {
   _forUpdate() { }
 }
 
-module.exports = CustomSelectBuilder;

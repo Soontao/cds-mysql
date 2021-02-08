@@ -1,4 +1,5 @@
-const FunctionBuilder = require('@sap/cds-runtime/lib/db/sql-builder').FunctionBuilder;
+// @ts-nocheck
+import { FunctionBuilder } from '@sap/cds-runtime/lib/db/sql-builder';
 
 const dateTimeFunctions = new Map([
   ['year', "'%Y'"],
@@ -10,7 +11,7 @@ const dateTimeFunctions = new Map([
 ]);
 const standadFunctions = ['locate', 'substring', 'to_date', 'to_time'];
 
-class CustomFunctionBuilder extends FunctionBuilder {
+export class CustomFunctionBuilder extends FunctionBuilder {
   get ExpressionBuilder() {
     const ExpressionBuilder = require('./CustomExpressionBuilder');
     Object.defineProperty(this, 'ExpressionBuilder', { value: ExpressionBuilder });
@@ -114,4 +115,3 @@ class CustomFunctionBuilder extends FunctionBuilder {
   }
 }
 
-module.exports = CustomFunctionBuilder;

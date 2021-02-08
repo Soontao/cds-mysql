@@ -26,4 +26,4 @@ const dependencies = {
   }
 };
 
-module.exports = dependencies;
+export default dependencies;

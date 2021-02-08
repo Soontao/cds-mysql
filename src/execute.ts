@@ -1,10 +1,10 @@
 // @ts-nocheck
-const { TYPE_CONVERSION_MAP } = require('./conversion');
-const CustomBuilder = require('./customBuilder');
-const { sqlFactory } = require('@sap/cds-runtime/lib/db/sql-builder');
-const { getPostProcessMapper, postProcess } = require('@sap/cds-runtime/lib/db/data-conversion/post-processing');
-const { createJoinCQNFromExpanded, hasExpand, rawToExpanded } = require('@sap/cds-runtime/lib/db/expand');
-const { Readable } = require('stream');
+import { getPostProcessMapper, postProcess } from '@sap/cds-runtime/lib/db/data-conversion/post-processing';
+import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from '@sap/cds-runtime/lib/db/expand';
+import { sqlFactory } from '@sap/cds-runtime/lib/db/sql-builder';
+import { Readable } from 'stream';
+import { TYPE_CONVERSION_MAP } from './conversion';
+import CustomBuilder from './customBuilder';
 
 const cds = global.cds || require('@sap/cds/lib');
 const LOG = (cds.log || cds.debug)('mysql');

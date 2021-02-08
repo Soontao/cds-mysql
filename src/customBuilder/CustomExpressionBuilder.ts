@@ -1,4 +1,4 @@
-const ExpressionBuilder = require('@sap/cds-runtime/lib/db/sql-builder').ExpressionBuilder;
+import { ExpressionBuilder } from '@sap/cds-runtime/lib/db/sql-builder';
 
 class CustomExpressionBuilder extends ExpressionBuilder {
   get ReferenceBuilder() {

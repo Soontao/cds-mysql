@@ -1,6 +1,6 @@
-const UpdateBuilder = require('@sap/cds-runtime/lib/db/sql-builder').UpdateBuilder;
+import { UpdateBuilder } from '@sap/cds-runtime/lib/db/sql-builder';
 
-class CustomUpdateBuilder extends UpdateBuilder {
+export class CustomUpdateBuilder extends UpdateBuilder {
   get ReferenceBuilder() {
     const ReferenceBuilder = require('./CustomReferenceBuilder');
     Object.defineProperty(this, 'ReferenceBuilder', { value: ReferenceBuilder });
@@ -13,4 +13,3 @@ class CustomUpdateBuilder extends UpdateBuilder {
   }
 }
 
-module.exports = CustomUpdateBuilder;
