@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base",
+  "include": [
+    "lib"
+  ],
+  "exclude": [
+    "node_modules",
+    "src",
+  ]
+}

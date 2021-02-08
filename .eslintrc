@@ -1,0 +1,40 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2016,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "impliedStrict": true,
+      "objectLiteralDuplicateProperties": false
+    }
+  },
+  "extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+  ],
+  "rules": {
+    "semi": [
+      2
+    ], // must end with semi
+    "no-extra-semi": [
+      0
+    ],
+    "@typescript-eslint/no-explicit-any": [
+      0
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ]
+  }
+}
