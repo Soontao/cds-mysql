@@ -1,4 +1,4 @@
-const SelectBuilder = require('../../db/sql-builder').SelectBuilder;
+const SelectBuilder = require('@sap/cds-runtime/lib/db/sql-builder').SelectBuilder;
 
 class CustomSelectBuilder extends SelectBuilder {
   get ReferenceBuilder() {

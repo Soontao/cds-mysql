@@ -1,4 +1,4 @@
-const DeleteBuilder = require('../../db/sql-builder').DeleteBuilder;
+const DeleteBuilder = require('@sap/cds-runtime/lib/db/sql-builder').DeleteBuilder;
 
 class CustomDeleteBuilder extends DeleteBuilder {
   get ReferenceBuilder() {

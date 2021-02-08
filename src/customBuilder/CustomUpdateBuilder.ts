@@ -1,4 +1,4 @@
-const UpdateBuilder = require('../../db/sql-builder').UpdateBuilder;
+const UpdateBuilder = require('@sap/cds-runtime/lib/db/sql-builder').UpdateBuilder;
 
 class CustomUpdateBuilder extends UpdateBuilder {
   get ReferenceBuilder() {

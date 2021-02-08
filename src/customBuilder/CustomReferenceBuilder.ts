@@ -1,4 +1,4 @@
-const ReferenceBuilder = require('../../db/sql-builder').ReferenceBuilder;
+const ReferenceBuilder = require('@sap/cds-runtime/lib/db/sql-builder').ReferenceBuilder;
 
 class CustomReferenceBuilder extends ReferenceBuilder {
   get FunctionBuilder() {

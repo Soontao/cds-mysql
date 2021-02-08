@@ -1,4 +1,4 @@
-const FunctionBuilder = require('../../db/sql-builder').FunctionBuilder;
+const FunctionBuilder = require('@sap/cds-runtime/lib/db/sql-builder').FunctionBuilder;
 
 const dateTimeFunctions = new Map([
   ['year', "'%Y'"],

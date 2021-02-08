@@ -1,15 +1,13 @@
-const cds = global.cds || require('@sap/cds/lib');
-const DatabaseService = require('@sap/cds-runtime/lib/db/Service');
+// @ts-nocheck
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
+import DatabaseService from '@sap/cds-runtime/lib/db/Service';
+import cds from '@sap/cds/lib';
 import { createPool, Pool } from "mysql2";
 import convertAssocToOneManaged from './convertAssocToOneManaged';
 import execute from './execute';
 import localized from './localized';
 
-/*
- * the service
- */
-module.exports = class MySQLDatabase extends DatabaseService {
+export class MySQLDatabase extends DatabaseService {
   constructor(...args: any[]) {
     super(...args);
 
