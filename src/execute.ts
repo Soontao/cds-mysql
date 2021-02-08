@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { isEmpty } from '@newdash/newdash';
 import { getPostProcessMapper, postProcess } from '@sap/cds-runtime/lib/db/data-conversion/post-processing';
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from '@sap/cds-runtime/lib/db/expand';
 import { sqlFactory } from '@sap/cds-runtime/lib/db/sql-builder';
@@ -24,26 +25,13 @@ function _executeSimpleSQL(dbc: Connection, sql, values) {
   return dbc.promise().query(sql, values);
 }
 
-function executeSelectSQL(dbc, sql, values, isOne, postMapper) {
+async function executeSelectSQL(dbc: Connection, sql, values, isOne, postMapper) {
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-  return new Promise((resolve, reject) => {
-    dbc[isOne ? 'get' : 'all'](sql, values, (err, result) => {
-      if (err) {
-        err.query = sql;
-        return reject(err);
-      }
-
-      // REVISIT
-      // .get returns undefined if nothing in db
-      // our coding expects the result to be null if isOne does not return anything
-      // REVISIT: -> we should definitely fix that coding which expects null
-      if (isOne && result === undefined) {
-        result = null;
-      }
-
-      resolve(postProcess(result, postMapper));
-    });
-  });
+  const results = await dbc.promise().query(sql, values);
+  if (isOne && isEmpty(results)) {
+    return null;
+  }
+  return postProcess(results, postMapper);
 }
 
 function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {

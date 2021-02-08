@@ -57,3 +57,6 @@ jobs:
           CI: true
           MYSQL_HOST: "127.0.0.1"
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          MYSQL_DATABASE: cds_test
+          MYSQL_USER: cds_test
+          MYSQL_PASSWORD: cds_test
