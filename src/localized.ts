@@ -1,5 +1,5 @@
-const { ensureUnlocalized } = require('../common/utils/draft');
-const { redirect } = require('../db/utils/localized');
+const { ensureUnlocalized } = require('@sap/cds-runtime/lib/common/utils/draft');
+const { redirect } = require('@sap/cds-runtime/lib/db/utils/localized');
 
 // REVISIT: this is actually configurable
 // there is no localized.en.<name>

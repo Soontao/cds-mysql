@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "description": "SAP CAP cds mysql adapter",
   "scripts": {
-    "test": "jest --detectOpenHandles --passWithNoTests",
+    "test": "jest --detectOpenHandles --passWithNoTests --forceExit",
     "prebuild": "rimraf lib",
     "build": "tsc",
     "postbuild": "tsc --noEmit --p tsconfig.lib.json",

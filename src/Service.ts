@@ -34,7 +34,6 @@ export class MySQLDatabase extends DatabaseService {
 
   init() {
 
-    this._pool = createPool(this.options);
     /*
      * before
      */

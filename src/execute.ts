@@ -2,6 +2,7 @@
 import { getPostProcessMapper, postProcess } from '@sap/cds-runtime/lib/db/data-conversion/post-processing';
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from '@sap/cds-runtime/lib/db/expand';
 import { sqlFactory } from '@sap/cds-runtime/lib/db/sql-builder';
+import { Connection } from 'mysql2';
 import { Readable } from 'stream';
 import { TYPE_CONVERSION_MAP } from './conversion';
 import CustomBuilder from './customBuilder';
@@ -18,17 +19,9 @@ const colored = {
   ROLLBACK: '\x1b[1m\x1b[91mROLLBACK\x1b[0m'
 };
 
-function _executeSimpleSQL(dbc, sql, values) {
+function _executeSimpleSQL(dbc: Connection, sql, values) {
   LOG && LOG._debug && LOG.debug(`${colored[sql] || sql} ${values && values.length ? JSON.stringify(values) : ''}`);
-  return new Promise((resolve, reject) => {
-    dbc.run(sql, values, function (err) {
-      if (err) {
-        err.query = sql;
-        return reject(err);
-      }
-      resolve(this.changes);
-    });
-  });
+  return dbc.promise().query(sql, values);
 }
 
 function executeSelectSQL(dbc, sql, values, isOne, postMapper) {
@@ -111,14 +104,15 @@ function executeDeleteCQN(model, dbc, cqn, user, locale, txTimestamp) {
   return _executeSimpleSQL(dbc, sql, values);
 }
 
-const _executeBulkInsertSQL = (dbc, sql, values) =>
+const _executeBulkInsertSQL = (dbc: Connection, sql, values) =>
   new Promise((resolve, reject) => {
     if (!Array.isArray(values)) {
       return reject(new Error(`Cannot execute SQL statement. Invalid values provided: ${JSON.stringify(values)}`));
     }
 
     LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-    const stmt = dbc.prepare(sql, err => {
+
+    dbc.prepare(sql, (err, stmt) => {
       if (err) {
         err.query = sql;
         return reject(err);
@@ -133,17 +127,21 @@ const _executeBulkInsertSQL = (dbc, sql, values) =>
       values.forEach(each => {
         const k = i;
         i++;
-        stmt.run(each, function (err) {
+        stmt.execute(each, function (err, results) {
           if (err) {
             err.values = each;
-            stmt.finalize();
+            stmt.close();
             return reject(err);
           }
           // InsertResult needs an object per row with its values
-          results[k] = { lastID: this.lastID, affectedRows: 1, values: each };
+          results[k] = {
+            lastID: results.insertId,
+            affectedRows: 1,
+            values: each
+          };
           n--;
           if (n === 0) {
-            stmt.finalize();
+            stmt.close();
             resolve(results);
           }
         });
@@ -151,7 +149,7 @@ const _executeBulkInsertSQL = (dbc, sql, values) =>
     });
   });
 
-function executePlainSQL(dbc, sql, values, isOne, postMapper) {
+function executePlainSQL(dbc, sql, values = [], isOne, postMapper) {
   // support named binding parameters
   if (values && typeof values === 'object' && !Array.isArray(values)) {
     values = new Proxy(values, {
@@ -172,7 +170,7 @@ function executePlainSQL(dbc, sql, values, isOne, postMapper) {
   return _executeSimpleSQL(dbc, sql, Array.isArray(values[0]) ? values[0] : values);
 }
 
-function executeInsertSQL(dbc, sql, values?, query?) {
+function executeInsertSQL(dbc: Connection, sql, values?, query?) {
   // Only bulk inserts will have arrays in arrays
   if (Array.isArray(values[0])) {
     if (values.length > 1) {
@@ -183,20 +181,8 @@ function executeInsertSQL(dbc, sql, values?, query?) {
   }
 
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-
-  return new Promise((resolve, reject) =>
-    dbc.run(sql, values, function (err) {
-      if (err) return reject(Object.assign(err, { query: sql }));
-      // InsertResult needs an object per row with its values
-      if (query && values.length > 0) {
-        // > single row via cqn
-        resolve([{ lastID: this.lastID, affectedRows: 1, values }]);
-      } else {
-        // > plain sql or INSERT into SELECT
-        resolve([{ lastID: this.lastID, affectedRows: this.changes }]);
-      }
-    })
-  );
+  const { insertId, affectedRows } = await dbc.promise().query(sql, values);
+  return [{ lastID: insertId, affectedRows: affectedRows, values }];
 }
 
 function _convertStreamValues(values) {

@@ -1,4 +1,4 @@
-const { foreignKeyPropagations } = require('../common/utils/foreignKeyPropagations');
+const { foreignKeyPropagations } = require('@sap/cds-runtime/lib/common/utils/foreignKeyPropagations');
 
 function _convertRefForAssocToOneManaged(element, refEntry) {
   const foreignKey = refEntry.ref.join('_');
