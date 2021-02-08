@@ -20,6 +20,7 @@
     "node": ">=10"
   },
   "dependencies": {
+    "@newdash/newdash": "^5.17.1",
     "@sap/cds-sql": "^1.24.1",
     "mysql2": "^2.2.5"
   },

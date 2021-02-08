@@ -1,0 +1,29 @@
+const dependencies = {
+  get DeleteBuilder() {
+    const CustomDeleteBuilder = require('./CustomDeleteBuilder');
+    Object.defineProperty(dependencies, 'DeleteBuilder', { value: CustomDeleteBuilder });
+    return CustomDeleteBuilder;
+  },
+  get ExpressionBuilder() {
+    const CustomExpressionBuilder = require('./CustomExpressionBuilder');
+    Object.defineProperty(dependencies, 'ExpressionBuilder', { value: CustomExpressionBuilder });
+    return CustomExpressionBuilder;
+  },
+  get SelectBuilder() {
+    const CustomSelectBuilder = require('./CustomSelectBuilder');
+    Object.defineProperty(dependencies, 'SelectBuilder', { value: CustomSelectBuilder });
+    return CustomSelectBuilder;
+  },
+  get ReferenceBuilder() {
+    const CustomReferenceBuilder = require('./CustomReferenceBuilder');
+    Object.defineProperty(dependencies, 'ReferenceBuilder', { value: CustomReferenceBuilder });
+    return CustomReferenceBuilder;
+  },
+  get UpdateBuilder() {
+    const CustomUpdateBuilder = require('./CustomUpdateBuilder');
+    Object.defineProperty(dependencies, 'UpdateBuilder', { value: CustomUpdateBuilder });
+    return CustomUpdateBuilder;
+  }
+};
+
+module.exports = dependencies;
