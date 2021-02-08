@@ -2,7 +2,7 @@
   "compilerOptions": {
     "charset": "UTF-8",
     "newLine": "lf",
-    "target": "ES2019",
+    "target": "ES2015",
     "module": "CommonJS",
     "sourceMap": true,
     "outDir": "lib",

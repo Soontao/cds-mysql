@@ -1,9 +1,8 @@
-import { a } from "../src";
 
 describe('Demo Test Suite', () => {
 
   it('should equal to 1', () => {
-    expect(a).toBe(1);
+    expect(1).toBe(1);
   });
 
 });

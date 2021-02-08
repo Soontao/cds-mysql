@@ -8,6 +8,9 @@
     "node": true,
     "es6": true
   },
+  "globals": {
+    "cds": true
+  },
   "parserOptions": {
     "ecmaVersion": 2016,
     "sourceType": "module",
