@@ -170,7 +170,7 @@ function executePlainSQL(dbc, sql, values = [], isOne, postMapper) {
   return _executeSimpleSQL(dbc, sql, Array.isArray(values[0]) ? values[0] : values);
 }
 
-function executeInsertSQL(dbc: Connection, sql, values?, query?) {
+async function executeInsertSQL(dbc: Connection, sql, values?, query?) {
   // Only bulk inserts will have arrays in arrays
   if (Array.isArray(values[0])) {
     if (values.length > 1) {
