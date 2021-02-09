@@ -44,11 +44,11 @@ const convertToISONoMilliseconds = element => {
 };
 
 const TYPE_CONVERSION_MAP = new Map([
-  ['cds.Boolean', convertToBoolean],
-  ['cds.Date', convertToDateString],
-  ['cds.Integer64', convertInt64ToString],
-  ['cds.DateTime', convertToISONoMilliseconds],
-  ['cds.Timestamp', convertToISOTime]
+  ["cds.Boolean", convertToBoolean],
+  ["cds.Date", convertToDateString],
+  ["cds.Integer64", convertInt64ToString],
+  ["cds.DateTime", convertToISONoMilliseconds],
+  ["cds.Timestamp", convertToISOTime]
 ]);
 
 export { TYPE_CONVERSION_MAP };

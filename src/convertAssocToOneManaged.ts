@@ -1,7 +1,7 @@
-const { foreignKeyPropagations } = require('@sap/cds-runtime/lib/common/utils/foreignKeyPropagations');
+const { foreignKeyPropagations } = require("@sap/cds-runtime/lib/common/utils/foreignKeyPropagations");
 
 function _convertRefForAssocToOneManaged(element, refEntry) {
-  const foreignKey = refEntry.ref.join('_');
+  const foreignKey = refEntry.ref.join("_");
   foreignKeyPropagations(element, true, false).forEach(key => {
     if (key.parentFieldName === foreignKey) {
       refEntry.ref = [foreignKey];
@@ -20,7 +20,7 @@ const _getConvertibleEntries = req => {
 // REVISIT once sql can handle structured keys properly, this handler should not be required anymore
 const _handler = req => {
   // do simple checks upfront and exit early
-  if (!req.query || typeof req.query === 'string') return;
+  if (!req.query || typeof req.query === "string") return;
   if (!req.query.SELECT.orderBy && !req.query.SELECT.groupBy && !req.query.SELECT.where && !req.query.SELECT.having) { return; }
 
   if (!req.target || !req.target.elements) return;

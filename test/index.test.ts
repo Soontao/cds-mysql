@@ -5,7 +5,7 @@ import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
 import { v4 } from "uuid";
 
-describe('CDS MySQL Basic Test Suite', () => {
+describe("CDS MySQL Basic Test Suite", () => {
 
   cds.env.requires.db = { kind: "mysql" };
   cds.env.requires.mysql = {
@@ -20,12 +20,14 @@ describe('CDS MySQL Basic Test Suite', () => {
     }
   };
 
-  it('should support deploy simple entity (with e2e CRUD)', async () => {
+  const createRandomName = () => v4().split("-").pop();
+
+  it("should support deploy simple entity (with e2e CRUD)", async () => {
 
     const csn = await cds.load(path.join(__dirname, "./resources/people.cds"));
     await cds_deploy(csn).to("mysql");
-    const randomName = v4().split("-").pop();
-    const randomName2 = v4().split("-").pop();
+    const randomName = createRandomName();
+    const randomName2 = createRandomName();
     // create item
     await cds.run(INSERT.into("People").entries({ Name: randomName }));
     const items = await cds.run(SELECT.from("People").where({ Name: randomName }));
@@ -43,20 +45,33 @@ describe('CDS MySQL Basic Test Suite', () => {
     const item2 = await cds.run(SELECT.one.from("People", item.ID));
     expect(item2).toBeNull();
 
+    // insert multi
+    const result = await cds.run(INSERT.into("People").entries({ Name: createRandomName() }, { Name: createRandomName() }));
+    expect(result).not.toBeNull();
+
+    const [{ total }] = await cds.run(SELECT.from("People").columns("count(1) as total"));
+    expect(total).toBe(2);
+
   });
 
-  it('should support deploy complex-type entity', async () => {
+  it("should support deploy complex-type entity", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/complex-type.cds"));
     await cds_deploy(csn).to("mysql");
   });
 
-  it('should support deploy different property types entity', async () => {
+  it("should support deploy different property types entity", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/property-type.cds"));
     await cds_deploy(csn).to("mysql");
   });
 
-  it('should support deploy long name entity', async () => {
+  it("should support deploy long name entity", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/long-table-name.cds"));
+    await cds_deploy(csn).to("mysql");
+  });
+
+
+  it("should support deploy view", async () => {
+    const csn = await cds.load(path.join(__dirname, "./resources/view.cds"));
     await cds_deploy(csn).to("mysql");
   });
 

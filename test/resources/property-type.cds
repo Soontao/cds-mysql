@@ -16,4 +16,5 @@ entity People : cuid {
     normal = 'normal';
     high   = 'high';
   };
+  Avatar        : Binary(255);
 }

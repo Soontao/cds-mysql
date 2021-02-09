@@ -32,6 +32,7 @@
     "@typescript-eslint/no-explicit-any": [
       0
     ],
+    "quotes": "error",
     "indent": [
       "error",
       2,

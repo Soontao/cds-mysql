@@ -1,13 +1,13 @@
 // @ts-nocheck
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
-import DatabaseService from '@sap/cds-runtime/lib/db/Service';
-import cds from '@sap/cds/lib';
+import DatabaseService from "@sap/cds-runtime/lib/db/Service";
+import cds from "@sap/cds/lib";
 import { createPool, Pool } from "mysql2";
-import convertAssocToOneManaged from './convertAssocToOneManaged';
-import execute from './execute';
-import localized from './localized';
+import convertAssocToOneManaged from "./convertAssocToOneManaged";
+import execute from "./execute";
+import localized from "./localized";
 
-const LOG = (cds.log || cds.debug)('mysql');
+const LOG = (cds.log || cds.debug)("mysql");
 
 export class MySQLDatabase extends DatabaseService {
   constructor(...args: any[]) {
@@ -29,7 +29,7 @@ export class MySQLDatabase extends DatabaseService {
   private _pools: LRUCacheProvider<string, Pool>
 
   set model(csn) {
-    const m = csn && 'definitions' in csn ? cds.linked(cds.compile.for.odata(csn)) : csn;
+    const m = csn && "definitions" in csn ? cds.linked(cds.compile.for.odata(csn)) : csn;
     cds.alpha_localized(m);
     super.model = m;
   }
@@ -39,24 +39,24 @@ export class MySQLDatabase extends DatabaseService {
     /*
      * before
      */
-    this._ensureModel && this.before('*', this._ensureModel);
+    this._ensureModel && this.before("*", this._ensureModel);
 
-    this.before(['CREATE', 'UPDATE'], '*', this._input);
-    this.before(['CREATE', 'READ', 'UPDATE', 'DELETE'], '*', this._rewrite);
+    this.before(["CREATE", "UPDATE"], "*", this._input);
+    this.before(["CREATE", "READ", "UPDATE", "DELETE"], "*", this._rewrite);
 
-    this.before('READ', '*', convertAssocToOneManaged);
-    this.before('READ', '*', localized); // > has to run after rewrite
+    this.before("READ", "*", convertAssocToOneManaged);
+    this.before("READ", "*", localized); // > has to run after rewrite
 
     // REVISIT: get data to be deleted for integrity check
-    this.before('DELETE', '*', this._integrity.beforeDelete);
+    this.before("DELETE", "*", this._integrity.beforeDelete);
 
     /*
      * on
      */
-    this.on('CREATE', '*', this._CREATE);
-    this.on('READ', '*', this._READ);
-    this.on('UPDATE', '*', this._UPDATE);
-    this.on('DELETE', '*', this._DELETE);
+    this.on("CREATE", "*", this._CREATE);
+    this.on("READ", "*", this._READ);
+    this.on("UPDATE", "*", this._UPDATE);
+    this.on("DELETE", "*", this._DELETE);
 
     /*
      * after
@@ -67,34 +67,34 @@ export class MySQLDatabase extends DatabaseService {
       const effective = cds.env.effective || cds.env;
       if (effective.odata.structs) {
         // REVISIT: only register for entities that contain structured or navigation to it
-        this.after(['READ'], '*', this._structured);
+        this.after(["READ"], "*", this._structured);
       }
-      if (effective.odata.version !== 'v2') {
+      if (effective.odata.version !== "v2") {
         // REVISIT: only register for entities that contain arrayed or navigation to it
-        this.after(['READ'], '*', this._arrayed);
+        this.after(["READ"], "*", this._arrayed);
       }
     }
 
     /*
      * tx
      */
-    this.on(['BEGIN', 'COMMIT', 'ROLLBACK'], function (req) {
+    this.on(["BEGIN", "COMMIT", "ROLLBACK"], function (req) {
       return this._run(this.model, this.dbc, req.event);
     });
 
     // REVISIT: register only if needed?
-    this.before('COMMIT', this._integrity.performCheck);
+    this.before("COMMIT", this._integrity.performCheck);
 
     /*
      * generic
      */
     // all others, i.e. CREATE, DROP table, ...
-    this.on('*', function (req) {
+    this.on("*", function (req) {
       return this._run(this.model, this.dbc, req.query || req.event, req);
     });
   }
 
-  getPool(tenant = 'default') {
+  getPool(tenant = "default"): Pool {
     return this._pools.getOrCreate(tenant, () => {
       return createPool(this.options.credentials);
     });
@@ -104,20 +104,11 @@ export class MySQLDatabase extends DatabaseService {
    * connection
    */
   async acquire(arg: any) {
-    const tenant = (typeof arg === 'string' ? arg : arg.user.tenant) || 'default';
+    const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || "default";
     const pool = this.getPool(tenant);
-
-    return new Promise((resolve, reject) => {
-      pool.getConnection((err, conn) => {
-        if (err) {
-          reject(err);
-        } else {
-          // @ts-ignore
-          conn._release = () => pool.releaseConnection(conn);
-          resolve(conn);
-        }
-      });
-    });
+    const conn = await pool.promise().getConnection();
+    conn._release = () => pool.releaseConnection(conn.connection);
+    return conn;
   }
 
   release(conn: any) {
@@ -146,16 +137,16 @@ export class MySQLDatabase extends DatabaseService {
       for (const {
         DROP: { view }
       } of dropViews) {
-        log('DROP VIEW IF EXISTS ' + view + ';');
+        log("DROP VIEW IF EXISTS " + view + ";");
       }
       log();
       for (const {
         DROP: { entity }
       } of dropTables) {
-        log('DROP TABLE IF EXISTS ' + entity + ';');
+        log("DROP TABLE IF EXISTS " + entity + ";");
       }
       log();
-      for (const each of createEntities) log(each + ';\n');
+      for (const each of createEntities) log(each + ";\n");
       return;
     }
 
