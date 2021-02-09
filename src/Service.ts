@@ -104,7 +104,7 @@ export class MySQLDatabase extends DatabaseService {
 
   private getPool(tenant = "default"): Pool {
     return this._pools.getOrCreate(tenant, () => {
-      return createPool(this.options.credentials);
+      return createPool({ ...this.options.credentials, dateStrings: true });
     });
   }
 

@@ -1,3 +1,6 @@
+import { DateTime, FixedOffsetZone } from "luxon";
+import { MYSQL_DATE_TIME_FORMAT } from "./constants";
+
 const convertToBoolean = boolean => {
   if (boolean === null) {
     return null;
@@ -22,24 +25,23 @@ const convertInt64ToString = int64 => {
   return String(int64);
 };
 
-const convertToISOTime = value => {
+const convertToISOTime = (value: string) => {
   if (value === null) {
     return value;
   }
-
-  if (!value) {
-    value = 0;
-  }
-
-  return new Date(value).toISOString();
+  const dateTime = DateTime.fromFormat(value, MYSQL_DATE_TIME_FORMAT, {
+    zone: FixedOffsetZone.instance(0)
+  });
+  return dateTime.toISO();
 };
 
-const convertToISONoMilliseconds = element => {
+const convertToISONoMilliseconds = (element: string) => {
   if (element) {
-    const dateTime = new Date(element).toISOString();
-    return dateTime.slice(0, 19) + dateTime.slice(23);
+    const dateTime = DateTime.fromFormat(element, MYSQL_DATE_TIME_FORMAT, {
+      zone: FixedOffsetZone.instance(0)
+    });
+    return dateTime.toISO({ suppressMilliseconds: true });
   }
-
   return null;
 };
 

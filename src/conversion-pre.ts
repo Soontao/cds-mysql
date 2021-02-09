@@ -1,5 +1,6 @@
 // pre conversion for INSERT/UPDATE
 import { DateTime } from "luxon";
+import { MYSQL_DATE_TIME_FORMAT } from "./constants";
 
 /**
  * MySQL required wired formatted date time 'yyyy-MM-dd hh:mm:ss'
@@ -12,7 +13,7 @@ function adaptToMySQLDateTime(value: string) {
   }
   const dateTime = DateTime.fromISO(value, { setZone: true });
   if (dateTime.isValid) {
-    return dateTime.toFormat("yyyy-MM-dd hh:mm:ss");
+    return dateTime.toFormat(MYSQL_DATE_TIME_FORMAT);
   } else {
     return null;
   }
