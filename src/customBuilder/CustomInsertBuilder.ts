@@ -41,7 +41,7 @@ export = class CustomInsertBuilder extends InsertBuilder {
         val = this._traverseValue(key, val);
       }
     }
-    // pre conversion input data
+    // convert value for specific type
     if (columnType && PRE_CONVERSION_MAP.has(columnType)) {
       val = PRE_CONVERSION_MAP.get(columnType)(val);
     }

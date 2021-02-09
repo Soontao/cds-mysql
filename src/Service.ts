@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
 import DatabaseService from "@sap/cds-runtime/lib/db/Service";
+import { CSN } from "@sap/cds/apis/csn";
 import cds from "@sap/cds/lib";
 import { createPool, Pool } from "mysql2";
 import convertAssocToOneManaged from "./convertAssocToOneManaged";
@@ -21,14 +22,21 @@ export class MySQLDatabase extends DatabaseService {
     this._read = this._queries.read(execute.select, execute.stream);
     this._update = this._queries.update(execute.update, execute.select);
     this._delete = this._queries.delete(execute.delete);
-    this._run = this._queries.run(this._insert, this._read, this._update, this._delete, execute.cqn, execute.sql);
+    this._run = this._queries.run(
+      this._insert,
+      this._read,
+      this._update,
+      this._delete,
+      execute.cqn,
+      execute.sql
+    );
 
     this._pools = new LRUCacheProvider<string, Pool>(1024);
   }
 
   private _pools: LRUCacheProvider<string, Pool>
 
-  set model(csn) {
+  set model(csn: CSN) {
     const m = csn && "definitions" in csn ? cds.linked(cds.compile.for.odata(csn)) : csn;
     cds.alpha_localized(m);
     super.model = m;
@@ -94,7 +102,7 @@ export class MySQLDatabase extends DatabaseService {
     });
   }
 
-  getPool(tenant = "default"): Pool {
+  private getPool(tenant = "default"): Pool {
     return this._pools.getOrCreate(tenant, () => {
       return createPool(this.options.credentials);
     });
@@ -103,7 +111,7 @@ export class MySQLDatabase extends DatabaseService {
   /*
    * connection
    */
-  async acquire(arg: any) {
+  public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || "default";
     const pool = this.getPool(tenant);
     const conn = await pool.promise().getConnection();
@@ -111,7 +119,7 @@ export class MySQLDatabase extends DatabaseService {
     return conn;
   }
 
-  release(conn: any) {
+  public release(conn: any) {
     conn._release();
   }
 

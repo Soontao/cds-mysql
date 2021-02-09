@@ -32,6 +32,7 @@ export = class CustomUpdateBuilder extends UpdateBuilder {
         this._outputObj.values.push(...value.values);
       } else {
         sql.push(`${this._quoteElement(key)} = ?`);
+        // convert value for specific type
         if (columnType && PRE_CONVERSION_MAP.has(columnType)) {
           value = PRE_CONVERSION_MAP.get(columnType)(value);
         }
