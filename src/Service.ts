@@ -10,7 +10,7 @@ import localized from "./localized";
 
 const LOG = (cds.log || cds.debug)("mysql");
 
-export class MySQLDatabase extends DatabaseService {
+export class MySQLDatabaseService extends DatabaseService {
   constructor(...args: any[]) {
     super(...args);
 

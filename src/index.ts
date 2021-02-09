@@ -1,3 +1,3 @@
-import { MySQLDatabase } from "./Service";
+import { MySQLDatabaseService } from "./service";
 
-export = MySQLDatabase
+export = MySQLDatabaseService
