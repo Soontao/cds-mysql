@@ -5,11 +5,11 @@ function adaptToMySQLDateTime(value: string) {
   if (value === null || value === undefined) {
     return null;
   }
-  const dateTime = DateTime.fromISO(value);
-  return dateTime.toFormat("YYYY-MM-DD hh:mm:ss");
+  const dateTime = DateTime.fromISO(value, { setZone: true });
+  return dateTime.toFormat("yyyy-MM-dd hh:mm:ss");
 }
 
 export const PRE_CONVERSION_MAP = new Map([
   ["cds.DateTime", adaptToMySQLDateTime],
-  ["cds.TimeStamp", adaptToMySQLDateTime]
+  ["cds.Timestamp", adaptToMySQLDateTime]
 ]);
