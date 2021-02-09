@@ -7,9 +7,10 @@ import { v4 } from "uuid";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
-  cds.env.requires.db = { kind: "mysql" };
-  cds.env.requires.mysql = {
+  cds.env.requires.db = {
     kind: "mysql",
+  };
+  cds.env.requires.mysql = {
     impl: path.join(__dirname, "../src"),
     credentials: {
       user: process.env.MYSQL_USER,

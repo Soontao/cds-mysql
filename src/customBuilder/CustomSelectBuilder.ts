@@ -1,6 +1,7 @@
 import { SelectBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
 
 export = class CustomSelectBuilder extends SelectBuilder {
+
   get ReferenceBuilder() {
     const ReferenceBuilder = require("./CustomReferenceBuilder");
     Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
@@ -27,7 +28,7 @@ export = class CustomSelectBuilder extends SelectBuilder {
   }
 
   getCollatingSequence() {
-    return "NOCASE";
+    return "utf8_general_ci";
   }
 
   _forUpdate() { }

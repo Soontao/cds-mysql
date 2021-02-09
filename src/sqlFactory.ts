@@ -1,5 +1,3 @@
-
-
 import { CreateBuilder, DeleteBuilder, DropBuilder, InsertBuilder, SelectBuilder, UpdateBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
 
 const _getCustomBuilderIfExists = (options, type) => {

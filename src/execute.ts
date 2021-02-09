@@ -4,7 +4,7 @@ import { getPostProcessMapper, postProcess } from "@sap/cds-runtime/lib/db/data-
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds-runtime/lib/db/expand";
 import { PoolConnection } from "mysql2";
 import { Readable } from "stream";
-import { TYPE_CONVERSION_MAP } from "./conversion";
+import { TYPE_POST_CONVERSION_MAP } from "./conversion";
 import CustomBuilder from "./customBuilder";
 import { sqlFactory } from "./sqlFactory";
 
@@ -39,7 +39,7 @@ function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
   const expandQueries = createJoinCQNFromExpanded(cqn, model, false, locale);
 
   for (const cqn of expandQueries.queries) {
-    cqn._conversionMapper = getPostProcessMapper(TYPE_CONVERSION_MAP, model, cqn);
+    cqn._conversionMapper = getPostProcessMapper(TYPE_POST_CONVERSION_MAP, model, cqn);
 
     // REVISIT
     // Why is the post processing in expand different?
@@ -74,7 +74,7 @@ function executeSelectCQN(model, dbc, query, user, locale, txTimestamp) {
     sql,
     values,
     query.SELECT.one,
-    getPostProcessMapper(TYPE_CONVERSION_MAP, model, query)
+    getPostProcessMapper(TYPE_POST_CONVERSION_MAP, model, query)
   );
 }
 

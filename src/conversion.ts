@@ -43,7 +43,7 @@ const convertToISONoMilliseconds = element => {
   return null;
 };
 
-const TYPE_CONVERSION_MAP = new Map([
+const TYPE_POST_CONVERSION_MAP = new Map([
   ["cds.Boolean", convertToBoolean],
   ["cds.Date", convertToDateString],
   ["cds.Integer64", convertInt64ToString],
@@ -51,5 +51,5 @@ const TYPE_CONVERSION_MAP = new Map([
   ["cds.Timestamp", convertToISOTime]
 ]);
 
-export { TYPE_CONVERSION_MAP };
+export { TYPE_POST_CONVERSION_MAP };
 
