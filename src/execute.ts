@@ -20,12 +20,12 @@ const colored = {
   ROLLBACK: "\x1b[1m\x1b[91mROLLBACK\x1b[0m"
 };
 
-function _executeSimpleSQL(dbc: PoolConnection, sql, values) {
+function _executeSimpleSQL(dbc: PoolConnection, sql: string, values: Array<any>) {
   LOG && LOG._debug && LOG.debug(`${colored[sql] || sql} ${values && values.length ? JSON.stringify(values) : ""}`);
   return dbc.query(sql, values);
 }
 
-async function executeSelectSQL(dbc: PoolConnection, sql, values, isOne, postMapper) {
+async function executeSelectSQL(dbc: PoolConnection, sql: string, values: Array<any>, isOne: any, postMapper) {
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
   const [results] = await dbc.query(sql, values);
   if (isOne && isEmpty(results)) {
@@ -91,15 +91,6 @@ function executeDeleteCQN(model, dbc, cqn, user, locale, txTimestamp) {
 
   return _executeSimpleSQL(dbc, sql, values);
 }
-
-const _executeBulkInsertSQL = async (dbc: PoolConnection, sql: string, values: any[]) => {
-  if (!Array.isArray(values)) {
-    return reject(new Error(`Cannot execute SQL statement. Invalid values provided: ${JSON.stringify(values)}`));
-  }
-  LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-  const results = await dbc.query(sql, values);
-  return results;
-};
 
 function executePlainSQL(dbc, sql, values = [], isOne, postMapper) {
   // support named binding parameters
