@@ -1,6 +1,6 @@
 import { ExpressionBuilder } from '@sap/cds-runtime/lib/db/sql-builder';
 
-class CustomExpressionBuilder extends ExpressionBuilder {
+export = class CustomExpressionBuilder extends ExpressionBuilder {
   get ReferenceBuilder() {
     const ReferenceBuilder = require('./CustomReferenceBuilder');
     Object.defineProperty(this, 'ReferenceBuilder', { value: ReferenceBuilder });
@@ -20,4 +20,3 @@ class CustomExpressionBuilder extends ExpressionBuilder {
   }
 }
 
-module.exports = CustomExpressionBuilder;

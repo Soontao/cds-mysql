@@ -11,7 +11,7 @@ const dateTimeFunctions = new Map([
 ]);
 const standadFunctions = ['locate', 'substring', 'to_date', 'to_time'];
 
-export class CustomFunctionBuilder extends FunctionBuilder {
+export = class CustomFunctionBuilder extends FunctionBuilder {
   get ExpressionBuilder() {
     const ExpressionBuilder = require('./CustomExpressionBuilder');
     Object.defineProperty(this, 'ExpressionBuilder', { value: ExpressionBuilder });

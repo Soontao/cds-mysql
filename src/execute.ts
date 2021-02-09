@@ -27,11 +27,11 @@ function _executeSimpleSQL(dbc: Connection, sql, values) {
 
 async function executeSelectSQL(dbc: Connection, sql, values, isOne, postMapper) {
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-  const results = await dbc.promise().query(sql, values);
+  const [results] = await dbc.promise().query(sql, values);
   if (isOne && isEmpty(results)) {
     return null;
   }
-  return postProcess(results, postMapper);
+  return postProcess(Boolean(isOne) ? results[0] : results, postMapper);
 }
 
 function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
@@ -169,7 +169,7 @@ async function executeInsertSQL(dbc: Connection, sql, values?, query?) {
   }
 
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-  const { insertId, affectedRows } = await dbc.promise().query(sql, values);
+  const [{ insertId, affectedRows }] = await dbc.promise().query(sql, values);
   return [{ lastID: insertId, affectedRows: affectedRows, values }];
 }
 

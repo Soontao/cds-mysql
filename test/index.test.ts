@@ -1,26 +1,68 @@
 // @ts-nocheck
+import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
+import { v4 } from "uuid";
 
 describe('CDS MySQL Basic Test Suite', () => {
 
-  it('should support deploy ', async () => {
-    cds.env.requires.db = { kind: "mysql" };
-    cds.env.requires.mysql = {
-      kind: "mysql",
-      impl: path.join(__dirname, "../src"),
-      credentials: {
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DATABASE,
-        host: process.env.MYSQL_HOST,
-        port: parseInt(process.env.MYSQL_PORT),
-      }
-    };
+  cds.env.requires.db = { kind: "mysql" };
+  cds.env.requires.mysql = {
+    kind: "mysql",
+    impl: path.join(__dirname, "../src"),
+    credentials: {
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+      host: process.env.MYSQL_HOST,
+      port: parseInt(process.env.MYSQL_PORT),
+    }
+  };
+
+  it('should support deploy simple entity (with e2e CRUD)', async () => {
+
     const csn = await cds.load(path.join(__dirname, "./resources/people.cds"));
     await cds_deploy(csn).to("mysql");
+    const randomName = v4().split("-").pop();
+    const randomName2 = v4().split("-").pop();
+    // create item
+    await cds.run(INSERT.into("People").entries({ Name: randomName }));
+    const items = await cds.run(SELECT.from("People").where({ Name: randomName }));
+    expect(items).toHaveLength(1);
+    expect(items[0].Name).toBe(randomName);
 
+    // update name
+    await cds.run(UPDATE.entity("People", items[0].ID).with({ Name: randomName2 }));
+    const item = await cds.run(SELECT.one.from("People", items[0].ID));
+    expect(item).not.toBeNull();
+    expect(item.Name).toBe(randomName2);
+
+    // delete item
+    await cds.run(DELETE.from("People", item.ID));
+    const item2 = await cds.run(SELECT.one.from("People", item.ID));
+    expect(item2).toBeNull();
+
+  });
+
+  it('should support deploy complex-type entity', async () => {
+    const csn = await cds.load(path.join(__dirname, "./resources/complex-type.cds"));
+    await cds_deploy(csn).to("mysql");
+  });
+
+  it('should support deploy different property types entity', async () => {
+    const csn = await cds.load(path.join(__dirname, "./resources/property-type.cds"));
+    await cds_deploy(csn).to("mysql");
+  });
+
+  it('should support deploy long name entity', async () => {
+    const csn = await cds.load(path.join(__dirname, "./resources/long-table-name.cds"));
+    await cds_deploy(csn).to("mysql");
+  });
+
+  afterAll(async () => {
+    // wait all table deployment
+    await sleep(500);
   });
 
 });

@@ -7,6 +7,8 @@ import convertAssocToOneManaged from './convertAssocToOneManaged';
 import execute from './execute';
 import localized from './localized';
 
+const LOG = (cds.log || cds.debug)('mysql');
+
 export class MySQLDatabase extends DatabaseService {
   constructor(...args: any[]) {
     super(...args);
@@ -140,8 +142,7 @@ export class MySQLDatabase extends DatabaseService {
     }
 
     if (options.dry) {
-      // REVISIT: no console
-      const log = console.log; // eslint-disable-line no-console
+      const log = LOG.debug;
       for (const {
         DROP: { view }
       } of dropViews) {
@@ -159,8 +160,12 @@ export class MySQLDatabase extends DatabaseService {
     }
 
     const tx = this.transaction();
+
+    // clean old tables
     await tx.run(dropViews);
     await tx.run(dropTables);
+
+    // create new tables
     await tx.run(createEntities);
     await tx.commit();
 
