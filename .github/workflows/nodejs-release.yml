@@ -42,6 +42,6 @@ jobs:
           MYSQL_PASSWORD: cds_test
 
       - name: npm auth & publish
-        run: npm run build && npm publish --access public --tag latest
+        run: npm run build && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.Z_NPM_TOKEN}}
