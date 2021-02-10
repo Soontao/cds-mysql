@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/Soontao/cds-mysql/compare/v0.0.2...v0.1.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* npm release script ([c963f5b](https://github.com/Soontao/cds-mysql/commit/c963f5bc5a36e4a02a6f6055ee0142f8598e08c1))
+
 ### 0.0.2 (2021-02-10)
 
 
