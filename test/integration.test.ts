@@ -3,6 +3,7 @@ import sleep from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
+import { createRandomName } from "./utils";
 
 
 describe("Integration Test Suite", () => {
@@ -42,6 +43,26 @@ describe("Integration Test Suite", () => {
     await server.PATCH(`/bank/Peoples(${created.ID})`, { Age: 25 });
     const { data: retrieveResult } = await server.GET(`/bank/Peoples(${created.ID})`);
     expect(retrieveResult.Age).toBe(25);
+
+  });
+
+  it("should support deep insert & expand data", async () => {
+
+    const name = createRandomName();
+    const addr = createRandomName();
+    const { data: created } = await server.POST("/bank/Peoples", {
+      Name: name,
+      Age: 21,
+      Detail: {
+        BirthDay: "1995-11-11",
+        Address: addr
+      }
+    });
+
+    const { data: retrievedItem } = await server.GET(`/bank/Peoples(${created.ID})?$expand=Detail`);
+
+    expect(retrievedItem.Name).toBe(name);
+    expect(retrievedItem.Detail.Address).toBe(addr);
 
   });
 

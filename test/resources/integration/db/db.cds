@@ -7,10 +7,16 @@ using {
 } from '@sap/cds/common';
 
 entity People : cuid, managed {
-  Name  : String(30);
-  Age   : Integer default 18;
-  Cards : Association to many Card
-            on Cards.People = $self;
+  Name   : String(30);
+  Age    : Integer default 18;
+  Cards  : Association to many Card
+             on Cards.People = $self;
+  Detail : Composition of Detail;
+}
+
+entity Detail : cuid, managed {
+  BirthDay : Date;
+  Address  : String(255);
 }
 
 entity Card : cuid, managed {

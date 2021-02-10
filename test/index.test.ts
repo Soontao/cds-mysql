@@ -3,7 +3,7 @@ import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
-import { v4 } from "uuid";
+import { createRandomName } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
@@ -21,7 +21,6 @@ describe("CDS MySQL Basic Test Suite", () => {
     }
   };
 
-  const createRandomName = () => v4().split("-").pop();
 
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 
