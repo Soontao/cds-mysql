@@ -2,6 +2,7 @@
 import { isEmpty } from "@newdash/newdash";
 import { getPostProcessMapper, postProcess } from "@sap/cds-runtime/lib/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds-runtime/lib/db/expand";
+import { Query } from "@sap/cds/apis/cqn";
 import { CSN } from "@sap/cds/apis/csn";
 import { PoolConnection } from "mysql2";
 import { Readable } from "stream";
@@ -26,7 +27,7 @@ function _executeSimpleSQL(dbc: PoolConnection, sql: string, values: Array<any>)
   return dbc.query(sql, values);
 }
 
-async function executeSelectSQL(dbc: PoolConnection, sql: string, values: Array<any>, isOne: any, postMapper) {
+async function executeSelectSQL(dbc: PoolConnection, sql: string, values: Array<any>, isOne: any, postMapper: Function) {
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
   const [results] = await dbc.query(sql, values);
   if (isOne && isEmpty(results)) {
@@ -64,7 +65,7 @@ function executeSelectCQN(model, dbc, query, user, locale, txTimestamp) {
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "strftime('%Y-%m-%dT%H:%M:%fZ','now')" }, // '2012-12-03T07:16:23.574Z'
+      now: txTimestamp || { sql: "now()" }, // '2012-12-03T07:16:23.574Z'
       locale
     },
     model
@@ -85,7 +86,7 @@ function executeDeleteCQN(model, dbc, cqn, user, locale, txTimestamp) {
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "strftime('%Y-%m-%dT%H:%M:%fZ','now')" } // '2012-12-03T07:16:23.574Z'
+      now: txTimestamp || { sql: "now()" } // '2012-12-03T07:16:23.574Z'
     },
     model
   );
@@ -93,7 +94,7 @@ function executeDeleteCQN(model, dbc, cqn, user, locale, txTimestamp) {
   return _executeSimpleSQL(dbc, sql, values);
 }
 
-function executePlainSQL(dbc, sql, values = [], isOne, postMapper) {
+function executePlainSQL(dbc: PoolConnection, sql: string, values = [], isOne: any, postMapper: Function) {
   // support named binding parameters
   if (values && typeof values === "object" && !Array.isArray(values)) {
     values = new Proxy(values, {
@@ -114,7 +115,7 @@ function executePlainSQL(dbc, sql, values = [], isOne, postMapper) {
   return _executeSimpleSQL(dbc, sql, Array.isArray(values[0]) ? values[0] : values);
 }
 
-async function executeInsertSQL(dbc: PoolConnection, sql, values?, query?) {
+async function executeInsertSQL(dbc: PoolConnection, sql: string, values?: any, query?: Query) {
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
   const [{ insertId, affectedRows }] = await dbc.query(sql, [values]);
   return [{ lastID: insertId, affectedRows: affectedRows, values }];
@@ -138,13 +139,13 @@ function _convertStreamValues(values) {
   return any ? Promise.all(values) : values;
 }
 
-async function executeInsertCQN(model, dbc, query, user, locale, txTimestamp) {
+async function executeInsertCQN(model: CSN, dbc: PoolConnection, query: Query, user, locale, txTimestamp) {
   const { sql, values = [] } = sqlFactory(
     query,
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "strftime('%Y-%m-%dT%H:%M:%fZ','now')" } // '2012-12-03T07:16:23.574Z'
+      now: txTimestamp || { sql: "now()" } // '2012-12-03T07:16:23.574Z'
     },
     model
   );
@@ -158,7 +159,7 @@ async function executeUpdateCQN(model: CSN, dbc, cqn, user, locale, txTimestamp)
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "strftime('%Y-%m-%dT%H:%M:%fZ','now')" } // '2012-12-03T07:16:23.574Z'
+      now: txTimestamp || { sql: "now()" }
     },
     model
   );
@@ -173,7 +174,7 @@ function executeGenericCQN(model, dbc, cqn, user, locale, txTimestamp) {
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "strftime('%Y-%m-%dT%H:%M:%fZ','now')" } // '2012-12-03T07:16:23.574Z'
+      now: txTimestamp || { sql: "now()" } // '2012-12-03T07:16:23.574Z'
     },
     model
   );

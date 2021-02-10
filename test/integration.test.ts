@@ -66,6 +66,27 @@ describe("Integration Test Suite", () => {
 
   });
 
+  it("should support complex query", async () => {
+
+    const name = createRandomName();
+    const addr = createRandomName();
+    const { data: created } = await server.POST("/bank/Peoples", {
+      Name: name,
+      Age: 21,
+      RegisterDate: "2000-01-01",
+      Detail: {
+        BirthDay: "1901-11-11",
+        Address: addr
+      }
+    });
+
+    expect(created?.ID).not.toBeUndefined();
+
+    const { data: retrievedItem } = await server.GET(`/bank/Peoples?$filter=year(RegisterDate) eq 2000 and substring(Name,0,4) eq '${name.substring(0, 4)}'`);
+    expect(retrievedItem?.value?.[0]?.Name).toBe(name);
+
+  });
+
   afterAll(async () => {
     await sleep(100);
   });

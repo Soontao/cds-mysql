@@ -3,24 +3,11 @@ import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
-import { createRandomName } from "./utils";
+import { createRandomName, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
-  cds.env.requires.db = {
-    kind: "mysql",
-  };
-  cds.env.requires.mysql = {
-    impl: path.join(__dirname, "../src"),
-    credentials: {
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASE,
-      host: process.env.MYSQL_HOST,
-      port: parseInt(process.env.MYSQL_PORT),
-    }
-  };
-
+  setupEnv();
 
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 
@@ -46,7 +33,10 @@ describe("CDS MySQL Basic Test Suite", () => {
     expect(item2).toBeNull();
 
     // insert multi
-    const result = await cds.run(INSERT.into("People").entries({ Name: createRandomName() }, { Name: createRandomName() }));
+    const result = await cds.run(INSERT.into("People").entries(
+      { Name: createRandomName() },
+      { Name: createRandomName() },
+    ));
     expect(result).not.toBeNull();
 
     const [{ total }] = await cds.run(SELECT.from("People").columns("count(1) as total"));
@@ -68,7 +58,6 @@ describe("CDS MySQL Basic Test Suite", () => {
     const csn = await cds.load(path.join(__dirname, "./resources/long-table-name.cds"));
     await cds_deploy(csn).to("mysql");
   });
-
 
   it("should support deploy view", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/view.cds"));

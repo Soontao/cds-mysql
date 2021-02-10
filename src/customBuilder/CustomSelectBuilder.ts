@@ -17,11 +17,6 @@ export = class CustomSelectBuilder extends SelectBuilder {
     Object.defineProperty(this, "FunctionBuilder", { value: FunctionBuilder });
     return FunctionBuilder;
   }
-  get SelectBuilder() {
-    const SelectBuilder = require("./CustomSelectBuilder");
-    Object.defineProperty(this, "SelectBuilder", { value: SelectBuilder });
-    return SelectBuilder;
-  }
 
   getCollate() {
     return "COLLATE " + this.getCollatingSequence();

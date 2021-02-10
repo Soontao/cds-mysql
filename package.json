@@ -51,5 +51,12 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "CDS",
+    "CAP",
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+  ]
 }

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { FunctionBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
 
-const dateTimeFunctions = new Map([
+const dateTimePlaceHolder = new Map([
   ["year", "'%Y'"],
   ["month", "'%m'"],
   ["dayofmonth", "'%d'"],
@@ -39,7 +39,7 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     const functionName = this._functionName(this._obj);
     const args = this._functionArgs(this._obj);
 
-    if (dateTimeFunctions.has(functionName)) {
+    if (dateTimePlaceHolder.has(functionName)) {
       this._timeFunction(functionName, args);
     } else if (standardFunctions.includes(functionName)) {
       this._standardFunction(functionName, args);
@@ -87,32 +87,33 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
   }
 
   _secondsBetweenFunction(args) {
-    this._outputObj.sql.push("strftime(?,");
-    this._outputObj.values.push("%s");
+    this._outputObj.sql.push("DATE_FORMAT(");
     if (args[1].val) {
       this._val(args[1].val);
+
     } else {
       this._ref(args[1]);
     }
-    this._outputObj.sql.push(") - strftime(?,");
     this._outputObj.values.push("%s");
+    this._outputObj.sql.push(",?) - DATE_FORMAT(");
     if (args[0].val) {
       this._val(args[0].val);
     } else {
       this._ref(args[0]);
     }
-    this._outputObj.sql.push(")");
+    this._outputObj.values.push("%s");
+    this._outputObj.sql.push(",?)");
   }
 
   _timeFunction(functionName, args) {
-    this._outputObj.sql.push("strftime(");
-    this._outputObj.sql.push(dateTimeFunctions.get(functionName), ",");
+    this._outputObj.sql.push("DATE_FORMAT(");
     if (typeof args === "string") {
-      this._outputObj.sql.push(args, ")");
+      this._outputObj.sql.push(args);
     } else {
       this._addFunctionArgs(args);
-      this._outputObj.sql.push(")");
     }
+    this._outputObj.sql.push(",", dateTimePlaceHolder.get(functionName));
+    this._outputObj.sql.push(")");
   }
 }
 
