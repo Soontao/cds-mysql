@@ -23,7 +23,9 @@
     "@newdash/newdash": "^5.17.1",
     "@sap/cds-sql": "^1.24.1",
     "luxon": "^1.25.0",
-    "mysql2": "^2.2.5"
+    "mysql2": "^2.2.5",
+    "ts-mysql-parser": "^0.2.0",
+    "typeorm": "^0.2.31"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",

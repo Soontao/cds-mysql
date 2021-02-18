@@ -19,3 +19,5 @@ export const setupEnv = () => {
     }
   };
 };
+
+export const loadCSN = async (relativePath: string) => cds.load(path.join(__dirname, relativePath));

@@ -11,10 +11,9 @@
 - [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT`/`DROP`
 - [x] deep insert
 - [x] full text search
-- [ ] deploy
+- [ ] deploy & schema migration
 - [ ] `$expand` navigation
 - [ ] `$filter` with functions
-- [ ] schema migration
 
 ## Known Issues
 
