@@ -22,6 +22,7 @@
   "dependencies": {
     "@newdash/newdash": "^5.17.1",
     "@sap/cds-sql": "^1.24.1",
+    "graphlib": "^2.1.8",
     "luxon": "^1.25.0",
     "mysql2": "^2.2.5",
     "ts-mysql-parser": "^0.2.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
     "@sap/cds": "4.4",
+    "@types/graphlib": "^2.1.7",
     "@types/jest": "^26.0.20",
     "@types/luxon": "^1.25.1",
     "@types/node": "^14.14.25",

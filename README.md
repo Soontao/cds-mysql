@@ -12,6 +12,8 @@
 - [x] deep insert
 - [x] full text search
 - [ ] deploy & schema migration
+- [ ] migration optimization (ignore drop in some case)
+- [ ] internaltional
 - [ ] `$expand` navigation
 - [ ] `$filter` with functions
 

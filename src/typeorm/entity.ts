@@ -1,20 +1,31 @@
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import cds from "@sap/cds";
 import { CSN } from "@sap/cds-reflect/apis/csn";
-import MySQLParser, { ColumnDefinitionContext, CreateTableContext, MySQLParserListener, TableConstraintDefContext, TableNameContext } from "ts-mysql-parser";
+import { alg, Graph } from "graphlib";
+import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";
 import { EntitySchema } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
+
+type TableName = string;
+
+interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
+  /**
+   * this view/table maybe depends other view/tables
+   */
+  deps: TableName[]
+}
 
 class CDSListener implements MySQLParserListener {
 
   private _entities: Array<EntitySchema>;
-  private _tmp: EntitySchemaOptions<any>;
+  private _tmp: EntitySchemaOptionsWithDeps;
+  private _currentStatement: string;
 
   constructor() {
     this._entities = [];
-    this._tmp = { name: "", columns: {} };
+    this._tmp = { name: "", columns: {}, deps: [] };
+    this._currentStatement = "";
   }
-
 
   exitTableName(ctx: TableNameContext) {
     this._tmp.name = ctx.text;
@@ -22,6 +33,7 @@ class CDSListener implements MySQLParserListener {
   }
 
   exitColumnDefinition(ctx: ColumnDefinitionContext) {
+    // mapping DDL column definition to schema options
     const name = ctx.columnName();
     const field = ctx.fieldDefinition();
     const dataType = field.dataType();
@@ -85,22 +97,15 @@ class CDSListener implements MySQLParserListener {
 
   }
 
-  exitCreateTable(ctx: CreateTableContext) {
-    this._entities.push(new EntitySchema(this._tmp));
-    this._tmp = { name: "", columns: {} };
+  private newEntitySchemaOption(): EntitySchemaOptionsWithDeps {
+    return { name: "", columns: {}, synchronize: true, deps: [] };
   }
 
-  // exitCreateView(ctx: CreateViewContext) {
-  //   const viewName = ctx.viewName();
-  //   const select = ctx.viewTail()?.viewSelect();
-  //   if (viewName && select) {
-  //     this._tmp.type = "view";
-  //     this._tmp.name = viewName.text;
-  //     this._tmp.expression = select.text;
-  //   }
-  //   this._entities.push(new EntitySchema(this._tmp));
-  //   this._tmp = { name: "", columns: {} };
-  // }
+  exitCreateTable(ctx: CreateTableContext) {
+    this._entities.push(new EntitySchema(this._tmp));
+    this._tmp = this.newEntitySchemaOption();
+  }
+
 
   exitTableConstraintDef(ctx: TableConstraintDefContext) {
     // PRIMARY KEY (COLUMN);
@@ -113,16 +118,57 @@ class CDSListener implements MySQLParserListener {
     }
   }
 
-  public getTables() {
+  exitCreateView(ctx: CreateViewContext) {
+    const viewName = ctx.viewName();
+    const select = ctx.viewTail()?.viewSelect();
+    if (viewName && select) {
+      this._tmp.type = "view";
+      this._tmp.name = viewName.text;
+      this._tmp.tableName = viewName.text;
+      const exp = this._currentStatement.substr(select.start.startIndex, select.stop.stopIndex);
+      this._tmp.expression = exp;
+    }
+    this._entities.push(new EntitySchema(this._tmp));
+    this._tmp = this.newEntitySchemaOption();
+  }
+
+  exitTableRef(ctx: TableRefContext) {
+    // SELECT FROM (TABLEREF), for view reference
+    this._tmp.deps.push(ctx.text);
+  }
+
+  /**
+   * get entity schemas after parsing
+   */
+  public getEntitySchemas(): Array<EntitySchema> {
+
+    if (this._entities && this._entities.length > 0) {
+      // order by graph
+      const g = new Graph();
+      this._entities.forEach(entity => {
+        const { deps, tableName } = (<EntitySchemaOptionsWithDeps>entity.options);
+        g.setNode(tableName, entity);
+        if (deps && deps.length > 0) {
+          // VIEW
+          deps.forEach(dep => g.setEdge(tableName, dep));
+        }
+      });
+      return alg.topsort(g).reverse().map(node => g.node(node));
+    }
+
     return this._entities;
   }
+
+  /**
+   * set current statement 
+   * 
+   * @param stat 
+   */
+  public setCurrentStatement(stat: string) {
+    this._currentStatement = stat;
+  }
+
 }
-
-const isCreateView = (stat: string) => {
-  const [, tableOrView] = stat.match(/^\s*CREATE (?:(TABLE|VIEW))\s+"?([^\s(]+)"?/im) || [];
-  return tableOrView?.toLowerCase() == "view";
-};
-
 
 /**
  * convert csn to typeorm entities
@@ -133,6 +179,9 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
   const listener: CDSListener = new CDSListener();
   const parser = new MySQLParser({ parserListener: listener });
   const statements = cds.compile.to.sql(model);
-  statements.forEach(stat => parser.parse(stat));
-  return listener.getTables();
+  statements.forEach(stat => {
+    listener.setCurrentStatement(stat);
+    parser.parse(stat);
+  });
+  return listener.getEntitySchemas();
 }

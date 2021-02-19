@@ -8,7 +8,17 @@ entity People : cuid {
       Active : Boolean default false;
 }
 
-entity ActivePeople as
-  select from People
+view ActivePeople as
+  select Name from People
   where
     Active = true;
+
+view InActivePeople as
+  select Name from People
+  where
+    Active = false;
+
+view AllPeoples as
+    select from ActivePeople
+  union
+    select from InActivePeople;

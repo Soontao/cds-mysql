@@ -4,13 +4,13 @@ import { RdbmsSchemaBuilder } from "typeorm/schema-builder/RdbmsSchemaBuilder";
 /**
  * @internal
  */
-class SchemaBuilder extends RdbmsSchemaBuilder {
+class CDSSchemaBuilder extends RdbmsSchemaBuilder {
 
   /**
-   * @override disable drop old column issue
+   * @override disable drop old columns
    */
   protected async executeSchemaSyncOperationsInProperOrder(): Promise<void> {
-    // await this.dropOldViews();
+    await this.dropOldViews();
     // await this.dropOldForeignKeys();
     await this.dropOldIndices();
     await this.dropOldChecks();
@@ -28,14 +28,16 @@ class SchemaBuilder extends RdbmsSchemaBuilder {
     // await this.createNewExclusions();
     // await this.createCompositeUniqueConstraints();
     // await this.createForeignKeys();
-    // await this.createViews();
+    await this.createViews();
   }
+
+
 }
 
 export async function migrate(connectionOptions: ConnectionOptions) {
   const conn = await createConnection(connectionOptions);
   try {
-    const builder = new SchemaBuilder(conn);
+    const builder = new CDSSchemaBuilder(conn);
     await builder.build(); // execute build
   } finally {
     if (conn.isConnected) {
