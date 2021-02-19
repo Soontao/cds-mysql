@@ -1,5 +1,5 @@
 import cds from "@sap/cds";
-import { CSN } from "@sap/cds/apis/csn";
+import { CSN } from "@sap/cds-reflect/apis/csn";
 import MySQLParser, { ColumnDefinitionContext, ColumnNameContext, CreateTableContext, DataTypeContext, FieldDefinitionContext, FieldLengthContext, FloatOptionsContext, MySQLParserListener, Real_ulonglong_numberContext, Real_ulong_numberContext, TableNameContext } from "ts-mysql-parser";
 import { EntitySchema } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";

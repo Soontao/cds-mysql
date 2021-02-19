@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
+import { CSN } from "@sap/cds-reflect/apis/csn";
 import DatabaseService from "@sap/cds-runtime/lib/db/Service";
-import { CSN } from "@sap/cds/apis/csn";
 import cds from "@sap/cds/lib";
 import { createPool, Pool } from "mysql2";
 import convertAssocToOneManaged from "./convertAssocToOneManaged";
@@ -127,7 +127,7 @@ export class MySQLDatabaseService extends DatabaseService {
    * deploy
    */
   // REVISIT: make tenant aware
-  async deploy(model: import("@sap/cds/apis/csn").CSN, options: any = {}) {
+  async deploy(model: import("@sap/cds-reflect/apis/csn").CSN, options: any = {}) {
 
     const createEntities = cds.compile.to.sql(model);
     if (!createEntities || createEntities.length === 0) return; // > nothing to deploy
