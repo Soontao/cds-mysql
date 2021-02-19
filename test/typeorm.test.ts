@@ -40,6 +40,7 @@ describe("TypeORM Test Suite", () => {
     expect(entities_step_3).toHaveLength(2);
     const entities_step_4 = csnToEntity(await loadCSN("./resources/migrate/step-4.cds"));
     expect(entities_step_4).toHaveLength(4);
+    const entities_step_5 = csnToEntity(await loadCSN("./resources/migrate/step-5.cds"));
 
     const baseOption: ConnectionOptions = {
       name: "migrate-test-01",
@@ -58,6 +59,7 @@ describe("TypeORM Test Suite", () => {
     // step 4 will include the cross ref view
     // so the view creation order will be important
     await migrate({ ...baseOption, entities: entities_step_4 });
+    await migrate({ ...baseOption, entities: entities_step_5 });
 
 
   });
