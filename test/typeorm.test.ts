@@ -1,5 +1,7 @@
 
-import { csnToEntity } from "../src/typeorm";
+import { sleep } from "@newdash/newdash";
+import { ConnectionOptions } from "typeorm";
+import { csnToEntity, migrate } from "../src/typeorm";
 import { loadCSN } from "./utils";
 
 describe("TypeORM Test Suite", () => {
@@ -21,6 +23,42 @@ describe("TypeORM Test Suite", () => {
     const csn = await loadCSN("./resources/property-type.cds");
     const entities = csnToEntity(csn);
     expect(entities).toHaveLength(1);
+
+    const [entity] = entities;
+    const { columns } = entity.options;
+
+    expect(columns["Type"].primary).toBeTruthy();
+    expect(columns["Name"].primary).toBeTruthy();
+    expect(columns["BirthDay"].nullable).toBeFalsy();
+    expect(columns["FullEmployee"].default).toStrictEqual(true);
+
+  });
+
+  it("should support migrate tables", async () => {
+    const entities_step_1 = csnToEntity(await loadCSN("./resources/migrate/step-1.cds"));
+    const entities_step_2 = csnToEntity(await loadCSN("./resources/migrate/step-2.cds"));
+    const entities_step_3 = csnToEntity(await loadCSN("./resources/migrate/step-3.cds"));
+
+    const baseOption: ConnectionOptions = {
+      name: "migrate-test-01",
+      type: "mysql",
+      username: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+      host: process.env.MYSQL_HOST,
+      port: parseInt(process.env.MYSQL_PORT),
+      // logging: true
+    };
+
+    await migrate({ ...baseOption, entities: entities_step_1 });
+    await migrate({ ...baseOption, entities: entities_step_2 });
+    await migrate({ ...baseOption, entities: entities_step_3 });
+
+
+  });
+
+  afterAll(async () => {
+    await sleep(100);
   });
 
 

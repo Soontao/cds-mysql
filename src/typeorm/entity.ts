@@ -1,39 +1,9 @@
+import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import cds from "@sap/cds";
 import { CSN } from "@sap/cds-reflect/apis/csn";
-import MySQLParser, { ColumnDefinitionContext, ColumnNameContext, CreateTableContext, DataTypeContext, FieldDefinitionContext, FieldLengthContext, FloatOptionsContext, MySQLParserListener, Real_ulonglong_numberContext, Real_ulong_numberContext, TableNameContext } from "ts-mysql-parser";
+import MySQLParser, { ColumnDefinitionContext, CreateTableContext, MySQLParserListener, TableConstraintDefContext, TableNameContext } from "ts-mysql-parser";
 import { EntitySchema } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
-
-const cdsToSqlTypes = {
-  "cds.String": "NVARCHAR",
-  "cds.hana.NCHAR": "NCHAR",
-  "cds.LargeString": "NCLOB",
-  "cds.hana.VARCHAR": "VARCHAR",
-  "cds.hana.CHAR": "CHAR",
-  "cds.hana.CLOB": "CLOB",
-  "cds.Binary": "BLOB",
-  "cds.hana.BINARY": "BLOB",
-  "cds.LargeBinary": "BLOB",
-  "cds.Decimal": "DECIMAL",
-  "cds.DecimalFloat": "DECIMAL",
-  "cds.Integer64": "BIGINT",
-  "cds.Integer": "INTEGER",
-  "cds.hana.SMALLINT": "SMALLINT",
-  "cds.hana.TINYINT": "TINYINT",
-  "cds.Double": "DOUBLE",
-  "cds.hana.REAL": "REAL",
-  "cds.Date": "DATE",
-  "cds.Time": "TIME",
-  "cds.DateTime": "TIMESTAMP",
-  "cds.Timestamp": "TIMESTAMP",
-  "cds.Boolean": "BOOLEAN",
-  "cds.UUID": "NVARCHAR",
-  "cds.hana.SMALLDECIMAL": "DECIMAL",
-  "cds.hana.ST_POINT": "ST_POINT",
-  "cds.hana.ST_GEOMETRY": "ST_GEOMETRY"
-};
-
-const IGNORE_TYPES = ["cds.Composition", "cds.Association"];
 
 class CDSListener implements MySQLParserListener {
 
@@ -52,12 +22,12 @@ class CDSListener implements MySQLParserListener {
   }
 
   exitColumnDefinition(ctx: ColumnDefinitionContext) {
-
-    const name = ctx.getRuleContext(0, ColumnNameContext);
-    const field = ctx.getRuleContext(0, FieldDefinitionContext);
-    const dataType = field.getRuleContext(0, DataTypeContext);
-    const length = dataType.tryGetRuleContext(0, FieldLengthContext);
-    const floatOption = dataType.tryGetRuleContext(0, FloatOptionsContext);
+    const name = ctx.columnName();
+    const field = ctx.fieldDefinition();
+    const dataType = field.dataType();
+    const length = dataType.fieldLength();
+    const floatOption = dataType.floatOptions();
+    const attrs = field.columnAttribute();
 
     this._tmp.columns[name.text] = {
       name: name.text,
@@ -66,15 +36,51 @@ class CDSListener implements MySQLParserListener {
     };
 
     if (length) {
-      const long1 = length.tryGetRuleContext(0, Real_ulonglong_numberContext);
-      const long2 = length.tryGetRuleContext(0, Real_ulong_numberContext);
-      if (long1 || long2) {
-        this._tmp.columns[name.text]["length"] = parseInt(long1?.text ?? long2?.text);
+      const long1 = length.real_ulonglong_number();
+      if (long1) {
+        this._tmp.columns[name.text]["length"] = parseInt(long1?.text);
       }
     }
     if (floatOption) {
       this._tmp.columns[name.text]["precision"] = parseInt(floatOption.getChild(0).getChild(1).text);
       this._tmp.columns[name.text]["scale"] = parseInt(floatOption.getChild(0).getChild(3).text);
+    }
+
+    if (attrs && attrs.length > 0) {
+      attrs.forEach(attr => {
+        // is DEFAULT value
+        if (attr.DEFAULT_SYMBOL()) {
+          const sign = attr.signedLiteral();
+          if (sign) {
+
+            const lit = sign.literal();
+
+            let value = undefined;
+
+            if (lit.boolLiteral()) {
+              value = Boolean(lit.boolLiteral());
+            }
+            if (lit.numLiteral()) {
+              value = parseFloat(lit.numLiteral().text);
+            }
+            if (lit.nullLiteral()) {
+              value = null;
+            }
+            if (lit.textLiteral()) {
+              value = trimSuffix(trimPrefix(lit.textLiteral().text, "'"), "'");
+            }
+
+            this._tmp.columns[name.text]["default"] = value;
+
+          }
+
+        }
+
+        if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
+          this._tmp.columns[name.text]["nullable"] = false;
+        }
+
+      });
     }
 
   }
@@ -84,13 +90,45 @@ class CDSListener implements MySQLParserListener {
     this._tmp = { name: "", columns: {} };
   }
 
+  // exitCreateView(ctx: CreateViewContext) {
+  //   const viewName = ctx.viewName();
+  //   const select = ctx.viewTail()?.viewSelect();
+  //   if (viewName && select) {
+  //     this._tmp.type = "view";
+  //     this._tmp.name = viewName.text;
+  //     this._tmp.expression = select.text;
+  //   }
+  //   this._entities.push(new EntitySchema(this._tmp));
+  //   this._tmp = { name: "", columns: {} };
+  // }
+
+  exitTableConstraintDef(ctx: TableConstraintDefContext) {
+    // PRIMARY KEY (COLUMN);
+    if (ctx.PRIMARY_SYMBOL() && ctx.KEY_SYMBOL()) {
+      const keyList = ctx.keyListVariants().keyList();
+      const keyParts = keyList.keyPart();
+      keyParts.forEach(keyPart => {
+        this._tmp.columns[keyPart.text].primary = true;
+      });
+    }
+  }
 
   public getTables() {
     return this._entities;
   }
 }
 
+const isCreateView = (stat: string) => {
+  const [, tableOrView] = stat.match(/^\s*CREATE (?:(TABLE|VIEW))\s+"?([^\s(]+)"?/im) || [];
+  return tableOrView?.toLowerCase() == "view";
+};
 
+
+/**
+ * convert csn to typeorm entities
+ * 
+ * @param model 
+ */
 export function csnToEntity(model: CSN): Array<EntitySchema> {
   const listener: CDSListener = new CDSListener();
   const parser = new MySQLParser({ parserListener: listener });

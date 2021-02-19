@@ -1,20 +1,17 @@
 namespace test.property.type;
 
-using {cuid} from '@sap/cds/common';
-
-
 type Name : String(20);
 
-entity People : cuid {
-  Name          : Name;
-  Age           : Integer;
-  Credit        : Decimal(10, 2);
-  FullEmployee  : Boolean default false;
-  BirthDay      : Date;
-  BirthDateTime : DateTime;
-  Type          : String enum {
-    normal = 'normal';
-    high   = 'high';
-  };
-  Avatar        : Binary(255);
+entity People {
+  key Name          : Name default 'Unknown';
+      Age           : Integer default 10;
+      Credit        : Decimal(10, 2) default 1.0;
+      FullEmployee  : Boolean default false;
+      BirthDay      : Date not null;
+      BirthDateTime : DateTime;
+  key Type          : String(10) enum {
+        normal = 'normal';
+        high   = 'high';
+      };
+      Avatar        : Binary(255);
 }
