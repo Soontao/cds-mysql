@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { isEmpty } from "@newdash/newdash";
 import { Query } from "@sap/cds-reflect/apis/cqn";
-import { CSN } from "@sap/cds-reflect/apis/csn";
 import { getPostProcessMapper, postProcess } from "@sap/cds-runtime/lib/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds-runtime/lib/db/expand";
 import { PoolConnection } from "mysql2";
@@ -139,7 +138,7 @@ function _convertStreamValues(values) {
   return any ? Promise.all(values) : values;
 }
 
-async function executeInsertCQN(model: CSN, dbc: PoolConnection, query: Query, user, locale, txTimestamp) {
+async function executeInsertCQN(model, dbc: PoolConnection, query: Query, user, locale, txTimestamp) {
   const { sql, values = [] } = sqlFactory(
     query,
     {
@@ -153,7 +152,7 @@ async function executeInsertCQN(model: CSN, dbc: PoolConnection, query: Query, u
   return executeInsertSQL(dbc, sql, vals, query);
 }
 
-async function executeUpdateCQN(model: CSN, dbc, cqn, user, locale, txTimestamp) {
+async function executeUpdateCQN(model, dbc, cqn, user, locale, txTimestamp) {
   const { sql, values = [] } = sqlFactory(
     cqn,
     {

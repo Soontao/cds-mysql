@@ -4,7 +4,7 @@
 ![node-test](https://github.com/Soontao/cds-mysql/workflows/node-test/badge.svg)
 [![codecov](https://codecov.io/gh/Soontao/cds-mysql/branch/main/graph/badge.svg?token=xTt6AaHeuu)](https://codecov.io/gh/Soontao/cds-mysql)
 
-`MySQL`/`MariaDB`/`TiDB` adapter for SAP CAP Core Data Service Runtime, inspired by [cds-pg](https://github.com/sapmentors/cds-pg)
+`MySQL`/`MariaDB`/`TiDB` adapter for [SAP CAP Framework](https://cap.cloud.sap/docs/about/), inspired by [cds-pg](https://github.com/sapmentors/cds-pg)
 
 ## Features
 
@@ -13,7 +13,7 @@
 - [x] full text search
 - [ ] deploy & schema migration
 - [ ] migration optimization (ignore drop in some case)
-- [ ] internaltional
+- [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/i18n)
 - [ ] `$expand` navigation
 - [ ] `$filter` with functions
 

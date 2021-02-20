@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
-import { CSN } from "@sap/cds-reflect/apis/csn";
 import DatabaseService from "@sap/cds-runtime/lib/db/Service";
 import cds from "@sap/cds/lib";
 import { createPool, Pool } from "mysql2";
@@ -39,7 +38,7 @@ export class MySQLDatabaseService extends DatabaseService {
 
   private _pools: LRUCacheProvider<string, Pool>
 
-  set model(csn: CSN) {
+  set model(csn) {
     const m = csn && "definitions" in csn ? cds.linked(cds.compile.for.odata(csn)) : csn;
     cds.alpha_localized(m);
     super.model = m;

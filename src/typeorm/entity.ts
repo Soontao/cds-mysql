@@ -1,6 +1,5 @@
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import cds from "@sap/cds";
-import { CSN } from "@sap/cds-reflect/apis/csn";
 import { alg, Graph } from "graphlib";
 import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";
 import { EntitySchema } from "typeorm";
@@ -27,7 +26,7 @@ class CDSListener implements MySQLParserListener {
     this._currentStatement = "";
   }
 
-  // CREATE TABLE
+  // >> CREATE TABLE
 
   exitTableName(ctx: TableNameContext) {
     this._tmp.name = ctx.text;
@@ -133,6 +132,7 @@ class CDSListener implements MySQLParserListener {
       this._tmp.type = "view";
       this._tmp.name = viewName.text;
       this._tmp.tableName = viewName.text;
+      // extract (SELECT FROM ...) part from original plain SQL 
       const exp = this._currentStatement.substr(select.start.startIndex, select.stop.stopIndex);
       this._tmp.expression = exp;
     }
@@ -185,9 +185,9 @@ class CDSListener implements MySQLParserListener {
 /**
  * convert csn to typeorm entities
  * 
- * @param model 
+ * @param model CSN model
  */
-export function csnToEntity(model: CSN): Array<EntitySchema> {
+export function csnToEntity(model: any): Array<EntitySchema> {
   const listener: CDSListener = new CDSListener();
   const parser = new MySQLParser({ parserListener: listener });
   const statements = cds.compile.to.sql(model);
