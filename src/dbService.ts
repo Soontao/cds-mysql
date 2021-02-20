@@ -4,9 +4,12 @@ import { CSN } from "@sap/cds-reflect/apis/csn";
 import DatabaseService from "@sap/cds-runtime/lib/db/Service";
 import cds from "@sap/cds/lib";
 import { createPool, Pool } from "mysql2";
+import { ConnectionOptions } from "typeorm";
+import { MYSQL_CHARSET } from "./constants";
 import convertAssocToOneManaged from "./convertAssocToOneManaged";
 import execute from "./execute";
 import localized from "./localized";
+import { csnToEntity, migrate } from "./typeorm";
 
 const LOG = (cds.log || cds.debug)("mysql");
 
@@ -109,7 +112,7 @@ export class MySQLDatabaseService extends DatabaseService {
   }
 
   /*
-   * connection
+   * acquire connection from pool
    */
   public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || "default";
@@ -120,54 +123,33 @@ export class MySQLDatabaseService extends DatabaseService {
   }
 
   public release(conn: any) {
-    conn._release();
+    if (conn._release && typeof conn._release === "function") {
+      conn._release();
+    }
+  }
+
+  private _getTypeOrmOption(): ConnectionOptions {
+    const { credentials } = this.options;
+    return {
+      name: "cds-deploy-connection",
+      type: "mysql",
+      username: credentials.user,
+      charset: MYSQL_CHARSET,
+      password: credentials.password,
+      database: credentials.database ?? credentials.user,
+      host: credentials.host,
+      port: parseInt(credentials.port) ?? 3306,
+      entities: []
+    };
+
   }
 
   /*
    * deploy
    */
-  // REVISIT: make tenant aware
   async deploy(model: import("@sap/cds-reflect/apis/csn").CSN, options: any = {}) {
-
-    const createEntities = cds.compile.to.sql(model);
-    if (!createEntities || createEntities.length === 0) return; // > nothing to deploy
-
-    const dropViews = [];
-    const dropTables = [];
-    for (const each of createEntities) {
-      const [, table, entity] = each.match(/^\s*CREATE (?:(TABLE)|VIEW)\s+"?([^\s(]+)"?/im) || [];
-      if (table) dropTables.push({ DROP: { entity } });
-      else dropViews.push({ DROP: { view: entity } });
-    }
-
-    if (options.dry) {
-      const log = LOG.debug;
-      for (const {
-        DROP: { view }
-      } of dropViews) {
-        log("DROP VIEW IF EXISTS " + view + ";");
-      }
-      log();
-      for (const {
-        DROP: { entity }
-      } of dropTables) {
-        log("DROP TABLE IF EXISTS " + entity + ";");
-      }
-      log();
-      for (const each of createEntities) log(each + ";\n");
-      return;
-    }
-
-    const tx = this.transaction();
-
-    // clean old tables
-    await tx.run(dropViews);
-    await tx.run(dropTables);
-
-    // create new tables
-    await tx.run(createEntities);
-    await tx.commit();
-
+    const entities = csnToEntity(model);
+    await migrate({ ...this._getTypeOrmOption(), entities, });
     return true;
   }
 };

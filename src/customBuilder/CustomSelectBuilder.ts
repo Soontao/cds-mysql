@@ -1,4 +1,5 @@
 import { SelectBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { MYSQL_COLLATE } from "../constants";
 
 export = class CustomSelectBuilder extends SelectBuilder {
 
@@ -23,7 +24,7 @@ export = class CustomSelectBuilder extends SelectBuilder {
   }
 
   getCollatingSequence() {
-    return "utf8_general_ci";
+    return MYSQL_COLLATE;
   }
 
   _forUpdate() { }

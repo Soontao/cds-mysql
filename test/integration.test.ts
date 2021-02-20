@@ -3,7 +3,7 @@ import sleep from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
-import { createRandomName } from "./utils";
+import { cleanDB, createRandomName } from "./utils";
 
 
 describe("Integration Test Suite", () => {
@@ -89,6 +89,7 @@ describe("Integration Test Suite", () => {
 
   afterAll(async () => {
     await sleep(100);
+    await cleanDB();
   });
 
 });

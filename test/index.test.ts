@@ -3,7 +3,7 @@ import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
-import { createRandomName, setupEnv } from "./utils";
+import { cleanDB, createRandomName, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
@@ -67,6 +67,7 @@ describe("CDS MySQL Basic Test Suite", () => {
   afterAll(async () => {
     // wait all table deployment
     await sleep(500);
+    await cleanDB();
   });
 
 });

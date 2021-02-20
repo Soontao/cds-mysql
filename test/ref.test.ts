@@ -1,7 +1,8 @@
+import { sleep } from "@newdash/newdash";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import path from "path";
-import { setupEnv } from "./utils";
+import { cleanDB, setupEnv } from "./utils";
 
 describe("Ref Test Suite", () => {
 
@@ -21,6 +22,11 @@ describe("Ref Test Suite", () => {
         in: SELECT.from(Detail).columns("PeopleID")
       }
     }));
+  });
+
+  afterAll(async () => {
+    await sleep(100);
+    await cleanDB();
   });
 
 

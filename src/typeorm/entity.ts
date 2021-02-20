@@ -23,9 +23,11 @@ class CDSListener implements MySQLParserListener {
 
   constructor() {
     this._entities = [];
-    this._tmp = { name: "", columns: {}, deps: [] };
+    this._tmp = this.newEntitySchemaOption();
     this._currentStatement = "";
   }
+
+  // CREATE TABLE
 
   exitTableName(ctx: TableNameContext) {
     this._tmp.name = ctx.text;
@@ -44,7 +46,8 @@ class CDSListener implements MySQLParserListener {
     this._tmp.columns[name.text] = {
       name: name.text,
       // @ts-ignore
-      type: dataType.getChild(0).text.toLowerCase()
+      type: dataType.getChild(0).text.toLowerCase(),
+      nullable: true, // default can be null
     };
 
     if (length) {
@@ -118,6 +121,11 @@ class CDSListener implements MySQLParserListener {
     }
   }
 
+  // << CREATE TABLE
+
+
+  // >> CREATE VIEW
+
   exitCreateView(ctx: CreateViewContext) {
     const viewName = ctx.viewName();
     const select = ctx.viewTail()?.viewSelect();
@@ -134,8 +142,12 @@ class CDSListener implements MySQLParserListener {
 
   exitTableRef(ctx: TableRefContext) {
     // SELECT FROM (TABLEREF), for view reference
+    // ANY JOIN FROM (TABLEREF)
     this._tmp.deps.push(ctx.text);
   }
+
+  // << CREATE VIEW
+
 
   /**
    * get entity schemas after parsing
