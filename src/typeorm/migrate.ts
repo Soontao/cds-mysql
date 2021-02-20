@@ -1,43 +1,11 @@
-import { ConnectionOptions, createConnection } from "typeorm";
-import { RdbmsSchemaBuilder } from "typeorm/schema-builder/RdbmsSchemaBuilder";
-
-/**
- * @internal
- */
-class CDSSchemaBuilder extends RdbmsSchemaBuilder {
-
-  /**
-   * @override disable drop old columns
-   */
-  protected async executeSchemaSyncOperationsInProperOrder(): Promise<void> {
-    await this.dropOldViews();
-    // await this.dropOldForeignKeys();
-    await this.dropOldIndices();
-    await this.dropOldChecks();
-    // await this.dropOldExclusions();
-    // await this.dropCompositeUniqueConstraints();
-    await this.renameColumns();
-    await this.createNewTables();
-    // DO NOT drop old columns
-    // await this.dropRemovedColumns(); 
-    await this.addNewColumns();
-    await this.updatePrimaryKeys();
-    await this.updateExistColumns();
-    await this.createNewIndices();
-    await this.createNewChecks();
-    // await this.createNewExclusions();
-    // await this.createCompositeUniqueConstraints();
-    // await this.createForeignKeys();
-    await this.createViews();
-  }
-
-
-}
+import { ConnectionOptions } from "typeorm";
+import { CDSMySQLConnection, CDSMySQLSchemaBuilder } from "./mysql";
 
 export async function migrate(connectionOptions: ConnectionOptions) {
-  const conn = await createConnection(connectionOptions);
+  const conn = new CDSMySQLConnection(connectionOptions);
   try {
-    const builder = new CDSSchemaBuilder(conn);
+    await conn.connect();
+    const builder = new CDSMySQLSchemaBuilder(conn);
     await builder.build(); // execute build
   } finally {
     if (conn.isConnected) {
