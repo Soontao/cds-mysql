@@ -50,6 +50,25 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     }
   }
 
+  _handleContains(args) {
+    const contains = this._obj.func
+      ? !this._obj.func.toLowerCase().includes("not")
+      : !this._obj.ref[0].toLowerCase().includes("not");
+    const columns = this._columns(args);
+    const params = this._obj.func ? args.slice(1) : this._obj.ref[1].args.slice(1);
+
+    for (const param of params) {
+      if (param === "or" || param === "and" || param === "not") {
+        this._outputObj.sql.push(param);
+      } else {
+        const searchText = param.val.toLowerCase();
+        this._outputObj.sql.push("(");
+        this._createLikeComparison(contains, columns, searchText);
+        this._outputObj.sql.push(")");
+      }
+    }
+  }
+
   _standardFunction(functionName, args) {
     switch (functionName) {
       case "locate":
@@ -75,6 +94,34 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
       this._addFunctionArgs(args);
       this._outputObj.sql.push(")");
     }
+  }
+
+  _handleConcat(args) {
+    const res = [];
+    for (const arg of args) {
+      if (arg.ref) {
+        const { sql, values } = new this.ReferenceBuilder(arg, this._options, this._csn).build();
+        res.push(sql);
+        this._outputObj.values.push(...values);
+      } else if (arg.val) {
+        if (typeof arg.val === "number") {
+          res.push(arg.val);
+        } else {
+          this._outputObj.values.push(arg.val);
+          res.push(this._options.placeholder);
+        }
+      } else if (typeof arg === "string") {
+        res.push(arg);
+      } else if (arg.func) {
+        const { sql, values } = new FunctionBuilder(arg, this._options, this._csn).build();
+        res.push(sql);
+        this._outputObj.values.push(...values);
+      }
+    }
+    // MySQL support concat multi values
+    this._outputObj.sql.push("CONCAT(");
+    this._outputObj.sql.push(res.join(", "));
+    this._outputObj.sql.push(")");
   }
 
   _val(val) {

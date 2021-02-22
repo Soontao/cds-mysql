@@ -87,6 +87,11 @@ describe("Integration Test Suite", () => {
     );
     expect(retrievedItem?.value?.[0]?.Name).toBe(name);
 
+    const { data: retrievedItem2 } = await server.GET(
+      `/bank/Peoples?$filter=contains(Name,'${name.substring(0, 4)}')`
+    );
+    expect(retrievedItem2?.value?.[0]?.Name).toBe(name);
+
     const { data: createdCard } = await server.POST("/bank/Cards", {
       People_ID: createdPeople?.ID,
       Number: "Card Number 01",

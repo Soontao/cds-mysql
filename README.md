@@ -17,9 +17,5 @@
 - [ ] `$expand` navigation
 - [ ] `$filter` with functions
 
-## Known Issues
-
-- function `contains(FIELD,'text')` not works correctly in `$filter`
-
 ## [CHANGELOG](./CHANGELOG.md)
 ## [LICENSE](./LICENSE)
