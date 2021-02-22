@@ -13,7 +13,7 @@
 - [x] full text search
 - [ ] deploy & schema migration
 - [ ] migration optimization (ignore drop in some case)
-- [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/i18n)
+- [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/localized-data)
 - [ ] `$expand` navigation
 - [ ] `$filter` with functions
 
