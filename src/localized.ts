@@ -8,7 +8,7 @@ const getLocalize = (locale, model) => name => {
     return name;
   }
   // if we get here via onReadDraft, target is already localized
-  // because of subrequest using SELECT.from as new target
+  // because of sub-request using SELECT.from as new target
   const target = model.definitions[ensureUnlocalized(name)];
   const localizedView =
     target &&

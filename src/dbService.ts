@@ -4,7 +4,7 @@ import DatabaseService from "@sap/cds-runtime/lib/db/Service";
 import cds from "@sap/cds/lib";
 import { createPool, Pool } from "mysql2";
 import { ConnectionOptions } from "typeorm";
-import { MYSQL_CHARSET } from "./constants";
+import { TENANT_DEFAULT } from "./constants";
 import convertAssocToOneManaged from "./convertAssocToOneManaged";
 import execute from "./execute";
 import localized from "./localized";
@@ -12,7 +12,35 @@ import { csnToEntity, migrate } from "./typeorm";
 
 const LOG = (cds.log || cds.debug)("mysql");
 
+
+interface MySQLCredential {
+  /**
+   * DB User Name
+   */
+  user: string,
+  /**
+   * DB Password
+   */
+  password?: string,
+  /**
+   * DB Database/Schema Name, default same with user name
+   */
+  database?: string,
+  /**
+   * DB HostName, default localhost
+   */
+  host?: string;
+  /**
+   * DB Connection Port, default 3306
+   */
+  port?: string | number;
+}
+
+/**
+ * MySQL Database Adapter for SAP CAP Framework
+ */
 export class MySQLDatabaseService extends DatabaseService {
+
   constructor(...args: any[]) {
     super(...args);
 
@@ -104,36 +132,60 @@ export class MySQLDatabaseService extends DatabaseService {
     });
   }
 
-  private getPool(tenant = "default"): Pool {
-    return this._pools.getOrCreate(tenant, () => {
-      return createPool({ ...this.options.credentials, dateStrings: true });
+  /**
+   * get connection pool for tenant
+   * 
+   * @param tenant 
+   */
+  private async getPool(tenant = TENANT_DEFAULT): Promise<Pool> {
+    return this._pools.getOrCreate(tenant, async () => {
+      const credential = await this.getTenantCredential(tenant);
+      return createPool({ ...credential, dateStrings: true });
     });
   }
 
-  /*
+  /**
+   * overwrite this method to provide different databases for different tenants
+   * 
+   * @param tenant 
+   */
+  private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
+    // TODO, leave an enhance point for user
+    return this.options.credentials;
+  }
+
+  /**
    * acquire connection from pool
+   * 
+   * @override
+   * @param arg 
    */
   public async acquire(arg: any) {
-    const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || "default";
-    const pool = this.getPool(tenant);
+    const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || TENANT_DEFAULT;
+    const pool = await this.getPool(tenant);
     const conn = await pool.promise().getConnection();
     conn._release = () => pool.releaseConnection(conn.connection);
     return conn;
   }
 
+  /**
+   * release connection to pool
+   * 
+   * @param conn 
+   * @override
+   */
   public release(conn: any) {
     if (conn._release && typeof conn._release === "function") {
       conn._release();
     }
   }
 
-  private _getTypeOrmOption(): ConnectionOptions {
-    const { credentials } = this.options;
+  private async _getTypeOrmOption(tenant?: string): Promise<ConnectionOptions> {
+    const credentials = await this.getTenantCredential(tenant);
     return {
       name: "cds-deploy-connection",
       type: "mysql",
       username: credentials.user,
-      charset: MYSQL_CHARSET,
       password: credentials.password,
       database: credentials.database ?? credentials.user,
       host: credentials.host,
@@ -146,9 +198,11 @@ export class MySQLDatabaseService extends DatabaseService {
   /*
    * deploy
    */
-  async deploy(model: import("@sap/cds-reflect/apis/csn").CSN, options: any = {}) {
+  async deploy(model: any, options: any = {}) {
     const entities = csnToEntity(model);
-    await migrate({ ...this._getTypeOrmOption(), entities, });
+    const migrateOptions = await this._getTypeOrmOption(options?.tenant ?? TENANT_DEFAULT);
+    await migrate({ ...migrateOptions, entities });
     return true;
   }
+
 };

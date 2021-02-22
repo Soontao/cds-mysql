@@ -14,6 +14,7 @@
 - [ ] deploy & schema migration
 - [ ] migration optimization (ignore drop in some case)
 - [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/localized-data)
+- [ ] multi tenancy
 - [ ] `$expand` navigation
 - [ ] `$filter` with functions
 

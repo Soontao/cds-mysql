@@ -36,7 +36,7 @@ describe("TypeORM Test Suite", () => {
 
 
     const CSNs = await Promise.all(
-      range(1, 8)
+      range(1, 9)
         .map(idx => `./resources/migrate/step-${idx}.cds`)
         .map(loadCSN)
     );
