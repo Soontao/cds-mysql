@@ -1,4 +1,4 @@
-// pre conversion for INSERT/UPDATE
+// pre conversion for INSERT/UPDATE (JSON -> DB)
 import { DateTime } from "luxon";
 import { MYSQL_DATE_TIME_FORMAT } from "./constants";
 
@@ -8,7 +8,7 @@ import { MYSQL_DATE_TIME_FORMAT } from "./constants";
  * @param value 
  */
 function adaptToMySQLDateTime(value: string) {
-  if (value === null || value === undefined) {
+  if (value === null) {
     return null;
   }
   const dateTime = DateTime.fromISO(value, { setZone: true });

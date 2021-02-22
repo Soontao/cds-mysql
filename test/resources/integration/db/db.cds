@@ -21,10 +21,18 @@ entity Detail : cuid, managed {
 }
 
 entity Card : cuid, managed {
-  Number   : String(50);
-  CertDate : Date;
-  People   : Association to one People;
-  Active   : Boolean default false;
-  Credit   : Decimal(30, 2) default 0;
-  Debit    : Decimal(30, 2) default 0;
+  Number         : String(50);
+  CertDate       : Date;
+  ActiveDate     : Date default $now;
+  People         : Association to one People;
+  Active         : Boolean default false;
+  Credit         : Decimal(30, 2) default 100.001;
+  Debit          : Decimal(30, 2) default 100.001;
+  ExampleInt64   : Integer64 default 1000000000;
+  ExampleInt64_2 : Integer64 default null;
+  ExampleBoolean : Boolean default null;
+  ExampleTS1     : Timestamp default $now;
+  ExampleTS2     : Timestamp default null;
+  ExampleDT1     : DateTime default null;
+  ExampleDT2     : DateTime default $now;
 }

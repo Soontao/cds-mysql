@@ -66,11 +66,11 @@ describe("Integration Test Suite", () => {
 
   });
 
-  it("should support complex query", async () => {
+  it("should support complex query & association", async () => {
 
     const name = createRandomName();
     const addr = createRandomName();
-    const { data: created } = await server.POST("/bank/Peoples", {
+    const { data: createdPeople } = await server.POST("/bank/Peoples", {
       Name: name,
       Age: 21,
       RegisterDate: "2000-01-01",
@@ -80,12 +80,29 @@ describe("Integration Test Suite", () => {
       }
     });
 
-    expect(created?.ID).not.toBeUndefined();
+    expect(createdPeople?.ID).not.toBeUndefined();
 
-    const { data: retrievedItem } = await server.GET(`/bank/Peoples?$filter=year(RegisterDate) eq 2000 and substring(Name,0,4) eq '${name.substring(0, 4)}'`);
+    const { data: retrievedItem } = await server.GET(
+      `/bank/Peoples?$filter=year(RegisterDate) eq 2000 and substring(Name,0,4) eq '${name.substring(0, 4)}'`
+    );
     expect(retrievedItem?.value?.[0]?.Name).toBe(name);
 
+    const { data: createdCard } = await server.POST("/bank/Cards", {
+      People_ID: createdPeople?.ID,
+      Number: "Card Number 01",
+      ExampleDT1: null,
+    });
+
+    expect(createdCard).not.toBe(undefined);
+
+    expect(createdCard.Active).toBeFalsy();
+
+    const { data: createdPeopleCards } = await server.GET(`/bank/Peoples(${createdPeople.ID})/Cards`);
+
+    expect(createdPeopleCards.value).toHaveLength(1);
+
   });
+
 
   afterAll(async () => {
     await sleep(100);

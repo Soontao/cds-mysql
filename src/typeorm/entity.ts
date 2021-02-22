@@ -88,6 +88,12 @@ class CDSListener implements MySQLParserListener {
 
           }
 
+          // current_timestamp
+          if (attr.NOW_SYMBOL()) {
+            const now = attr.NOW_SYMBOL();
+            this._tmp.columns[name.text]["default"] = () => now.text;
+          }
+
         }
 
         if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
