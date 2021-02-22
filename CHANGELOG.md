@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/Soontao/cds-mysql/compare/v0.1.2...v0.1.3) (2021-02-22)
+
+
+### Features
+
+* migrate with typeorm ([37b7e00](https://github.com/Soontao/cds-mysql/commit/37b7e005876c8ba318dbc25f1cd58b3588c4ba7c))
+* migration with view ([fda5c1a](https://github.com/Soontao/cds-mysql/commit/fda5c1ad03d059557160d5c3288e35d9973016d8))
+* reverse SQL to entity schema ([e21c737](https://github.com/Soontao/cds-mysql/commit/e21c7372ea4480b0bfddb73201821687c42d3b19))
+
+
+### Bug Fixes
+
+* charset for tables ([4675cd0](https://github.com/Soontao/cds-mysql/commit/4675cd067d2f050ac4a8f492adb28daa568eee60))
+* contains function not work ([30418b1](https://github.com/Soontao/cds-mysql/commit/30418b18abc056497a0f29711fda96fa862e2d2c))
+
 ### [0.1.2](https://github.com/Soontao/cds-mysql/compare/v0.0.2...v0.1.2) (2021-02-10)
 
 
