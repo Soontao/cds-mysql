@@ -49,14 +49,15 @@ edit your `package.json` > `cds` node
 
 ```json
 {
-    "requires": {
-        "db": {
-            "kind": "mysql"
-        },
-        "mysql": {
-            "impl": "cds-mysql"
-        }
+  "requires": {
+    "db": {
+      "kind": "mysql"
+    },
+    "mysql": {
+      "impl": "cds-mysql",
+      "models": ["srv", "db"]
     }
+  }
 }
 ```
 
