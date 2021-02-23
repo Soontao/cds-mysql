@@ -2,8 +2,7 @@
 import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
-import path from "path";
-import { cleanDB, createRandomName, setupEnv } from "./utils";
+import { cleanDB, createRandomName, loadCSN, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
@@ -11,7 +10,7 @@ describe("CDS MySQL Basic Test Suite", () => {
 
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 
-    const csn = await cds.load(path.join(__dirname, "./resources/people.cds"));
+    const csn = await loadCSN("./resources/people.cds");
     await cds_deploy(csn).to("mysql");
     const randomName = createRandomName();
     const randomName2 = createRandomName();
@@ -45,22 +44,27 @@ describe("CDS MySQL Basic Test Suite", () => {
   });
 
   it("should support deploy complex-type entity", async () => {
-    const csn = await cds.load(path.join(__dirname, "./resources/complex-type.cds"));
+    const csn = await loadCSN("./resources/complex-type.cds");
     await cds_deploy(csn).to("mysql");
   });
 
   it("should support deploy different property types entity", async () => {
-    const csn = await cds.load(path.join(__dirname, "./resources/property-type.cds"));
+    const csn = await loadCSN("./resources/property-type.cds");
     await cds_deploy(csn).to("mysql");
   });
 
   it("should support deploy long name entity", async () => {
-    const csn = await cds.load(path.join(__dirname, "./resources/long-table-name.cds"));
+    const csn = await loadCSN("./resources/long-table-name.cds");
     await cds_deploy(csn).to("mysql");
   });
 
   it("should support deploy view", async () => {
-    const csn = await cds.load(path.join(__dirname, "./resources/view.cds"));
+    const csn = await loadCSN("./resources/view.cds");
+    await cds_deploy(csn).to("mysql");
+  });
+
+  it("should support deploy large row size table", async () => {
+    const csn = await loadCSN("./resources/big-size-table.cds");
     await cds_deploy(csn).to("mysql");
   });
 

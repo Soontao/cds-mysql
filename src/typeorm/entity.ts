@@ -2,10 +2,21 @@ import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import cds from "@sap/cds";
 import { alg, Graph } from "graphlib";
 import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";
-import { EntitySchema } from "typeorm";
+import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 
 type TableName = string;
+
+
+const TextColumnTypes: Array<ColumnType> = [
+  "varchar",
+  "varchar2",
+  "nvarchar",
+  "nvarchar2",
+  "char",
+];
+
+const DEFAULT_LENGTH = 5000;
 
 interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   /**
@@ -42,28 +53,42 @@ class CDSListener implements MySQLParserListener {
     const floatOption = dataType.floatOptions();
     const attrs = field.columnAttribute();
 
-    this._tmp.columns[name.text] = {
+    const column: EntitySchemaColumnOptions = {
       name: name.text,
-      // @ts-ignore
-      type: dataType.getChild(0).text.toLowerCase(),
+      type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
       nullable: true, // default can be null
     };
 
+    // (5000)
     if (length) {
       const long1 = length.real_ulonglong_number();
       if (long1) {
-        this._tmp.columns[name.text]["length"] = parseInt(long1?.text);
+        column.length = parseInt(long1?.text);
+      }
+      // default un-set length string, 
+      // will convert it to 'text' to avoid MySQL row 65565 bytes size limit 
+      if (
+        TextColumnTypes.includes(column.type) &&
+        column.length === DEFAULT_LENGTH
+      ) {
+        column.type = "text";
+        column.length = undefined;
       }
     }
+
+    // (10, 2)
     if (floatOption) {
-      this._tmp.columns[name.text]["precision"] = parseInt(floatOption.getChild(0).getChild(1).text);
-      this._tmp.columns[name.text]["scale"] = parseInt(floatOption.getChild(0).getChild(3).text);
+      column.precision = parseInt(floatOption.getChild(0).getChild(1).text);
+      column.scale = parseInt(floatOption.getChild(0).getChild(3).text);
     }
 
+
+    // DEFAULT
     if (attrs && attrs.length > 0) {
       attrs.forEach(attr => {
         // is DEFAULT value
         if (attr.DEFAULT_SYMBOL()) {
+
           const sign = attr.signedLiteral();
           if (sign) {
 
@@ -84,24 +109,26 @@ class CDSListener implements MySQLParserListener {
               value = trimSuffix(trimPrefix(lit.textLiteral().text, "'"), "'");
             }
 
-            this._tmp.columns[name.text]["default"] = value;
+            column.default = value;
 
           }
 
           // current_timestamp
           if (attr.NOW_SYMBOL()) {
             const now = attr.NOW_SYMBOL();
-            this._tmp.columns[name.text]["default"] = () => now.text;
+            column.default = () => now.text;
           }
 
         }
 
         if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
-          this._tmp.columns[name.text]["nullable"] = false;
+          column.nullable = false;
         }
 
       });
     }
+
+    this._tmp.columns[name.text] = column;
 
   }
 
