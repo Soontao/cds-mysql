@@ -1,6 +1,6 @@
 {
   "name": "cds-mysql",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "lib/index.js",
   "bin": "./bin/cds-mysql.js",
   "description": "SAP CAP cds mysql adapter",
