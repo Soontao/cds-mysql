@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/Soontao/cds-mysql/compare/v0.1.5...v0.1.6) (2021-02-23)
+
+
+### Bug Fixes
+
+* large size table with default size ([1a83ca5](https://github.com/Soontao/cds-mysql/commit/1a83ca505a7cb95eda91d0564d5c9ad638f01ec2))
+
 ### [0.1.5](https://github.com/Soontao/cds-mysql/compare/v0.1.4...v0.1.5) (2021-02-23)
 
 
