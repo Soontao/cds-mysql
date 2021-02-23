@@ -11,12 +11,77 @@
 - [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT`/`DROP`
 - [x] deep insert
 - [x] full text search
-- [ ] deploy & schema migration
-- [ ] migration optimization (ignore drop in some case)
+- [x] deploy & schema migration
+- [x] migration optimization (ignore drop in some case)
 - [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/localized-data)
 - [ ] multi tenancy
-- [ ] `$expand` navigation
-- [ ] `$filter` with functions
+- [x] `$expand` navigation
+- [x] `$filter` with functions
+
+## Development
+
+edit your `defualt-env.json` file, with `mysql` credential information
+
+```json
+{
+  "VCAP_SERVICES": {
+    "mysql": [
+      {
+        "name": "mysql",
+        "label": "mysql",
+        "tags": [
+          "mysql"
+        ],
+        "credentials": {
+          "user": "<db user name>",
+          "password": "<db password>",
+          "database": "<db schema name>",
+          "port": 3306,
+          "host": "<db host name>"
+        }
+      }
+    ]
+  }
+}
+```
+
+edit your `package.json` > `cds` node
+
+```json
+{
+    "requires": {
+        "db": {
+            "kind": "mysql"
+        },
+        "mysql": {
+            "impl": "cds-mysql"
+        }
+    }
+}
+```
+
+## Deployment
+
+edit your `package.json` > `scripts` node, add `deploy` command
+
+```json
+{
+  "scripts": {
+    "deploy": "cds-mysql-deploy"
+  }
+}
+```
+
+and just run the `npm run deploy` is enough.
+
+### Automatically Migration
+
+`cds-mysql` will re-use `cds` generated SQL and `typeorm` migration logics. 
+
+It will full automatically, sync changed `columns`, `views`.
+
+It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
+
 
 ## [CHANGELOG](./CHANGELOG.md)
 ## [LICENSE](./LICENSE)

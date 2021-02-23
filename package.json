@@ -2,8 +2,10 @@
   "name": "cds-mysql",
   "version": "0.1.4",
   "main": "lib/index.js",
-  "bin": "./bin/cds-mysql.js",
-  "description": "SAP CAP cds mysql adapter",
+  "bin": {
+    "cds-mysql-deploy": "./bin/cds-mysql-deploy.js"
+  },
+  "description": "SAP CAP adapter for mysql",
   "scripts": {
     "test": "jest --passWithNoTests --runInBand --forceExit",
     "prebuild": "rimraf lib",
