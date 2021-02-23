@@ -61,7 +61,12 @@ edit your `package.json` > `cds` node
 }
 ```
 
-## Deployment
+Then, edit your `cds` definitions & run the `cds-mysql-deploy` before start server.
+
+
+## DB Artifacts Deployment
+
+> `cds run` will **NOT** perform `DB deployment` automatically, development/infra should manually perform it before server start. 
 
 edit your `package.json` > `scripts` node, add `deploy` command
 
