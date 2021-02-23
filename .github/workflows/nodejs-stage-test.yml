@@ -1,4 +1,4 @@
-name: node-next-test
+name: stage-runtime-test
 
 on:
   push:
@@ -99,7 +99,7 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm install @cds@latest
+          npm install @sap/cds@latest
           npm ls @sap/cds
           npm run build --if-present
           npm run test
