@@ -116,7 +116,7 @@ class CDSListener implements MySQLParserListener {
           // current_timestamp
           if (attr.NOW_SYMBOL()) {
             if (column.type == "date") {
-              column.default = () => "CURDATE()";
+              column.default = () => "(CURRENT_DATE)";
             } else {
               column.default = () => "NOW()";
             }
