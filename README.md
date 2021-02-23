@@ -89,5 +89,10 @@ It will full automatically, sync changed `columns`, `views`.
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
 
 
+## Limitation
+
+* mysql 5.6 not support key length exceed 767 bytes
+* `date` column not support default `current_timstamp`
+
 ## [CHANGELOG](./CHANGELOG.md)
 ## [LICENSE](./LICENSE)
