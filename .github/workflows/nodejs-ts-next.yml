@@ -1,4 +1,4 @@
-name: node-ts-next-test
+name: node-next-test
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
     - cron: "0 2 * * *"
 
 jobs:
-  build:
+  ts-next-build:
     runs-on: ${{ matrix.os }}
 
     services:
@@ -51,6 +51,56 @@ jobs:
         run: |
           npm install
           npm install typescript@next
+          npm run build --if-present
+          npm run test
+        env:
+          CI: true
+          MYSQL_HOST: "127.0.0.1"
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          MYSQL_DATABASE: cds_test
+          MYSQL_USER: cds_test
+          MYSQL_PASSWORD: cds_test
+
+  cds-next-build:
+    runs-on: ${{ matrix.os }}
+
+    services:
+      mysql:
+        image: mariadb:10.4
+        env:
+          MYSQL_DATABASE: cds_test
+          MYSQL_USER: cds_test
+          MYSQL_PASSWORD: cds_test
+          MYSQL_ROOT_PASSWORD: cds_test
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm install @cds@latest
+          npm ls @sap/cds
           npm run build --if-present
           npm run test
         env:
