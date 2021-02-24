@@ -1,5 +1,4 @@
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
-import cds from "@sap/cds";
 import { alg, Graph } from "graphlib";
 import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
@@ -7,6 +6,8 @@ import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 
 type TableName = string;
 
+const cds = global.cds || require("@sap/cds/lib");
+const logger = (cds.log)("mysql");
 
 const TextColumnTypes: Array<ColumnType> = [
   "varchar",
@@ -113,10 +114,12 @@ class CDSListener implements MySQLParserListener {
 
           }
 
+          const now = attr.NOW_SYMBOL();
+
           // current_timestamp
-          if (attr.NOW_SYMBOL()) {
+          if (now) {
             if (column.type === "date") {
-              // column.default = () => "(CURRENT_DATE)";
+              logger?.warn(`column(${column.name}) default value skipped, because mysql not support create 'date' column with default value '${now.text}'`);
             } else {
               column.default = () => "CURRENT_TIMESTAMP";
             }
