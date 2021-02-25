@@ -13,6 +13,7 @@
 - [x] full text search
 - [x] deploy & schema migration
 - [x] migration optimization (ignore drop in some case)
+- [x] `@Core.Media` attachment support
 - [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/localized-data)
 - [ ] multi tenancy
 - [x] `$expand` navigation
@@ -93,6 +94,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 * mysql 5.6 not support key length exceed 767 bytes
 * `date` column not support default `$now`
+* upload attachment maybe will meet `max_allowed_packet` issue, [it's can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
 
 ## [CHANGELOG](./CHANGELOG.md)
 ## [LICENSE](./LICENSE)

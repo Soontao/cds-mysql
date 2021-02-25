@@ -2,8 +2,10 @@
 import sleep from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
+import { readFileSync } from "fs";
 import path from "path";
-import { cleanDB, createRandomName } from "./utils";
+import { createRandomName } from "./utils";
+
 
 
 describe("Integration Test Suite", () => {
@@ -105,6 +107,36 @@ describe("Integration Test Suite", () => {
     const { data: createdPeopleCards } = await server.GET(`/bank/Peoples(${createdPeople.ID})/Cards`);
 
     expect(createdPeopleCards.value).toHaveLength(1);
+
+  });
+
+  it("should support create stream media data", async () => {
+
+    const name = createRandomName();
+    const addr = createRandomName();
+
+    const { data: createdPeople } = await server.POST("/bank/Peoples", {
+      Name: name,
+      Age: 23,
+      RegisterDate: "2000-01-01",
+      Detail: {
+        BirthDay: "1901-11-11",
+        Address: addr
+      }
+    });
+
+    expect(createdPeople?.Detail?.ID).not.toBeUndefined();
+
+    const attachmentUri = `/bank/Details(${createdPeople.Detail.ID})/Attachment`;
+    const fileLocation = path.join(__dirname, "./tsconfig.json");
+
+    const data = readFileSync(fileLocation);
+
+    await server.PUT(attachmentUri, data);
+
+    const { data: buff } = await server.GET(attachmentUri, { responseType: "arraybuffer" });
+
+    expect(buff).toStrictEqual(data);
 
   });
 

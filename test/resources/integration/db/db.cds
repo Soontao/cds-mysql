@@ -16,8 +16,10 @@ entity People : cuid, managed {
 }
 
 entity Detail : cuid, managed {
-  BirthDay : Date;
-  Address  : String(255);
+  BirthDay            : Date;
+  Address             : String(255);
+  AttachmentMediaType : String(100);
+  Attachment          : LargeBinary @Core.MediaType : AttachmentMediaType;
 }
 
 entity Card : cuid, managed {

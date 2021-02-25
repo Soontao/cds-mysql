@@ -12,6 +12,7 @@
     "Unlocalized",
     "VCAP",
     "dayofmonth",
+    "havings",
     "luxon"
   ]
 }
