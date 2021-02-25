@@ -13,6 +13,7 @@
     "VCAP",
     "dayofmonth",
     "havings",
-    "luxon"
+    "luxon",
+    "mariadb"
   ]
 }

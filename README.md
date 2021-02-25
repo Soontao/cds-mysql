@@ -4,7 +4,8 @@
 ![node-test](https://github.com/Soontao/cds-mysql/workflows/node-test/badge.svg)
 [![codecov](https://codecov.io/gh/Soontao/cds-mysql/branch/main/graph/badge.svg?token=xTt6AaHeuu)](https://codecov.io/gh/Soontao/cds-mysql)
 
-`MySQL`/`MariaDB`/`TiDB` adapter for [SAP CAP Framework](https://cap.cloud.sap/docs/about/), inspired by [cds-pg](https://github.com/sapmentors/cds-pg)
+`MySQL`/`MariaDB`/`TiDB` adapter for [SAP CAP Framework](https://cap.cloud.sap/docs/about/), inspired by [cds-pg](https://github.com/sapmentors/cds-pg).
+
 
 ## Features
 
@@ -13,11 +14,12 @@
 - [x] full text search
 - [x] deploy & schema migration
 - [x] migration optimization (ignore drop in some case)
-- [x] `@Core.Media` attachment support
+- [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/generic#serving-media-data)
 - [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/localized-data)
 - [ ] multi tenancy
 - [x] `$expand` navigation
 - [x] `$filter` with functions
+- [x] Test with `mariadb 10.4`, `mysql 5.6/5.7/8`
 
 ## Development
 
@@ -83,7 +85,7 @@ and just run the `npm run deploy` is enough.
 
 ### Automatically Migration
 
-`cds-mysql` will re-use `cds` generated SQL and `typeorm` migration logics. 
+`cds-mysql` will use the `cds` to generate `DDL` SQL, parse the `DDL` and convert it with `typeorm`-`EntitySchema`, then do the migration with `typeorm`. 
 
 It will full automatically, sync changed `columns`, `views`.
 
@@ -94,7 +96,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 * mysql 5.6 not support key length exceed 767 bytes
 * `date` column not support default `$now`
-* upload attachment maybe will meet `max_allowed_packet` issue, [it's can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
+* upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
 
 ## [CHANGELOG](./CHANGELOG.md)
 ## [LICENSE](./LICENSE)
