@@ -3,7 +3,7 @@ import { isEmpty } from "@newdash/newdash";
 import { Query } from "@sap/cds-reflect/apis/cqn";
 import { getPostProcessMapper, postProcess } from "@sap/cds-runtime/lib/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds-runtime/lib/db/expand";
-import { PoolConnection } from "mysql2";
+import { Connection } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
 import CustomBuilder from "./customBuilder";
@@ -21,12 +21,12 @@ const colored = {
   ROLLBACK: "\x1b[1m\x1b[91mROLLBACK\x1b[0m"
 };
 
-function _executeSimpleSQL(dbc: PoolConnection, sql: string, values: Array<any>) {
+function _executeSimpleSQL(dbc: Connection, sql: string, values: Array<any>) {
   LOG && LOG._debug && LOG.debug(`${colored[sql] || sql} ${values && values.length ? JSON.stringify(values) : ""}`);
   return dbc.query(sql, values);
 }
 
-async function executeSelectSQL(dbc: PoolConnection, sql: string, values: Array<any>, isOne: any, postMapper: Function) {
+async function executeSelectSQL(dbc: Connection, sql: string, values: Array<any>, isOne: any, postMapper: Function) {
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
   const [results] = await dbc.query(sql, values);
   if (isOne && isEmpty(results)) {
@@ -93,7 +93,7 @@ function executeDeleteCQN(model, dbc, cqn, user, locale, txTimestamp) {
   return _executeSimpleSQL(dbc, sql, values);
 }
 
-function executePlainSQL(dbc: PoolConnection, sql: string, values = [], isOne: any, postMapper: Function) {
+function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, postMapper: Function) {
   // support named binding parameters
   if (values && typeof values === "object" && !Array.isArray(values)) {
     values = new Proxy(values, {
@@ -114,7 +114,7 @@ function executePlainSQL(dbc: PoolConnection, sql: string, values = [], isOne: a
   return _executeSimpleSQL(dbc, sql, Array.isArray(values[0]) ? values[0] : values);
 }
 
-async function executeInsertSQL(dbc: PoolConnection, sql: string, values?: any, query?: Query) {
+async function executeInsertSQL(dbc: Connection, sql: string, values?: any, query?: Query) {
   LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
   const [{ insertId, affectedRows }] = await dbc.query(sql, [values]);
   return [{ lastID: insertId, affectedRows: affectedRows, values }];
@@ -138,7 +138,7 @@ function _convertStreamValues(values) {
   return any ? Promise.all(values) : values;
 }
 
-async function executeInsertCQN(model, dbc: PoolConnection, query: Query, user, locale, txTimestamp) {
+async function executeInsertCQN(model, dbc: Connection, query: Query, user, locale, txTimestamp) {
   const { sql, values = [] } = sqlFactory(
     query,
     {

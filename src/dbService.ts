@@ -2,9 +2,10 @@
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
 import DatabaseService from "@sap/cds-runtime/lib/db/Service";
 import cds from "@sap/cds/lib";
-import { createPool, Pool } from "mysql2";
+import { createPool, Pool } from "generic-pool";
+import { Connection, createConnection } from "mysql2/promise";
 import { ConnectionOptions } from "typeorm";
-import { TENANT_DEFAULT } from "./constants";
+import { CONNECTION_IDLE_CHECK_INTERVAL, DEFAULT_CONNECTION_IDLE_TIMEOUT, DEFAULT_TENANT_CONNECTION_POOL_SIZE, MAX_QUEUE_SIZE, TENANT_DEFAULT } from "./constants";
 import convertAssocToOneManaged from "./convertAssocToOneManaged";
 import execute from "./execute";
 import localized from "./localized";
@@ -61,10 +62,10 @@ export class MySQLDatabaseService extends DatabaseService {
       execute.sql
     );
 
-    this._pools = new LRUCacheProvider<string, Pool>(1024);
+    this._pools = new LRUCacheProvider(1024);
   }
 
-  private _pools: LRUCacheProvider<string, Pool>
+  private _pools: LRUCacheProvider<string, Pool<Connection>>
 
   set model(csn) {
     const m = csn && "definitions" in csn ? cds.linked(cds.compile.for.odata(csn)) : csn;
@@ -135,12 +136,27 @@ export class MySQLDatabaseService extends DatabaseService {
   /**
    * get connection pool for tenant
    * 
+   * connection pool is independent for tenant
+   * 
    * @param tenant 
    */
-  private async getPool(tenant = TENANT_DEFAULT): Promise<Pool> {
+  private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
     return this._pools.getOrCreate(tenant, async () => {
       const credential = await this.getTenantCredential(tenant);
-      return createPool({ ...credential, dateStrings: true });
+      return createPool(
+        {
+          create: () => createConnection({ ...credential, dateStrings: true }),
+          destroy: (conn) => conn.destroy()
+        },
+        {
+          min: 0, // keep zero connection when whole tenant idle
+          max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
+          maxWaitingClients: MAX_QUEUE_SIZE,
+          evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
+          idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
+          ...this.options?.pool, // overwrite by cds
+        }
+      );
     });
   }
 
@@ -150,8 +166,11 @@ export class MySQLDatabaseService extends DatabaseService {
    * @param tenant 
    */
   private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
-    // TODO, leave an enhance point for user
-    return this.options.credentials;
+    const rt: MySQLCredential = { ...this.options.credentials };
+    if (tenant !== TENANT_DEFAULT) {
+      rt.database = tenant;
+    }
+    return rt;
   }
 
   /**
@@ -163,8 +182,8 @@ export class MySQLDatabaseService extends DatabaseService {
   public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || TENANT_DEFAULT;
     const pool = await this.getPool(tenant);
-    const conn = await pool.promise().getConnection();
-    conn._release = () => pool.releaseConnection(conn.connection);
+    const conn = await pool.acquire();
+    conn._release = () => pool.release(conn);
     return conn;
   }
 
@@ -174,9 +193,9 @@ export class MySQLDatabaseService extends DatabaseService {
    * @param conn 
    * @override
    */
-  public release(conn: any) {
+  public async release(conn: any) {
     if (conn._release && typeof conn._release === "function") {
-      conn._release();
+      await conn._release();
     }
   }
 
