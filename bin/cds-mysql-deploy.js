@@ -5,6 +5,7 @@
 
     const path = require("path");
     const process = require("process");
+    const { pick } = require("@newdash/newdash/pick");
 
     const _require = (id) => {
       if (require.resolve(id)) {
