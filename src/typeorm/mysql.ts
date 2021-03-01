@@ -5,7 +5,6 @@ import { Query } from "typeorm/driver/Query";
 import { RdbmsSchemaBuilder } from "typeorm/schema-builder/RdbmsSchemaBuilder";
 import { MYSQL_CHARSET, MYSQL_COLLATE } from "../constants";
 
-
 /**
  * @internal
  */
@@ -36,7 +35,10 @@ export class CDSMySQLDriver extends MysqlDriver {
     return new CDSMySQLQueryRunner(this, mode);
   }
 
+
 }
+
+
 
 
 /**
@@ -87,6 +89,5 @@ export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
     // await this.createForeignKeys();
     await this.createViews();
   }
-
 
 }

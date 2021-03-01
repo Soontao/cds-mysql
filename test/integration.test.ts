@@ -4,7 +4,7 @@ import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
 import { readFileSync } from "fs";
 import path from "path";
-import { createRandomName } from "./utils";
+import { cleanDB, createRandomName } from "./utils";
 
 
 

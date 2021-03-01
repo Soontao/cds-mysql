@@ -1,6 +1,7 @@
 import { range, sleep } from "@newdash/newdash";
 import { ConnectionOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
+import { EXPECTED_MIGRATE_DDL } from "./resources/migrate/expected.migrate";
 import { cleanDB, getTestTypeORMOptions, loadCSN } from "./utils";
 
 describe("TypeORM Test Suite", () => {
@@ -47,13 +48,18 @@ describe("TypeORM Test Suite", () => {
       ...getTestTypeORMOptions(),
       name: "migrate-test-01",
       type: "mysql",
-      // logging: true,
+      logging: false
     };
 
     // do migration one by one
-    for (const entities of entityList) {
+
+    for (let idx = 0; idx < entityList.length; idx++) {
+      const entities = entityList[idx];
+      const ddl = (await migrate({ ...baseOption, entities: entities }, true)).upQueries.map(({ query }) => query);
+      expect(ddl).toStrictEqual(EXPECTED_MIGRATE_DDL[`${idx}->${idx + 1}`]);
       await migrate({ ...baseOption, entities: entities });
     }
+
 
   });
 

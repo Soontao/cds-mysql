@@ -58,6 +58,7 @@ class CDSListener implements MySQLParserListener {
       name: name.text,
       type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
       nullable: true, // default can be null
+      default: null,
     };
 
     // (5000)
@@ -121,7 +122,7 @@ class CDSListener implements MySQLParserListener {
             if (column.type === "date") {
               logger?.warn(`column(${column.name}) default value skipped, because mysql not support create 'date' column with default value '${now.text}'`);
             } else {
-              column.default = () => "CURRENT_TIMESTAMP";
+              column.default = () => "CURRENT_TIMESTAMP()";
             }
           }
 
@@ -129,17 +130,19 @@ class CDSListener implements MySQLParserListener {
 
         if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
           column.nullable = false;
+          column.default = undefined;
         }
 
       });
     }
+
 
     this._tmp.columns[name.text] = column;
 
   }
 
   private newEntitySchemaOption(): EntitySchemaOptionsWithDeps {
-    return { name: "", columns: {}, synchronize: true, deps: [] };
+    return { name: "", columns: {}, synchronize: true, deps: [], };
   }
 
   exitCreateTable(ctx: CreateTableContext) {
@@ -155,6 +158,8 @@ class CDSListener implements MySQLParserListener {
       const keyParts = keyList.keyPart();
       keyParts.forEach(keyPart => {
         this._tmp.columns[keyPart.text].primary = true;
+        this._tmp.columns[keyPart.text].nullable = false;
+        this._tmp.columns[keyPart.text].default = undefined;
       });
     }
   }
