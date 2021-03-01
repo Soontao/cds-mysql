@@ -55,7 +55,10 @@ describe("TypeORM Test Suite", () => {
 
     for (let idx = 0; idx < entityList.length; idx++) {
       const entities = entityList[idx];
-      const ddl = (await migrate({ ...baseOption, entities: entities }, true)).upQueries.map(({ query }) => query);
+      const ddl = (await migrate({ ...baseOption, entities: entities }, true))
+        .upQueries
+        // replace with current UT database name
+        .map(({ query }) => query.replace(/\`cdstest\`\./, `\`${baseOption.database}\`.`));
       expect(ddl).toStrictEqual(EXPECTED_MIGRATE_DDL[`${idx}->${idx + 1}`]);
       await migrate({ ...baseOption, entities: entities });
     }
