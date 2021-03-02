@@ -19,7 +19,8 @@
 - [ ] multi tenancy
 - [x] `$expand` navigation
 - [x] `$filter` with functions
-- [x] Test with `mariadb 10.4`, `mysql 5.6/5.7/8`
+- [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`
+- [ ] initial data provision by `CSV`
 
 ## Development
 
