@@ -2,16 +2,18 @@
 
 (async () => {
 
+  require("colors");
   const path = require("path");
   const process = require("process");
   const { pick } = require("@newdash/newdash/pick");
+  const zipObject = require("@newdash/newdash/zipObject").default;
   const { flattenDeep } = require("@newdash/newdash/flattenDeep");
 
   const _resolve = (id) => {
     return require.resolve(id, {
       paths: [
         path.join(process.cwd(), "node_modules", id),
-        path.join(__dirname, "../node_modules", id)
+        path.join(__dirname, "../node_modules", id),
       ]
     });
   };
@@ -55,7 +57,7 @@
     };
 
     logger.info(
-      "start database migration for ",
+      "start database schema migration for ",
       pick(
         connectionOptions,
         "host",
@@ -64,11 +66,15 @@
       )
     );
 
+    await migrate(connectionOptions);
+
+    logger.info("schema migration successful");
+
     const db = await cds.connect.to("db", {
       impl: _resolve("cds-mysql")
     });
 
-    await migrate(connectionOptions);
+    db.model = model;
 
     const csvFiles = flattenDeep(
       model._sources
@@ -77,24 +83,68 @@
         .map(pattern => glob(pattern))
     );
 
-    for (const csvFile of csvFiles) {
-      const filename = path.basename(csvFile, ".csv");
-      const entity = filename.replace(/-/g, ".");
-      const entires = CSV.read(csvFile);
-      if (entity in model.definitions) {
-        logger.info("filling db", entity, "with file", csvFile);
-        await db.run(
-          INSERT
-            .into(entity)
-            .columns(...entires[0])
-            .entries(entires.slice(1))
-        );
+    if (csvFiles.length > 0) {
+
+      logger.info("start migration CSV provision data");
+
+      for (const csvFile of csvFiles) {
+        const filename = path.basename(csvFile, ".csv");
+        const entity = filename.replace(/-/g, ".");
+        const entires = CSV.read(csvFile);
+        if (entity in model.definitions) {
+          const meta = model.definitions[entity];
+          const keys = Object
+            .values(meta.elements)
+            .filter(e => e.key === true)
+            .map(e => e.name);
+
+          if (keys.length === 0) {
+            logger.error(
+              "entity",
+              entity.green,
+              "not have any keys, can not execute CSV migration"
+            );
+            continue;
+          }
+
+          const headers = entires[0];
+
+          logger.info(
+            "filling entity",
+            entity.green,
+            "with file",
+            path.relative(process.cwd(), csvFile).green
+          );
+
+          const entryObjects = entires.slice(1).reduce((pre, row,) => {
+            pre.push(zipObject(headers, row)); return pre;
+          }, []);
+
+          for (const instance of entryObjects) {
+
+            const filterObject = keys.reduce((pre, key) => {
+              pre[key] = instance[key]; return pre;
+            }, {});
+
+            //  existed, delete it firstly
+            if (await db.run(SELECT.one(entity).where(filterObject)) !== null) {
+              await db.run(DELETE.from(entity).where(filterObject));
+            }
+
+            await db.run(INSERT.into(entity).entries(instance));
+
+          }
+
+        }
       }
+
+      await db.disconnect();
+
+      logger.info("CSV provision data migration successful");
+
     }
 
-    await db.disconnect();
-
-    logger.info("migration successful");
+    process.exit(0);
 
   } catch (error) {
     logger.error(error);

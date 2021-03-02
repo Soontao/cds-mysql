@@ -25,6 +25,7 @@
   "dependencies": {
     "@newdash/newdash": "^5.17.1",
     "@sap/cds-sql": "^1.24.1",
+    "colors": "^1.4.0",
     "generic-pool": "^3.7.2",
     "glob": "^7.1.6",
     "graphlib": "^2.1.8",
