@@ -1,26 +1,35 @@
 #!/usr/bin/env node
 
 (async () => {
+
+  const path = require("path");
+  const process = require("process");
+  const { pick } = require("@newdash/newdash/pick");
+  const { flattenDeep } = require("@newdash/newdash/flattenDeep");
+
+  const _resolve = (id) => {
+    return require.resolve(id, {
+      paths: [
+        path.join(process.cwd(), "node_modules", id),
+        path.join(__dirname, "../node_modules", id)
+      ]
+    });
+  };
+
+  const _require = (id) => {
+    if (_resolve(id)) {
+      return require(_resolve(id));
+    }
+    throw new Error(`can not found module ${id}`);
+  };
+
+  const cds = _require("@sap/cds");
+  const glob = _require("glob").sync;
+  const CSV = _require("@sap/cds/lib/utils/csv");
+  const logger = cds.log("mysql");
+  const { env: { requires } } = cds;
+
   try {
-
-    const path = require("path");
-    const process = require("process");
-    const { pick } = require("@newdash/newdash/pick");
-
-    const _require = (id) => {
-      if (require.resolve(id)) {
-        return require(id);
-      }
-      const cwdPath = path.join(process.cwd, "node_modules", id);
-      if (require.resolve(cwdPath)) {
-        return require(cwdPath);
-      }
-      throw new Error(`can not found module ${id}`);
-    };
-
-    const cds = _require("@sap/cds");
-    const logger = (cds.log)("mysql");
-    const { env: { requires } } = cds;
 
     const model = await cds.load(
       requires.db.model || requires.mysql.model || ["srv"]
@@ -55,12 +64,40 @@
       )
     );
 
+    const db = await cds.connect.to("db", {
+      impl: _resolve("cds-mysql")
+    });
+
     await migrate(connectionOptions);
+
+    const csvFiles = flattenDeep(
+      model._sources
+        .map(path.dirname)
+        .map(dir => `${dir}/**/*.csv`)
+        .map(pattern => glob(pattern))
+    );
+
+    for (const csvFile of csvFiles) {
+      const filename = path.basename(csvFile, ".csv");
+      const entity = filename.replace(/-/g, ".");
+      const entires = CSV.read(csvFile);
+      if (entity in model.definitions) {
+        logger.info("filling db", entity, "with file", csvFile);
+        await db.run(
+          INSERT
+            .into(entity)
+            .columns(...entires[0])
+            .entries(entires.slice(1))
+        );
+      }
+    }
+
+    await db.disconnect();
 
     logger.info("migration successful");
 
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     process.exit(1);
   }
 

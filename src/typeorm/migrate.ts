@@ -6,8 +6,6 @@ export async function migrate(connectionOptions: ConnectionOptions, dryRun: true
 export async function migrate(connectionOptions: ConnectionOptions, dryRun?: false): Promise<void>;
 export async function migrate(connectionOptions: ConnectionOptions, dryRun = false): Promise<any> {
 
-
-
   const conn = new CDSMySQLConnection({
     ...connectionOptions,
   });

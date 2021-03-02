@@ -214,6 +214,12 @@ export class MySQLDatabaseService extends DatabaseService {
 
   }
 
+  public async disconnect() {
+    for (const [tenant, pool] of this._pools.entries()) {
+      await (<Pool<Connection>>pool).clear();
+    }
+  }
+
   /*
    * deploy
    */
