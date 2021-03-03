@@ -3,8 +3,10 @@
 (async () => {
 
   require("colors");
+  const assert = require("assert");
   const path = require("path");
   const process = require("process");
+  const { get } = require("@newdash/newdash/get");
   const { pick } = require("@newdash/newdash/pick");
   const zipObject = require("@newdash/newdash/zipObject").default;
   const { flattenDeep } = require("@newdash/newdash/flattenDeep");
@@ -33,15 +35,22 @@
 
   try {
 
+    /**
+     * @type {import("@sap/cds-reflect/apis/csn").CSN}
+     */
     const model = await cds.load(
-      requires.db.model || requires.mysql.model || ["srv"]
+      get(requires, "db.model") || get(requires, "mysql.model") || ["srv"]
     );
 
     const credentials = Object.assign(
       {},
-      requires.db.credentials,
-      requires.mysql.credentials
+      get(requires, "db.credentials"),
+      get(requires, "mysql.credentials")
     );
+
+    assert.ok(credentials.user, "must defined user");
+    assert.ok(credentials.password, "must defined password");
+    assert.ok(credentials.host, "must defined host");
 
     const { csnToEntity, migrate } = require("../lib/typeorm");
 
@@ -70,6 +79,9 @@
 
     logger.info("schema migration successful");
 
+    /**
+     * @type {import("@sap/cds/apis/services").DatabaseService}
+     */
     const db = await cds.connect.to("db", {
       impl: _resolve("cds-mysql")
     });
@@ -86,56 +98,63 @@
     if (csvFiles.length > 0) {
 
       logger.info("start migration CSV provision data");
+      const tx = db.tx();
 
-      for (const csvFile of csvFiles) {
-        const filename = path.basename(csvFile, ".csv");
-        const entity = filename.replace(/-/g, ".");
-        const entires = CSV.read(csvFile);
-        if (entity in model.definitions) {
-          const meta = model.definitions[entity];
-          const keys = Object
-            .values(meta.elements)
-            .filter(e => e.key === true)
-            .map(e => e.name);
+      try {
 
-          if (keys.length === 0) {
-            logger.error(
-              "entity",
-              entity.green,
-              "not have any keys, can not execute CSV migration"
-            );
-            continue;
-          }
+        for (const csvFile of csvFiles) {
 
-          const headers = entires[0];
+          const filename = path.basename(csvFile, ".csv");
+          const entity = filename.replace(/-/g, ".");
+          const entires = CSV.read(csvFile);
 
-          logger.info(
-            "filling entity",
-            entity.green,
-            "with file",
-            path.relative(process.cwd(), csvFile).green
-          );
+          if (entity in model.definitions) {
+            const meta = model.definitions[entity];
+            const keys = Object
+              .values(meta.elements)
+              .filter(e => e.key === true)
+              .map(e => e.name);
 
-          const entryObjects = entires.slice(1).reduce((pre, row,) => {
-            pre.push(zipObject(headers, row)); return pre;
-          }, []);
-
-          for (const instance of entryObjects) {
-
-            const filterObject = keys.reduce((pre, key) => {
-              pre[key] = instance[key]; return pre;
-            }, {});
-
-            //  existed, delete it firstly
-            if (await db.run(SELECT.one(entity).where(filterObject)) !== null) {
-              await db.run(DELETE.from(entity).where(filterObject));
+            if (keys.length === 0) {
+              logger.warn(
+                "entity",
+                entity.green,
+                "not have any keys, can not execute CSV migration"
+              );
+              continue;
             }
 
-            await db.run(INSERT.into(entity).entries(instance));
+            const headers = entires[0];
 
+            logger.info(
+              "filling entity",
+              entity.green,
+              "with file",
+              path.relative(process.cwd(), csvFile).green
+            );
+
+            const entryObjects = entires.slice(1).reduce((pre, row) => {
+              pre.push(zipObject(headers, row)); return pre;
+            }, []);
+
+            for (const instance of entryObjects) {
+              const keyFilter = keys.reduce(
+                (pre, key) => { pre[key] = instance[key]; return pre; }, {}
+              );
+              // delete old data firstly by primary key
+              await tx.run(DELETE.from(entity).where(keyFilter));
+            }
+            // batch insert
+            await tx.run(INSERT.into(entity).entries(entryObjects));
+          } else {
+            logger.warn("not found entity", entity, "in definitions");
           }
-
         }
+
+        await tx.commit();
+      } catch (error) {
+        await tx.rollback();
+        throw error;
       }
 
       await db.disconnect();
