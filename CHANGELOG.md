@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/Soontao/cds-mysql/compare/v0.1.6...v0.1.7) (2021-03-03)
+
+
+### Features
+
+* atttachment support ([5dbc153](https://github.com/Soontao/cds-mysql/commit/5dbc1535a0457b0ef067cd6865a54cffb865ed38))
+* csv migration ([68838e1](https://github.com/Soontao/cds-mysql/commit/68838e1fb85a74ebcb086c389b739341864246d8))
+* csv provision data import ([2ed2dfb](https://github.com/Soontao/cds-mysql/commit/2ed2dfb792a3532fe55839b01c3fd204cbf22a17))
+* enhance db migration ([08f5af6](https://github.com/Soontao/cds-mysql/commit/08f5af6a23e9b9440796e76432686ba8e49dee89))
+* enhance initialize data provision ([317141e](https://github.com/Soontao/cds-mysql/commit/317141e0713756c9b0c2ad0af542f353947e49f4))
+* warning for 'date' column default value ([d9bd16d](https://github.com/Soontao/cds-mysql/commit/d9bd16d0008ddccfa0ffb4084181a61a336f2abf))
+
+
+### Bug Fixes
+
+* ci ([b73894f](https://github.com/Soontao/cds-mysql/commit/b73894f2de8a58f842e287480fce833155bf6cbc))
+* ci db name ([a312701](https://github.com/Soontao/cds-mysql/commit/a3127015639a7f96048390e94acdc40d3deb4965))
+* current date issue for mysql 8 ([835fa40](https://github.com/Soontao/cds-mysql/commit/835fa40650c1360e3e3b5d1d70e836a24443886c))
+* date for mysql 8 again ([f9c7fdc](https://github.com/Soontao/cds-mysql/commit/f9c7fdc36132a924c1a46e37e0aec82d3b206da7))
+* mysql 8 current_timestamp issue ([b50c013](https://github.com/Soontao/cds-mysql/commit/b50c01326757d3b588daa47472e8b41e7a348d63))
+* ut again ([455f5de](https://github.com/Soontao/cds-mysql/commit/455f5de8af43345c2835b44feec3442c495775b0))
+* ut firstly ([57b4f42](https://github.com/Soontao/cds-mysql/commit/57b4f42854235aa9c54f465204c2a33420ca8828))
+* ut for key limitation ([db02773](https://github.com/Soontao/cds-mysql/commit/db02773c13ed191e76900acb831e6c4e371fb916))
+* **ci:** issue ([b0e78a3](https://github.com/Soontao/cds-mysql/commit/b0e78a36651b412ad103117e2d00077b4370beb8))
+
 ### [0.1.6](https://github.com/Soontao/cds-mysql/compare/v0.1.5...v0.1.6) (2021-02-23)
 
 
