@@ -83,7 +83,7 @@
      * @type {import("@sap/cds/apis/services").DatabaseService}
      */
     const db = await cds.connect.to("db", {
-      impl: _resolve("cds-mysql")
+      impl: path.join(__dirname, "../lib/index.js")
     });
 
     db.model = model;
@@ -124,28 +124,44 @@
               continue;
             }
 
+            if (entires.length > 1) {
+              logger.info(
+                "filling entity",
+                entity.green,
+                "with file",
+                path.relative(process.cwd(), csvFile).green
+              );
+            } else {
+              logger.warn(
+                "CSV file",
+                path.relative(process.cwd(), csvFile).green,
+                "is empty, skip processing"
+              );
+              continue;
+            }
+
             const headers = entires[0];
+            const data = entires.slice(1);
 
-            logger.info(
-              "filling entity",
-              entity.green,
-              "with file",
-              path.relative(process.cwd(), csvFile).green
-            );
-
-            const entryObjects = entires.slice(1).reduce((pre, row) => {
-              pre.push(zipObject(headers, row)); return pre;
+            const keysLocation = keys.reduce((pre, key) => {
+              pre.push({
+                name: key,
+                index: headers.indexOf(key)
+              });
+              return pre;
             }, []);
 
-            for (const instance of entryObjects) {
-              const keyFilter = keys.reduce(
-                (pre, key) => { pre[key] = instance[key]; return pre; }, {}
+            for (const entry of entires) {
+              const keyFilter = keysLocation.reduce(
+                (pre, location) => { pre[location.name] = entry[location.index]; return pre; }, {}
               );
               // delete old data firstly by primary key
               await tx.run(DELETE.from(entity).where(keyFilter));
             }
+
             // batch insert
-            await tx.run(INSERT.into(entity).entries(entryObjects));
+            await tx.run(INSERT.into(entity).columns(...headers).rows(data));
+
           } else {
             logger.warn("not found entity", entity, "in definitions");
           }
