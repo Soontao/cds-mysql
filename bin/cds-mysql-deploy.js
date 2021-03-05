@@ -8,7 +8,6 @@
   const process = require("process");
   const { get } = require("@newdash/newdash/get");
   const { pick } = require("@newdash/newdash/pick");
-  const zipObject = require("@newdash/newdash/zipObject").default;
   const { flattenDeep } = require("@newdash/newdash/flattenDeep");
 
   const _resolve = (id) => {
