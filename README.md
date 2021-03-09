@@ -20,7 +20,7 @@
 - [x] `$expand` navigation
 - [x] `$filter` with functions
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`
-- [ ] initial data provision by `CSV`
+- [x] initial data provision by `CSV`
 
 ## Development
 
@@ -99,7 +99,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 * `date` column not support default `$now`
 * upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
 * The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
-* The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for you `String(255)` fields.
+* The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
 
 ## [CHANGELOG](./CHANGELOG.md)
 ## [LICENSE](./LICENSE)

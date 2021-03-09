@@ -19,10 +19,10 @@ jobs:
       mysql:
         image: mariadb:10.4
         env:
-          MYSQL_DATABASE: cds_test
-          MYSQL_USER: cds_test
-          MYSQL_PASSWORD: cds_test
-          MYSQL_ROOT_PASSWORD: cds_test
+          MYSQL_DATABASE: cdstest
+          MYSQL_USER: cdstest
+          MYSQL_PASSWORD: cdstest
+          MYSQL_ROOT_PASSWORD: cdstest
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
@@ -56,9 +56,9 @@ jobs:
           CI: true
           MYSQL_HOST: "127.0.0.1"
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
-          MYSQL_DATABASE: cds_test
-          MYSQL_USER: cds_test
-          MYSQL_PASSWORD: cds_test
+          MYSQL_DATABASE: cdstest
+          MYSQL_USER: cdstest
+          MYSQL_PASSWORD: cdstest
 
       - name: upload coverage
         uses: codecov/codecov-action@v1

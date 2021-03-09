@@ -88,6 +88,12 @@ class CDSListener implements MySQLParserListener {
     // DEFAULT
     if (attrs && attrs.length > 0) {
       attrs.forEach(attr => {
+
+        if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
+          column.nullable = false;
+          column.default = undefined;
+        }
+
         // is DEFAULT value
         if (attr.DEFAULT_SYMBOL()) {
 
@@ -128,10 +134,7 @@ class CDSListener implements MySQLParserListener {
 
         }
 
-        if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
-          column.nullable = false;
-          column.default = undefined;
-        }
+
 
       });
     }
