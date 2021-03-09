@@ -1,3 +1,6 @@
+// ADD AGE
+// ADD KEY
+
 namespace test.resources.migrate;
 
 using {cuid} from '@sap/cds/common';
