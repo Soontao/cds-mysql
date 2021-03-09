@@ -89,7 +89,12 @@ export class CDSMySQLDriver extends MysqlDriver {
       if (defaultTo(tableColumn.comment, "") !== defaultTo(columnMetadata.comment, "")) {
         return true;
       }
-      if (!this.compareDefaultValues(this.normalizeDefault(columnMetadata), tableColumn.default)) {
+      if (
+        !this.compareDefaultValues(
+          this.normalizeDefault(columnMetadata),
+          tableColumn.default === "'NULL'" ? undefined : tableColumn.default
+        )
+      ) {
         return true;
       }
       if (
@@ -127,7 +132,11 @@ export class CDSMySQLDriver extends MysqlDriver {
 
     if (defaultValue === null) {
       return undefined;
-    } else if (
+    }
+    else if (defaultValue === "'NULL'") {
+      return undefined;
+    }
+    else if (
       (columnMetadata.type === "enum"
         || columnMetadata.type === "simple-enum"
         || typeof defaultValue === "string")
