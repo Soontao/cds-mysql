@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/Soontao/cds-mysql/compare/v0.1.7...v0.1.8) (2021-03-10)
+
+
+### Features
+
+* enhance csv provision ([d3ed134](https://github.com/Soontao/cds-mysql/commit/d3ed1340558bf26dc1b14d6af23bd12901d838af))
+* enhance migration ([d61687f](https://github.com/Soontao/cds-mysql/commit/d61687fb54ebf17cd577afc2e630d5a05045ed98))
+
+
+### Bug Fixes
+
+* database difference between old/new mysql ([bca0b99](https://github.com/Soontao/cds-mysql/commit/bca0b990a2eeec8e4750406b5cd19e15edc59872))
+
 ### [0.1.7](https://github.com/Soontao/cds-mysql/compare/v0.1.6...v0.1.7) (2021-03-03)
 
 
