@@ -105,7 +105,13 @@ class CDSListener implements MySQLParserListener {
             let value = undefined;
 
             if (lit.boolLiteral()) {
-              value = Boolean(lit.boolLiteral());
+              const sBool = lit.boolLiteral().text.toLowerCase();
+              if (sBool === "true") {
+                value = true;
+              }
+              if (sBool === "false") {
+                value = false;
+              }
             }
             if (lit.numLiteral()) {
               value = parseFloat(lit.numLiteral().text);

@@ -10,6 +10,7 @@
     "CURDATE",
     "Millis",
     "Rdbms",
+    "TINYINT",
     "Unlocalized",
     "VCAP",
     "dayofmonth",

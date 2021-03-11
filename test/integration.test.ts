@@ -108,6 +108,21 @@ describe("Integration Test Suite", () => {
 
     expect(createdPeopleCards.value).toHaveLength(1);
 
+    const { data: createdCard2 } = await server.POST("/bank/Cards", {
+      People_ID: createdPeople?.ID,
+      Number: "Card Number 02",
+      ExampleDT1: null,
+      Active: true
+    });
+
+    expect(createdCard2.Active).toBeTruthy();
+
+    const { data: { value: queryCards } } = await server.GET("/bank/Cards?$filter=Active eq true");
+
+    expect(queryCards).toHaveLength(1);
+
+    expect(queryCards[0].ID).toBe(createdCard2.ID);
+
   });
 
   it("should support create stream media data", async () => {

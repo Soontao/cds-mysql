@@ -26,7 +26,7 @@ export const EXPECTED_MIGRATE_DDL = {
   ],
   "2->3": [
     {
-      query: "ALTER TABLE `test_resources_migrate_People` ADD `Active` tinyint NULL DEFAULT 1",
+      query: "ALTER TABLE `test_resources_migrate_People` ADD `Active` tinyint NULL DEFAULT 0",
       parameters: undefined
     },
     {
@@ -128,7 +128,7 @@ export const EXPECTED_MIGRATE_DDL = {
   ],
   "4->5": [
     {
-      query: "CREATE TABLE `test_resources_migrate_Job` (`ID` varchar(36) NOT NULL, `Title` varchar(255) NULL, `Level` int NULL, `Active` tinyint NULL DEFAULT 1, PRIMARY KEY (`ID`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+      query: "CREATE TABLE `test_resources_migrate_Job` (`ID` varchar(36) NOT NULL, `Title` varchar(255) NULL, `Level` int NULL, `Active` tinyint NULL DEFAULT 0, PRIMARY KEY (`ID`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
       parameters: undefined
     },
     {

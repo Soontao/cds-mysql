@@ -29,7 +29,8 @@ describe("TypeORM Test Suite", () => {
     expect(columns["Type"].primary).toBeTruthy();
     expect(columns["Name"].primary).toBeTruthy();
     expect(columns["BirthDay"].nullable).toBeFalsy();
-    expect(columns["FullEmployee"].default).toStrictEqual(true);
+    expect(columns["FullEmployee"].default).toStrictEqual(false);
+    expect(columns["Active"].default).toStrictEqual(true);
 
   });
 

@@ -7,6 +7,7 @@ entity People {
       Age           : Integer default 10;
       Credit        : Decimal(10, 2) default 1.0;
       FullEmployee  : Boolean default false;
+      Active        : Boolean default true;
       BirthDay      : Date not null;
       BirthDateTime : DateTime;
   key Type          : String(10) enum {
