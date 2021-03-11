@@ -1,5 +1,5 @@
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
-import { alg, Graph } from "graphlib";
+import { alg, Graph } from "@snyk/graphlib";
 import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";

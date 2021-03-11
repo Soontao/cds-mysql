@@ -13,7 +13,6 @@
     "declaration": true,
     "lib": [
       "ES6",
-      "DOM",
       "ES2015",
       "ES2016",
       "ES2017",
