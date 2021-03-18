@@ -2,6 +2,7 @@
 import sleep from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/db/deploy";
+import axios, { AxiosInstance } from "axios";
 import { readFileSync } from "fs";
 import path from "path";
 import { cleanDB, createRandomName } from "./utils";
@@ -11,7 +12,7 @@ import { cleanDB, createRandomName } from "./utils";
 describe("Integration Test Suite", () => {
 
   cds.env._home = path.join(__dirname, "./resources/integration");
-  const server = cds.test(".").in(__dirname, "./resources/integration");
+  cds.env.i18n.for_sqlite = ["zh_CN"]; // this configure will used for create view
   cds.env.requires.db = {
     impl: path.join(__dirname, "../src"),
     credentials: {
@@ -22,6 +23,8 @@ describe("Integration Test Suite", () => {
       port: parseInt(process.env.MYSQL_PORT),
     }
   };
+  const server = cds.test(".").in(__dirname, "./resources/integration");
+  let client: AxiosInstance;
 
   beforeAll(async () => {
     const csn = await cds.load([
@@ -29,10 +32,11 @@ describe("Integration Test Suite", () => {
       path.join(__dirname, "./resources/integration/db")
     ]);
     await cds_deploy(csn).to("db");
+    client = axios.create({ baseURL: server.url });
   });
 
   it("should support basic query", async () => {
-    const response = await server.GET("/bank/Peoples");
+    const response = await client.get("/bank/Peoples");
     expect(response.data.value.length).toBe(0);
   });
 
@@ -152,6 +156,42 @@ describe("Integration Test Suite", () => {
     const { data: buff } = await server.GET(attachmentUri, { responseType: "arraybuffer" });
 
     expect(buff).toStrictEqual(data);
+
+  });
+
+  it("should support localized data", async () => {
+    const PRODUCTS = "/bank/Products";
+    const apple_en = "Apple";
+    const apple_zh = "苹果🍎";
+
+    const { data } = await client.request({
+      url: PRODUCTS,
+      method: "post",
+      data: {
+        Name: apple_en
+      },
+      headers: {
+        "Accept-Language": "en"
+      }
+    });
+    await client.request({
+      url: `${PRODUCTS}(${data.ID})/texts`,
+      method: "POST",
+      data: {
+        Name: apple_zh,
+        locale: "zh_CN"
+      }
+    });
+
+    const { data: data2 } = await client.request({ url: `${PRODUCTS}(${data.ID})`, method: "get" });
+    expect(data2.Name).toBe(apple_en);
+
+    const { data: data3 } = await client.request({
+      url: `${PRODUCTS}(${data.ID})`, method: "get", headers: {
+        "Accept-Language": "zh_CN"
+      }
+    });
+    expect(data3.Name).toBe(apple_zh);
 
   });
 

@@ -19,7 +19,7 @@
 - [x] deploy & schema migration
 - [x] migration optimization (ignore drop in some case)
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/generic#serving-media-data)
-- [ ] [localization (i18n)](https://cap.cloud.sap/docs/guides/localized-data)
+- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
 - [ ] multi tenancy
 - [x] `$expand` navigation
 - [x] `$filter` with functions

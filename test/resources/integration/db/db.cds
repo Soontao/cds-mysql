@@ -38,3 +38,10 @@ entity Card : cuid, managed {
   ExampleDT1     : DateTime default null;
   ExampleDT2     : DateTime default $now;
 }
+
+type TranslatedText : localized String(255);
+
+entity Product : cuid {
+  Name  : TranslatedText;
+  Price : Decimal(10, 2);
+}
