@@ -96,6 +96,10 @@ It will full automatically, sync changed `columns`, `views`.
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
 
 
+### Enhanced CSV Migration
+
+`cds-mysql` built-in a csv migration tool, it will migration data with key validation.
+
 ## Limitation
 
 * mysql 5.6 not support key length exceed 767 bytes
