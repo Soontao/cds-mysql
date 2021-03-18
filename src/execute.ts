@@ -184,11 +184,11 @@ function executeGenericCQN(model, dbc, cqn, user, locale, txTimestamp) {
 async function executeSelectStreamCQN(model, dbc, query, user, locale, txTimestamp) {
   const result = await executeSelectCQN(model, dbc, query, user, locale, txTimestamp);
 
-  if (result.length === 0) {
+  if (result == null || result.length === 0) {
     return;
   }
 
-  let val = Object.values(result[0])[0];
+  let val = Array.isArray(result) ? Object.values(result[0])[0] : Object.values(result)[0];
   if (val === null) {
     return null;
   }

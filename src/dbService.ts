@@ -1,14 +1,12 @@
 // @ts-nocheck
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
-import DatabaseService from "@sap/cds-runtime/lib/db/Service";
+import DatabaseService from "@sap/cds-runtime/lib/sqlite/Service";
 import cds from "@sap/cds/lib";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import { ConnectionOptions } from "typeorm";
 import { CONNECTION_IDLE_CHECK_INTERVAL, DEFAULT_CONNECTION_IDLE_TIMEOUT, DEFAULT_TENANT_CONNECTION_POOL_SIZE, MAX_QUEUE_SIZE, TENANT_DEFAULT } from "./constants";
-import convertAssocToOneManaged from "./convertAssocToOneManaged";
 import execute from "./execute";
-import localized from "./localized";
 import { csnToEntity, migrate } from "./typeorm";
 
 const LOG = (cds.log || cds.debug)("mysql");
@@ -66,72 +64,6 @@ export class MySQLDatabaseService extends DatabaseService {
   }
 
   private _pools: LRUCacheProvider<string, Pool<Connection>>
-
-  set model(csn) {
-    const m = csn && "definitions" in csn ? cds.linked(cds.compile.for.odata(csn)) : csn;
-    cds.alpha_localized(m);
-    super.model = m;
-  }
-
-  init() {
-
-    /*
-     * before
-     */
-    this._ensureModel && this.before("*", this._ensureModel);
-
-    this.before(["CREATE", "UPDATE"], "*", this._input);
-    this.before(["CREATE", "READ", "UPDATE", "DELETE"], "*", this._rewrite);
-
-    this.before("READ", "*", convertAssocToOneManaged);
-    this.before("READ", "*", localized); // > has to run after rewrite
-
-    // REVISIT: get data to be deleted for integrity check
-    this.before("DELETE", "*", this._integrity.beforeDelete);
-
-    /*
-     * on
-     */
-    this.on("CREATE", "*", this._CREATE);
-    this.on("READ", "*", this._READ);
-    this.on("UPDATE", "*", this._UPDATE);
-    this.on("DELETE", "*", this._DELETE);
-
-    /*
-     * after
-     */
-    // REVISIT: after phase runs in parallel -> side effects possible!
-    if (this.model) {
-      // REVISIT: cds.env.effective will be there with @sap/cds^4.2
-      const effective = cds.env.effective || cds.env;
-      if (effective.odata.structs) {
-        // REVISIT: only register for entities that contain structured or navigation to it
-        this.after(["READ"], "*", this._structured);
-      }
-      if (effective.odata.version !== "v2") {
-        // REVISIT: only register for entities that contain arrayed or navigation to it
-        this.after(["READ"], "*", this._arrayed);
-      }
-    }
-
-    /*
-     * tx
-     */
-    this.on(["BEGIN", "COMMIT", "ROLLBACK"], function (req) {
-      return this._run(this.model, this.dbc, req.event);
-    });
-
-    // REVISIT: register only if needed?
-    this.before("COMMIT", this._integrity.performCheck);
-
-    /*
-     * generic
-     */
-    // all others, i.e. CREATE, DROP table, ...
-    this.on("*", function (req) {
-      return this._run(this.model, this.dbc, req.query || req.event, req);
-    });
-  }
 
   /**
    * get connection pool for tenant
