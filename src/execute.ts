@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { isEmpty } from "@newdash/newdash";
-import { Query } from "@sap/cds-reflect/apis/cqn";
 import { getPostProcessMapper, postProcess } from "@sap/cds-runtime/lib/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds-runtime/lib/db/expand";
+import { Query } from "@sap/cds/apis/cqn";
 import { Connection } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
