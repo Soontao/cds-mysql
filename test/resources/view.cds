@@ -16,13 +16,13 @@ entity Address : cuid {
 
 
 view PeopleWithAddress as
-  select from People
+  select from People as p
   left join Address
-    on Address.PeopleID = People.ID
+    on Address.PeopleID = p.ID
   {
-    key People.ID,
-        People.Age,
-        People.Name,
+    key p.ID,
+        p.Age,
+        p.Name,
         Address.Street,
   };
 

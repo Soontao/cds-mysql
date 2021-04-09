@@ -1,6 +1,6 @@
 import { sleep } from "@newdash/newdash";
 import cds from "@sap/cds";
-import cds_deploy from "@sap/cds/lib/db/deploy";
+import cds_deploy from "@sap/cds/lib/deploy";
 import path from "path";
 import { cleanDB, setupEnv } from "./utils";
 
