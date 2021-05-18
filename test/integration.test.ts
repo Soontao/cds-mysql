@@ -158,6 +158,7 @@ describe("Integration Test Suite", () => {
 
   });
 
+  // broken after 5.x release, the model has changed
   it.skip("should support localized data", async () => {
     const PRODUCTS = "/bank/Products";
     const apple_en = "Apple";
