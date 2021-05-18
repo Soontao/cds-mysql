@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/Soontao/cds-mysql/compare/v0.1.8...v5.1.0) (2021-05-18)
+
+
+### Features
+
+* boolean type enhance ([8d8a71c](https://github.com/Soontao/cds-mysql/commit/8d8a71c87fe6678ded814e0e30ab4b71d305d50d))
+* i18n support are disabled from 5.x ([71a692a](https://github.com/Soontao/cds-mysql/commit/71a692ab83e5c06965f188fff6f279a118b7c048))
+* localized data test ([67fb9f5](https://github.com/Soontao/cds-mysql/commit/67fb9f540d1f4ac72016cbf837b765eed08fd39a))
+* migrate to cds 5.0 ([1ed93a7](https://github.com/Soontao/cds-mysql/commit/1ed93a7a9f04cf9b2abddd605498072ccff636b3))
+
+
+### Bug Fixes
+
+* type ([c6d086d](https://github.com/Soontao/cds-mysql/commit/c6d086d1e6b470f67b32fdeecbbcdf8b4b97e8eb))
+
 ### [0.1.8](https://github.com/Soontao/cds-mysql/compare/v0.1.7...v0.1.8) (2021-03-10)
 
 
