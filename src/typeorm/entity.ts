@@ -3,6 +3,7 @@ import { alg, Graph } from "@snyk/graphlib";
 import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
+import { overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
 
@@ -241,12 +242,19 @@ class CDSListener implements MySQLParserListener {
  * @param model CSN model
  */
 export function csnToEntity(model: any): Array<EntitySchema> {
+  overwriteCDSCoreTypes();
   const listener: CDSListener = new CDSListener();
   const parser = new MySQLParser({ parserListener: listener });
   const statements = cds.compile.to.sql(model);
   statements.forEach(stat => {
     listener.setCurrentStatement(stat);
-    parser.parse(stat);
+    const result = parser.parse(stat);
+    if (result.lexerError) {
+      throw result.lexerError;
+    }
+    if (result.parserError) {
+      throw result.parserError;
+    }
   });
   return listener.getEntitySchemas();
 }

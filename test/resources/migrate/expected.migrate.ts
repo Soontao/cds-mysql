@@ -261,10 +261,10 @@ export const EXPECTED_MIGRATE_DDL = {
     },
     {
       query: "CREATE VIEW `localized_fr_test_resources_migrate_People` AS SELECT\n" +
-        "  L_0.ID,\n" +
-        "  L_0.Name,\n" +
-        "  L_0.Active\n" +
-        "FROM test_resources_migrate_People AS L_0",
+        "  L.ID,\n" +
+        "  L.Name,\n" +
+        "  L.Active\n" +
+        "FROM test_resources_migrate_People AS L",
       parameters: undefined
     },
     {
@@ -274,18 +274,18 @@ export const EXPECTED_MIGRATE_DDL = {
         "cdstest",
         "localized_fr_test_resources_migrate_People",
         "SELECT\n" +
-        "  L_0.ID,\n" +
-        "  L_0.Name,\n" +
-        "  L_0.Active\n" +
-        "FROM test_resources_migrate_People AS L_0"
+        "  L.ID,\n" +
+        "  L.Name,\n" +
+        "  L.Active\n" +
+        "FROM test_resources_migrate_People AS L"
       ]
     },
     {
       query: "CREATE VIEW `localized_de_test_resources_migrate_People` AS SELECT\n" +
-        "  L_0.ID,\n" +
-        "  L_0.Name,\n" +
-        "  L_0.Active\n" +
-        "FROM test_resources_migrate_People AS L_0",
+        "  L.ID,\n" +
+        "  L.Name,\n" +
+        "  L.Active\n" +
+        "FROM test_resources_migrate_People AS L",
       parameters: undefined
     },
     {
@@ -295,18 +295,18 @@ export const EXPECTED_MIGRATE_DDL = {
         "cdstest",
         "localized_de_test_resources_migrate_People",
         "SELECT\n" +
-        "  L_0.ID,\n" +
-        "  L_0.Name,\n" +
-        "  L_0.Active\n" +
-        "FROM test_resources_migrate_People AS L_0"
+        "  L.ID,\n" +
+        "  L.Name,\n" +
+        "  L.Active\n" +
+        "FROM test_resources_migrate_People AS L"
       ]
     },
     {
       query: "CREATE VIEW `localized_test_resources_migrate_People` AS SELECT\n" +
-        "  L_0.ID,\n" +
-        "  L_0.Name,\n" +
-        "  L_0.Active\n" +
-        "FROM test_resources_migrate_People AS L_0",
+        "  L.ID,\n" +
+        "  L.Name,\n" +
+        "  L.Active\n" +
+        "FROM test_resources_migrate_People AS L",
       parameters: undefined
     },
     {
@@ -316,10 +316,10 @@ export const EXPECTED_MIGRATE_DDL = {
         "cdstest",
         "localized_test_resources_migrate_People",
         "SELECT\n" +
-        "  L_0.ID,\n" +
-        "  L_0.Name,\n" +
-        "  L_0.Active\n" +
-        "FROM test_resources_migrate_People AS L_0"
+        "  L.ID,\n" +
+        "  L.Name,\n" +
+        "  L.Active\n" +
+        "FROM test_resources_migrate_People AS L"
       ]
     },
     {
