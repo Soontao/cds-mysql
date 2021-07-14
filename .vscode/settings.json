@@ -18,5 +18,6 @@
     "luxon",
     "mariadb",
     "varchar"
-  ]
+  ],
+  "jest.autoRun": {}
 }

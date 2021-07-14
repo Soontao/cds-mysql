@@ -2,7 +2,8 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "prettier"
   ],
   "env": {
     "node": true,
@@ -21,8 +22,17 @@
   },
   "extends": [
     "plugin:@typescript-eslint/eslint-recommended",
+    "prettier"
   ],
   "rules": {
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "ignoreComments": true,
+        "ignoreRegExpLiterals": true
+      }
+    ],
     "semi": [
       2
     ], // must end with semi
@@ -32,7 +42,14 @@
     "@typescript-eslint/no-explicit-any": [
       0
     ],
-    "quotes": "error",
+    "quotes": [
+      "error",
+      "double",
+      {
+        "allowTemplateLiterals": true,
+        "avoidEscape": true
+      }
+    ],
     "indent": [
       "error",
       2,

@@ -1,0 +1,5 @@
+coverage
+.vscode
+node_modules
+report
+lib

@@ -1,4 +1,5 @@
-import { pick, range, sleep } from "@newdash/newdash";
+import { pick, range, sleep, trimSuffix } from "@newdash/newdash";
+import map from "@newdash/newdash/async/map";
 import { ConnectionOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
 import { EXPECTED_MIGRATE_DDL } from "./resources/migrate/expected.migrate";
@@ -64,7 +65,16 @@ describe("TypeORM Test Suite", () => {
       // replace with current UT database name
       const expected = EXPECTED_MIGRATE_DDL[migrationId];
 
-      expect(ddl).toStrictEqual(expected);
+      for (let idx = 0; idx < ddl.length; idx++) {
+        const aDdl = ddl[idx];
+        const aExpected = expected[idx];
+        expect(trimSuffix(aDdl.query, ";"))
+          .toBe(trimSuffix(aExpected.query, ";"));
+        expect(map(aDdl.parameters, parameter => trimSuffix(parameter,";")))
+          .toStrictEqual(map(aExpected.parameters, parameter => trimSuffix(parameter,";")));
+        
+      }
+
       await migrate({ ...baseOption, entities: entities });
     }
 

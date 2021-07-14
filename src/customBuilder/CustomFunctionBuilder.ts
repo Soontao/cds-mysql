@@ -31,13 +31,9 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     return SelectBuilder;
   }
 
-  _functionArgs(element) {
-    return (element.ref && element.ref[1].args) || element.args;
-  }
-
   _handleFunction() {
-    const functionName = this._functionName(this._obj);
-    const args = this._functionArgs(this._obj);
+    const functionName = this._functionName();
+    const args = this._functionArgs();
 
     if (dateTimePlaceHolder.has(functionName)) {
       this._timeFunction(functionName, args);
@@ -51,22 +47,19 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
   }
 
   _handleContains(args) {
-    const contains = this._obj.func
-      ? !this._obj.func.toLowerCase().includes("not")
-      : !this._obj.ref[0].toLowerCase().includes("not");
-    const columns = this._columns(args);
-    const params = this._obj.func ? args.slice(1) : this._obj.ref[1].args.slice(1);
+    this._handleLikewiseFunc(args);
+  }
 
-    for (const param of params) {
-      if (param === "or" || param === "and" || param === "not") {
-        this._outputObj.sql.push(param);
-      } else {
-        const searchText = param.val.toLowerCase();
-        this._outputObj.sql.push("(");
-        this._createLikeComparison(contains, columns, searchText);
-        this._outputObj.sql.push(")");
-      }
+  
+  _createLikeComparisonForColumn(not, left, right) {
+    if (not) {
+      this._outputObj.sql.push("(", left, "IS NULL", "OR");
     }
+
+    this._outputObj.sql.push(left, `${not}LIKE`);
+    this._outputObj.sql.push("CONCAT"); // CONCAT ('%', ?, '%')
+    this._addFunctionArgs(right, true);
+    if (not) this._outputObj.sql.push(")");
   }
 
   _standardFunction(functionName, args) {

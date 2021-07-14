@@ -18,6 +18,9 @@
       "args": [
         "--runInBand"
       ],
+      "env": {
+        "DEBUG": "mysql"
+      },
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
