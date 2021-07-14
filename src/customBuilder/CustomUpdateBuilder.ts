@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { UpdateBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { UpdateBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 
 export = class CustomUpdateBuilder extends UpdateBuilder {

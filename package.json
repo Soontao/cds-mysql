@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^12.1.4",
-    "@sap/cds": "^5.1.5",
+    "@sap/cds": "^5.3.1",
     "@types/generic-pool": "^3.1.9",
     "@types/graphlib": "^2.1.7",
     "@types/jest": "^26.0.23",
@@ -58,7 +58,7 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "@sap/cds": ">=5",
+    "@sap/cds": ">=5.3 <=6",
     "express": "4.x"
   },
   "husky": {

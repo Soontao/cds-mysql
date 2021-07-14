@@ -1,4 +1,4 @@
-import { DeleteBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { DeleteBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 
 export = class CustomDeleteBuilder extends DeleteBuilder {
 

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { FunctionBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { FunctionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 
 const dateTimePlaceHolder = new Map([
   ["year", "'%Y'"],

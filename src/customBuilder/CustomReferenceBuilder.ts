@@ -1,4 +1,4 @@
-import { ReferenceBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { ReferenceBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 
 export = class CustomReferenceBuilder extends ReferenceBuilder {
   get FunctionBuilder() {

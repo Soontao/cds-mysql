@@ -1,4 +1,4 @@
-import { ExpressionBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { ExpressionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 
 export = class CustomExpressionBuilder extends ExpressionBuilder {
 

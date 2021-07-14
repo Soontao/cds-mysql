@@ -1,4 +1,4 @@
-import { CreateBuilder, DeleteBuilder, DropBuilder, InsertBuilder, SelectBuilder, UpdateBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { CreateBuilder, DeleteBuilder, DropBuilder, InsertBuilder, SelectBuilder, UpdateBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 
 const _getCustomBuilderIfExists = (options, type) => {
   if (options && options.customBuilder) {

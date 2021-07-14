@@ -1,4 +1,4 @@
-import { SelectBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
+import { SelectBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import { MYSQL_COLLATE } from "../constants";
 
 export = class CustomSelectBuilder extends SelectBuilder {

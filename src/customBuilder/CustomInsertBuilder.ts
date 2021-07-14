@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { InsertBuilder } from "@sap/cds-runtime/lib/db/sql-builder";
-import getAnnotatedColumns from "@sap/cds-runtime/lib/db/sql-builder/annotations";
-import * as dollar from "@sap/cds-runtime/lib/db/sql-builder/dollar";
+import { InsertBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import getAnnotatedColumns from "@sap/cds/libx/_runtime/db/sql-builder/annotations";
+import * as dollar from "@sap/cds/libx/_runtime/db/sql-builder/dollar";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 
 export = class CustomInsertBuilder extends InsertBuilder {

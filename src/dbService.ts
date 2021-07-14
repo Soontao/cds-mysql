@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
-import DatabaseService from "@sap/cds-runtime/lib/sqlite/Service";
 import cds from "@sap/cds/lib";
+import DatabaseService from "@sap/cds/libx/_runtime/sqlite/Service";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import { ConnectionOptions } from "typeorm";
