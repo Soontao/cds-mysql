@@ -1,2 +1,3 @@
 lib
 commitlint.config.js
+test/resources/migrate
