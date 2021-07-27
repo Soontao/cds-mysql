@@ -1,4 +1,11 @@
-import { CreateBuilder, DeleteBuilder, DropBuilder, InsertBuilder, SelectBuilder, UpdateBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import {
+  CreateBuilder,
+  DeleteBuilder,
+  DropBuilder,
+  InsertBuilder,
+  SelectBuilder,
+  UpdateBuilder
+} from "@sap/cds/libx/_runtime/db/sql-builder";
 
 const _getCustomBuilderIfExists = (options, type) => {
   if (options && options.customBuilder) {
@@ -48,7 +55,7 @@ const build = (cqn, options, csn) => {
     throw new Error("Cannot build SQL. No CQN object provided.");
   }
 
-  const build = Builder => {
+  const build = (Builder) => {
     return new Builder(cqn, options, csn).build();
   };
 
@@ -85,4 +92,3 @@ const build = (cqn, options, csn) => {
 };
 
 export { build as sqlFactory };
-
