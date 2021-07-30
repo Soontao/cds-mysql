@@ -28,7 +28,7 @@
     "generic-pool": "^3.8.2",
     "glob": "^7.1.7",
     "@snyk/graphlib": "^2.1.9-patch.3",
-    "luxon": "^1.27.0",
+    "luxon": "^1.28.0",
     "mysql2": "^2.2.5",
     "ts-mysql-parser": "^0.2.0",
     "typeorm": "^0.2.34"
