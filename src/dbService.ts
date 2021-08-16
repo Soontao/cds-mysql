@@ -5,26 +5,31 @@ import DatabaseService from "@sap/cds/libx/_runtime/sqlite/Service";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import { ConnectionOptions } from "typeorm";
-import { CONNECTION_IDLE_CHECK_INTERVAL, DEFAULT_CONNECTION_IDLE_TIMEOUT, DEFAULT_TENANT_CONNECTION_POOL_SIZE, MAX_QUEUE_SIZE, TENANT_DEFAULT } from "./constants";
+import {
+  CONNECTION_IDLE_CHECK_INTERVAL,
+  DEFAULT_CONNECTION_IDLE_TIMEOUT,
+  DEFAULT_TENANT_CONNECTION_POOL_SIZE,
+  MAX_QUEUE_SIZE,
+  TENANT_DEFAULT
+} from "./constants";
 import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
 
 const LOG = (cds.log || cds.debug)("mysql");
 
-
 interface MySQLCredential {
   /**
    * DB User Name
    */
-  user: string,
+  user: string;
   /**
    * DB Password
    */
-  password?: string,
+  password?: string;
   /**
    * DB Database/Schema Name, default same with user name
    */
-  database?: string,
+  database?: string;
   /**
    * DB HostName, default localhost
    */
@@ -39,7 +44,6 @@ interface MySQLCredential {
  * MySQL Database Adapter for SAP CAP Framework
  */
 export class MySQLDatabaseService extends DatabaseService {
-
   constructor(...args: any[]) {
     super(...args);
 
@@ -56,14 +60,14 @@ export class MySQLDatabaseService extends DatabaseService {
     this._pools = new LRUCacheProvider(1024);
   }
 
-  private _pools: LRUCacheProvider<string, Pool<Connection>>
+  private _pools: LRUCacheProvider<string, Pool<Connection>>;
 
   /**
    * get connection pool for tenant
-   * 
+   *
    * connection pool is independent for tenant
-   * 
-   * @param tenant 
+   *
+   * @param tenant
    */
   private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
     return this._pools.getOrCreate(tenant, async () => {
@@ -79,7 +83,7 @@ export class MySQLDatabaseService extends DatabaseService {
           maxWaitingClients: MAX_QUEUE_SIZE,
           evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
           idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
-          ...this.options?.pool, // overwrite by cds
+          ...this.options?.pool // overwrite by cds
         }
       );
     });
@@ -87,8 +91,8 @@ export class MySQLDatabaseService extends DatabaseService {
 
   /**
    * overwrite this method to provide different databases for different tenants
-   * 
-   * @param tenant 
+   *
+   * @param tenant
    */
   private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
     const rt: MySQLCredential = { ...this.options.credentials };
@@ -100,9 +104,9 @@ export class MySQLDatabaseService extends DatabaseService {
 
   /**
    * acquire connection from pool
-   * 
+   *
    * @override
-   * @param arg 
+   * @param arg
    */
   public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || TENANT_DEFAULT;
@@ -114,8 +118,8 @@ export class MySQLDatabaseService extends DatabaseService {
 
   /**
    * release connection to pool
-   * 
-   * @param conn 
+   *
+   * @param conn
    * @override
    */
   public async release(conn: any) {
@@ -136,7 +140,6 @@ export class MySQLDatabaseService extends DatabaseService {
       port: parseInt(credentials.port) ?? 3306,
       entities: []
     };
-
   }
 
   public async disconnect() {
@@ -154,5 +157,4 @@ export class MySQLDatabaseService extends DatabaseService {
     await migrate({ ...migrateOptions, entities });
     return true;
   }
-
-};
+}

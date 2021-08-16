@@ -24,10 +24,9 @@ export class CDSMySQLConnection extends Connection {
  * @internal
  */
 export class CDSMySQLDriver extends MysqlDriver {
-
   /**
-    * Creates a schema builder used to build and sync a schema.
-    */
+   * Creates a schema builder used to build and sync a schema.
+   */
   createSchemaBuilder() {
     return new CDSMySQLSchemaBuilder(this.connection);
   }
@@ -44,13 +43,13 @@ export class CDSMySQLDriver extends MysqlDriver {
    * and returns only changed.
    */
   findChangedColumns(tableColumns: TableColumn[], columnMetadataList: ColumnMetadata[]): ColumnMetadata[] {
-    return columnMetadataList.filter(columnMetadata => {
-      const tableColumn = tableColumns.find(c => c.name === columnMetadata.databaseName);
-      if (!tableColumn)
-        return false; // we don't need new columns, we only need exist and changed
+    return columnMetadataList.filter((columnMetadata) => {
+      const tableColumn = tableColumns.find((c) => c.name === columnMetadata.databaseName);
+      if (!tableColumn) return false; // we don't need new columns, we only need exist and changed
 
       let columnMetadataLength = columnMetadata.length;
-      if (!columnMetadataLength && columnMetadata.generationStrategy === "uuid") { // fixing #3374
+      if (!columnMetadataLength && columnMetadata.generationStrategy === "uuid") {
+        // fixing #3374
         columnMetadataLength = this.getColumnLength(columnMetadata);
       }
 
@@ -98,7 +97,10 @@ export class CDSMySQLDriver extends MysqlDriver {
       if (
         tableColumn.enum &&
         columnMetadata.enum &&
-        !OrmUtils.isArraysEqual(tableColumn.enum, columnMetadata.enum.map(val => val + ""))
+        !OrmUtils.isArraysEqual(
+          tableColumn.enum,
+          columnMetadata.enum.map((val) => val + "")
+        )
       ) {
         return true;
       }
@@ -123,26 +125,21 @@ export class CDSMySQLDriver extends MysqlDriver {
   }
 
   /**
-     * Normalizes "default" value of the column.
-     */
+   * Normalizes "default" value of the column.
+   */
   normalizeDefault(columnMetadata: ColumnMetadata): string | undefined {
     const defaultValue = columnMetadata.default;
 
     if (defaultValue === null) {
       return undefined;
-    }
-    else if (defaultValue === "'NULL'") {
+    } else if (defaultValue === "'NULL'") {
       return undefined;
-    }
-    else if (
-      (
-        columnMetadata.type === "enum" ||
-        columnMetadata.type === "simple-enum" ||
-        typeof defaultValue === "string"
-      )
-      && defaultValue !== undefined) {
+    } else if (
+      (columnMetadata.type === "enum" || columnMetadata.type === "simple-enum" || typeof defaultValue === "string") &&
+      defaultValue !== undefined
+    ) {
       return `'${defaultValue}'`;
-    } else if ((columnMetadata.type === "set") && defaultValue !== undefined) {
+    } else if (columnMetadata.type === "set" && defaultValue !== undefined) {
       return `'${DateUtils.simpleArrayToString(defaultValue)}'`;
     } else if (typeof defaultValue === "number") {
       return `'${defaultValue.toFixed(columnMetadata.scale)}'`;
@@ -151,20 +148,15 @@ export class CDSMySQLDriver extends MysqlDriver {
     } else if (typeof defaultValue === "function") {
       return defaultValue();
     } else {
-      return defaultValue;
+      return defaultValue as any;
     }
   }
-
 }
-
-
-
 
 /**
  * @internal
  */
 export class CDSMySQLQueryRunner extends MysqlQueryRunner {
-
   /**
    * Builds create table sql
    */
@@ -174,16 +166,12 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
     sql += ` CHARACTER SET '${MYSQL_CHARSET}' COLLATE '${MYSQL_COLLATE}'`;
     return new Query(sql);
   }
-
 }
-
-
 
 /**
  * @internal
  */
 export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
-
   /**
    * @override disable drop old columns
    */
@@ -197,7 +185,7 @@ export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
     await this.renameColumns();
     await this.createNewTables();
     // DO NOT drop old columns
-    // await this.dropRemovedColumns(); 
+    // await this.dropRemovedColumns();
     await this.addNewColumns();
     await this.updatePrimaryKeys();
     await this.updateExistColumns();
@@ -208,5 +196,4 @@ export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
     // await this.createForeignKeys();
     await this.createViews();
   }
-
 }
