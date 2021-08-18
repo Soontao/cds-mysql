@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^13.1.0",
-    "@sap/cds": "^5.3.2",
+    "@sap/cds": "^5.4.3",
     "@types/generic-pool": "^3.1.10",
     "@types/graphlib": "^2.1.8",
     "@types/jest": "^26.0.24",

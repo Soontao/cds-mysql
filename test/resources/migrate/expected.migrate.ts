@@ -200,31 +200,6 @@ export const EXPECTED_MIGRATE_DDL = {
       parameters: undefined
     },
     {
-      query: "CREATE VIEW `test_resources_migrate_PeopleWithJob` AS SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))",
-      parameters: undefined
-    },
-    {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
-      parameters: [
-        "VIEW",
-        "cdstest",
-        "test_resources_migrate_PeopleWithJob",
-        "SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))"
-      ]
-    },
-    {
       query: "CREATE VIEW `test_resources_migrate_ActiveJobs` AS SELECT\n" +
         "  Job_0.ID,\n" +
         "  Job_0.Title,\n" +
@@ -252,317 +227,342 @@ export const EXPECTED_MIGRATE_DDL = {
         "FROM test_resources_migrate_Job AS Job_0\n" +
         "WHERE Job_0.Active = TRUE"
       ]
-    }
+    },
+    {
+      query: "CREATE VIEW `test_resources_migrate_PeopleWithJob` AS SELECT\n" +
+        "  People_0.Name,\n" +
+        "  People_0.Active,\n" +
+        "  Job_1.Title,\n" +
+        "  Job_1.Level,\n" +
+        "  Job_1.Active AS JobActive\n" +
+        "FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))",
+      parameters: undefined
+    },
+    {
+      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      parameters: [
+        "VIEW",
+        "cdstest",
+        "test_resources_migrate_PeopleWithJob",
+        "SELECT\n" +
+        "  People_0.Name,\n" +
+        "  People_0.Active,\n" +
+        "  Job_1.Title,\n" +
+        "  Job_1.Level,\n" +
+        "  Job_1.Active AS JobActive\n" +
+        "FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))"
+      ]
+    },
   ],
-  "7->8": [
+  "7->8":  [
     {
       query: "CREATE TABLE `test_resources_migrate_Job_texts` (`locale` varchar(14) NOT NULL, `ID` varchar(36) NOT NULL, `Title` varchar(255) NULL, PRIMARY KEY (`locale`, `ID`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
       parameters: undefined
     },
     {
-      query: "CREATE VIEW `localized_fr_test_resources_migrate_People` AS SELECT\n" +
-        "  L.ID,\n" +
-        "  L.Name,\n" +
-        "  L.Active\n" +
-        "FROM test_resources_migrate_People AS L",
+      query: 'CREATE VIEW `localized_fr_test_resources_migrate_Job` AS SELECT\n' +
+        '  L_0.ID,\n' +
+        '  coalesce(localized_fr_1.Title, L_0.Title) AS Title,\n' +
+        '  L_0.Level,\n' +
+        '  L_0.Active,\n' +
+        '  L_0.People_ID,\n' +
+        '  L_0.People_Name\n' +
+        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');",
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_fr_test_resources_migrate_People",
-        "SELECT\n" +
-        "  L.ID,\n" +
-        "  L.Name,\n" +
-        "  L.Active\n" +
-        "FROM test_resources_migrate_People AS L"
+        'VIEW',
+        'cdstest',
+        'localized_fr_test_resources_migrate_Job',
+        'SELECT\n' +
+          '  L_0.ID,\n' +
+          '  coalesce(localized_fr_1.Title, L_0.Title) AS Title,\n' +
+          '  L_0.Level,\n' +
+          '  L_0.Active,\n' +
+          '  L_0.People_ID,\n' +
+          '  L_0.People_Name\n' +
+          "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');"
       ]
     },
     {
-      query: "CREATE VIEW `localized_de_test_resources_migrate_People` AS SELECT\n" +
-        "  L.ID,\n" +
-        "  L.Name,\n" +
-        "  L.Active\n" +
-        "FROM test_resources_migrate_People AS L",
+      query: 'CREATE VIEW `localized_fr_test_resources_migrate_ActiveJobs` AS SELECT\n' +
+        '  Job_0.ID,\n' +
+        '  Job_0.Title,\n' +
+        '  Job_0.Level,\n' +
+        '  Job_0.Active,\n' +
+        '  Job_0.People_ID,\n' +
+        '  Job_0.People_Name\n' +
+        'FROM localized_fr_test_resources_migrate_Job AS Job_0\n' +
+        'WHERE Job_0.Active = TRUE;',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_de_test_resources_migrate_People",
-        "SELECT\n" +
-        "  L.ID,\n" +
-        "  L.Name,\n" +
-        "  L.Active\n" +
-        "FROM test_resources_migrate_People AS L"
+        'VIEW',
+        'cdstest',
+        'localized_fr_test_resources_migrate_ActiveJobs',
+        'SELECT\n' +
+          '  Job_0.ID,\n' +
+          '  Job_0.Title,\n' +
+          '  Job_0.Level,\n' +
+          '  Job_0.Active,\n' +
+          '  Job_0.People_ID,\n' +
+          '  Job_0.People_Name\n' +
+          'FROM localized_fr_test_resources_migrate_Job AS Job_0\n' +
+          'WHERE Job_0.Active = TRUE;'
       ]
     },
     {
-      query: "CREATE VIEW `localized_test_resources_migrate_People` AS SELECT\n" +
-        "  L.ID,\n" +
-        "  L.Name,\n" +
-        "  L.Active\n" +
-        "FROM test_resources_migrate_People AS L",
+      query: 'CREATE VIEW `localized_de_test_resources_migrate_Job` AS SELECT\n' +
+        '  L_0.ID,\n' +
+        '  coalesce(localized_de_1.Title, L_0.Title) AS Title,\n' +
+        '  L_0.Level,\n' +
+        '  L_0.Active,\n' +
+        '  L_0.People_ID,\n' +
+        '  L_0.People_Name\n' +
+        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');",
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_test_resources_migrate_People",
-        "SELECT\n" +
-        "  L.ID,\n" +
-        "  L.Name,\n" +
-        "  L.Active\n" +
-        "FROM test_resources_migrate_People AS L"
+        'VIEW',
+        'cdstest',
+        'localized_de_test_resources_migrate_Job',
+        'SELECT\n' +
+          '  L_0.ID,\n' +
+          '  coalesce(localized_de_1.Title, L_0.Title) AS Title,\n' +
+          '  L_0.Level,\n' +
+          '  L_0.Active,\n' +
+          '  L_0.People_ID,\n' +
+          '  L_0.People_Name\n' +
+          "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');"
       ]
     },
     {
-      query: "CREATE VIEW `localized_fr_test_resources_migrate_Job` AS SELECT\n" +
-        "  L_0.ID,\n" +
-        "  coalesce(localized_fr_1.Title, L_0.Title) AS Title,\n" +
-        "  L_0.Level,\n" +
-        "  L_0.Active,\n" +
-        "  L_0.People_ID,\n" +
-        "  L_0.People_Name\n" +
-        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr')",
+      query: 'CREATE VIEW `localized_de_test_resources_migrate_ActiveJobs` AS SELECT\n' +
+        '  Job_0.ID,\n' +
+        '  Job_0.Title,\n' +
+        '  Job_0.Level,\n' +
+        '  Job_0.Active,\n' +
+        '  Job_0.People_ID,\n' +
+        '  Job_0.People_Name\n' +
+        'FROM localized_de_test_resources_migrate_Job AS Job_0\n' +
+        'WHERE Job_0.Active = TRUE;',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_fr_test_resources_migrate_Job",
-        "SELECT\n" +
-        "  L_0.ID,\n" +
-        "  coalesce(localized_fr_1.Title, L_0.Title) AS Title,\n" +
-        "  L_0.Level,\n" +
-        "  L_0.Active,\n" +
-        "  L_0.People_ID,\n" +
-        "  L_0.People_Name\n" +
-        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr')"
+        'VIEW',
+        'cdstest',
+        'localized_de_test_resources_migrate_ActiveJobs',
+        'SELECT\n' +
+          '  Job_0.ID,\n' +
+          '  Job_0.Title,\n' +
+          '  Job_0.Level,\n' +
+          '  Job_0.Active,\n' +
+          '  Job_0.People_ID,\n' +
+          '  Job_0.People_Name\n' +
+          'FROM localized_de_test_resources_migrate_Job AS Job_0\n' +
+          'WHERE Job_0.Active = TRUE;'
       ]
     },
     {
-      query: "CREATE VIEW `localized_fr_test_resources_migrate_PeopleWithJob` AS SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))",
+      query: 'CREATE VIEW `localized_test_resources_migrate_Job` AS SELECT\n' +
+        '  L_0.ID,\n' +
+        '  coalesce(localized_1.Title, L_0.Title) AS Title,\n' +
+        '  L_0.Level,\n' +
+        '  L_0.Active,\n' +
+        '  L_0.People_ID,\n' +
+        '  L_0.People_Name\n' +
+        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');",
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_fr_test_resources_migrate_PeopleWithJob",
-        "SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))"
+        'VIEW',
+        'cdstest',
+        'localized_test_resources_migrate_Job',
+        'SELECT\n' +
+          '  L_0.ID,\n' +
+          '  coalesce(localized_1.Title, L_0.Title) AS Title,\n' +
+          '  L_0.Level,\n' +
+          '  L_0.Active,\n' +
+          '  L_0.People_ID,\n' +
+          '  L_0.People_Name\n' +
+          "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');"
       ]
     },
     {
-      query: "CREATE VIEW `localized_fr_test_resources_migrate_ActiveJobs` AS SELECT\n" +
-        "  Job_0.ID,\n" +
-        "  Job_0.Title,\n" +
-        "  Job_0.Level,\n" +
-        "  Job_0.Active,\n" +
-        "  Job_0.People_ID,\n" +
-        "  Job_0.People_Name\n" +
-        "FROM localized_fr_test_resources_migrate_Job AS Job_0\n" +
-        "WHERE Job_0.Active = TRUE",
+      query: 'CREATE VIEW `localized_test_resources_migrate_ActiveJobs` AS SELECT\n' +
+        '  Job_0.ID,\n' +
+        '  Job_0.Title,\n' +
+        '  Job_0.Level,\n' +
+        '  Job_0.Active,\n' +
+        '  Job_0.People_ID,\n' +
+        '  Job_0.People_Name\n' +
+        'FROM localized_test_resources_migrate_Job AS Job_0\n' +
+        'WHERE Job_0.Active = TRUE;',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_fr_test_resources_migrate_ActiveJobs",
-        "SELECT\n" +
-        "  Job_0.ID,\n" +
-        "  Job_0.Title,\n" +
-        "  Job_0.Level,\n" +
-        "  Job_0.Active,\n" +
-        "  Job_0.People_ID,\n" +
-        "  Job_0.People_Name\n" +
-        "FROM localized_fr_test_resources_migrate_Job AS Job_0\n" +
-        "WHERE Job_0.Active = TRUE"
+        'VIEW',
+        'cdstest',
+        'localized_test_resources_migrate_ActiveJobs',
+        'SELECT\n' +
+          '  Job_0.ID,\n' +
+          '  Job_0.Title,\n' +
+          '  Job_0.Level,\n' +
+          '  Job_0.Active,\n' +
+          '  Job_0.People_ID,\n' +
+          '  Job_0.People_Name\n' +
+          'FROM localized_test_resources_migrate_Job AS Job_0\n' +
+          'WHERE Job_0.Active = TRUE;'
       ]
     },
     {
-      query: "CREATE VIEW `localized_de_test_resources_migrate_Job` AS SELECT\n" +
-        "  L_0.ID,\n" +
-        "  coalesce(localized_de_1.Title, L_0.Title) AS Title,\n" +
-        "  L_0.Level,\n" +
-        "  L_0.Active,\n" +
-        "  L_0.People_ID,\n" +
-        "  L_0.People_Name\n" +
-        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de')",
+      query: 'CREATE VIEW `localized_fr_test_resources_migrate_People` AS SELECT\n' +
+        '  L.ID,\n' +
+        '  L.Name,\n' +
+        '  L.Active\n' +
+        'FROM test_resources_migrate_People AS L;',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_de_test_resources_migrate_Job",
-        "SELECT\n" +
-        "  L_0.ID,\n" +
-        "  coalesce(localized_de_1.Title, L_0.Title) AS Title,\n" +
-        "  L_0.Level,\n" +
-        "  L_0.Active,\n" +
-        "  L_0.People_ID,\n" +
-        "  L_0.People_Name\n" +
-        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de')"
+        'VIEW',
+        'cdstest',
+        'localized_fr_test_resources_migrate_People',
+        'SELECT\n' +
+          '  L.ID,\n' +
+          '  L.Name,\n' +
+          '  L.Active\n' +
+          'FROM test_resources_migrate_People AS L;'
       ]
     },
     {
-      query: "CREATE VIEW `localized_de_test_resources_migrate_PeopleWithJob` AS SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))",
+      query: 'CREATE VIEW `localized_fr_test_resources_migrate_PeopleWithJob` AS SELECT\n' +
+        '  People_0.Name,\n' +
+        '  People_0.Active,\n' +
+        '  Job_1.Title,\n' +
+        '  Job_1.Level,\n' +
+        '  Job_1.Active AS JobActive\n' +
+        'FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_de_test_resources_migrate_PeopleWithJob",
-        "SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))"
+        'VIEW',
+        'cdstest',
+        'localized_fr_test_resources_migrate_PeopleWithJob',
+        'SELECT\n' +
+          '  People_0.Name,\n' +
+          '  People_0.Active,\n' +
+          '  Job_1.Title,\n' +
+          '  Job_1.Level,\n' +
+          '  Job_1.Active AS JobActive\n' +
+          'FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));'
       ]
     },
     {
-      query: "CREATE VIEW `localized_de_test_resources_migrate_ActiveJobs` AS SELECT\n" +
-        "  Job_0.ID,\n" +
-        "  Job_0.Title,\n" +
-        "  Job_0.Level,\n" +
-        "  Job_0.Active,\n" +
-        "  Job_0.People_ID,\n" +
-        "  Job_0.People_Name\n" +
-        "FROM localized_de_test_resources_migrate_Job AS Job_0\n" +
-        "WHERE Job_0.Active = TRUE",
+      query: 'CREATE VIEW `localized_de_test_resources_migrate_People` AS SELECT\n' +
+        '  L.ID,\n' +
+        '  L.Name,\n' +
+        '  L.Active\n' +
+        'FROM test_resources_migrate_People AS L;',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_de_test_resources_migrate_ActiveJobs",
-        "SELECT\n" +
-        "  Job_0.ID,\n" +
-        "  Job_0.Title,\n" +
-        "  Job_0.Level,\n" +
-        "  Job_0.Active,\n" +
-        "  Job_0.People_ID,\n" +
-        "  Job_0.People_Name\n" +
-        "FROM localized_de_test_resources_migrate_Job AS Job_0\n" +
-        "WHERE Job_0.Active = TRUE"
+        'VIEW',
+        'cdstest',
+        'localized_de_test_resources_migrate_People',
+        'SELECT\n' +
+          '  L.ID,\n' +
+          '  L.Name,\n' +
+          '  L.Active\n' +
+          'FROM test_resources_migrate_People AS L;'
       ]
     },
     {
-      query: "CREATE VIEW `localized_test_resources_migrate_Job` AS SELECT\n" +
-        "  L_0.ID,\n" +
-        "  coalesce(localized_1.Title, L_0.Title) AS Title,\n" +
-        "  L_0.Level,\n" +
-        "  L_0.Active,\n" +
-        "  L_0.People_ID,\n" +
-        "  L_0.People_Name\n" +
-        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en')",
+      query: 'CREATE VIEW `localized_de_test_resources_migrate_PeopleWithJob` AS SELECT\n' +
+        '  People_0.Name,\n' +
+        '  People_0.Active,\n' +
+        '  Job_1.Title,\n' +
+        '  Job_1.Level,\n' +
+        '  Job_1.Active AS JobActive\n' +
+        'FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_test_resources_migrate_Job",
-        "SELECT\n" +
-        "  L_0.ID,\n" +
-        "  coalesce(localized_1.Title, L_0.Title) AS Title,\n" +
-        "  L_0.Level,\n" +
-        "  L_0.Active,\n" +
-        "  L_0.People_ID,\n" +
-        "  L_0.People_Name\n" +
-        "FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en')"
+        'VIEW',
+        'cdstest',
+        'localized_de_test_resources_migrate_PeopleWithJob',
+        'SELECT\n' +
+          '  People_0.Name,\n' +
+          '  People_0.Active,\n' +
+          '  Job_1.Title,\n' +
+          '  Job_1.Level,\n' +
+          '  Job_1.Active AS JobActive\n' +
+          'FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));'
       ]
     },
     {
-      query: "CREATE VIEW `localized_test_resources_migrate_PeopleWithJob` AS SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))",
+      query: 'CREATE VIEW `localized_test_resources_migrate_People` AS SELECT\n' +
+        '  L.ID,\n' +
+        '  L.Name,\n' +
+        '  L.Active\n' +
+        'FROM test_resources_migrate_People AS L;',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_test_resources_migrate_PeopleWithJob",
-        "SELECT\n" +
-        "  People_0.Name,\n" +
-        "  People_0.Active,\n" +
-        "  Job_1.Title,\n" +
-        "  Job_1.Level,\n" +
-        "  Job_1.Active AS JobActive\n" +
-        "FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)))"
+        'VIEW',
+        'cdstest',
+        'localized_test_resources_migrate_People',
+        'SELECT\n' +
+          '  L.ID,\n' +
+          '  L.Name,\n' +
+          '  L.Active\n' +
+          'FROM test_resources_migrate_People AS L;'
       ]
     },
     {
-      query: "CREATE VIEW `localized_test_resources_migrate_ActiveJobs` AS SELECT\n" +
-        "  Job_0.ID,\n" +
-        "  Job_0.Title,\n" +
-        "  Job_0.Level,\n" +
-        "  Job_0.Active,\n" +
-        "  Job_0.People_ID,\n" +
-        "  Job_0.People_Name\n" +
-        "FROM localized_test_resources_migrate_Job AS Job_0\n" +
-        "WHERE Job_0.Active = TRUE",
+      query: 'CREATE VIEW `localized_test_resources_migrate_PeopleWithJob` AS SELECT\n' +
+        '  People_0.Name,\n' +
+        '  People_0.Active,\n' +
+        '  Job_1.Title,\n' +
+        '  Job_1.Level,\n' +
+        '  Job_1.Active AS JobActive\n' +
+        'FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));',
       parameters: undefined
     },
     {
-      query: "INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)",
+      query: 'INSERT INTO `cdstest`.`typeorm_metadata`(`type`, `schema`, `name`, `value`) VALUES (?, ?, ?, ?)',
       parameters: [
-        "VIEW",
-        "cdstest",
-        "localized_test_resources_migrate_ActiveJobs",
-        "SELECT\n" +
-        "  Job_0.ID,\n" +
-        "  Job_0.Title,\n" +
-        "  Job_0.Level,\n" +
-        "  Job_0.Active,\n" +
-        "  Job_0.People_ID,\n" +
-        "  Job_0.People_Name\n" +
-        "FROM localized_test_resources_migrate_Job AS Job_0\n" +
-        "WHERE Job_0.Active = TRUE"
+        'VIEW',
+        'cdstest',
+        'localized_test_resources_migrate_PeopleWithJob',
+        'SELECT\n' +
+          '  People_0.Name,\n' +
+          '  People_0.Active,\n' +
+          '  Job_1.Title,\n' +
+          '  Job_1.Level,\n' +
+          '  Job_1.Active AS JobActive\n' +
+          'FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));'
       ]
     }
   ]
