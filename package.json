@@ -29,7 +29,7 @@
     "glob": "^7.1.7",
     "@snyk/graphlib": "^2.1.9-patch.3",
     "luxon": "^1.28.0",
-    "mysql2": "^2.2.5",
+    "mysql2": "^2.3.0",
     "ts-mysql-parser": "^0.2.0",
     "typeorm": "^0.2.34"
   },
