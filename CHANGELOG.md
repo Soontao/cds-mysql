@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.2.2](https://github.com/Soontao/cds-mysql/compare/v5.2.1...v5.2.2) (2021-09-12)
+
+
+### Bug Fixes
+
+* upgrade luxon from 1.27.0 to 1.28.0 ([393845b](https://github.com/Soontao/cds-mysql/commit/393845b626ca1f6e4e8a57a7c95b1556b1c360fc))
+* upgrade mysql2 from 2.2.5 to 2.3.0 ([41c36f8](https://github.com/Soontao/cds-mysql/commit/41c36f8eb4f62f27d7b3100133929ff8bc8eae74))
+
 ### [5.2.1](https://github.com/Soontao/cds-mysql/compare/v5.1.0...v5.2.1) (2021-07-27)
 
 
