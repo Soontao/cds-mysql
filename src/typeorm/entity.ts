@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import { alg, Graph } from "@snyk/graphlib";
 import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { isEmpty } from "@newdash/newdash";
+import { filter, isEmpty } from "@newdash/newdash";
 import { Query } from "@sap/cds/apis/cqn";
 import { getPostProcessMapper, postProcess } from "@sap/cds/libx/_runtime/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds/libx/_runtime/db/expand";
@@ -10,29 +10,55 @@ import CustomBuilder from "./customBuilder";
 import { sqlFactory } from "./sqlFactory";
 
 const cds = global.cds || require("@sap/cds/lib");
-const LOG = (cds.log || cds.debug)("mysql");
+const LOG = cds.log("mysql");
+const DEBUG = cds.debug("mysql");
+const _captureStack = DEBUG
+  ? () => {
+    const o = {};
+    Error.captureStackTrace(o, _captureStack);
+    return o;
+  }
+  : () => undefined;
 
 /*
  * helpers
  */
-const colored = {
+const _colored = {
   BEGIN: "\x1b[1m\x1b[33mBEGIN\x1b[0m",
   COMMIT: "\x1b[1m\x1b[32mCOMMIT\x1b[0m",
   ROLLBACK: "\x1b[1m\x1b[91mROLLBACK\x1b[0m"
 };
 
+const _augmented = (err: Error, sql: string, o: any) => {
+  err.query = sql;
+  err.message += " in: \n" + sql;
+  if (o) err.stack = err.message + o.stack.slice(5);
+  return err;
+};
+
 function _executeSimpleSQL(dbc: Connection, sql: string, values: Array<any>) {
-  LOG && LOG._debug && LOG.debug(`${colored[sql] || sql} ${values && values.length ? JSON.stringify(values) : ""}`);
-  return dbc.query(sql, values);
+  LOG._debug && LOG.debug(_colored[sql] || sql, values || "");
+  const o = _captureStack();
+  try {
+    return dbc.query(sql, values);
+  } catch (error) {
+    throw _augmented(err, sql, o);
+  }
+
 }
 
 async function executeSelectSQL(dbc: Connection, sql: string, values: Array<any>, isOne: any, postMapper: Function) {
-  LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-  const [results] = await dbc.query(sql, values);
-  if (isOne && isEmpty(results)) {
-    return null;
+  LOG._debug && LOG.debug(sql, values);
+  const o = _captureStack();
+  try {
+    const [results] = await dbc.query(sql, values);
+    if (isOne && isEmpty(results)) {
+      return null;
+    }
+    return postProcess(Boolean(isOne) ? results[0] : results, postMapper);
+  } catch (error) {
+    throw _augmented(err, sql, o);
   }
-  return postProcess(Boolean(isOne) ? results[0] : results, postMapper);
 }
 
 function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
@@ -52,7 +78,7 @@ function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
     queries.push(executeSelectSQL(dbc, sql, values, false));
   }
 
-  return rawToExpanded(expandQueries, queries, cqn.SELECT.one);
+  return rawToExpanded(expandQueries, queries, cqn.SELECT.one, cqn._rootEntity);
 }
 
 function executeSelectCQN(model, dbc, query, user, locale, txTimestamp) {
@@ -115,9 +141,23 @@ function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, 
 }
 
 async function executeInsertSQL(dbc: Connection, sql: string, values?: any, query?: Query) {
-  LOG && LOG._debug && LOG.debug(`${sql} ${JSON.stringify(values)}`);
-  const [{ insertId, affectedRows }] = await dbc.query(sql, [values]);
-  return [{ lastID: insertId, affectedRows: affectedRows, values }];
+
+  LOG._debug && LOG.debug(sql, values);
+
+  const o = _captureStack();
+
+  try {
+    const results: Array<OkPacket> = await dbc.query(sql, [values]);
+    return filter(results, (value?: OkPacket) => value !== undefined)
+      .map(({ insertId, affectedRows }) => ({
+        lastID: insertId,
+        affectedRows: affectedRows,
+        values
+      }));
+  } catch (error) {
+    throw _augmented(error, sql, o);
+  }
+
 }
 
 function _convertStreamValues(values) {

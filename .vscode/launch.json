@@ -21,6 +21,7 @@
       "env": {
         "DEBUG": "mysql"
       },
+      "sourceMaps": true,
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
