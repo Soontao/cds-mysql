@@ -10,7 +10,6 @@
 
 `MySQL`/`MariaDB`/`TiDB` adapter for [SAP CAP Framework](https://cap.cloud.sap/docs/about/), inspired by [cds-pg](https://github.com/sapmentors/cds-pg).
 
-
 ## Features
 
 - [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT`/`DROP`
@@ -73,7 +72,7 @@ Then, edit your `cds` definitions & run the `cds-mysql-deploy` before start serv
 
 ## DB Artifacts Deployment
 
-> `cds run` will **NOT** perform `DB deployment` automatically, development/infra should manually perform it before server start. 
+> `cds run` will **NOT** perform `DB deployment` automatically, development/infra should manually perform it before server start.
 
 edit your `package.json` > `scripts` node, add `deploy` command
 
@@ -89,12 +88,11 @@ and just run the `npm run deploy` is enough.
 
 ### Automatically Migration
 
-`cds-mysql` will use the `cds` to generate `DDL` SQL, parse the `DDL` and convert it with `typeorm`-`EntitySchema`, then do the migration with `typeorm`. 
+`cds-mysql` will use the `cds` to generate `DDL` SQL, parse the `DDL` and convert it with `typeorm`-`EntitySchema`, then do the migration with `typeorm`.
 
 It will full automatically, sync changed `columns`, `views`.
 
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
-
 
 ### Enhanced CSV Migration
 
@@ -102,12 +100,13 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 ## Limitation
 
-* mysql 5.6 not support key length exceed 767 bytes
-* `date` column not support default `$now`
-* upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
-* The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
-* The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
-* The `Boolean` type is represented as `TINYINT(1)` in mysql server, as a result, `boolean default true/false` will be converted to `TINYINT DEFAULT 1/0`.
+- mysql 5.6 not support key length exceed 767 bytes
+- `date` column not support default `$now`
+- upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
+- The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
+- The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
+- The `Boolean` type is represented as `TINYINT(1)` in mysql server, as a result, `boolean default true/false` will be converted to `TINYINT DEFAULT 1/0`.
 
 ## [CHANGELOG](./CHANGELOG.md)
+
 ## [LICENSE](./LICENSE)
