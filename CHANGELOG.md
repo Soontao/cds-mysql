@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.2.3](https://github.com/Soontao/cds-mysql/compare/v5.2.2...v5.2.3) (2021-09-30)
+
+
+### Bug Fixes
+
+* issue after upgrade to cds 5.5 ([fbf2fb2](https://github.com/Soontao/cds-mysql/commit/fbf2fb2ece7a62b01ec159811f648691a9b36bd0))
+* type ([81483f3](https://github.com/Soontao/cds-mysql/commit/81483f3c83fce092e274cc3f3d288b564e610352))
+
 ### [5.2.2](https://github.com/Soontao/cds-mysql/compare/v5.2.1...v5.2.2) (2021-09-12)
 
 
