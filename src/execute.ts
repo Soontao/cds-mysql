@@ -3,7 +3,7 @@ import { filter, isEmpty } from "@newdash/newdash";
 import { Query } from "@sap/cds/apis/cqn";
 import { getPostProcessMapper, postProcess } from "@sap/cds/libx/_runtime/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds/libx/_runtime/db/expand";
-import { Connection } from "mysql2/promise";
+import { Connection, OkPacket } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
 import CustomBuilder from "./customBuilder";
