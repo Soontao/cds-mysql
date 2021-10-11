@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.3.0](https://github.com/Soontao/cds-mysql/compare/v5.2.3...v5.3.0) (2021-10-11)
+
+
+### Features
+
+* support env configuration ([2617fa6](https://github.com/Soontao/cds-mysql/commit/2617fa6d024ba8848512cd2cb3986ef3578a3bb3))
+
+
+### Bug Fixes
+
+* deploy issue ([8692ad2](https://github.com/Soontao/cds-mysql/commit/8692ad2fcc1f7b418b610eea87e67b837e9b72bb))
+* error ([8b0f5f8](https://github.com/Soontao/cds-mysql/commit/8b0f5f82ea516379c7859be56d9d77e30e4be8ca))
+* issue for TIMESTAMP_TEXT type ([8ddaf19](https://github.com/Soontao/cds-mysql/commit/8ddaf19390e09a04566130148828140783762355))
+* replace the quotingStyle function ([18da22c](https://github.com/Soontao/cds-mysql/commit/18da22ce90ccaf405a05da82a4bfb89617b5d417))
+* type issue ([3a3dd84](https://github.com/Soontao/cds-mysql/commit/3a3dd84f8271e6800bb0df4a7be96eae84cb3226))
+
 ### [5.2.3](https://github.com/Soontao/cds-mysql/compare/v5.2.2...v5.2.3) (2021-09-30)
 
 
