@@ -28,7 +28,7 @@
 
   const cds = _require("@sap/cds");
   const glob = _require("glob").sync;
-  const CSV = _require("@sap/cds/lib/utils/csv");
+  const CSV = _require("@sap/cds/lib/compile/etc/csv.js");
   const logger = cds.log("mysql");
   const { env: { requires } } = cds;
 

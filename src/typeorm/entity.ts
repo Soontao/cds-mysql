@@ -1,7 +1,15 @@
 /* eslint-disable max-len */
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import { alg, Graph } from "@snyk/graphlib";
-import MySQLParser, { ColumnDefinitionContext, CreateTableContext, CreateViewContext, MySQLParserListener, TableConstraintDefContext, TableNameContext, TableRefContext } from "ts-mysql-parser";
+import MySQLParser, {
+  ColumnDefinitionContext,
+  CreateTableContext,
+  CreateViewContext,
+  MySQLParserListener,
+  TableConstraintDefContext,
+  TableNameContext,
+  TableRefContext
+} from "ts-mysql-parser";
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 import { overwriteCDSCoreTypes } from "../utils";
@@ -9,15 +17,9 @@ import { overwriteCDSCoreTypes } from "../utils";
 type TableName = string;
 
 const cds = global.cds || require("@sap/cds/lib");
-const logger = (cds.log)("mysql");
+const logger = cds.log("mysql");
 
-const TextColumnTypes: Array<ColumnType> = [
-  "varchar",
-  "varchar2",
-  "nvarchar",
-  "nvarchar2",
-  "char",
-];
+const TextColumnTypes: Array<ColumnType> = ["varchar", "varchar2", "nvarchar", "nvarchar2", "char"];
 
 const DEFAULT_LENGTH = 5000;
 
@@ -25,11 +27,10 @@ interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   /**
    * this view/table maybe depends other view/tables
    */
-  deps: TableName[]
+  deps: TableName[];
 }
 
 class CDSListener implements MySQLParserListener {
-
   private _entities: Array<EntitySchema>;
   private _tmp: EntitySchemaOptionsWithDeps;
   private _currentStatement: string;
@@ -60,7 +61,7 @@ class CDSListener implements MySQLParserListener {
       name: name.text,
       type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
       nullable: true, // default can be null
-      default: null,
+      default: null
     };
 
     // (5000)
@@ -69,12 +70,9 @@ class CDSListener implements MySQLParserListener {
       if (long1) {
         column.length = parseInt(long1?.text);
       }
-      // default un-set length string, 
-      // will convert it to 'text' to avoid MySQL row 65565 bytes size limit 
-      if (
-        TextColumnTypes.includes(column.type) &&
-        column.length === DEFAULT_LENGTH
-      ) {
+      // default un-set length string,
+      // will convert it to 'text' to avoid MySQL row 65565 bytes size limit
+      if (TextColumnTypes.includes(column.type) && column.length === DEFAULT_LENGTH) {
         column.type = "text";
         column.length = undefined;
       }
@@ -86,11 +84,9 @@ class CDSListener implements MySQLParserListener {
       column.scale = parseInt(floatOption.getChild(0).getChild(3).text);
     }
 
-
     // DEFAULT
     if (attrs && attrs.length > 0) {
-      attrs.forEach(attr => {
-
+      attrs.forEach((attr) => {
         if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
           column.nullable = false;
           column.default = undefined;
@@ -98,10 +94,8 @@ class CDSListener implements MySQLParserListener {
 
         // is DEFAULT value
         if (attr.DEFAULT_SYMBOL()) {
-
           const sign = attr.signedLiteral();
           if (sign) {
-
             const lit = sign.literal();
 
             let value = undefined;
@@ -126,7 +120,6 @@ class CDSListener implements MySQLParserListener {
             }
 
             column.default = value;
-
           }
 
           const now = attr.NOW_SYMBOL();
@@ -134,26 +127,22 @@ class CDSListener implements MySQLParserListener {
           // current_timestamp
           if (now) {
             if (column.type === "date") {
-              logger?.warn(`column(${column.name}) default value skipped, because mysql not support create 'date' column with default value '${now.text}'`);
+              logger?.warn(
+                `column(${column.name}) default value skipped, because mysql not support create 'date' column with default value '${now.text}'`
+              );
             } else {
               column.default = () => "CURRENT_TIMESTAMP()";
             }
           }
-
         }
-
-
-
       });
     }
 
-
     this._tmp.columns[name.text] = column;
-
   }
 
   private newEntitySchemaOption(): EntitySchemaOptionsWithDeps {
-    return { name: "", columns: {}, synchronize: true, deps: [], };
+    return { name: "", columns: {}, synchronize: true, deps: [] };
   }
 
   exitCreateTable(ctx: CreateTableContext) {
@@ -161,13 +150,12 @@ class CDSListener implements MySQLParserListener {
     this._tmp = this.newEntitySchemaOption();
   }
 
-
   exitTableConstraintDef(ctx: TableConstraintDefContext) {
     // PRIMARY KEY (COLUMN);
     if (ctx.PRIMARY_SYMBOL() && ctx.KEY_SYMBOL()) {
       const keyList = ctx.keyListVariants().keyList();
       const keyParts = keyList.keyPart();
-      keyParts.forEach(keyPart => {
+      keyParts.forEach((keyPart) => {
         this._tmp.columns[keyPart.text].primary = true;
         this._tmp.columns[keyPart.text].nullable = false;
         this._tmp.columns[keyPart.text].default = undefined;
@@ -176,7 +164,6 @@ class CDSListener implements MySQLParserListener {
   }
 
   // << CREATE TABLE
-
 
   // >> CREATE VIEW
 
@@ -187,7 +174,7 @@ class CDSListener implements MySQLParserListener {
       this._tmp.type = "view";
       this._tmp.name = viewName.text;
       this._tmp.tableName = viewName.text;
-      // extract (SELECT FROM ...) part from original plain SQL 
+      // extract (SELECT FROM ...) part from original plain SQL
       const exp = this._currentStatement.substr(select.start.startIndex, select.stop.stopIndex);
       this._tmp.expression = exp;
     }
@@ -203,43 +190,43 @@ class CDSListener implements MySQLParserListener {
 
   // << CREATE VIEW
 
-
   /**
    * get entity schemas after parsing
    */
   public getEntitySchemas(): Array<EntitySchema> {
-
     if (this._entities && this._entities.length > 0) {
       // order by graph
       const g = new Graph();
-      this._entities.forEach(entity => {
-        const { deps, tableName } = (<EntitySchemaOptionsWithDeps>entity.options);
+      this._entities.forEach((entity) => {
+        const { deps, tableName } = <EntitySchemaOptionsWithDeps>entity.options;
         g.setNode(tableName, entity);
         if (deps && deps.length > 0) {
           // VIEW
-          deps.forEach(dep => g.setEdge(tableName, dep));
+          deps.forEach((dep) => g.setEdge(tableName, dep));
         }
       });
-      return alg.topsort(g).reverse().map(node => g.node(node));
+      return alg
+        .topsort(g)
+        .reverse()
+        .map((node) => g.node(node));
     }
 
     return this._entities;
   }
 
   /**
-   * set current statement 
-   * 
-   * @param stat 
+   * set current statement
+   *
+   * @param stat
    */
   public setCurrentStatement(stat: string) {
     this._currentStatement = stat;
   }
-
 }
 
 /**
  * convert csn to typeorm entities
- * 
+ *
  * @param model CSN model
  */
 export function csnToEntity(model: any): Array<EntitySchema> {
@@ -247,7 +234,8 @@ export function csnToEntity(model: any): Array<EntitySchema> {
   const listener: CDSListener = new CDSListener();
   const parser = new MySQLParser({ parserListener: listener });
   const statements = cds.compile.to.sql(model);
-  statements.forEach(stat => {
+  statements.forEach((stat: string) => {
+    stat = stat.replace(/TIMESTAMP_TEXT/g, "TIMESTAMP"); // workaround for TIMESTAMP_TEXT type
     listener.setCurrentStatement(stat);
     const result = parser.parse(stat);
     if (result.lexerError) {

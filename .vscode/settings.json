@@ -19,5 +19,6 @@
     "mariadb",
     "varchar"
   ],
-  "jest.autoRun": {}
+  "jest.autoRun": {},
+  "WhiteSource Advise.BaseBranch": "main"
 }
