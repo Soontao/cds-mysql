@@ -27,7 +27,7 @@
 
 ## Development
 
-edit your `defualt-env.json` file, with `mysql` credential information
+edit your `default-env.json` file, with `mysql` credential information
 
 ```json
 {
