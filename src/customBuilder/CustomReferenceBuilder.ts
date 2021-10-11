@@ -6,4 +6,4 @@ export = class CustomReferenceBuilder extends ReferenceBuilder {
     Object.defineProperty(this, "FunctionBuilder", { value: FunctionBuilder });
     return FunctionBuilder;
   }
-}
+};
