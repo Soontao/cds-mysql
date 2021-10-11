@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
-import { alg, Graph } from "@snyk/graphlib";
+import { alg, Graph } from "@newdash/graphlib";
 import MySQLParser, {
   ColumnDefinitionContext,
   CreateTableContext,
