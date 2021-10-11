@@ -41,10 +41,9 @@ function _executeSimpleSQL(dbc: Connection, sql: string, values: Array<any>) {
   const o = _captureStack();
   try {
     return dbc.query(sql, values);
-  } catch (error) {
+  } catch (err) {
     throw _augmented(err, sql, o);
   }
-
 }
 
 async function executeSelectSQL(dbc: Connection, sql: string, values: Array<any>, isOne: any, postMapper: Function) {
@@ -56,7 +55,7 @@ async function executeSelectSQL(dbc: Connection, sql: string, values: Array<any>
       return null;
     }
     return postProcess(Boolean(isOne) ? results[0] : results, postMapper);
-  } catch (error) {
+  } catch (err) {
     throw _augmented(err, sql, o);
   }
 }
@@ -125,7 +124,7 @@ function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, 
     values = new Proxy(values, {
       getOwnPropertyDescriptor: (o, p) => Object.getOwnPropertyDescriptor(o, p.slice(1)),
       get: (o, p) => o[p.slice(1)],
-      ownKeys: o => Reflect.ownKeys(o).map(k => `:${k}`)
+      ownKeys: (o) => Reflect.ownKeys(o).map((k) => `:${k}`)
     });
   }
 
@@ -141,32 +140,29 @@ function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, 
 }
 
 async function executeInsertSQL(dbc: Connection, sql: string, values?: any, query?: Query) {
-
   LOG._debug && LOG.debug(sql, values);
 
   const o = _captureStack();
 
   try {
     const results: Array<OkPacket> = await dbc.query(sql, [values]);
-    return filter(results, (value?: OkPacket) => value !== undefined)
-      .map(({ insertId, affectedRows }) => ({
-        lastID: insertId,
-        affectedRows: affectedRows,
-        values
-      }));
+    return filter(results, (value?: OkPacket) => value !== undefined).map(({ insertId, affectedRows }) => ({
+      lastID: insertId,
+      affectedRows: affectedRows,
+      values
+    }));
   } catch (error) {
     throw _augmented(error, sql, o);
   }
-
 }
 
 function _convertStreamValues(values) {
   let any;
   values.forEach((v, i) => {
     if (v && typeof v.pipe === "function") {
-      any = values[i] = new Promise(resolve => {
+      any = values[i] = new Promise((resolve) => {
         const chunks = [];
-        v.on("data", chunk => chunks.push(chunk));
+        v.on("data", (chunk) => chunks.push(chunk));
         v.on("end", () => resolve(Buffer.concat(chunks)));
         v.on("error", () => {
           v.removeAllListeners("error");
@@ -252,4 +248,3 @@ export default {
   cqn: executeGenericCQN,
   sql: executePlainSQL
 };
-
