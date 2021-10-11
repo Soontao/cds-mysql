@@ -41,10 +41,19 @@
       get(requires, "db.model") || get(requires, "mysql.model") || ["srv"]
     );
 
+    const envCredential = {
+      user: process.env.CDS_MYSQL_USER,
+      password: process.env.CDS_MYSQL_PASSWORD,
+      host: process.env.CDS_MYSQL_HOST,
+      port: process.env.CDS_MYSQL_PORT,
+      database: process.env.CDS_MYSQL_DATABASE,
+    };
+
     const credentials = Object.assign(
       {},
       get(requires, "db.credentials"),
-      get(requires, "mysql.credentials")
+      get(requires, "mysql.credentials"),
+      envCredential
     );
 
     assert.ok(credentials.user, "must defined user");
