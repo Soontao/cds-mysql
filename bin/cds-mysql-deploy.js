@@ -35,7 +35,7 @@
   try {
 
     /**
-     * @type {import("@sap/cds-reflect/apis/csn").CSN}
+     * @type {import("@sap/cds/apis/csn").CSN}
      */
     const model = await cds.load(
       get(requires, "db.model") || get(requires, "mysql.model") || ["srv"]
@@ -88,7 +88,7 @@
     db.model = model;
 
     const csvFiles = flattenDeep(
-      model._sources
+      model.$sources
         .map(path.dirname)
         .map(dir => `${dir}/**/*.csv`)
         .map(pattern => glob(pattern))
