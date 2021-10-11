@@ -31,6 +31,7 @@ jobs:
 
       - name: npm test
         run: |
+          npm i -g npm
           npm install
           npm shrinkwrap
           npm test
