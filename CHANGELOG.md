@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.4.1](https://github.com/Soontao/cds-mysql/compare/v5.4.0...v5.4.1) (2021-10-12)
+
+
+### Bug Fixes
+
+* sql builder issue ([9d48f62](https://github.com/Soontao/cds-mysql/commit/9d48f62aa97ac142ddb8fbcb0bc7659579549f69))
+
 ## [5.4.0](https://github.com/Soontao/cds-mysql/compare/v5.3.0...v5.4.0) (2021-10-12)
 
 
