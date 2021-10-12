@@ -12,7 +12,7 @@
     "build": "tsc",
     "postbuild": "tsc --noEmit --p tsconfig.lib.json",
     "lint": "eslint src/** --fix",
-    "release": "standard-version --no-verify && git push --follow-tags origin main",
+    "release": "standard-version --no-verify",
     "coverage": "npm test -- --coverage --no-cache"
   },
   "repository": {
