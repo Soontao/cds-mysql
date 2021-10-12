@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.0](https://github.com/Soontao/cds-mysql/compare/v5.3.0...v5.4.0) (2021-10-12)
+
+
+### Features
+
+* support env credential for deployment ([3202536](https://github.com/Soontao/cds-mysql/commit/320253600f362277116d44900c5d85f49f6d8f65))
+
 ## [5.3.0](https://github.com/Soontao/cds-mysql/compare/v5.2.3...v5.3.0) (2021-10-11)
 
 
