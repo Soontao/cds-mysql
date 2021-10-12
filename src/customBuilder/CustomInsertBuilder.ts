@@ -1,24 +1,31 @@
 // @ts-nocheck
+import { CSN } from "@sap/cds/apis/csn";
 import { InsertBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import getAnnotatedColumns from "@sap/cds/libx/_runtime/db/sql-builder/annotations";
 import * as dollar from "@sap/cds/libx/_runtime/db/sql-builder/dollar";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
+import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 export = class CustomInsertBuilder extends InsertBuilder {
-
+  constructor(obj: any, options: any, csn: CSN) {
+    super(obj, options, csn);
+    // overwrite quote function
+    // @ts-ignore
+    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+  }
   /**
-  * Builds an Object based on the properties of the CQN object.
-  * @example <caption>Example output</caption>
-  * {
-  *    sql: 'INSERT INTO "T" ("a", "b", "c") VALUES (?, ?, ?)',
-  *    values: [1, 2, '\'asd\'']
-  * }
-  *
-  * @returns {{sql: string, values: Array}} Object with two properties.
-  * 
-  * SQL string for prepared statement and array of values to replace the placeholders.
-  * Property values can be an Array of Arrays for Batch insert of multiple rows.
-  */
+   * Builds an Object based on the properties of the CQN object.
+   * @example <caption>Example output</caption>
+   * {
+   *    sql: 'INSERT INTO "T" ("a", "b", "c") VALUES (?, ?, ?)',
+   *    values: [1, 2, '\'asd\'']
+   * }
+   *
+   * @returns {{sql: string, values: Array}} Object with two properties.
+   *
+   * SQL string for prepared statement and array of values to replace the placeholders.
+   * Property values can be an Array of Arrays for Batch insert of multiple rows.
+   */
   build() {
     this._outputObj = {
       sql: ["INSERT", "INTO"],
@@ -70,7 +77,7 @@ export = class CustomInsertBuilder extends InsertBuilder {
 
     this._outputObj.columns.forEach((column: string, colIndex: number) => {
       const columnType = entity?.elements?.[column]?.type;
-      this._outputObj.values.forEach(row => {
+      this._outputObj.values.forEach((row) => {
         const value = row[colIndex];
         if (columnType && PRE_CONVERSION_MAP.has(columnType)) {
           const val = PRE_CONVERSION_MAP.get(columnType)(value);
@@ -90,7 +97,7 @@ export = class CustomInsertBuilder extends InsertBuilder {
   _columns(annotatedColumns) {
     this._outputObj.sql.push("(");
 
-    const insertColumns = [...this._obj.INSERT.columns.map(col => this._quoteElement(col))];
+    const insertColumns = [...this._obj.INSERT.columns.map((col) => this._quoteElement(col))];
 
     if (this.uuidKeys) {
       for (const key of this.uuidKeys) {
@@ -111,13 +118,12 @@ export = class CustomInsertBuilder extends InsertBuilder {
     this._outputObj.sql.push(")");
   }
 
-
   _columnAnnotatedAdded(annotatedColumns) {
     const annotatedInsertColumnNames = this._getAnnotatedInsertColumnNames(annotatedColumns);
 
     if (annotatedInsertColumnNames && annotatedInsertColumnNames.length !== 0) {
       this._outputObj.columns.push(...annotatedInsertColumnNames);
-      this._outputObj.sql.push(",", annotatedInsertColumnNames.map(col => this._quoteElement(col)).join(", "));
+      this._outputObj.sql.push(",", annotatedInsertColumnNames.map((col) => this._quoteElement(col)).join(", "));
     }
   }
 
@@ -125,6 +131,4 @@ export = class CustomInsertBuilder extends InsertBuilder {
     // for mysql driver, it will automatically processing single & multiply insert
     return ["VALUES", "?"];
   }
-
-
-}
+};

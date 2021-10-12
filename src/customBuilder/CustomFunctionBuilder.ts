@@ -1,5 +1,7 @@
 // @ts-nocheck
+import { CSN } from "@sap/cds/apis/csn";
 import { FunctionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const dateTimePlaceHolder = new Map([
   ["year", "'%Y'"],
@@ -13,6 +15,12 @@ const dateTimePlaceHolder = new Map([
 const standardFunctions = ["locate", "substring", "to_date", "to_time"];
 
 export = class CustomFunctionBuilder extends FunctionBuilder {
+  constructor(obj: any, options: any, csn: CSN) {
+    super(obj, options, csn);
+    // overwrite quote function
+    // @ts-ignore
+    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+  }
   get ExpressionBuilder() {
     const ExpressionBuilder = require("./CustomExpressionBuilder");
     Object.defineProperty(this, "ExpressionBuilder", { value: ExpressionBuilder });
@@ -50,7 +58,6 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     this._handleLikewiseFunc(args);
   }
 
-  
   _createLikeComparisonForColumn(not, left, right) {
     if (not) {
       this._outputObj.sql.push("(", left, "IS NULL", "OR");
@@ -130,7 +137,6 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     this._outputObj.sql.push("DATE_FORMAT(");
     if (args[1].val) {
       this._val(args[1].val);
-
     } else {
       this._ref(args[1]);
     }
@@ -155,5 +161,4 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     this._outputObj.sql.push(",", dateTimePlaceHolder.get(functionName));
     this._outputObj.sql.push(")");
   }
-}
-
+};

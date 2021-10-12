@@ -1,8 +1,16 @@
 // @ts-nocheck
+import { CSN } from "@sap/cds/apis/csn";
 import { UpdateBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
+import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 export = class CustomUpdateBuilder extends UpdateBuilder {
+  constructor(obj: any, options: any, csn: CSN) {
+    super(obj, options, csn);
+    // overwrite quote function
+    // @ts-ignore
+    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+  }
   get ReferenceBuilder() {
     const ReferenceBuilder = require("./CustomReferenceBuilder");
     Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
@@ -42,5 +50,4 @@ export = class CustomUpdateBuilder extends UpdateBuilder {
 
     this._outputObj.sql.push(`SET ${sql.join(", ")}`);
   }
-}
-
+};
