@@ -27,29 +27,14 @@
 
 ## Development
 
-edit your `default-env.json` file, with `mysql` credential information
+edit your `.env` file in project root directory, with `mysql` credential information
 
-```json
-{
-  "VCAP_SERVICES": {
-    "mysql": [
-      {
-        "name": "mysql",
-        "label": "mysql",
-        "tags": [
-          "mysql"
-        ],
-        "credentials": {
-          "user": "<db user name>",
-          "password": "<db password>",
-          "database": "<db schema name>",
-          "port": 3306,
-          "host": "<db host name>"
-        }
-      }
-    ]
-  }
-}
+```env
+CDS_MYSQL_USER=<user>
+CDS_MYSQL_PASSWORD=<password>
+CDS_MYSQL_DATABASE=<database>
+CDS_MYSQL_HOST=<hostname>
+CDS_MYSQL_PORT=3306
 ```
 
 edit your `package.json` > `cds` node
