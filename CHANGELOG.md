@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.4.2](https://github.com/Soontao/cds-mysql/compare/v5.4.1...v5.4.2) (2021-10-15)
+
+
+### Features
+
+* migrate csv test ([c7c3549](https://github.com/Soontao/cds-mysql/commit/c7c354975015757e0d233cea5f7fb891c1b3a75b))
+* update data migration logic ([3fc53fe](https://github.com/Soontao/cds-mysql/commit/3fc53fe9b35699c90d283471144a4b8780c68c40))
+* virtual element & doc ([44f2bba](https://github.com/Soontao/cds-mysql/commit/44f2bba475093a983be5d83ff6d3de2c46b1330f))
+* **logger:** add logger for migration ([09c5027](https://github.com/Soontao/cds-mysql/commit/09c50278dcad619549db9e8c112ea8d197ca5717))
+
 ### [5.4.1](https://github.com/Soontao/cds-mysql/compare/v5.4.0...v5.4.1) (2021-10-12)
 
 
