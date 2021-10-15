@@ -2,7 +2,7 @@
 import cds from "@sap/cds";
 import { Logger, QueryRunner } from "typeorm";
 
-const logger = cds.log("mysql-deploy|db");
+const logger = cds.log("mysql|db");
 
 export class TypeORMLogger implements Logger {
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {

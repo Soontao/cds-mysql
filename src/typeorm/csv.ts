@@ -59,9 +59,9 @@ export async function migrateData(db: DatabaseService, csvList: Array<string>, m
           /**
            * @type {Array<string>}
            */
-          const headers = entires[0];
+          const headers: Array<string> = entires[0];
 
-          const convertObject = entry => {
+          const convertObject = (entry: Array<string>) => {
             return headers.reduce(
               (pre, headerName, index) => {
                 pre[headerName] = entry[index];
@@ -69,7 +69,6 @@ export async function migrateData(db: DatabaseService, csvList: Array<string>, m
               }, {}
             );
           };
-
 
           const batchInserts = [];
 
