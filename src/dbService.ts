@@ -17,8 +17,7 @@ import {
 import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
 
-
-const LOG = (cds.log || cds.debug)("mysql");
+const LOG = (cds.log || cds.debug)("mysql|db");
 
 interface MySQLCredential {
   /**
@@ -98,13 +97,12 @@ export class MySQLDatabaseService extends DatabaseService {
    * @param tenant
    */
   private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
-
     const envCredential = {
       user: process.env.CDS_MYSQL_USER,
       password: process.env.CDS_MYSQL_PASSWORD,
       host: process.env.CDS_MYSQL_HOST,
       port: process.env.CDS_MYSQL_PORT,
-      database: process.env.CDS_MYSQL_DATABASE,
+      database: process.env.CDS_MYSQL_DATABASE
     };
 
     const rt: MySQLCredential = defaultsDeep(cloneDeep(this.options.credentials), envCredential);

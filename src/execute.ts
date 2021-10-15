@@ -10,8 +10,8 @@ import CustomBuilder from "./customBuilder";
 import { sqlFactory } from "./sqlFactory";
 
 const cds = global.cds || require("@sap/cds/lib");
-const LOG = cds.log("mysql");
-const DEBUG = cds.debug("mysql");
+const LOG = cds.log("mysql|db");
+const DEBUG = cds.debug("mysql|db");
 const _captureStack = DEBUG
   ? () => {
     const o = {};
