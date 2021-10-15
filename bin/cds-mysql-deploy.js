@@ -9,6 +9,7 @@
   const { get } = require("@newdash/newdash/get");
   const { pick } = require("@newdash/newdash/pick");
   const { flattenDeep } = require("@newdash/newdash/flattenDeep");
+  const { migrateData } = require("../lib/typeorm/csv");
 
   const _resolve = (id) => {
     return require.resolve(id, {
@@ -28,8 +29,7 @@
 
   const cds = _require("@sap/cds");
   const glob = _require("glob").sync;
-  const CSV = _require("@sap/cds/lib/compile/etc/csv.js");
-  const logger = cds.log("mysql");
+  const logger = cds.log("mysql|db");
   const { env: { requires } } = cds;
 
   try {
@@ -103,89 +103,7 @@
         .map(pattern => glob(pattern))
     );
 
-    if (csvFiles.length > 0) {
-
-      logger.info("start migration CSV provision data");
-      const tx = db.tx();
-
-      try {
-
-        for (const csvFile of csvFiles) {
-
-          const filename = path.basename(csvFile, ".csv");
-          const entity = filename.replace(/-/g, ".");
-          const entires = CSV.read(csvFile);
-
-          if (entity in model.definitions) {
-            const meta = model.definitions[entity];
-            const keys = Object
-              .values(meta.elements)
-              .filter(e => e.key === true)
-              .map(e => e.name);
-
-            if (keys.length === 0) {
-              logger.warn(
-                "entity",
-                entity.green,
-                "not have any keys, can not execute CSV migration"
-              );
-              continue;
-            }
-
-            if (entires.length > 1) {
-              logger.info(
-                "filling entity",
-                entity.green,
-                "with file",
-                path.relative(process.cwd(), csvFile).green
-              );
-            } else {
-              logger.warn(
-                "CSV file",
-                path.relative(process.cwd(), csvFile).green,
-                "is empty, skip processing"
-              );
-              continue;
-            }
-
-            const headers = entires[0];
-            const data = entires.slice(1);
-
-            const keysLocation = keys.reduce((pre, key) => {
-              pre.push({
-                name: key,
-                index: headers.indexOf(key)
-              });
-              return pre;
-            }, []);
-
-            for (const entry of entires) {
-              const keyFilter = keysLocation.reduce(
-                (pre, location) => { pre[location.name] = entry[location.index]; return pre; }, {}
-              );
-              // delete old data firstly by primary key
-              await tx.run(DELETE.from(entity).where(keyFilter));
-            }
-
-            // batch insert
-            await tx.run(INSERT.into(entity).columns(...headers).rows(data));
-
-          } else {
-            logger.warn("not found entity", entity, "in definitions");
-          }
-        }
-
-        await tx.commit();
-      } catch (error) {
-        await tx.rollback();
-        throw error;
-      }
-
-      await db.disconnect();
-
-      logger.info("CSV provision data migration successful");
-
-    }
+    await migrateData(db, csvFiles, model);
 
     process.exit(0);
 

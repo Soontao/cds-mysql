@@ -8,16 +8,17 @@
   },
   "cSpell.words": [
     "CURDATE",
-    "Millis",
-    "Rdbms",
-    "TINYINT",
-    "Unlocalized",
-    "VCAP",
     "dayofmonth",
     "havings",
     "luxon",
     "mariadb",
-    "varchar"
+    "Millis",
+    "Rdbms",
+    "TINYINT",
+    "typeorm",
+    "Unlocalized",
+    "varchar",
+    "VCAP"
   ],
   "jest.autoRun": {},
   "WhiteSource Advise.BaseBranch": "main"
