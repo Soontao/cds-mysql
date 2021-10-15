@@ -14,11 +14,11 @@ export const setupEnv = () => {
   cds.env.requires.mysql = {
     impl: path.join(__dirname, "../src"),
     credentials: {
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASE,
-      host: process.env.MYSQL_HOST,
-      port: parseInt(process.env.MYSQL_PORT),
+      user: process.env.CDS_MYSQL_USER,
+      password: process.env.CDS_MYSQL_PASSWORD,
+      database: process.env.CDS_MYSQL_DATABASE,
+      host: process.env.CDS_MYSQL_HOST,
+      port: parseInt(process.env.CDS_MYSQL_PORT),
     }
   };
 };
@@ -27,12 +27,12 @@ export const loadCSN = async (relativePath: string) => cds.load(path.join(__dirn
 
 export const getTestTypeORMOptions = () => ({
   type: "mysql",
-  username: process.env.MYSQL_USER,
+  username: process.env.CDS_MYSQL_USER,
   charset: MYSQL_CHARSET,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  host: process.env.MYSQL_HOST,
-  port: parseInt(process.env.MYSQL_PORT),
+  password: process.env.CDS_MYSQL_PASSWORD,
+  database: process.env.CDS_MYSQL_DATABASE,
+  host: process.env.CDS_MYSQL_HOST,
+  port: parseInt(process.env.CDS_MYSQL_PORT),
   entities: [],
 });
 

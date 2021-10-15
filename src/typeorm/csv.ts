@@ -1,17 +1,23 @@
 import { isEmpty, pick } from "@newdash/newdash";
 import { toHashCode } from "@newdash/newdash/functional/toHashCode";
 import type { CSN } from "@sap/cds/apis/csn";
-import type { DatabaseService } from "@sap/cds/apis/services";
 import cds from "@sap/cds/lib";
 import CSV from "@sap/cds/lib/compile/etc/csv";
 import "colors";
 import path from "path";
+import MySQLDatabaseService from "..";
 
 
 // @ts-ignore
 const logger = cds.log("mysql|db");
 
-export async function migrateData(db: DatabaseService, csvList: Array<string>, model: CSN) {
+/**
+ * 
+ * @param db database service
+ * @param csvList 
+ * @param model 
+ */
+export async function migrateData(db: MySQLDatabaseService, csvList: Array<string>, model: CSN) {
   if (csvList.length > 0) {
 
     logger.info("start migration CSV provision data");
@@ -23,7 +29,7 @@ export async function migrateData(db: DatabaseService, csvList: Array<string>, m
       for (const csvFile of csvList) {
 
         const filename = path.basename(csvFile, ".csv");
-        const entity = filename.replace(/-/g, ".");
+        const entity = filename.replace(/_/g, "."); // name_space_entity.csv -> name.space.entity
         const entires = CSV.read(csvFile);
 
         if (entity in model.definitions) {
@@ -113,9 +119,6 @@ export async function migrateData(db: DatabaseService, csvList: Array<string>, m
       await tx.rollback();
       throw error;
     }
-
-    // @ts-ignore
-    await db.disconnect();
 
     logger.info("CSV provision data migration successful");
 

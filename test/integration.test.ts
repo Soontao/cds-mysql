@@ -1,10 +1,13 @@
 // @ts-nocheck
 import sleep from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
+import { CSN } from "@sap/cds/apis/csn";
 import cds_deploy from "@sap/cds/lib/deploy";
 import axios, { AxiosInstance } from "axios";
 import { readFileSync } from "fs";
 import path from "path";
+import MySQLDatabaseService from "../src";
+import { migrateData } from "../src/typeorm";
 import { cleanDB, createRandomName } from "./utils";
 
 
@@ -15,22 +18,28 @@ describe("Integration Test Suite", () => {
   cds.env.requires.db = {
     impl: path.join(__dirname, "../src"),
     credentials: {
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASE,
-      host: process.env.MYSQL_HOST,
-      port: parseInt(process.env.MYSQL_PORT),
+      user: process.env.CDS_MYSQL_USER,
+      password: process.env.CDS_MYSQL_PASSWORD,
+      database: process.env.CDS_MYSQL_DATABASE,
+      host: process.env.CDS_MYSQL_HOST,
+      port: parseInt(process.env.CDS_MYSQL_PORT),
     }
   };
   const server = cds.test(".").in(__dirname, "./resources/integration");
+  const ENTITIES = {
+    PEOPLE: "People"
+  };
   let client: AxiosInstance;
+  let db: MySQLDatabaseService;
+  let csn: CSN;
 
   beforeAll(async () => {
-    const csn = await cds.load([
+    csn = await cds.load([
       path.join(__dirname, "./resources/integration/srv"),
       path.join(__dirname, "./resources/integration/db")
     ]);
     await cds_deploy(csn).to("db");
+    db = await cds.connect.to("db");
     client = axios.create({ baseURL: server.url });
   });
 
@@ -192,6 +201,63 @@ describe("Integration Test Suite", () => {
       }
     });
     expect(data3.Name).toBe(apple_zh);
+
+  });
+
+  it("should connected to db", async () => {
+    expect(db).not.toBeUndefined();
+    expect(db).toBeInstanceOf(MySQLDatabaseService);
+  });
+
+  it("should support migrate csv data", async () => {
+
+    const migrateTo = async (version: string) => migrateData(
+      db,
+      [path.join(__dirname, `./resources/integration/db/data/${version}/test_resources_integration_People.csv`)],
+      csn
+    );
+    await migrateTo("v1");
+    const people5 = await cds.run(
+      SELECT
+        .one
+        .from(ENTITIES.PEOPLE)
+        .where({ Name: "People5" })
+    );
+    expect(people5).not.toBeNull();
+    expect((people5.ID)).toBe("e3cf83a0-2d99-11ec-8d3d-0242ac130003");
+
+    await migrateTo("v2");
+    const people1000005 = await cds.run(
+      SELECT
+        .one
+        .from(ENTITIES.PEOPLE)
+        .byKey("e3cf83a0-2d99-11ec-8d3d-0242ac130003")
+    );
+    expect(people1000005).not.toBeNull();
+    expect(people1000005.Name).toBe("People1000005");
+    expect(people1000005.Age).toBe(18);
+
+    await migrateTo("v3");
+    const peopleWithAge9999 = await cds.run(
+      SELECT
+        .one
+        .from(ENTITIES.PEOPLE)
+        .byKey("e3cf7edc-2d99-11ec-8d3d-0242ac130003")
+    );
+    expect(peopleWithAge9999).not.toBeNull();
+    expect(peopleWithAge9999.Name).toBe("PeopleWithAge9999");
+    expect(peopleWithAge9999.Age).toBe(9999);
+
+    // original also existed
+    expect(await cds.run(
+      SELECT
+        .one
+        .from(ENTITIES.PEOPLE)
+        .byKey("e3cf83a0-2d99-11ec-8d3d-0242ac130003")
+    )).toMatchObject({
+      Name: "People1000005",
+      Age: 18,
+    });
 
   });
 

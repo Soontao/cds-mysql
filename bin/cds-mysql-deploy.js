@@ -105,6 +105,8 @@
 
     await migrateData(db, csvFiles, model);
 
+    await db.disconnect();
+
     process.exit(0);
 
   } catch (error) {
