@@ -34,6 +34,11 @@ export async function migrateData(db: MySQLDatabaseService, csvList: Array<strin
 
         if (entity in model.definitions) {
           const meta = model.definitions[entity];
+
+          if (meta === undefined) {
+            logger.warn(entity, "is not in the model");
+            continue;
+          }
           // @ts-ignore
           const keys = Object.values(meta.elements).filter(e => e.key === true).map(e => e.name);
 
