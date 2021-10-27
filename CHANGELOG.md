@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.4.4](https://github.com/Soontao/cds-mysql/compare/v5.4.3...v5.4.4) (2021-10-27)
+
+
+### Bug Fixes
+
+* upgrade typeorm from 0.2.34 to 0.2.38 ([cc935a1](https://github.com/Soontao/cds-mysql/commit/cc935a157998c3924f06ec816d0c66e969edbd09))
+
 ### [5.4.3](https://github.com/Soontao/cds-mysql/compare/v5.4.2...v5.4.3) (2021-10-19)
 
 ### [5.4.2](https://github.com/Soontao/cds-mysql/compare/v5.4.1...v5.4.2) (2021-10-15)
