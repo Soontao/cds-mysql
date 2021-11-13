@@ -77,7 +77,7 @@ function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
     queries.push(executeSelectSQL(dbc, sql, values, false));
   }
 
-  return rawToExpanded(expandQueries, queries, cqn.SELECT.one, cqn._rootEntity);
+  return rawToExpanded(expandQueries, queries, cqn.SELECT.one, cqn._target);
 }
 
 function executeSelectCQN(model, dbc, query, user, locale, txTimestamp) {
