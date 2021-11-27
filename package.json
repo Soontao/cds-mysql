@@ -23,7 +23,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@sap/cds": "5.6.2",
+    "@sap/cds": "5.6.4",
     "express": "4.x",
     "@newdash/newdash": "^5.20.0",
     "@newdash/graphlib": "^3.1.1",
