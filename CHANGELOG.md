@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.4.5](https://github.com/Soontao/cds-mysql/compare/v5.4.4...v5.4.5) (2021-11-28)
+
+
+### Bug Fixes
+
+* CSV migration ([e7e952d](https://github.com/Soontao/cds-mysql/commit/e7e952dade1caacb8107dcb8f3dd3aaa4f360404))
+
 ### [5.4.4](https://github.com/Soontao/cds-mysql/compare/v5.4.3...v5.4.4) (2021-10-27)
 
 
