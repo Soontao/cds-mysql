@@ -33,7 +33,7 @@
     "luxon": "^2.1.1",
     "mysql2": "^2.3.2",
     "ts-mysql-parser": "^0.2.0",
-    "typeorm": "0.2.38"
+    "typeorm": "0.2.40"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^13.2.0",
