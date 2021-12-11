@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.8.0](https://github.com/Soontao/cds-mysql/compare/v5.4.5...v5.8.0) (2021-12-11)
+
+
+### Features
+
+* upgrade @sap/cds ([3c4d619](https://github.com/Soontao/cds-mysql/commit/3c4d619f5aee974b479d5a056a6ccf9d926d6f7a))
+
+
+### Bug Fixes
+
+* lint ([fbd7ef2](https://github.com/Soontao/cds-mysql/commit/fbd7ef2e2aea8a6ec6169650142648b4d6df80b1))
+* upgrade mysql2 from 2.3.2 to 2.3.3 ([a14fcb8](https://github.com/Soontao/cds-mysql/commit/a14fcb85ca4f00a1569c8e02f3a7ae8a83c18f60))
+* upgrade typeorm from 0.2.38 to 0.2.40 ([8c23ff1](https://github.com/Soontao/cds-mysql/commit/8c23ff1beba6cf2dc9995210b662ba0d25b5691c))
+
 ### [5.4.5](https://github.com/Soontao/cds-mysql/compare/v5.4.4...v5.4.5) (2021-11-28)
 
 
