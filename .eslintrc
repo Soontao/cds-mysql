@@ -9,11 +9,8 @@
     "node": true,
     "es6": true
   },
-  "globals": {
-    "cds": true
-  },
   "parserOptions": {
-    "ecmaVersion": 2016,
+    "ecmaVersion": 2021,
     "sourceType": "module",
     "ecmaFeatures": {
       "impliedStrict": true,
@@ -39,9 +36,27 @@
     "no-extra-semi": [
       0
     ],
+    "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/no-explicit-any": [
       0
     ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "space-before-blocks": "error",
+    "key-spacing": "error",
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "space-infix-ops": "off",
+    "@typescript-eslint/space-infix-ops": "error",
+    "comma-spacing": "error",
+    "arrow-spacing": "error",
+    "lines-between-class-members": "error",
     "quotes": [
       "error",
       "double",
@@ -50,7 +65,8 @@
         "avoidEscape": true
       }
     ],
-    "indent": [
+    "indent": "off",
+    "@typescript-eslint/indent": [
       "error",
       2,
       {

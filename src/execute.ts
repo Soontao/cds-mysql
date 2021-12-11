@@ -147,6 +147,7 @@ function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, 
   return _executeSimpleSQL(dbc, sql, Array.isArray(values[0]) ? values[0] : values);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function executeInsertSQL(dbc: Connection, sql: string, values?: any, query?: Query) {
   LOG._debug && LOG.debug(sql, SANITIZE_VALUES ? ["***"] : values);
 
