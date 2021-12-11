@@ -21,6 +21,7 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     // @ts-ignore
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
   }
+
   get ExpressionBuilder() {
     const ExpressionBuilder = require("./CustomExpressionBuilder");
     Object.defineProperty(this, "ExpressionBuilder", { value: ExpressionBuilder });

@@ -11,11 +11,13 @@ export = class CustomUpdateBuilder extends UpdateBuilder {
     // @ts-ignore
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
   }
+
   get ReferenceBuilder() {
     const ReferenceBuilder = require("./CustomReferenceBuilder");
     Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
     return ReferenceBuilder;
   }
+
   get ExpressionBuilder() {
     const ExpressionBuilder = require("./CustomExpressionBuilder");
     Object.defineProperty(this, "ExpressionBuilder", { value: ExpressionBuilder });
@@ -33,7 +35,7 @@ export = class CustomUpdateBuilder extends UpdateBuilder {
     this._addAnnotatedUpdateColumns(resMap, annotatedColumns);
     const entity = this._csn.definitions[this._obj.UPDATE.entity];
 
-    resMap.forEach((value, key, map) => {
+    resMap.forEach((value, key) => {
       const columnType = entity.elements?.[key]?.type;
       if (value && value.sql) {
         sql.push(`${this._quoteElement(key)} = ${value.sql}`);

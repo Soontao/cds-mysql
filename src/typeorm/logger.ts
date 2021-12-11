@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-nocheck
 import cds from "@sap/cds";
 import { Logger, QueryRunner } from "typeorm";

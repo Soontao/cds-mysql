@@ -17,6 +17,7 @@ import {
 import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LOG = (cds.log || cds.debug)("mysql|db");
 
 interface MySQLCredential {
@@ -154,6 +155,7 @@ export class MySQLDatabaseService extends DatabaseService {
   }
 
   public async disconnect() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [tenant, pool] of this._pools.entries()) {
       await (<Pool<Connection>>pool).clear();
     }

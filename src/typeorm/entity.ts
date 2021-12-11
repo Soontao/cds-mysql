@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
-import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import { alg, Graph } from "@newdash/graphlib";
+import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import MySQLParser, {
   ColumnDefinitionContext,
   CreateTableContext,
@@ -16,6 +16,7 @@ import { overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
 
+// @ts-ignore
 const cds = global.cds || require("@sap/cds/lib");
 const logger = cds.log("mysql");
 
@@ -32,7 +33,9 @@ interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
 
 class CDSListener implements MySQLParserListener {
   private _entities: Array<EntitySchema>;
+
   private _tmp: EntitySchemaOptionsWithDeps;
+
   private _currentStatement: string;
 
   constructor() {
@@ -145,6 +148,7 @@ class CDSListener implements MySQLParserListener {
     return { name: "", columns: {}, synchronize: true, deps: [] };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   exitCreateTable(ctx: CreateTableContext) {
     this._entities.push(new EntitySchema(this._tmp));
     this._tmp = this.newEntitySchemaOption();

@@ -13,6 +13,7 @@ export = class CustomInsertBuilder extends InsertBuilder {
     // @ts-ignore
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
   }
+
   /**
    * Builds an Object based on the properties of the CQN object.
    * @example <caption>Example output</caption>

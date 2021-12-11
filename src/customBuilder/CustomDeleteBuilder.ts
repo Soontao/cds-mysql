@@ -9,6 +9,7 @@ export = class CustomDeleteBuilder extends DeleteBuilder {
     // @ts-ignore
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
   }
+
   get ReferenceBuilder() {
     const ReferenceBuilder = require("./CustomReferenceBuilder");
     Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
