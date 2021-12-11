@@ -1,8 +1,9 @@
 // @ts-nocheck
-import { filter, isEmpty } from "@newdash/newdash";
+import { filter } from "@newdash/newdash/filter";
+import { isEmpty } from "@newdash/newdash/isEmpty";
 import { Query } from "@sap/cds/apis/cqn";
 import { getPostProcessMapper, postProcess } from "@sap/cds/libx/_runtime/db/data-conversion/post-processing";
-import { createJoinCQNFromExpanded, hasExpand, rawToExpanded } from "@sap/cds/libx/_runtime/db/expand";
+import { createJoinCQNFromExpanded, expandV2, hasExpand, rawToExpanded } from "@sap/cds/libx/_runtime/db/expand";
 import { Connection, OkPacket } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
@@ -20,6 +21,8 @@ const _captureStack = DEBUG
   }
   : () => undefined;
 
+const SANITIZE_VALUES = process.env.NODE_ENV === "production" && cds.env.log.sanitize_values !== false;
+
 /*
  * helpers
  */
@@ -29,8 +32,9 @@ const _colored = {
   ROLLBACK: "\x1b[1m\x1b[91mROLLBACK\x1b[0m"
 };
 
-const _augmented = (err: Error, sql: string, o: any) => {
+const _augmented = (err: Error, sql: string, values: any, o: any) => {
   err.query = sql;
+  if (values) err.values = SANITIZE_VALUES ? ["***"] : values;
   err.message += " in: \n" + sql;
   if (o) err.stack = err.message + o.stack.slice(5);
   return err;
@@ -42,12 +46,12 @@ function _executeSimpleSQL(dbc: Connection, sql: string, values: Array<any>) {
   try {
     return dbc.query(sql, values);
   } catch (err) {
-    throw _augmented(err, sql, o);
+    throw _augmented(err, sql, values, o);
   }
 }
 
 async function executeSelectSQL(dbc: Connection, sql: string, values: Array<any>, isOne: any, postMapper: Function) {
-  LOG._debug && LOG.debug(sql, values);
+  LOG._debug && LOG.debug(sql, SANITIZE_VALUES ? ["***"] : values);
   const o = _captureStack();
   try {
     const [results] = await dbc.query(sql, values);
@@ -56,7 +60,7 @@ async function executeSelectSQL(dbc: Connection, sql: string, values: Array<any>
     }
     return postProcess(Boolean(isOne) ? results[0] : results, postMapper);
   } catch (err) {
-    throw _augmented(err, sql, o);
+    throw _augmented(err, sql, values, o);
   }
 }
 
@@ -82,6 +86,10 @@ function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
 
 function executeSelectCQN(model, dbc, query, user, locale, txTimestamp) {
   if (hasExpand(query)) {
+    // expand: '**' or '*3' is handled by new impl
+    if (query.SELECT.columns.some(c => c.expand && typeof c.expand === "string" && /^\*{1}[\d|*]+/.test(c.expand))) {
+      return expandV2(model, dbc, query, user, locale, txTimestamp, executeSelectCQN);
+    }
     return _processExpand(model, dbc, query, user, locale, txTimestamp);
   }
   const { sql, values = [] } = sqlFactory(
@@ -140,7 +148,7 @@ function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, 
 }
 
 async function executeInsertSQL(dbc: Connection, sql: string, values?: any, query?: Query) {
-  LOG._debug && LOG.debug(sql, values);
+  LOG._debug && LOG.debug(sql, SANITIZE_VALUES ? ["***"] : values);
 
   const o = _captureStack();
 
@@ -152,7 +160,7 @@ async function executeInsertSQL(dbc: Connection, sql: string, values?: any, quer
       values
     }));
   } catch (error) {
-    throw _augmented(error, sql, o);
+    throw _augmented(error, sql, values, o);
   }
 }
 

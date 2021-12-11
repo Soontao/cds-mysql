@@ -12,6 +12,7 @@
     "CURDATE",
     "dayofmonth",
     "havings",
+    "libx",
     "luxon",
     "mariadb",
     "Millis",
