@@ -23,7 +23,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "express": "~4.17.1",
+    "express": "~4.17.2",
     "@newdash/newdash": "^5.20.0",
     "@newdash/graphlib": "^3.1.1",
     "colors": "^1.4.0",
@@ -47,7 +47,7 @@
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "husky": "^4.3.8",
     "jest": "^27.4.4",
     "prettier": "^2.5.1",
