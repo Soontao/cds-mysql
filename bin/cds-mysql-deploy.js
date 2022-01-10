@@ -10,6 +10,7 @@
   const { pick } = require("@newdash/newdash/pick");
   const { flattenDeep } = require("@newdash/newdash/flattenDeep");
   const { migrateData } = require("../lib/typeorm/csv");
+  const { parseEnv } = require("../lib/env");
 
   const _resolve = (id) => {
     return require.resolve(id, {
@@ -41,13 +42,10 @@
       get(requires, "db.model") || get(requires, "mysql.model") || ["srv"]
     );
 
-    const envCredential = {
-      user: process.env.CDS_MYSQL_USER,
-      password: process.env.CDS_MYSQL_PASSWORD,
-      host: process.env.CDS_MYSQL_HOST,
-      port: process.env.CDS_MYSQL_PORT,
-      database: process.env.CDS_MYSQL_DATABASE,
-    };
+    /**
+     * @type {import("typeorm/driver/mysql/MysqlConnectionOptions").MysqlConnectionOptions}
+     */
+    const envCredential = parseEnv(process.env, "cds").cds.mysql;
 
     const credentials = Object.assign(
       {},
