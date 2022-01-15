@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.9.0](https://github.com/Soontao/cds-mysql/compare/v5.8.0...v5.9.0) (2022-01-15)
+
+
+### Features
+
+* enhance env reader ([600dc80](https://github.com/Soontao/cds-mysql/commit/600dc804e13b4f4953d82a830490cc6ef9d5f3d2))
+* env reader ([f894083](https://github.com/Soontao/cds-mysql/commit/f89408399710c1bcfb0f5042bb1e5402fba86b3c))
+* support ssl encryped ([c87cf92](https://github.com/Soontao/cds-mysql/commit/c87cf9213de438f6edf912d6ab884e63ca185ba3))
+
 ## [5.8.0](https://github.com/Soontao/cds-mysql/compare/v5.4.5...v5.8.0) (2021-12-11)
 
 
