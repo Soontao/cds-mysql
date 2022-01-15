@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.1](https://github.com/Soontao/cds-mysql/compare/v5.9.0...v5.9.1) (2022-01-15)
+
+
+### Bug Fixes
+
+* ssl deploy ([86dc7cb](https://github.com/Soontao/cds-mysql/commit/86dc7cb068362da53eb8b08d0c62ff4e8b7eed8c))
+
 ## [5.9.0](https://github.com/Soontao/cds-mysql/compare/v5.8.0...v5.9.0) (2022-01-15)
 
 
