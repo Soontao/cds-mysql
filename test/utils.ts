@@ -14,14 +14,14 @@ export const setupEnv = () => {
   };
   cds.env.requires.mysql = {
     impl: path.join(__dirname, "../src"),
-    credentials: parseEnv(process.env, "cds").cds.mysql
+    credentials: parseEnv(process.env, "cds")?.cds?.mysql ?? {}
   };
 };
 
 export const loadCSN = async (relativePath: string) => cds.load(path.join(__dirname, relativePath));
 
 export const getTestTypeORMOptions = () => {
-  const credential = parseEnv(process.env, "cds").cds.mysql;
+  const credential = parseEnv(process.env, "cds")?.cds?.mysql ?? {};
   return Object.assign (
     {},
     {

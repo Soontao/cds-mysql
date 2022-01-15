@@ -45,7 +45,7 @@
     /**
      * @type {import("typeorm/driver/mysql/MysqlConnectionOptions").MysqlConnectionOptions}
      */
-    const envCredential = parseEnv(process.env, "cds").cds.mysql;
+    const envCredential = get(parseEnv(process.env, "cds"), "cds.mysql", {});
 
     const credentials = Object.assign(
       {},

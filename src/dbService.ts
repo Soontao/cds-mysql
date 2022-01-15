@@ -48,7 +48,7 @@ interface MySQLCredential {
   }
 }
 
-const envCredential = parseEnv(process.env, "cds").cds.mysql;
+const envCredential = parseEnv(process.env, "cds")?.cds?.mysql ?? {};
 
 /**
  * MySQL Database Adapter for SAP CAP Framework
