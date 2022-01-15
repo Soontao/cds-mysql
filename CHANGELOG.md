@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.2](https://github.com/Soontao/cds-mysql/compare/v5.9.1...v5.9.2) (2022-01-15)
+
+
+### Bug Fixes
+
+* env parser ([93587c0](https://github.com/Soontao/cds-mysql/commit/93587c095c0bef51f2dd06f9c631968a9d8556d8))
+
 ### [5.9.1](https://github.com/Soontao/cds-mysql/compare/v5.9.0...v5.9.1) (2022-01-15)
 
 
