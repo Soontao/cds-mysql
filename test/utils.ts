@@ -5,6 +5,7 @@ import process from "process";
 import { ConnectionOptions, createConnection } from "typeorm";
 import { v4 } from "uuid";
 import { MYSQL_CHARSET } from "../src/constants";
+import { parseEnv } from "../src/env";
 
 export const createRandomName = () => v4().split("-").pop();
 export const setupEnv = () => {
@@ -13,28 +14,25 @@ export const setupEnv = () => {
   };
   cds.env.requires.mysql = {
     impl: path.join(__dirname, "../src"),
-    credentials: {
-      user: process.env.CDS_MYSQL_USER,
-      password: process.env.CDS_MYSQL_PASSWORD,
-      database: process.env.CDS_MYSQL_DATABASE,
-      host: process.env.CDS_MYSQL_HOST,
-      port: parseInt(process.env.CDS_MYSQL_PORT),
-    }
+    credentials: parseEnv(process.env, "cds").cds.mysql
   };
 };
 
 export const loadCSN = async (relativePath: string) => cds.load(path.join(__dirname, relativePath));
 
-export const getTestTypeORMOptions = () => ({
-  type: "mysql",
-  username: process.env.CDS_MYSQL_USER,
-  charset: MYSQL_CHARSET,
-  password: process.env.CDS_MYSQL_PASSWORD,
-  database: process.env.CDS_MYSQL_DATABASE,
-  host: process.env.CDS_MYSQL_HOST,
-  port: parseInt(process.env.CDS_MYSQL_PORT),
-  entities: [],
-});
+export const getTestTypeORMOptions = () => {
+  const credential = parseEnv(process.env, "cds").cds.mysql;
+  return Object.assign (
+    {},
+    {
+      type: "mysql",
+      charset: MYSQL_CHARSET,
+      entities: [],
+    },
+    credential,
+    { username: credential.user }
+  );
+};
 
 export const cleanDB = async () => {
   const options: ConnectionOptions = {

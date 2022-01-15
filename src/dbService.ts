@@ -42,6 +42,10 @@ interface MySQLCredential {
    * DB Connection Port, default 3306
    */
   port?: string | number;
+
+  ssl?: {
+    ca?: string;
+  }
 }
 
 const envCredential = parseEnv(process.env, "cds").cds.mysql;
@@ -101,10 +105,7 @@ export class MySQLDatabaseService extends DatabaseService {
    * @param tenant
    */
   private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
-    
-
     const rt: MySQLCredential = defaultsDeep(cloneDeep(this.options.credentials), envCredential);
-
     if (tenant !== TENANT_DEFAULT) {
       rt.database = tenant;
     }
@@ -139,16 +140,18 @@ export class MySQLDatabaseService extends DatabaseService {
 
   private async _getTypeOrmOption(tenant?: string): Promise<ConnectionOptions> {
     const credentials = await this.getTenantCredential(tenant);
-    return {
-      name: "cds-deploy-connection",
-      type: "mysql",
-      username: credentials.user,
-      password: credentials.password,
-      database: credentials.database ?? credentials.user,
-      host: credentials.host,
-      port: parseInt(credentials.port) ?? 3306,
-      entities: []
-    };
+    return Object.assign(
+      {},
+      {
+        name: `cds-deploy-connection-${tenant ?? "main"}`,
+        type: "mysql",
+        username: credentials.user,
+        database: credentials.user,
+        port: 3306,
+        entities: []
+      },
+      credentials
+    );
   }
 
   public async disconnect() {

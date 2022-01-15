@@ -108,3 +108,4 @@ lib
 
 # run
 *.db
+test_ca.pem
