@@ -60,16 +60,18 @@
 
     const { csnToEntity, migrate } = require("../lib/typeorm");
 
-    const connectionOptions = {
-      name: "cds-deploy-connection",
-      type: "mysql",
-      username: credentials.user,
-      password: credentials.password,
-      database: credentials.database || credentials.user,
-      host: credentials.host,
-      port: parseInt(credentials.port) || 3306,
-      entities: csnToEntity(model)
-    };
+    const connectionOptions = Object.assign(
+      {},
+      {
+        name: `cds-deploy-connection`,
+        type: "mysql",
+        username: credentials.user,
+        database: credentials.user,
+        port: 3306,
+        entities: csnToEntity(model)
+      },
+      credentials
+    );
 
     logger.info(
       "start database schema migration for ",
