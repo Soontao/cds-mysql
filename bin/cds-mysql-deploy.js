@@ -1,40 +1,40 @@
 #!/usr/bin/env node
 
 (async () => {
-
-  require("colors");
-  require("dotenv").config();
-  const assert = require("assert");
-  const path = require("path");
-  const process = require("process");
-  const { get } = require("@newdash/newdash/get");
-  const { pick } = require("@newdash/newdash/pick");
-  const { flattenDeep } = require("@newdash/newdash/flattenDeep");
-  const { migrateData } = require("../lib/typeorm/csv");
-  const { parseEnv } = require("../lib/env");
-
-  const _resolve = (id) => {
-    return require.resolve(id, {
-      paths: [
-        path.join(process.cwd(), "node_modules", id),
-        path.join(__dirname, "../node_modules", id),
-      ]
-    });
-  };
-
-  const _require = (id) => {
-    if (_resolve(id)) {
-      return require(_resolve(id));
-    }
-    throw new Error(`can not found module ${id}`);
-  };
-
-  const cds = _require("@sap/cds");
-  const glob = _require("glob").sync;
-  const logger = cds.log("mysql|db");
-  const { env: { requires } } = cds;
-
   try {
+
+    require("colors");
+    require("dotenv").config();
+    const assert = require("assert");
+    const path = require("path");
+    const process = require("process");
+    const { get } = require("@newdash/newdash/get");
+    const { pick } = require("@newdash/newdash/pick");
+    const { flattenDeep } = require("@newdash/newdash/flattenDeep");
+    const { migrateData } = require("../lib/typeorm/csv");
+    const { parseEnv } = require("../lib/env");
+
+    const _resolve = (id) => {
+      return require.resolve(id, {
+        paths: [
+          path.join(process.cwd(), "node_modules", id),
+          path.join(__dirname, "../node_modules", id),
+        ]
+      });
+    };
+
+    const _require = (id) => {
+      if (_resolve(id)) {
+        return require(_resolve(id));
+      }
+      throw new Error(`can not found module ${id}`);
+    };
+
+    const cds = _require("@sap/cds");
+    const glob = _require("glob").sync;
+    const logger = cds.log("mysql|db");
+    const { env: { requires } } = cds;
+
 
     /**
      * @type {import("@sap/cds/apis/csn").CSN}
