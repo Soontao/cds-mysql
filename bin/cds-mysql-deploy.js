@@ -3,6 +3,7 @@
 (async () => {
 
   require("colors");
+  require("dotenv").config();
   const assert = require("assert");
   const path = require("path");
   const process = require("process");
