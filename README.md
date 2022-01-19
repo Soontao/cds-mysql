@@ -27,7 +27,9 @@
 
 ## Development
 
-edit your `default-env.json` file in project root directory, with `mysql` credential information
+put the `default-env.json` file into the root directory of your CAP project, with `mysql` credential information.
+
+please **NOTICE** that, the `{ tags: ['mysql'] }` is the key which used for service credential lookup in CAP framework.
 
 ```json
 {
@@ -88,11 +90,13 @@ and just run the `npm run deploy` is enough.
 
 ### Automatically Migration
 
-`cds-mysql` will use the `cds` to generate `DDL` SQL, parse the `DDL` and convert it with `typeorm`-`EntitySchema`, then do the migration with `typeorm`.
+`cds-mysql` will use the `cds` to generate `DDL` SQL, parse the `DDL` and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
 
-It will full automatically, sync changed `columns`, `views`.
+It will be fullly automatically, sync changed `columns`, `views`.
 
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
+
+**The mysql database must be empty (all table must be managed by cds-mysql, no pre-defined tables), otherwise the migration will be failed because typeorm detect the metadata by itself table**
 
 ### Enhanced CSV Migration
 
