@@ -27,14 +27,29 @@
 
 ## Development
 
-edit your `.env` file in project root directory, with `mysql` credential information
+edit your `default-env.json` file in project root directory, with `mysql` credential information
 
-```env
-CDS_MYSQL_USER=<user>
-CDS_MYSQL_PASSWORD=<password>
-CDS_MYSQL_DATABASE=<database>
-CDS_MYSQL_HOST=<hostname>
-CDS_MYSQL_PORT=3306
+```json
+{
+  "VCAP_SERVICES": {
+    "user-provided": [
+      {
+        "label": "user-provided",
+        "name": "remote-mysql-service",
+        "tags": [
+          "mysql"
+        ],
+        "credentials": {
+          "host": "mysql.host.name.com",
+          "user": "cdsuser",
+          "password": "cdsPas$w0rd",
+          "database": "cdstest",
+          "port": 3306
+        }
+      }
+    ]
+  }
+}
 ```
 
 edit your `package.json` > `cds` node

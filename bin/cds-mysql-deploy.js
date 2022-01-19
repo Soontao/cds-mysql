@@ -2,7 +2,6 @@
 
 (async () => {
   try {
-
     require("colors");
     require("dotenv").config();
     const assert = require("assert");
@@ -35,84 +34,88 @@
     const logger = cds.log("mysql|db");
     const { env: { requires } } = cds;
 
+    try {
 
-    /**
-     * @type {import("@sap/cds/apis/csn").CSN}
-     */
-    const model = await cds.load(
-      get(requires, "db.model") || get(requires, "mysql.model") || ["srv"]
-    );
+      /**
+       * @type {import("@sap/cds/apis/csn").CSN}
+       */
+      const model = await cds.load(
+        get(requires, "db.model") || get(requires, "mysql.model") || ["srv"]
+      );
 
-    /**
-     * @type {import("typeorm/driver/mysql/MysqlConnectionOptions").MysqlConnectionOptions}
-     */
-    const envCredential = get(parseEnv(process.env, "cds"), "cds.mysql", {});
+      /**
+       * @type {import("typeorm/driver/mysql/MysqlConnectionOptions").MysqlConnectionOptions}
+       */
+      const envCredential = get(parseEnv(process.env, "cds"), "cds.mysql", {});
 
-    const credentials = Object.assign(
-      {},
-      get(requires, "db.credentials"),
-      get(requires, "mysql.credentials"),
-      envCredential
-    );
+      const credentials = Object.assign(
+        {},
+        get(requires, "db.credentials"),
+        get(requires, "mysql.credentials"),
+        envCredential
+      );
 
-    assert.ok(credentials.user, "must defined user");
-    assert.ok(credentials.password, "must defined password");
-    assert.ok(credentials.host, "must defined host");
+      assert.ok(credentials.user, "must defined user");
+      assert.ok(credentials.password, "must defined password");
+      assert.ok(credentials.host, "must defined host");
 
-    const { csnToEntity, migrate } = require("../lib/typeorm");
+      const { csnToEntity, migrate } = require("../lib/typeorm");
 
-    const connectionOptions = Object.assign(
-      {},
-      {
-        name: `cds-deploy-connection`,
-        type: "mysql",
-        username: credentials.user,
-        database: credentials.user,
-        port: 3306,
-        entities: csnToEntity(model)
-      },
-      credentials
-    );
+      const connectionOptions = Object.assign(
+        {},
+        {
+          name: `cds-deploy-connection`,
+          type: "mysql",
+          username: credentials.user,
+          database: credentials.user,
+          port: 3306,
+          entities: csnToEntity(model)
+        },
+        credentials
+      );
 
-    logger.info(
-      "start database schema migration for ",
-      pick(
-        connectionOptions,
-        "host",
-        "username",
-        "database",
-      )
-    );
+      logger.info(
+        "start database schema migration for ",
+        pick(
+          connectionOptions,
+          "host",
+          "username",
+          "database",
+        )
+      );
 
-    await migrate(connectionOptions);
+      await migrate(connectionOptions);
 
-    logger.info("schema migration successful");
+      logger.info("schema migration successful");
 
-    /**
-     * @type {import("@sap/cds/apis/services").DatabaseService}
-     */
-    const db = await cds.connect.to("db", {
-      impl: path.join(__dirname, "../lib/index.js")
-    });
+      /**
+       * @type {import("@sap/cds/apis/services").DatabaseService}
+       */
+      const db = await cds.connect.to("db", {
+        impl: path.join(__dirname, "../lib/index.js")
+      });
 
-    db.model = model;
+      db.model = model;
 
-    const csvFiles = flattenDeep(
-      model.$sources
-        .map(path.dirname)
-        .map(dir => `${dir}/**/*.csv`)
-        .map(pattern => glob(pattern))
-    );
+      const csvFiles = flattenDeep(
+        model.$sources
+          .map(path.dirname)
+          .map(dir => `${dir}/**/*.csv`)
+          .map(pattern => glob(pattern))
+      );
 
-    await migrateData(db, csvFiles, model);
+      await migrateData(db, csvFiles, model);
 
-    await db.disconnect();
+      await db.disconnect();
 
-    process.exit(0);
+      process.exit(0);
 
+    } catch (error) {
+      logger.error(error);
+      process.exit(1);
+    }
   } catch (error) {
-    logger.error(error);
-    process.exit(1);
+    console.error(`error happened ${error.message}`);
   }
 
 })();
