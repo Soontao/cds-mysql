@@ -31,6 +31,8 @@ put the `default-env.json` file into the root directory of your CAP project, wit
 
 please **NOTICE** that, the `{ tags: ['mysql'] }` is the key which used for service credential lookup in CAP framework.
 
+for the supported options in `credentials` node, just ref the [mysql official connection options document](https://www.npmjs.com/package/mysql#connection-options)
+
 ```json
 {
   "VCAP_SERVICES": {
