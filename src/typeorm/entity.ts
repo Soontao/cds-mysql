@@ -18,7 +18,7 @@ type TableName = string;
 
 // @ts-ignore
 const cds = global.cds || require("@sap/cds/lib");
-const logger = cds.log("mysql");
+const logger = cds.log("mysql|db");
 
 const TextColumnTypes: Array<ColumnType> = ["varchar", "varchar2", "nvarchar", "nvarchar2", "char"];
 

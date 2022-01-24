@@ -2,6 +2,7 @@ import { pick, range, sleep, trimSuffix } from "@newdash/newdash";
 import map from "@newdash/newdash/map";
 import { ConnectionOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
+import { equalWithoutCase } from "../src/typeorm/mysql/utils";
 import { EXPECTED_MIGRATE_DDL } from "./resources/migrate/expected.migrate";
 import { cleanDB, getTestTypeORMOptions, loadCSN } from "./utils";
 
@@ -17,6 +18,19 @@ describe("TypeORM Test Suite", () => {
     const csn = await loadCSN("./resources/complex-type.cds");
     const entities = csnToEntity(csn);
     expect(entities).toHaveLength(1);
+  });
+
+  it("should support compare with string without case sensitive", () => {
+    expect(equalWithoutCase("a", "A")).toBeTruthy();
+    expect(equalWithoutCase("123", "123")).toBeTruthy();
+    expect(equalWithoutCase("a1", "a1")).toBeTruthy();
+    expect(equalWithoutCase("", "")).toBeTruthy();
+    expect(equalWithoutCase(undefined, undefined)).toBeTruthy();
+
+    expect(equalWithoutCase(undefined, "")).toBeFalsy();
+    expect(equalWithoutCase("", undefined)).toBeFalsy();
+    expect(equalWithoutCase("1", undefined)).toBeFalsy();
+    expect(equalWithoutCase("a1", "1a")).toBeFalsy();
   });
 
   it("should support convert different prop type to EntitySchema", async () => {
