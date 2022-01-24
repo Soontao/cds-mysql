@@ -1,24 +1,13 @@
-import { defaultTo } from "@newdash/newdash";
-import { Connection, ConnectionOptions, ReplicationMode, Table, TableColumn } from "typeorm";
+/* eslint-disable max-len */
+import { defaultTo } from "@newdash/newdash/defaultTo";
+import { isEmpty } from "@newdash/newdash/isEmpty";
+import type { ReplicationMode, TableColumn } from "typeorm";
 import { MysqlDriver } from "typeorm/driver/mysql/MysqlDriver";
-import { MysqlQueryRunner } from "typeorm/driver/mysql/MysqlQueryRunner";
-import { Query } from "typeorm/driver/Query";
 import { ColumnMetadata } from "typeorm/metadata/ColumnMetadata";
-import { RdbmsSchemaBuilder } from "typeorm/schema-builder/RdbmsSchemaBuilder";
 import { DateUtils } from "typeorm/util/DateUtils";
 import { OrmUtils } from "typeorm/util/OrmUtils";
-import { MYSQL_CHARSET, MYSQL_COLLATE } from "../constants";
-
-/**
- * @internal
- */
-export class CDSMySQLConnection extends Connection {
-  constructor(options: ConnectionOptions) {
-    super(options);
-    // @ts-ignore
-    this.driver = new CDSMySQLDriver(this);
-  }
-}
+import { CDSMySQLQueryRunner } from "./query-runner";
+import { CDSMySQLSchemaBuilder } from "./schema-builder";
 
 /**
  * @internal
@@ -59,18 +48,34 @@ export class CDSMySQLDriver extends MysqlDriver {
       if (tableColumn.type !== this.normalizeType(columnMetadata)) {
         return true;
       }
-      if (tableColumn.length !== columnMetadataLength) {
-        return true;
+      if (this.withLengthColumnTypes.includes(tableColumn.type as any)) {
+        // for the empty length, it means its maybe a default length
+        if (
+          !isEmpty(tableColumn.length) 
+            && !isEmpty(columnMetadataLength) 
+            && tableColumn.length !== columnMetadataLength) {
+          return true;
+        }
       }
-      if (tableColumn.width !== columnMetadata.width) {
-        return true;
+      
+      if (this.withWidthColumnTypes.includes(tableColumn.type as any)) {
+        if (tableColumn.width !== columnMetadata.width) {
+          return true;
+        }
       }
-      if (columnMetadata.precision !== undefined && tableColumn.precision !== columnMetadata.precision) {
-        return true;
+
+      if (this.withPrecisionColumnTypes.includes(tableColumn.type as any)) {
+        if (columnMetadata.precision !== undefined && tableColumn.precision !== columnMetadata.precision) {
+          return true;
+        }
       }
-      if (columnMetadata.scale !== undefined && tableColumn.scale !== columnMetadata.scale) {
-        return true;
+    
+      if  (this.withScaleColumnTypes.includes(tableColumn.type as any)) {
+        if (columnMetadata.scale !== undefined && tableColumn.scale !== columnMetadata.scale) {
+          return true;
+        }
       }
+     
       if (tableColumn.zerofill !== columnMetadata.zerofill) {
         return true;
       }
@@ -150,50 +155,5 @@ export class CDSMySQLDriver extends MysqlDriver {
     } else {
       return defaultValue as any;
     }
-  }
-}
-
-/**
- * @internal
- */
-export class CDSMySQLQueryRunner extends MysqlQueryRunner {
-  /**
-   * Builds create table sql
-   */
-  protected createTableSql(table: Table, createForeignKeys?: boolean): Query {
-    // enhance charset
-    let sql = super.createTableSql(table, createForeignKeys).query;
-    sql += ` CHARACTER SET '${MYSQL_CHARSET}' COLLATE '${MYSQL_COLLATE}'`;
-    return new Query(sql);
-  }
-}
-
-/**
- * @internal
- */
-export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
-  /**
-   * @override disable drop old columns
-   */
-  protected async executeSchemaSyncOperationsInProperOrder(): Promise<void> {
-    await this.dropOldViews();
-    // await this.dropOldForeignKeys();
-    await this.dropOldIndices();
-    await this.dropOldChecks();
-    // await this.dropOldExclusions();
-    // await this.dropCompositeUniqueConstraints();
-    await this.renameColumns();
-    await this.createNewTables();
-    // DO NOT drop old columns
-    // await this.dropRemovedColumns();
-    await this.addNewColumns();
-    await this.updatePrimaryKeys();
-    await this.updateExistColumns();
-    await this.createNewIndices();
-    await this.createNewChecks();
-    // await this.createNewExclusions();
-    // await this.createCompositeUniqueConstraints();
-    // await this.createForeignKeys();
-    await this.createViews();
   }
 }

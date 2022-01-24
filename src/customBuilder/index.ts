@@ -28,7 +28,7 @@ const dependencies = {
     const CustomUpdateBuilder = require("./CustomUpdateBuilder");
     Object.defineProperty(dependencies, "UpdateBuilder", { value: CustomUpdateBuilder });
     return CustomUpdateBuilder;
-  }
+  },
 };
 
 export default dependencies;
