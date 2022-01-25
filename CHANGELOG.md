@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.6-alpha.0](https://github.com/Soontao/cds-mysql/compare/v5.9.5...v5.9.6-alpha.0) (2022-01-25)
+
+
+### Bug Fixes
+
+* azure mysql information schema is not case sensitive ([d529df8](https://github.com/Soontao/cds-mysql/commit/d529df82ee2309b05f9eefae5d0303ed18cfedbc))
+
 ### [5.9.5](https://github.com/Soontao/cds-mysql/compare/v5.9.4...v5.9.5) (2022-01-19)
 
 ### [5.9.4](https://github.com/Soontao/cds-mysql/compare/v5.9.3...v5.9.4) (2022-01-18)
