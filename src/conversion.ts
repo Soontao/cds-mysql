@@ -54,5 +54,14 @@ const TYPE_POST_CONVERSION_MAP = new Map([
   ["cds.Timestamp", convertToISOTime]
 ]);
 
+// @ts-ignore
+if (cds.env.features.bigjs) {
+  const Big = require("big.js");
+  const convertToBig = (value: any) => new Big(value);
+ 
+  TYPE_POST_CONVERSION_MAP.set("cds.Integer64", convertToBig);
+  TYPE_POST_CONVERSION_MAP.set("cds.Decimal", convertToBig);
+}
+
 export { TYPE_POST_CONVERSION_MAP };
 

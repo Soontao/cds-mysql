@@ -70,7 +70,7 @@ export class MySQLDatabaseService extends DatabaseService {
     this._insert = this._queries.insert(execute.insert);
     this._read = this._queries.read(execute.select, execute.stream);
     this._update = this._queries.update(execute.update, execute.select);
-    this._delete = this._queries.delete(execute.delete);
+    this._delete = this._queries.delete(execute.delete, execute.update);
     this._run = this._queries.run(this._insert, this._read, this._update, this._delete, execute.cqn, execute.sql);
 
     this._pools = new LRUCacheProvider(1024);
