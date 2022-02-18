@@ -23,11 +23,10 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@sap/cds": "^5.8.0",
+    "@sap/cds": "^5.8.1",
     "@newdash/graphlib": "^3.1.1",
     "@newdash/newdash": "^5.21.0",
     "colors": "^1.4.0",
-    "dotenv": "^14.3.2",
     "generic-pool": "^3.8.2",
     "glob": "^7.2.0",
     "luxon": "^2.3.0",

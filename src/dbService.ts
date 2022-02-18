@@ -4,7 +4,6 @@ import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
 import { defaultsDeep } from "@newdash/newdash/defaultsDeep";
 import cds from "@sap/cds/lib";
 import DatabaseService from "@sap/cds/libx/_runtime/sqlite/Service";
-import { config } from "dotenv";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import { ConnectionOptions } from "typeorm";
@@ -18,8 +17,6 @@ import {
 import { parseEnv } from "./env";
 import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
-
-config(); // load config from dot env file
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LOG = (cds.log || cds.debug)("mysql|db");
