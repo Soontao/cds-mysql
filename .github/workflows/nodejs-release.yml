@@ -29,12 +29,14 @@ jobs:
           node-version: 14.x
           registry-url: https://registry.npmjs.org/
 
-      - name: npm test
+      - name: npm install
         run: |
           npm i -g npm
           npm install
           npm shrinkwrap
-          npm test
+
+      - name: npm test
+        run: npm test
         env:
           CI: true
           CDS_MYSQL_HOST: "127.0.0.1"

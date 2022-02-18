@@ -47,12 +47,14 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: npm install, build, and test
+      - name: npm install, build
         run: |
           npm i -g npm
           npm install
           npm run build --if-present
-          npm run coverage
+
+      - name: coverage
+        run: npm run coverage
         env:
           CI: true
           CDS_MYSQL_HOST: "127.0.0.1"
