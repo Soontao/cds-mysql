@@ -10,6 +10,7 @@
     const { pick } = require("@newdash/newdash/pick");
     const { flattenDeep } = require("@newdash/newdash/flattenDeep");
     const { migrateData } = require("../lib/typeorm/csv");
+    const { checkCdsVersion } = require("../lib/utils");
     const { parseEnv } = require("../lib/env");
 
     const _resolve = (id) => {
@@ -32,6 +33,8 @@
     const glob = _require("glob").sync;
     const logger = cds.log("mysql|db");
     const { env: { requires } } = cds;
+
+    checkCdsVersion();
 
     try {
 

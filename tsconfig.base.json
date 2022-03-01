@@ -4,6 +4,7 @@
     "newLine": "lf",
     "target": "ES2018",
     "module": "CommonJS",
+    "allowJs": true,
     "sourceMap": true,
     "outDir": "lib",
     "esModuleInterop": true,

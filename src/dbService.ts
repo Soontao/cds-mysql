@@ -17,6 +17,7 @@ import {
 import { parseEnv } from "./env";
 import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
+import { checkCdsVersion } from "./utils";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LOG = (cds.log || cds.debug)("mysql|db");
@@ -60,6 +61,7 @@ export class MySQLDatabaseService extends DatabaseService {
   constructor(...args: any[]) {
     super(...args);
 
+    checkCdsVersion();
     // REVISIT: official db api
     this._execute = execute;
 
