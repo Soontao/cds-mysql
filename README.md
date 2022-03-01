@@ -105,6 +105,13 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 `cds-mysql` built-in a csv migration tool, it will migration data with key validation.
 
+
+## Compatibility Table
+
+| @sap/cds version | cds-mysql version |
+|------------------|-------------------|
+| 5.8.x            | 5.9.x             |
+
 ## Limitation
 
 - mysql 5.6 not support key length exceed 767 bytes

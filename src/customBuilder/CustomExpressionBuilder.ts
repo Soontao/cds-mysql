@@ -1,5 +1,5 @@
 import { CSN } from "@sap/cds/apis/csn";
-import ExpressionBuilder from "@sap/cds/libx/_runtime/sqlite/customBuilder/CustomExpressionBuilder";
+import { ExpressionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 export = class CustomExpressionBuilder extends ExpressionBuilder {
