@@ -21,7 +21,8 @@ export function overwriteCDSCoreTypes() {
 export function checkCdsVersion() {
   const { VERSION } = require("./cds.version");
   const cds = require("@sap/cds");
-  if (cds.version !== VERSION) {
+  const intersects = require("semver/ranges/intersects")
+  if (!intersects(cds.version, VERSION)) {
     throw new Error(`lib 'cds-mysql' requires '@sap/cds' with version: '${VERSION}', but installed '@sap/cds' version is: 
     ${cds.version}', please try other version 'cds-mysql'`);
   }
