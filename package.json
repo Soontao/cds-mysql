@@ -1,6 +1,6 @@
 {
   "name": "cds-mysql",
-  "version": "5.9.6",
+  "version": "5.9.7-alpha.0",
   "main": "lib/index.js",
   "bin": {
     "cds-mysql-deploy": "./bin/cds-mysql-deploy.js"
