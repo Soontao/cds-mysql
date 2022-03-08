@@ -7,6 +7,9 @@ import { v4 } from "uuid";
 import { MYSQL_CHARSET } from "../src/constants";
 import { parseEnv } from "../src/env";
 
+
+require("dotenv").config();
+
 export const createRandomName = () => v4().split("-").pop();
 export const setupEnv = () => {
   cds.env.requires.db = {

@@ -28,6 +28,5 @@
   },
   "buildOptions": {
     "incremental": true
-  },
-  "include": []
+  }
 }

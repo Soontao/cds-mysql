@@ -6,6 +6,7 @@ import { CDSMySQLConnection } from "./mysql";
 export async function migrate(connectionOptions: ConnectionOptions, dryRun: true): Promise<SqlInMemory>;
 export async function migrate(connectionOptions: ConnectionOptions, dryRun?: false): Promise<void>;
 export async function migrate(connectionOptions: ConnectionOptions, dryRun = false): Promise<any> {
+  // TODO: lock for migration
   const conn = new CDSMySQLConnection({
     ...connectionOptions,
     logging: true,

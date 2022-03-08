@@ -87,9 +87,11 @@ export class MySQLDatabaseService extends DatabaseService {
   private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
     return this._pools.getOrCreate(tenant, async () => {
       const credential = await this.getTenantCredential(tenant);
+      // TODO: ddl-auto for automatic migration
       return createPool(
         {
           create: () => createConnection({ ...credential, dateStrings: true }),
+          validate: (conn) => conn.query("SELECT 1").then(() => true).catch(() => false),
           destroy: (conn) => conn.destroy()
         },
         {

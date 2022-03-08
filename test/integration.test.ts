@@ -14,7 +14,7 @@ import { cleanDB, createRandomName } from "./utils";
 describe("Integration Test Suite", () => {
 
   cds.env._home = path.join(__dirname, "./resources/integration");
-  cds.env.i18n.for_sqlite = ["zh_CN"]; // this configure will used for create view
+  cds.env.i18n.for_sqlite = ["en", "zh_CN"]; // this configure will used for create view
   cds.env.requires.db = {
     impl: path.join(__dirname, "../src"),
     credentials: {
@@ -180,7 +180,7 @@ describe("Integration Test Suite", () => {
         Name: apple_en
       },
       headers: {
-        "Accept-Language": "en"
+        "accept-language": "en"
       }
     });
     await client.request({
@@ -196,8 +196,10 @@ describe("Integration Test Suite", () => {
     expect(data2.Name).toBe(apple_en);
 
     const { data: data3 } = await client.request({
-      url: `${PRODUCTS}(${data.ID})`, method: "get", headers: {
-        "Accept-Language": "zh_CN"
+      url: `${PRODUCTS}(${data.ID})`,
+      method: "get",
+      headers: {
+        "accept-language": "zh_CN"
       }
     });
     expect(data3.Name).toBe(apple_zh);

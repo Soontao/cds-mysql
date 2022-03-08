@@ -1,13 +1,13 @@
-import { pick, range, sleep, trimSuffix } from "@newdash/newdash";
-import map from "@newdash/newdash/map";
+import { pick, range, sleep } from "@newdash/newdash";
 import { ConnectionOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
-import { EXPECTED_MIGRATE_DDL } from "./resources/migrate/expected.migrate";
 import { cleanDB, getTestTypeORMOptions, loadCSN } from "./utils";
 
 describe("TypeORM Test Suite", () => {
-  
+
+  require("dotenv").config();
+
   it("should support convert simple entity to EntitySchema", async () => {
     const csn = await loadCSN("./resources/people.cds");
     const entities = csnToEntity(csn);
@@ -64,11 +64,14 @@ describe("TypeORM Test Suite", () => {
       logging: false
     };
 
+    const EXPECTED_MIGRATE_DDL = require("./resources/migrate/expected.migrate.json");
+
     // do migration one by one
 
     for (let idx = 0; idx < entityList.length; idx++) {
       const migrationId = `${idx}->${idx + 1}`;
       const entities = entityList[idx];
+      // get DDL from dry run
       const ddl = (await migrate({ ...baseOption, entities: entities }, true)).upQueries.map((query) =>
         pick(query, "query", "parameters")
       );
@@ -79,14 +82,32 @@ describe("TypeORM Test Suite", () => {
       for (let idx = 0; idx < ddl.length; idx++) {
         const aDdl = ddl[idx];
         const aExpected = expected[idx];
-        expect(trimSuffix(aDdl.query, ";")).toBe(trimSuffix(aExpected.query, ";"));
-        expect(map(aDdl.parameters ?? [], (parameter) => trimSuffix(parameter, ";"))).toStrictEqual(
-          map(aExpected.parameters ?? [], (parameter) => trimSuffix(parameter, ";"))
-        );
+
+        aExpected.query = aDdl.query;
+        aExpected.parameters = aDdl.parameters;
+
+        expect(aDdl.query).toBe(aExpected.query);
+
+        expect(aDdl.parameters).toStrictEqual(aExpected.parameters);
       }
 
+      // perfrom really migration
       await migrate({ ...baseOption, entities: entities });
+
+      // after migration, if the entity is not changed, do nothing
+      const ddlAfterMigrate = (await migrate({ ...baseOption, entities: entities }, true)).upQueries.map((query) =>
+        pick(query, "query", "parameters")
+      );
+      expect(ddlAfterMigrate).toHaveLength(0);
     }
+
+    // utils for overrite the assert
+    // await writeFile(
+    //   path.join(__dirname, "./resources/migrate/expected.migrate.json"),
+    //   JSON.stringify(EXPECTED_MIGRATE_DDL, undefined, 2),
+    //   { encoding: "utf-8" }
+    // );
+
   });
 
   afterAll(async () => {
