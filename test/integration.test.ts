@@ -14,7 +14,6 @@ import { cleanDB, createRandomName } from "./utils";
 describe("Integration Test Suite", () => {
 
   cds.env._home = path.join(__dirname, "./resources/integration");
-  cds.env.i18n.for_sqlite = ["en", "zh_CN"]; // this configure will used for create view
   cds.env.requires.db = {
     impl: path.join(__dirname, "../src"),
     credentials: {
@@ -168,10 +167,11 @@ describe("Integration Test Suite", () => {
   });
 
   // broken after 5.x release, the model has changed
-  it.skip("should support localized data", async () => {
+  it("should support localized data", async () => {
+    // TODO: document about the https://cap.cloud.sap/docs/guides/localized-data
     const PRODUCTS = "/bank/Products";
     const apple_en = "Apple";
-    const apple_zh = "苹果🍎";
+    const apple_fr = "苹果🍎";
 
     const { data } = await client.request({
       url: PRODUCTS,
@@ -187,8 +187,8 @@ describe("Integration Test Suite", () => {
       url: `${PRODUCTS}(${data.ID})/texts`,
       method: "POST",
       data: {
-        Name: apple_zh,
-        locale: "zh_CN"
+        Name: apple_fr,
+        locale: "fr"
       }
     });
 
@@ -199,10 +199,10 @@ describe("Integration Test Suite", () => {
       url: `${PRODUCTS}(${data.ID})`,
       method: "get",
       headers: {
-        "accept-language": "zh_CN"
+        "accept-language": "fr"
       }
     });
-    expect(data3.Name).toBe(apple_zh);
+    expect(data3.Name).toBe(apple_fr);
 
   });
 
