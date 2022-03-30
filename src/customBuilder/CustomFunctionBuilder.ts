@@ -12,7 +12,7 @@ const dateTimePlaceHolder = new Map([
   ["minute", "'%M'"]
 ]);
 
-const standardFunctions = ["locate", "substring", "to_date", "to_time"];
+const STANDARD_FUNCTIONS_SET = new Set(["locate", "substring", "to_date", "to_time"]);
 
 export = class CustomFunctionBuilder extends FunctionBuilder {
   constructor(obj: any, options: any, csn: CSN) {
@@ -46,7 +46,7 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
 
     if (dateTimePlaceHolder.has(functionName)) {
       this._timeFunction(functionName, args);
-    } else if (standardFunctions.includes(functionName)) {
+    } else if (STANDARD_FUNCTIONS_SET.has(functionName)) {
       this._standardFunction(functionName, args);
     } else if (functionName === "seconds_between") {
       this._secondsBetweenFunction(args);
