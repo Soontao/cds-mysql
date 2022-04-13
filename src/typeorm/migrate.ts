@@ -1,21 +1,21 @@
-import { ConnectionOptions } from "typeorm";
+import { DataSourceOptions } from "typeorm";
 import { SqlInMemory } from "typeorm/driver/SqlInMemory";
 import { TypeORMLogger } from "./logger";
-import { CDSMySQLConnection } from "./mysql";
+import { CDSMySQLDataSource } from "./mysql";
 
-export async function migrate(connectionOptions: ConnectionOptions, dryRun: true): Promise<SqlInMemory>;
-export async function migrate(connectionOptions: ConnectionOptions, dryRun?: false): Promise<void>;
-export async function migrate(connectionOptions: ConnectionOptions, dryRun = false): Promise<any> {
+export async function migrate(connectionOptions: DataSourceOptions, dryRun: true): Promise<SqlInMemory>;
+export async function migrate(connectionOptions: DataSourceOptions, dryRun?: false): Promise<void>;
+export async function migrate(connectionOptions: DataSourceOptions, dryRun = false): Promise<any> {
   // TODO: lock for migration
-  const conn = new CDSMySQLConnection({
+  const ds = new CDSMySQLDataSource({
     ...connectionOptions,
     logging: true,
     logger: new TypeORMLogger()
   });
 
   try {
-    await conn.connect();
-    const builder = conn.driver.createSchemaBuilder();
+    await ds.initialize();
+    const builder = ds.driver.createSchemaBuilder();
     // dry run and return the DDL SQL
     if (dryRun) {
       return await builder.log();
@@ -24,8 +24,8 @@ export async function migrate(connectionOptions: ConnectionOptions, dryRun = fal
   } catch (error) {
     throw error;
   } finally {
-    if (conn.isConnected) {
-      await conn.close();
+    if (ds.isInitialized) {
+      await ds.destroy();
     }
   }
 }

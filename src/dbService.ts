@@ -6,7 +6,7 @@ import cds from "@sap/cds/lib";
 import DatabaseService from "@sap/cds/libx/_runtime/sqlite/Service";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
-import { ConnectionOptions } from "typeorm";
+import type { DataSourceOptions } from "typeorm";
 import {
   CONNECTION_IDLE_CHECK_INTERVAL,
   DEFAULT_CONNECTION_IDLE_TIMEOUT,
@@ -145,7 +145,7 @@ export class MySQLDatabaseService extends DatabaseService {
     }
   }
 
-  private async _getTypeOrmOption(tenant?: string): Promise<ConnectionOptions> {
+  private async _getTypeOrmOption(tenant?: string): Promise<DataSourceOptions> {
     const credentials = await this.getTenantCredential(tenant);
     return Object.assign(
       {},

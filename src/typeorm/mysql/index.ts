@@ -1,16 +1,16 @@
 /* eslint-disable max-len */
 // @ts-nocheck
 import {
-  Connection,
-  ConnectionOptions
+  DataSource,
+  DataSourceOptions
 } from "typeorm";
 import { CDSMySQLDriver } from "./driver";
 
 /**
  * @internal
  */
-export class CDSMySQLConnection extends Connection {
-  constructor(options: ConnectionOptions) {
+export class CDSMySQLDataSource extends DataSource {
+  constructor(options: DataSourceOptions) {
     super(options);
     // @ts-ignore
     this.driver = new CDSMySQLDriver(this);
