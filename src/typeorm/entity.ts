@@ -12,7 +12,7 @@ import MySQLParser, {
 } from "ts-mysql-parser";
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
-import { overwriteCDSCoreTypes } from "../utils";
+import { groupByKey, overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
 
@@ -31,6 +31,7 @@ interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   deps: TableName[];
 }
 
+const CDS_TYPEORM_ANNOTATION = "@cds.typeorm.config";
 class CDSListener implements MySQLParserListener {
   private _entities: Array<EntitySchema>;
 
@@ -38,10 +39,13 @@ class CDSListener implements MySQLParserListener {
 
   private _currentStatement: string;
 
-  constructor() {
+  private _model: any;
+
+  constructor(options: any) {
     this._entities = [];
     this._tmp = this.newEntitySchemaOption();
     this._currentStatement = "";
+    this._model = options.model;
   }
 
   // >> CREATE TABLE
@@ -150,8 +154,38 @@ class CDSListener implements MySQLParserListener {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   exitCreateTable(ctx: CreateTableContext) {
+    const entityDef = this.findEntityCSN(this._tmp.name);
+    if (entityDef !== undefined) {
+      const schemaConfig = groupByKey(CDS_TYPEORM_ANNOTATION, entityDef);
+
+      if (schemaConfig !== undefined && Object.keys(schemaConfig).length > 0) {
+        this._tmp = Object.assign({}, schemaConfig, this._tmp);
+      }
+
+      Object
+        .values(entityDef.elements)
+        .forEach((ele: any) => {
+          // TODO: filter composition and association
+          const columnName = ele.name;
+          const columnConfig = ele[CDS_TYPEORM_ANNOTATION];
+          if (columnConfig !== undefined && columnName in this._tmp.columns) {
+            this._tmp.columns[columnName] = Object.assign(
+              {},
+              columnConfig,
+              this._tmp.columns[columnName],
+            );
+          }
+        });
+
+    }
+    
+    // TODO: why its undefined ?
     this._entities.push(new EntitySchema(this._tmp));
     this._tmp = this.newEntitySchemaOption();
+  }
+
+  private findEntityCSN(tableName: string): any {
+    return Object.values(this._model.definitions).find((def: any) => def?.name?.split(".").join("_") === tableName);
   }
 
   exitTableConstraintDef(ctx: TableConstraintDefContext) {
@@ -235,7 +269,7 @@ class CDSListener implements MySQLParserListener {
  */
 export function csnToEntity(model: any): Array<EntitySchema> {
   overwriteCDSCoreTypes();
-  const listener: CDSListener = new CDSListener();
+  const listener: CDSListener = new CDSListener({ model: cds.reflect(model) });
   const parser = new MySQLParser({ parserListener: listener });
   const statements = cds.compile.to.sql(model);
   statements.forEach((stat: string) => {

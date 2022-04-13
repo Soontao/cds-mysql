@@ -42,6 +42,11 @@ entity Card : cuid, managed {
 
 type TranslatedText : localized String(255);
 
+
+@cds.typeorm.config : {indices : [{
+  name    : 'ProductName',
+  columns : ['Name']
+}]}
 entity Product : cuid {
   Name  : TranslatedText;
   Price : Decimal(10, 2);

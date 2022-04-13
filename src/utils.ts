@@ -27,3 +27,11 @@ export function checkCdsVersion() {
     ${cds.version}', please try other version 'cds-mysql'`);
   }
 }
+
+// TODO: reuse
+export function groupByKey(prefix: string, obj: any): Partial<typeof obj> {
+  return Object
+    .keys(obj)
+    .filter(key => key.startsWith(prefix))
+    .reduce((pre, cur) => { pre[cur.slice(cur === prefix ? prefix.length : (prefix.length + 1))] = obj[cur]; return pre; }, {});
+}
