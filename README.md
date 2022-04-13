@@ -95,7 +95,7 @@ and just run the `npm run deploy` is enough.
 
 `cds-mysql` will use the `cds` to generate `DDL` SQL, parse the `DDL` and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
 
-It will be fullly automatically, sync changed `columns`, `views`.
+It will be fully automatically, sync changed `columns`, `views`.
 
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
 
