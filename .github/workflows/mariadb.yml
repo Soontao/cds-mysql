@@ -9,21 +9,21 @@ on:
       - "*"
 
 jobs:
-  mysql:
+  mariadb:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        mysql-version: ["mysql:5.6", "mysql:5.7", "mysql:8.0"]
+        mysql-version: ["mariadb:10.5", "mariadb:10.8"]
 
     services:
       mysql:
         image: ${{ matrix.mysql-version }}
         env:
-          MYSQL_DATABASE: cdstest
-          MYSQL_USER: cdstest
-          MYSQL_PASSWORD: cdstest
-          MYSQL_ROOT_PASSWORD: cdstest
+          MARIADB_DATABASE: cdstest
+          MARIADB_USER: cdstest
+          MARIADB_PASSWORD: cdstest
+          MARIADB_ROOT_PASSWORD: cdstest
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
