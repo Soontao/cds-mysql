@@ -103,7 +103,7 @@ Then, write your own `cds` definitions & execute the `npm run deploy` to deploy 
 ```groovy
 using {incrementID} from 'cds-mysql';
 
-// for the entity `Animal`, it will have an 'ID' field which automatically generated ID from sequence
+// the entity `Animal` will have an auto-filled 'ID' field 
 entity Animal : incrementID {
   Name : String(255);
 }
