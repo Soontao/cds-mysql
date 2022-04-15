@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
 
+import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
+
 /**
  * overwrite cds compiler type mapping
  */
@@ -28,6 +30,7 @@ export function checkCdsVersion() {
   }
 }
 
+
 // TODO: reuse
 export function groupByKey(prefix: string, obj: any): Partial<typeof obj> {
   return Object
@@ -35,3 +38,46 @@ export function groupByKey(prefix: string, obj: any): Partial<typeof obj> {
     .filter(key => key.startsWith(prefix))
     .reduce((pre, cur) => { pre[cur.slice(cur === prefix ? prefix.length : (prefix.length + 1))] = obj[cur]; return pre; }, {});
 }
+
+/**
+ * utils for memorized (sync) **ONE-parameter** function
+ * 
+ * @param func a function which only have one parameter
+ * @returns 
+ */
+export const memorized = <T extends (arg0: any) => any>(func: T): T => {
+  let cache: WeakMap<any, any>;
+
+  // @ts-ignore
+  return function (arg0: any) {
+    if (typeof arg0 === "object") {
+      cache = new WeakMap();
+    } else {
+      cache = new Map();
+    }
+    if (!cache.has(arg0)) {
+      cache.set(arg0, func(arg0));
+    }
+    return cache.get(arg0);
+  };
+};
+
+export function mustBeArray<T extends Array<any>>(obj: T): T;
+export function mustBeArray(obj: null): [];
+export function mustBeArray(obj: undefined): [];
+export function mustBeArray<T extends object>(obj: T): [T];
+export function mustBeArray(obj: any): Array<any> {
+  if (obj instanceof Array) {
+    return obj;
+  }
+  if (obj === undefined || obj === null) {
+    return [];
+  }
+  return [obj];
+};
+
+export const getIncrementalKey = memorized((entityDef: any): any | undefined => {
+  const [key] = Object.values(entityDef?.keys)
+    .filter(keyEle => groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, keyEle)?.generated === "increment");
+  return key;
+});

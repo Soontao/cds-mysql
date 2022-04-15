@@ -5,6 +5,7 @@
   "bin": {
     "cds-mysql-deploy": "./bin/cds-mysql-deploy.js"
   },
+  "cds.main": "./index.cds",
   "description": "SAP CAP adapter for mysql",
   "scripts": {
     "test": "jest --passWithNoTests --runInBand --forceExit",

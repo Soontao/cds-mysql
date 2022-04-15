@@ -1,5 +1,7 @@
 namespace test.resources.integration;
 
+using {incrementID} from '../../../../index';
+
 
 using {
   cuid,
@@ -50,4 +52,9 @@ type TranslatedText : localized String(255);
 entity Product : cuid {
   Name  : TranslatedText;
   Price : Decimal(10, 2);
+}
+
+
+entity DummyAnimal : incrementID {
+  Name : String(255);
 }

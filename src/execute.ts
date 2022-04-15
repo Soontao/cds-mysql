@@ -9,6 +9,7 @@ import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
 import CustomBuilder from "./customBuilder";
 import { sqlFactory } from "./sqlFactory";
+import { getIncrementalKey, mustBeArray } from "./utils";
 
 const cds = global.cds || require("@sap/cds/lib");
 const LOG = cds.log("mysql|db");
@@ -155,11 +156,12 @@ async function executeInsertSQL(dbc: Connection, sql: string, values?: any, quer
 
   try {
     const results: Array<OkPacket> = await dbc.query(sql, [values]);
-    return filter(results, (value?: OkPacket) => value !== undefined).map(({ insertId, affectedRows }) => ({
-      lastID: insertId,
-      affectedRows: affectedRows,
-      values
-    }));
+    return filter(results, (value?: OkPacket) => value !== undefined)
+      .map(({ insertId, affectedRows }) => ({
+        lastID: insertId,
+        affectedRows: affectedRows,
+        values
+      }));
   } catch (error) {
     throw _augmented(error, sql, values, o);
   }
@@ -183,7 +185,7 @@ function _convertStreamValues(values) {
   return any ? Promise.all(values) : values;
 }
 
-async function executeInsertCQN(model, dbc: Connection, query: Query, user, locale, txTimestamp) {
+async function executeInsertCQN(model: any, dbc: Connection, query: Query, user, locale, txTimestamp) {
   const { sql, values = [] } = sqlFactory(
     query,
     {
@@ -194,7 +196,20 @@ async function executeInsertCQN(model, dbc: Connection, query: Query, user, loca
     model
   );
   const vals = await _convertStreamValues(values);
-  return executeInsertSQL(dbc, sql, vals, query);
+  const mappedResults = await executeInsertSQL(dbc, sql, vals, query);
+  // write back the insert id to response body
+  if (
+    cds.context?.target?.kind === "entity" &&
+    cds.context?.data !== undefined
+  ) {
+    const key = getIncrementalKey(cds.context.target);
+    if (key !== undefined) {
+      for (const row of mustBeArray(cds.context.data)) {
+        row[key.name] = mappedResults[0].lastID;
+      }
+    }
+  }
+  return mappedResults;
 }
 
 async function executeUpdateCQN(model, dbc, cqn, user, locale, txTimestamp) {

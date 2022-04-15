@@ -263,6 +263,26 @@ describe("Integration Test Suite", () => {
 
   });
 
+  it("should support create animal with incremental ID", async () => {
+    const axios: import("axios").AxiosInstance = server.axios;
+    let res = await axios.get("/bank/DummyAnimals");
+    expect(res.status).toBe(200);
+    res = await axios.post("/bank/DummyAnimals",
+      { Name: "horse 1" },
+      { validateStatus: () => true }
+    );
+    expect(res.status).toBe(201);
+    expect(res.data.ID).not.toBeUndefined();
+    const { results } = await cds.run(
+      INSERT
+        .into("test.resources.integration.BankService.DummyAnimals")
+        .entries({ Name: "horse 2" }, { Name: "horse 3" })
+    );
+
+    expect(results).toHaveLength(1);
+    expect(results[0].affectedRows).toBe(2);
+  });
+
 
   afterAll(async () => {
     await sleep(100);

@@ -12,6 +12,7 @@ import MySQLParser, {
 } from "ts-mysql-parser";
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
+import { ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
 import { groupByKey, overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
@@ -31,7 +32,7 @@ interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   deps: TableName[];
 }
 
-const CDS_TYPEORM_ANNOTATION = "@cds.typeorm.config";
+
 class CDSListener implements MySQLParserListener {
   private _entities: Array<EntitySchema>;
 
@@ -156,7 +157,7 @@ class CDSListener implements MySQLParserListener {
   exitCreateTable(ctx: CreateTableContext) {
     const entityDef = this.findEntityCSN(this._tmp.name);
     if (entityDef !== undefined) {
-      const schemaConfig = groupByKey(CDS_TYPEORM_ANNOTATION, entityDef);
+      const schemaConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, entityDef);
 
       if (schemaConfig !== undefined && Object.keys(schemaConfig).length > 0) {
         this._tmp = Object.assign({}, schemaConfig, this._tmp);
@@ -164,11 +165,11 @@ class CDSListener implements MySQLParserListener {
 
       Object
         .values(entityDef.elements)
-        .forEach((ele: any) => {
+        .forEach((elementDef: any) => {
           // TODO: filter composition and association
-          const columnName = ele.name;
-          const columnConfig = ele[CDS_TYPEORM_ANNOTATION];
-          if (columnConfig !== undefined && columnName in this._tmp.columns) {
+          const columnName = elementDef.name;
+          const columnConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, elementDef);
+          if (columnConfig !== undefined && Object.keys(columnConfig).length > 0 && columnName in this._tmp.columns) {
             this._tmp.columns[columnName] = Object.assign(
               {},
               columnConfig,
@@ -178,7 +179,7 @@ class CDSListener implements MySQLParserListener {
         });
 
     }
-    
+
     // TODO: why its undefined ?
     this._entities.push(new EntitySchema(this._tmp));
     this._tmp = this.newEntitySchemaOption();

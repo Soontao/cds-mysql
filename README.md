@@ -25,7 +25,7 @@
 - [x] `$filter` with functions
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`
 - [x] initial data provision by `CSV`
-- [ ] auto incremental key aspect
+- [x] auto incremental key aspect (odata only, single records)
 - [ ] index config
 
 ## Development
