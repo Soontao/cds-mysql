@@ -14,11 +14,11 @@ jobs:
 
     strategy:
       matrix:
-        mysql-version: ["mariadb:10.5", "mariadb:10.8"]
+        docker-images: ["mariadb:10.5", "mariadb:10.8"]
 
     services:
-      mysql:
-        image: ${{ matrix.mysql-version }}
+      db:
+        image: ${{ matrix.docker-images }}
         env:
           MARIADB_DATABASE: cdstest
           MARIADB_USER: cdstest
@@ -53,7 +53,7 @@ jobs:
         env:
           CI: true
           CDS_MYSQL_HOST: "127.0.0.1"
-          CDS_MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          CDS_MYSQL_PORT: ${{ job.services.db.ports[3306] }}
           CDS_MYSQL_DATABASE: cdstest
           CDS_MYSQL_USER: cdstest
           CDS_MYSQL_PASSWORD: cdstest
