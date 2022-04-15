@@ -1,6 +1,5 @@
 import { CSN } from "@sap/cds/apis/csn";
 import { SelectBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import { MYSQL_COLLATE } from "../constants";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 export = class CustomSelectBuilder extends SelectBuilder {
@@ -29,13 +28,6 @@ export = class CustomSelectBuilder extends SelectBuilder {
     return FunctionBuilder;
   }
 
-  getCollate() {
-    return "COLLATE " + this.getCollatingSequence();
-  }
-
-  getCollatingSequence() {
-    return MYSQL_COLLATE;
-  }
-
   _forUpdate() {}
+  
 };

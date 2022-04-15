@@ -12,6 +12,7 @@ import {
   DEFAULT_CONNECTION_IDLE_TIMEOUT,
   DEFAULT_TENANT_CONNECTION_POOL_SIZE,
   MAX_QUEUE_SIZE,
+  MYSQL_COLLATE,
   TENANT_DEFAULT
 } from "./constants";
 import { parseEnv } from "./env";
@@ -90,7 +91,7 @@ export class MySQLDatabaseService extends DatabaseService {
       // TODO: ddl-auto for automatic migration
       return createPool(
         {
-          create: () => createConnection({ ...credential, dateStrings: true }),
+          create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE }),
           validate: (conn) => conn.query("SELECT 1").then(() => true).catch(() => false),
           destroy: (conn) => conn.destroy()
         },

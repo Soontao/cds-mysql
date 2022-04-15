@@ -23,6 +23,7 @@ import { equalWithoutCase } from "./utils";
  * @internal
  */
 export class CDSMySQLQueryRunner extends MysqlQueryRunner {
+
   /**
    * Builds create table sql
    */
@@ -32,7 +33,6 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
     sql += ` CHARACTER SET '${MYSQL_CHARSET}' COLLATE '${MYSQL_COLLATE}'`;
     return new Query(sql);
   }
-
 
 
   /**
@@ -125,7 +125,7 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
     // Avoid data directory scan: TABLE_SCHEMA
     // Avoid database directory scan: TABLE_NAME
     // All columns will hit the full table.
-    const kcuSubquerySql =  dbTables.map(({ TABLE_SCHEMA, TABLE_NAME }) => {
+    const kcuSubquerySql = dbTables.map(({ TABLE_SCHEMA, TABLE_NAME }) => {
       return `
               SELECT
                   *
@@ -249,19 +249,19 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
 
           const columnUniqueIndices = dbIndices.filter(dbIndex => {
             return dbIndex["TABLE_NAME"] === dbTable["TABLE_NAME"]
-                          && dbIndex["TABLE_SCHEMA"] === dbTable["TABLE_SCHEMA"]
-                          && dbIndex["COLUMN_NAME"] === dbColumn["COLUMN_NAME"]
-                          && parseInt(dbIndex["NON_UNIQUE"], 10) === 0;
+              && dbIndex["TABLE_SCHEMA"] === dbTable["TABLE_SCHEMA"]
+              && dbIndex["COLUMN_NAME"] === dbColumn["COLUMN_NAME"]
+              && parseInt(dbIndex["NON_UNIQUE"], 10) === 0;
           });
 
           const tableMetadata = this.connection.entityMetadatas.find(metadata => equalWithoutCase(this.getTablePath(table), this.getTablePath(metadata)));
           const hasIgnoredIndex = columnUniqueIndices.length > 0
-                      && tableMetadata
-                      && tableMetadata.indices.some(index => {
-                        return columnUniqueIndices.some(uniqueIndex => {
-                          return index.name === uniqueIndex["INDEX_NAME"] && index.synchronize === false;
-                        });
-                      });
+            && tableMetadata
+            && tableMetadata.indices.some(index => {
+              return columnUniqueIndices.some(uniqueIndex => {
+                return index.name === uniqueIndex["INDEX_NAME"] && index.synchronize === false;
+              });
+            });
 
           const isConstraintComposite = columnUniqueIndices.every((uniqueIndex) => {
             return dbIndices.some(dbIndex => dbIndex["INDEX_NAME"] === uniqueIndex["INDEX_NAME"] && dbIndex["COLUMN_NAME"] !== dbColumn["COLUMN_NAME"]);
@@ -279,8 +279,8 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
           }
 
           if (dbColumn["COLUMN_DEFAULT"] === null
-                      || dbColumn["COLUMN_DEFAULT"] === undefined
-                      || (isMariaDb && dbColumn["COLUMN_DEFAULT"] === "NULL")) {
+            || dbColumn["COLUMN_DEFAULT"] === undefined
+            || (isMariaDb && dbColumn["COLUMN_DEFAULT"] === "NULL")) {
             tableColumn.default = undefined;
 
           } else if (/^CURRENT_TIMESTAMP(\([0-9]*\))?$/i.test(dbColumn["COLUMN_DEFAULT"])) {
@@ -311,8 +311,8 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
           tableColumn.isPrimary = dbPrimaryKeys.some(dbPrimaryKey => {
             return (
               dbPrimaryKey["TABLE_NAME"] === dbColumn["TABLE_NAME"] &&
-                          dbPrimaryKey["TABLE_SCHEMA"] === dbColumn["TABLE_SCHEMA"] &&
-                          dbPrimaryKey["COLUMN_NAME"] === dbColumn["COLUMN_NAME"]
+              dbPrimaryKey["TABLE_SCHEMA"] === dbColumn["TABLE_SCHEMA"] &&
+              dbPrimaryKey["COLUMN_NAME"] === dbColumn["COLUMN_NAME"]
             );
           });
           tableColumn.isGenerated = dbColumn["EXTRA"].indexOf("auto_increment") !== -1;
@@ -348,8 +348,8 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
           }
 
           if ((tableColumn.type === "datetime" || tableColumn.type === "time" || tableColumn.type === "timestamp")
-                      && dbColumn["DATETIME_PRECISION"] !== null && dbColumn["DATETIME_PRECISION"] !== undefined
-                      && !this.isDefaultColumnPrecision(table, tableColumn, parseInt(dbColumn["DATETIME_PRECISION"]))) {
+            && dbColumn["DATETIME_PRECISION"] !== null && dbColumn["DATETIME_PRECISION"] !== undefined
+            && !this.isDefaultColumnPrecision(table, tableColumn, parseInt(dbColumn["DATETIME_PRECISION"]))) {
             tableColumn.precision = parseInt(dbColumn["DATETIME_PRECISION"]);
           }
 
@@ -387,8 +387,8 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
       table.indices = tableIndexConstraints.map(constraint => {
         const indices = dbIndices.filter(index => {
           return index["TABLE_SCHEMA"] === constraint["TABLE_SCHEMA"]
-                      && index["TABLE_NAME"] === constraint["TABLE_NAME"]
-                      && index["INDEX_NAME"] === constraint["INDEX_NAME"];
+            && index["TABLE_NAME"] === constraint["TABLE_NAME"]
+            && index["INDEX_NAME"] === constraint["INDEX_NAME"];
         });
 
         const nonUnique = parseInt(constraint["NON_UNIQUE"], 10);
