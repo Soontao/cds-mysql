@@ -27,6 +27,7 @@
 - [x] initial data provision by `CSV`
 - [x] auto incremental key aspect (odata only, single records)
 - [x] mysql index
+  - [ ] better error for not supported elements
 - [ ] automatically schema sync
 - [ ] better E2E document/sample
 
