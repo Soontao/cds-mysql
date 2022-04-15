@@ -26,9 +26,13 @@
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`
 - [x] initial data provision by `CSV`
 - [x] auto incremental key aspect (odata only, single records)
-- [ ] index config
+- [x] mysql index
+- [ ] automatically schema sync
+- [ ] better E2E document/sample
 
-## Development
+
+## Setup
+
 
 put the `default-env.json` file into the root directory of your CAP project, with `mysql` credential information.
 
@@ -48,9 +52,9 @@ for the supported options in `credentials` node, just ref the [mysql official co
         ],
         "credentials": {
           "host": "mysql.host.name.com",
-          "user": "cdsuser",
+          "user": "user",
           "password": "cdsPas$w0rd",
-          "database": "cdstest",
+          "database": "test",
           "port": 3306
         }
       }
@@ -68,20 +72,13 @@ edit your `package.json` > `cds` node
       "kind": "mysql"
     },
     "mysql": {
-      "impl": "cds-mysql",
-      "models": ["srv", "db"]
+      "impl": "cds-mysql"
     }
   }
 }
 ```
 
-Then, edit your `cds` definitions & run the `cds-mysql-deploy` before start server.
-
-## DB Artifacts Deployment
-
-> `cds run` will **NOT** perform `DB deployment` automatically, development/infra should manually perform it before server start.
-
-edit your `package.json` > `scripts` node, add `deploy` command
+edit your `package.json` > `scripts` node, add the `deploy` command
 
 ```json
 {
@@ -91,11 +88,69 @@ edit your `package.json` > `scripts` node, add `deploy` command
 }
 ```
 
-and just run the `npm run deploy` is enough.
+Then, write your own `cds` definitions & execute the `npm run deploy` to deploy schema before server start.
 
-### Automatically Migration
 
-`cds-mysql` will use the `cds` to generate `DDL` SQL, parse the `DDL` and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
+## Usage
+
+> some detail usage
+
+### Auto Incremental Key
+
+> define entity with `incrementalID` aspect like cds built-in `cuid` aspect
+
+```groovy
+using {incrementID} from 'cds-mysql';
+
+// for the entity `Animal`, it will have an 'ID' field which automatically generated ID from sequence
+entity Animal : incrementID {
+  Name : String(255);
+}
+```
+
+### Add Column Index
+
+> define entity with mysql built-in index
+
+```groovy
+@cds.typeorm.config : {indices : [{
+  name    : 'ProductName', // key name
+  columns : ['Name'] // index fields
+}]}
+entity Product : cuid {
+  Name  : TranslatedText;
+  Price : Decimal(10, 2);
+}
+```
+
+
+### Database Setup (Cloud Foundry)
+
+> if you want to run cds-mysql on cloud foundry
+
+create mysql service by [`cf cups`](http://cli.cloudfoundry.org/en-US/cf/create-user-provided-service.html) with following format
+
+```bash
+cf cups remote-mysql-service -t 'mysql' -p '{"host":"public.mysql.instance.com","user":"cds-user","password":"CdsUser123$","database":"cds-user","port":3306,"ssl":{"ca":"-----BEGIN CERTIFICATE-----\n ......\n-----END CERTIFICATE-----\n"}}'
+```
+
+you can convert PEM cert to json format with [this document](https://docs.vmware.com/en/Unified-Access-Gateway/2.9/com.vmware.access-point-29-deploy-config/GUID-870AF51F-AB37-4D6C-B9F5-4BFEB18F11E9.html), just run command
+
+```bash
+awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
+```
+
+## Schema Migration
+
+`cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, parse the `DDL` statements and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
+
+```mermaid
+graph LR
+    CDS[CDS Definition] --> |CDS compile to  sql| SQL[Compiled SQL]
+    SQL --> |ast parser| te[TypeORM Entity Metadata]
+    te --> |use typeorm migrate schema|Schema[Database Schema]
+```
+
 
 It will be fully automatically, sync changed `columns`, `views`.
 
@@ -103,9 +158,9 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 **The mysql database must be empty (all table must be managed by cds-mysql, no pre-defined tables), otherwise the migration will be failed because typeorm detect the metadata by itself table**
 
-### Enhanced CSV Migration
+## Enhanced CSV Migration
 
-`cds-mysql` built-in a csv migration tool, it will migration data with key validation.
+`cds-mysql-deploy` has a built-in csv migration tool, it will migrate data with key validation (enhance `cds` built-in one for sqlite).
 
 
 ## Compatibility Table
