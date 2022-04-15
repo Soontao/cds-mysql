@@ -135,7 +135,7 @@ class CDSListener implements MySQLParserListener {
           // current_timestamp
           if (now) {
             if (column.type === "date") {
-              logger?.warn(
+              logger?.debug(
                 `column(${column.name}) default value skipped, because mysql not support create 'date' column with default value '${now.text}'`
               );
             } else {
