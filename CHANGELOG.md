@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.9-alpha.0](https://github.com/Soontao/cds-mysql/compare/v5.9.8...v5.9.9-alpha.0) (2022-04-15)
+
+
+### Features
+
+* better typeorm integration ([6a4b21b](https://github.com/Soontao/cds-mysql/commit/6a4b21ba542c2d02419e47471864a183706559e4))
+* cds for increment ID ([fec3a06](https://github.com/Soontao/cds-mysql/commit/fec3a06f2ba8a6a38e91620157102d7a76ec97c8))
+* cds incremental key ([2f849e1](https://github.com/Soontao/cds-mysql/commit/2f849e1bcc30292e30ff06f4104b485a7a47432a))
+
+
+### Bug Fixes
+
+* charset for utf8 ([7f9fd63](https://github.com/Soontao/cds-mysql/commit/7f9fd63baf8d9748633db865a8a0307d69ede28d))
+* update deprecated APIs ([cea3c23](https://github.com/Soontao/cds-mysql/commit/cea3c23580143b590012f851146c21809ffd47cf))
+
 ### [5.9.8](https://github.com/Soontao/cds-mysql/compare/v5.9.7...v5.9.8) (2022-04-13)
 
 
