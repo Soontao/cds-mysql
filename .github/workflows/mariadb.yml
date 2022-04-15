@@ -1,4 +1,4 @@
-name: mysql-test
+name: mariadb-test
 
 on:
   push:
