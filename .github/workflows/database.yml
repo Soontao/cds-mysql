@@ -1,4 +1,4 @@
-name: mysql-test
+name: database-test
 
 on:
   push:
@@ -9,31 +9,42 @@ on:
       - "*"
 
 jobs:
-  mysql:
+  database-test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        mysql-version: ["mysql:5.6", "mysql:5.7", "mysql:8.0"]
+        docker-images:
+          [
+            "mysql:5.6",
+            "mysql:5.7",
+            "mysql:8.0",
+            "mariadb:10.5",
+            "mariadb:10.8",
+          ]
 
     services:
-      mysql:
-        image: ${{ matrix.mysql-version }}
+      db:
+        image: ${{ matrix.docker-images }}
         env:
           MYSQL_DATABASE: cdstest
           MYSQL_USER: cdstest
           MYSQL_PASSWORD: cdstest
           MYSQL_ROOT_PASSWORD: cdstest
+          MARIADB_DATABASE: cdstest
+          MARIADB_USER: cdstest
+          MARIADB_PASSWORD: cdstest
+          MARIADB_ROOT_PASSWORD: cdstest
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
 
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js 14.x
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 16.x
 
       - name: Cache node modules
         uses: actions/cache@v1
@@ -47,13 +58,13 @@ jobs:
         run: |
           npm i -g npm
           npm install
-          
+
       - name: coverage
         run: npm run coverage
         env:
           CI: true
           CDS_MYSQL_HOST: "127.0.0.1"
-          CDS_MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          CDS_MYSQL_PORT: ${{ job.services.db.ports[3306] }}
           CDS_MYSQL_DATABASE: cdstest
           CDS_MYSQL_USER: cdstest
           CDS_MYSQL_PASSWORD: cdstest
