@@ -50,10 +50,12 @@ export const memorized = <T extends (arg0: any) => any>(func: T): T => {
 
   // @ts-ignore
   return function (arg0: any) {
-    if (typeof arg0 === "object") {
-      cache = new WeakMap();
-    } else {
-      cache = new Map();
+    if (cache === undefined) {
+      if (typeof arg0 === "object") {
+        cache = new WeakMap();
+      } else {
+        cache = new Map();
+      }
     }
     if (!cache.has(arg0)) {
       cache.set(arg0, func(arg0));
