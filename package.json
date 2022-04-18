@@ -32,17 +32,17 @@
     "colors": "^1.4.0",
     "generic-pool": "^3.8.2",
     "glob": "^7.2.0",
-    "luxon": "^2.3.1",
+    "luxon": "^2.3.2",
     "mysql2": "^2.3.3",
     "ts-mysql-parser": "^0.2.0",
-    "typeorm": "~0.3.6"
+    "typeorm": "^0.3.6"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^16.2.1",
     "@types/generic-pool": "^3.1.10",
     "@types/jest": "^27.4.1",
     "@types/luxon": "^2.3.1",
-    "@types/node": "^16.11.26",
+    "@types/node": "^16.11.27",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
