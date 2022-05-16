@@ -53,8 +53,8 @@ jobs:
           npm install
           npm run build --if-present
 
-      - name: coverage
-        run: npm run coverage
+      - name: test
+        run: npm run test
         env:
           CI: true
           CDS_MYSQL_HOST: "127.0.0.1"
@@ -63,5 +63,3 @@ jobs:
           CDS_MYSQL_USER: cdstest
           CDS_MYSQL_PASSWORD: cdstest
 
-      - name: upload coverage
-        uses: codecov/codecov-action@v1
