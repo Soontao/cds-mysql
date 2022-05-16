@@ -9,7 +9,7 @@ on:
       - "*"
   # daily check at 01:00 AM
   schedule:
-    - cron: "56 32 * * *"
+    - cron: "56 18 * * *"
 
 jobs:
   build:
