@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.9](https://github.com/Soontao/cds-mysql/compare/v5.9.9-alpha.0...v5.9.9) (2022-05-16)
+
+
+### Bug Fixes
+
+* cache ([d235e94](https://github.com/Soontao/cds-mysql/commit/d235e943de4a914c4e4dd28683ed6bcb94dcdfb8))
+* ci ([c13be2d](https://github.com/Soontao/cds-mysql/commit/c13be2d12433059dde7b69018b2430f7a8ecd946))
+
 ### [5.9.9-alpha.0](https://github.com/Soontao/cds-mysql/compare/v5.9.8...v5.9.9-alpha.0) (2022-04-15)
 
 
