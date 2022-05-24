@@ -1,8 +1,6 @@
-// @ts-nocheck
 import { cloneDeep } from "@newdash/newdash";
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
-import cds from "@sap/cds/lib";
-import DatabaseService from "@sap/cds/libx/_runtime/sqlite/Service";
+import { cwdRequire, cwdRequireCDS, LinkedModel, Logger } from "cds-internal-tool";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import type { DataSourceOptions } from "typeorm";
@@ -18,9 +16,9 @@ import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
 import { checkCdsVersion } from "./utils";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const LOG = (cds.log || cds.debug)("mysql|db");
-
+/**
+ * raw mysql2 library required credential
+ */
 interface MySQLCredential {
   /**
    * DB User Name
@@ -51,10 +49,19 @@ interface MySQLCredential {
   }
 }
 
+function toTenantDatabaseName(credentials: MySQLCredential, tenant = TENANT_DEFAULT) {
+  if (tenant === TENANT_DEFAULT) {
+    return credentials.database ?? credentials.user;
+  }
+  const cds = cwdRequireCDS();
+  const tenant_db_prefix = cds.env.get("requires.mysql.tenant_prefix") ?? "tenant_db";
+  return `${tenant_db_prefix}_${tenant}`;
+}
+
 /**
  * MySQL Database Adapter for SAP CAP Framework
  */
-export class MySQLDatabaseService extends DatabaseService {
+export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sqlite/Service") {
   constructor(...args: any[]) {
     super(...args);
 
@@ -70,7 +77,28 @@ export class MySQLDatabaseService extends DatabaseService {
     this._run = this._queries.run(this._insert, this._read, this._update, this._delete, execute.cqn, execute.sql);
 
     this._pools = new LRUCacheProvider(1024);
+    this._logger = cwdRequireCDS().log("db|mysql");
   }
+
+  private options: any;
+
+  private model: LinkedModel;
+
+  private _queries: any;
+
+  private _execute: any;
+
+  private _read: any;
+
+  private _insert: any;
+
+  private _update: any;
+
+  private _delete: any;
+
+  private _run: any;
+
+  private _logger: Logger;
 
   private _pools: LRUCacheProvider<string, Pool<Connection>>;
 
@@ -82,26 +110,31 @@ export class MySQLDatabaseService extends DatabaseService {
    * @param tenant
    */
   private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
-    return this._pools.getOrCreate(tenant, async () => {
-      const credential = await this.getTenantCredential(tenant);
-      // TODO: ddl-auto for automatic migration
 
-      await this.deploy(await cds.load(this.model["$sources"]), { tenant });
-      
+    return this._pools.getOrCreate(tenant, async () => {
+
+      const credential = await this.getTenantCredential(tenant);
+
+      await this.deploy(await cwdRequireCDS().load(this.model["$sources"]), { tenant });
+
+      const poolOptions = {
+        min: 1,
+        max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
+        maxWaitingClients: MAX_QUEUE_SIZE,
+        evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
+        idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
+        ...this.options?.pool // overwrite by cds
+      };
+
+      this._logger.info("creating pool for tenant", tenant, "with option", poolOptions);
+
       return createPool(
         {
-          create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE }),
+          create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE } as any),
           validate: (conn) => conn.query("SELECT 1").then(() => true).catch(() => false),
-          destroy: (conn) => conn.destroy()
+          destroy: async (conn) => conn.destroy()
         },
-        {
-          min: 1,
-          max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
-          maxWaitingClients: MAX_QUEUE_SIZE,
-          evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
-          idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
-          ...this.options?.pool // overwrite by cds
-        }
+        poolOptions,
       );
     });
   }
@@ -113,9 +146,7 @@ export class MySQLDatabaseService extends DatabaseService {
    */
   private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
     const rt: MySQLCredential = cloneDeep(this.options.credentials);
-    if (tenant !== TENANT_DEFAULT) {
-      rt.database = tenant;
-    }
+    rt.database = toTenantDatabaseName(rt, tenant);
     return rt;
   }
 
@@ -129,7 +160,7 @@ export class MySQLDatabaseService extends DatabaseService {
     const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || TENANT_DEFAULT;
     const pool = await this.getPool(tenant);
     const conn = await pool.acquire();
-    conn._release = () => pool.release(conn);
+    conn["_release"] = () => pool.release(conn);
     return conn;
   }
 
@@ -145,20 +176,26 @@ export class MySQLDatabaseService extends DatabaseService {
     }
   }
 
-  private async _getTypeOrmOption(tenant?: string): Promise<DataSourceOptions> {
+  /**
+   * get type orm option for migration or other usage
+   * @param tenant 
+   * @returns 
+   */
+  private async _getTypeOrmOption(tenant: string = TENANT_DEFAULT): Promise<DataSourceOptions> {
     const credentials = await this.getTenantCredential(tenant);
     return Object.assign(
       {},
       {
         name: `cds-deploy-connection-${tenant ?? "main"}`,
         type: "mysql",
-        username: credentials.user,
-        database: credentials?.database ?? credentials.user,
-        port: 3306,
         entities: []
       },
-      credentials
-    );
+      credentials,
+      {
+        // typeorm need the 'username' field as username
+        username: credentials.user
+      }
+    ) as any;
   }
 
   public async disconnect() {
@@ -168,13 +205,24 @@ export class MySQLDatabaseService extends DatabaseService {
     }
   }
 
-  /*
-   * deploy
+  /**
+   * 
+   * @param model plain CSN object
+   * @param options deployment options
+   * @returns 
    */
   async deploy(model: any, options?: { tenant: string }) {
-    const entities = csnToEntity(model);
-    const migrateOptions = await this._getTypeOrmOption(options?.tenant ?? TENANT_DEFAULT);
-    await migrate({ ...migrateOptions, entities });
-    return true;
+    const tenant = options?.tenant ?? TENANT_DEFAULT;
+    try {
+      this._logger.info("migrating schema for tenant", tenant);
+      const entities = csnToEntity(model);
+      const migrateOptions = await this._getTypeOrmOption(tenant);
+      await migrate({ ...migrateOptions, entities });
+      this._logger.info("migrate finished for tenant", tenant);
+      return true;
+    } catch (error) {
+      this._logger.info("migrate failed for tenant", tenant, error);
+      throw error;
+    }
   }
 }

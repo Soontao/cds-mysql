@@ -11,15 +11,25 @@ export const createRandomName = () => v4().split("-").pop();
 
 export const setupEnv = () => {
   const cds = cwdRequireCDS();
-  cds.env.requires.db.kind = "mysql";
-  cds.env.requires.mysql = { impl: path.join(__dirname, "../src"), dialect: "sqlite" };
+  const dbOpt = { kind: "mysql" };
+  if (cds.env.requires.db === undefined) {
+    cds.env.requires.db = dbOpt;
+  } else {
+    Object.assign(cds.env.requires.db, dbOpt);
+  }
+  const mysqlOpt = { impl: path.join(__dirname, "../src"), dialect: "sqlite" };
+  if (cds.env.requires.mysql === undefined) {
+    cds.env.requires.mysql = mysqlOpt;
+  } else {
+    Object.assign(cds.env.requires.mysql, mysqlOpt);
+  }
 };
 
 export const loadCSN = async (relativePath: string) => cwdRequireCDS().load(path.join(__dirname, relativePath));
 
 export const getTestTypeORMOptions = () => {
   const cds = cwdRequireCDS("@sap/cds");
-  const { credentials } = cds.requires.db;
+  const { credentials } = cds.requires.mysql;
   return Object.assign(
     {},
     {

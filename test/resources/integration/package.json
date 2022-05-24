@@ -2,14 +2,18 @@
   "cds": {
     "requires": {
       "db": {
-        "kind": "mysql"
+        "kind": "mysql",
+        "dialect": "sqlite"
       },
       "mysql": {
         "impl": "../../../src/index"
       },
       "auth": {
-        "auth": {
-          "kind": "basic-auth"
+        "kind": "basic-auth",
+        "users": {
+          "theo-on-tenant-2": {
+            "tenant": "e5f878d5-7985-407b-a1cb-87a8716f1904"
+          }
         }
       }
     }

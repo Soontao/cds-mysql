@@ -6,16 +6,13 @@ import { cleanDB, setupEnv } from "./utils";
 describe("Ref Test Suite", () => {
 
   const cds = cwdRequireCDS();
-
   const cds_deploy = require("@sap/cds/lib/deploy");
-  
-  beforeAll(() => {
-    setupEnv();
-  });
+
+  setupEnv();
 
   it("should support reference query", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/reference.cds"));
-    await cds_deploy(csn).to("db");
+    await cds_deploy(csn).to("mysql");
     const People = csn.definitions["test.resources.ref.People2"];
     const Detail = csn.definitions["test.resources.ref.Detail2"];
 

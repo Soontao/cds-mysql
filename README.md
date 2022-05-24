@@ -19,8 +19,11 @@
 - [x] deploy & schema migration
 - [x] migration optimization (ignore drop in some case)
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/generic#serving-media-data)
-- [ ] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
+- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
 - [ ] multi tenancy
+  - [x] deploy model on-fly
+  - [ ] create database on-demand
+  - [ ] documentation
 - [x] `$expand` navigation
 - [x] `$filter` with functions
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`
@@ -28,7 +31,8 @@
 - [x] auto incremental key aspect (odata only, single records)
 - [x] mysql index
   - [ ] better error for not supported elements
-- [ ] automatically schema sync
+- [x] automatically schema sync (when create pool)
+  - [ ] sync data model online
 - [ ] better E2E document/sample
 
 
@@ -66,11 +70,12 @@ for the supported options in `credentials` node, just ref the [mysql official co
 
 edit your `package.json` > `cds` node
 
-```json
+```json5
 {
   "requires": {
     "db": {
-      "kind": "mysql"
+      "kind": "mysql",
+      "dialect": "sqlite" // add this if you want to make `localized` elements works
     },
     "mysql": {
       "impl": "cds-mysql"

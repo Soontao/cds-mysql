@@ -12,10 +12,8 @@ describe("Integration Test Suite", () => {
   const cds = cwdRequireCDS();
   const client = setupTest(__dirname, "./resources/integration");
   client.defaults.auth = { username: "alice", password: "admin" };
-  
+
   const ENTITIES = { PEOPLE: "People" };
-
-
 
   it("should support basic query", async () => {
     const response = await client.get("/bank/Peoples");
@@ -141,7 +139,6 @@ describe("Integration Test Suite", () => {
 
   });
 
-  // TODO: fix this
   // debug: node_modules/@sap/cds/lib/compile/etc/_localized.js
   it("should support localized data", async () => {
     // TODO: document about the https://cap.cloud.sap/docs/guides/localized-data
@@ -253,6 +250,17 @@ describe("Integration Test Suite", () => {
 
     expect(results).toHaveLength(1);
     expect(results[0].affectedRows).toBe(2);
+  });
+
+  it.skip("should support multi-tenancy", async () => {
+    // TODO: must have create data base permission
+    const response = await client.get("/bank/Peoples", {
+      auth: {
+        username: "theo-on-tenant-2",
+        password: "any"
+      }
+    });
+    expect(response.data.value.length).toBe(0);
   });
 
 

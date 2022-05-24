@@ -91,7 +91,7 @@ describe("TypeORM Test Suite", () => {
         expect(aDdl.parameters).toStrictEqual(aExpected.parameters);
       }
 
-      // perfrom really migration
+      // perform really migration
       await migrate({ ...baseOption, entities: entities });
 
       // after migration, if the entity is not changed, do nothing
@@ -101,7 +101,7 @@ describe("TypeORM Test Suite", () => {
       expect(ddlAfterMigrate).toHaveLength(0);
     }
 
-    // utils for overrite the assert
+    // utils for override the assert
     // await writeFile(
     //   path.join(__dirname, "./resources/migrate/expected.migrate.json"),
     //   JSON.stringify(EXPECTED_MIGRATE_DDL, undefined, 2),
