@@ -1,35 +1,21 @@
 // @ts-nocheck
+
 import sleep from "@newdash/newdash/sleep";
-import cds from "@sap/cds";
-import { CSN } from "@sap/cds/apis/csn";
-import cds_deploy from "@sap/cds/lib/deploy";
-import axios, { AxiosInstance } from "axios";
 import { readFileSync } from "fs";
 import path from "path";
-import MySQLDatabaseService from "../src";
-import { migrateData } from "../src/typeorm";
-import { cleanDB, createRandomName, setupEnv } from "./utils";
+import { cleanDB, createRandomName } from "./utils";
+import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 
 
 describe("Integration Test Suite", () => {
 
-  setupEnv();
-  cds.env._home = path.join(__dirname, "./resources/integration");
-  const server = cds.test(".").in(__dirname, "./resources/integration");
+  const cds = cwdRequireCDS();
+  const client = setupTest(__dirname, "./resources/integration");
+  client.defaults.auth = { username: "alice", password: "admin" };
+  
   const ENTITIES = { PEOPLE: "People" };
-  let client: AxiosInstance;
-  let db: MySQLDatabaseService;
-  let csn: CSN;
 
-  beforeAll(async () => {
-    csn = await cds.load([
-      path.join(__dirname, "./resources/integration/srv"),
-      path.join(__dirname, "./resources/integration/db")
-    ]);
-    await cds_deploy(csn).to("db");
-    db = await cds.connect.to("db");
-    client = axios.create({ baseURL: server.url, auth: { username: "alice", password: "admin" } });
-  });
+
 
   it("should support basic query", async () => {
     const response = await client.get("/bank/Peoples");
@@ -156,7 +142,8 @@ describe("Integration Test Suite", () => {
   });
 
   // TODO: fix this
-  it.skip("should support localized data", async () => {
+  // debug: node_modules/@sap/cds/lib/compile/etc/_localized.js
+  it("should support localized data", async () => {
     // TODO: document about the https://cap.cloud.sap/docs/guides/localized-data
     const PRODUCTS = "/bank/Products";
     const apple_en = "Apple";
@@ -193,16 +180,16 @@ describe("Integration Test Suite", () => {
   });
 
   it("should connected to db", async () => {
-    expect(db).not.toBeUndefined();
-    expect(db).toBeInstanceOf(MySQLDatabaseService);
+    expect(cds.db).not.toBeUndefined();
+    expect(cds.db).toBeInstanceOf(require("../src/index"));
   });
 
   it("should support migrate csv data", async () => {
-
+    const { migrateData } = require("../src/typeorm");
     const migrateTo = async (version: string) => migrateData(
-      db,
+      cds.db,
       [path.join(__dirname, `./resources/integration/db/data/${version}/test_resources_integration_People.csv`)],
-      csn
+      cds.model
     );
     await migrateTo("v1");
     const people5 = await cds.run(

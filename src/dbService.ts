@@ -85,6 +85,9 @@ export class MySQLDatabaseService extends DatabaseService {
     return this._pools.getOrCreate(tenant, async () => {
       const credential = await this.getTenantCredential(tenant);
       // TODO: ddl-auto for automatic migration
+
+      await this.deploy(await cds.load(this.model["$sources"]), { tenant });
+      
       return createPool(
         {
           create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE }),
@@ -92,7 +95,7 @@ export class MySQLDatabaseService extends DatabaseService {
           destroy: (conn) => conn.destroy()
         },
         {
-          min: 0, // keep zero connection when whole tenant idle
+          min: 1,
           max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
           maxWaitingClients: MAX_QUEUE_SIZE,
           evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
@@ -168,7 +171,7 @@ export class MySQLDatabaseService extends DatabaseService {
   /*
    * deploy
    */
-  async deploy(model: any, options: any = {}) {
+  async deploy(model: any, options?: { tenant: string }) {
     const entities = csnToEntity(model);
     const migrateOptions = await this._getTypeOrmOption(options?.tenant ?? TENANT_DEFAULT);
     await migrate({ ...migrateOptions, entities });

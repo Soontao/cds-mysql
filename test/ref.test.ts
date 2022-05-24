@@ -1,11 +1,14 @@
 import { sleep } from "@newdash/newdash";
-import cds from "@sap/cds";
-import cds_deploy from "@sap/cds/lib/deploy";
+import { cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
 import { cleanDB, setupEnv } from "./utils";
 
 describe("Ref Test Suite", () => {
 
+  const cds = cwdRequireCDS();
+
+  const cds_deploy = require("@sap/cds/lib/deploy");
+  
   beforeAll(() => {
     setupEnv();
   });
