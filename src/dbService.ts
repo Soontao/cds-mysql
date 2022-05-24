@@ -1,7 +1,6 @@
 // @ts-nocheck
 import { cloneDeep } from "@newdash/newdash";
 import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
-import { defaultsDeep } from "@newdash/newdash/defaultsDeep";
 import cds from "@sap/cds/lib";
 import DatabaseService from "@sap/cds/libx/_runtime/sqlite/Service";
 import { createPool, Pool } from "generic-pool";
@@ -15,7 +14,6 @@ import {
   MYSQL_COLLATE,
   TENANT_DEFAULT
 } from "./constants";
-import { parseEnv } from "./env";
 import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
 import { checkCdsVersion } from "./utils";
@@ -52,8 +50,6 @@ interface MySQLCredential {
     ca?: string;
   }
 }
-
-const envCredential = parseEnv(process.env, "cds")?.cds?.mysql ?? {};
 
 /**
  * MySQL Database Adapter for SAP CAP Framework
@@ -113,7 +109,7 @@ export class MySQLDatabaseService extends DatabaseService {
    * @param tenant
    */
   private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
-    const rt: MySQLCredential = defaultsDeep(cloneDeep(this.options.credentials), envCredential);
+    const rt: MySQLCredential = cloneDeep(this.options.credentials);
     if (tenant !== TENANT_DEFAULT) {
       rt.database = tenant;
     }
@@ -154,7 +150,7 @@ export class MySQLDatabaseService extends DatabaseService {
         name: `cds-deploy-connection-${tenant ?? "main"}`,
         type: "mysql",
         username: credentials.user,
-        database: credentials.user,
+        database: credentials?.database ?? credentials.user,
         port: 3306,
         entities: []
       },

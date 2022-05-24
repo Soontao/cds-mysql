@@ -2,7 +2,7 @@ namespace test.resources.integration;
 
 using {test.resources.integration} from '../db/db';
 
-
+@requires : 'authenticated-user'
 service BankService {
   entity Details      as projection on integration.Detail;
   entity Peoples      as projection on integration.People;

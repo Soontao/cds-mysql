@@ -11,7 +11,6 @@
     const { flattenDeep } = require("@newdash/newdash/flattenDeep");
     const { migrateData } = require("../lib/typeorm/csv");
     const { checkCdsVersion } = require("../lib/utils");
-    const { parseEnv } = require("../lib/env");
 
     const _resolve = (id) => {
       return require.resolve(id, {
@@ -45,16 +44,10 @@
         get(requires, "db.model") || get(requires, "mysql.model") || ["srv"]
       );
 
-      /**
-       * @type {import("typeorm/driver/mysql/MysqlConnectionOptions").MysqlConnectionOptions}
-       */
-      const envCredential = get(parseEnv(process.env, "cds"), "cds.mysql", {});
-
       const credentials = Object.assign(
         {},
         get(requires, "db.credentials"),
         get(requires, "mysql.credentials"),
-        envCredential
       );
 
       assert.ok(credentials.user, "must defined user");

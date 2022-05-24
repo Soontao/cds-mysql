@@ -1,0 +1,17 @@
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql"
+      },
+      "mysql": {
+        "impl": "../../../src/index"
+      },
+      "auth": {
+        "auth": {
+          "kind": "basic-auth"
+        }
+      }
+    }
+  }
+}

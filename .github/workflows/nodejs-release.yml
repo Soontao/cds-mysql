@@ -39,11 +39,11 @@ jobs:
         run: npm test
         env:
           CI: true
-          CDS_MYSQL_HOST: "127.0.0.1"
-          CDS_MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
-          CDS_MYSQL_DATABASE: cdstest
-          CDS_MYSQL_USER: cdstest
-          CDS_MYSQL_PASSWORD: cdstest
+          CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
+          CDS_REQUIRES_DB_CREDENTIALS_PORT: ${{ job.services.mysql.ports[3306] }}
+          CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cdstest
+          CDS_REQUIRES_DB_CREDENTIALS_USER: cdstest
+          CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cdstest
 
       - name: npm auth & publish
         run: npm run build && npm publish
