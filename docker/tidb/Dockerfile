@@ -14,4 +14,4 @@ RUN ulimit -c 1073741824
 EXPOSE 4000
 EXPOSE 2379
 
-CMD ["tiup", "playground", "--without-monitor"]
+CMD ["tiup", "playground", "--without-monitor", "--db.host", "0.0.0.0"]
