@@ -33,10 +33,10 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - run: npm i -g npm mysql2
+      - run: npm i -g npm
 
-      - name: npm install
-        run: npm install
+      - name: install dependency
+        run: npm ci
 
       - name: setup tidb user
         run: |
@@ -44,7 +44,7 @@ jobs:
             (
               async () => {
                 try {
-                  const mysql = require("mysql2/promise");
+                  const mysql = require('mysql2/promise');
                   const conn = await mysql.createConnection({
                     user: 'root',
                     host: '127.0.0.1',
