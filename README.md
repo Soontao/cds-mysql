@@ -28,7 +28,7 @@
   - [ ] documentation
 - [x] `$expand` navigation
 - [x] `$filter` with functions
-- [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`
+- [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
 - [x] initial data provision by `CSV`
 - [x] auto incremental key aspect (odata only, single records)
 - [x] mysql index
