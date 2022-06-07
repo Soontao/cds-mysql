@@ -24,7 +24,8 @@ mysqladmin ping --host 127.0.0.1 --port 4000 -u root
 ## User
 
 ```sql
-CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest'; GRANT ALL on cdstest.* to 'cdstest'@'%';
+CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest'; 
+GRANT ALL on cdstest.* to 'cdstest'@'%';
 ```
 
 ## Env File
