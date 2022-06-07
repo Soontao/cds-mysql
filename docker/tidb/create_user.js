@@ -8,7 +8,8 @@
         port: 4000,
       })
 
-      await conn.query(`CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest'; `)
+      await conn.query(`CREATE DATABASE cdstest;`)
+      await conn.query(`CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest';`)
       await conn.query(`GRANT ALL on cdstest.* to 'cdstest'@'%';`)
 
       conn.destroy()
