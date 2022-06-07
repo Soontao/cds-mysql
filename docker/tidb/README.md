@@ -21,6 +21,12 @@ docker run -d --name tidb_inst -p 4000:4000 thedockerimages/tidb
 mysqladmin ping --host 127.0.0.1 --port 4000 -u root
 ```
 
+## User
+
+```sql
+CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest'; GRANT ALL on cdstest.* to 'cdstest'@'%';
+```
+
 ## Env File
 
 ```env

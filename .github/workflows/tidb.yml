@@ -11,6 +11,12 @@ on:
 jobs:
   tidb:
     runs-on: ubuntu-latest
+    services:
+      db:
+        image: thedockerimages/tidb:latest
+        ports:
+          - 4000:4000
+        options: --health-cmd="mysqladmin ping --host 127.0.0.1 --port 4000 -u root" --health-interval=30s --health-timeout=5s --health-retries=10
 
     steps:
       - uses: actions/checkout@v1
@@ -19,6 +25,9 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: setup tidb user
+        run: docker exec -it db --host 127.0.0.1 --port 4000 -u root < docker/tidb/create_user.sql
+        
       - name: Cache node modules
         uses: actions/cache@v1
         env:
