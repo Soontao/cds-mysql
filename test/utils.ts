@@ -51,7 +51,11 @@ export const cleanDB = async () => {
   try {
     await conn.createQueryRunner().clearDatabase();
   } finally {
-    if (conn.isConnected) { await conn.close(); }
+    if (conn.isInitialized) { await conn.destroy(); }
   }
 
 };
+
+export function isTiDBTest() {
+  return process.env.IS_TIDB === 'true'
+}

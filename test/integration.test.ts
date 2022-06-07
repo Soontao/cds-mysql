@@ -267,6 +267,7 @@ describe("Integration Test Suite", () => {
   afterAll(async () => {
     await sleep(100);
     await cleanDB();
+    await cds?.db?.disconnect?.();
   });
 
 });

@@ -40,6 +40,16 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
     return SelectBuilder;
   }
 
+  build() {
+    this._outputObj = { sql: [], values: [] }
+    this._handleFunction()
+    // SELECT count ( 1 ) AS "total" FROM People ALIAS_1:
+    // ERROR: FUNCTION cdstest.count does not exist in: 
+    // TiDB will throw error: SELECT count ( 1 );
+    this._outputObj.sql = this._outputObj.sql.join('') // overwrite standard ' ', to adapt the TiDB
+    return this._outputObj
+  }
+
   _handleFunction() {
     const functionName = this._functionName();
     const args = this._functionArgs();
@@ -61,10 +71,10 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
 
   _createLikeComparisonForColumn(not, left, right) {
     if (not) {
-      this._outputObj.sql.push("(", left, "IS NULL", "OR");
+      this._outputObj.sql.push("(", " ", left, " ", "IS NULL", " ", "OR", " ");
     }
 
-    this._outputObj.sql.push(left, `${not}LIKE`);
+    this._outputObj.sql.push(left, " ", `${not} LIKE`, " ");
     this._outputObj.sql.push("CONCAT"); // CONCAT ('%', ?, '%')
     this._addFunctionArgs(right, true);
     if (not) this._outputObj.sql.push(")");

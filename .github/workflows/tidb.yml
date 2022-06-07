@@ -1,0 +1,44 @@
+name: tidb-test
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  tidb:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: npm install, build
+        run: |
+          npm i -g npm
+          npm install
+          npm run build --if-present
+
+      - name: test
+        run: npm run test
+        env:
+          CI: true
+          CDS_REQUIRES_MYSQL_CREDENTIALS_HOST: ${{ secrets.TIDB_CLOUD_HOST }}
+          CDS_REQUIRES_MYSQL_CREDENTIALS_PORT: 4000
+          CDS_REQUIRES_MYSQL_CREDENTIALS_DATABASE: cdstest
+          CDS_REQUIRES_MYSQL_CREDENTIALS_USER: cdstest
+          CDS_REQUIRES_MYSQL_CREDENTIALS_PASSWORD: cdstest

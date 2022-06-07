@@ -8,6 +8,7 @@
     "source.organizeImports": false
   },
   "cSpell.words": [
+    "cdstest",
     "CURDATE",
     "dayofmonth",
     "havings",
@@ -16,6 +17,7 @@
     "mariadb",
     "Millis",
     "Rdbms",
+    "TIDB",
     "TINYINT",
     "typeorm",
     "Unlocalized",

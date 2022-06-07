@@ -1,5 +1,5 @@
 module.exports = {
-  "testTimeout": 30 * 1000,
+  "testTimeout": 120 * 1000,
   "transform": {
     ".(ts|tsx)": "ts-jest"
   },

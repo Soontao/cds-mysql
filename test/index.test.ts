@@ -2,7 +2,7 @@
 import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/deploy";
-import { cleanDB, createRandomName, loadCSN, setupEnv } from "./utils";
+import { cleanDB, createRandomName, isTiDBTest, loadCSN, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
