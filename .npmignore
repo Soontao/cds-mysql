@@ -7,3 +7,4 @@ test
 commitlint.config.js
 jest.config.js
 .env
+docker
