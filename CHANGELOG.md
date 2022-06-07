@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.10-0](https://github.com/Soontao/cds-mysql/compare/v5.9.9...v5.9.10-0) (2022-06-07)
+
+
+### Features
+
+* deploy to launch tenant ([7f9ffd4](https://github.com/Soontao/cds-mysql/commit/7f9ffd4057c39954cd100eaa6d9d50f421e7b40e))
+* tidb ci ([0a2491e](https://github.com/Soontao/cds-mysql/commit/0a2491e828a3ce459ebb8d3224fdfec940f09d84))
+* tidb image for test ([25bb300](https://github.com/Soontao/cds-mysql/commit/25bb3001f61200e1ee719e9a1ced5fc27af06904))
+* update ([9fd67b3](https://github.com/Soontao/cds-mysql/commit/9fd67b35c9d82a45753317763c786820960aea37))
+
+
+### Bug Fixes
+
+* ci ([43457f1](https://github.com/Soontao/cds-mysql/commit/43457f1229500611f933424e44bcc0ecd7d044e8))
+* env ([b35cc6e](https://github.com/Soontao/cds-mysql/commit/b35cc6e8bdc9c6cb5996daf911fd550911b1f6da))
+* script ([ebc75b9](https://github.com/Soontao/cds-mysql/commit/ebc75b92ad3cef230e74f93cf3b68665f3b27a70))
+* tidb ci ([a6c4f62](https://github.com/Soontao/cds-mysql/commit/a6c4f62d8210a5373f84fdf8dc0513b5dc8e3bae))
+* tidb ci ([6672e89](https://github.com/Soontao/cds-mysql/commit/6672e89d002d2d087d7a02cc3803ca151bb4b2e4))
+* tidb ci ([6643feb](https://github.com/Soontao/cds-mysql/commit/6643feb9cba708ab551dbf9e4c7881cf01fab744))
+* tidb ci ([a759a54](https://github.com/Soontao/cds-mysql/commit/a759a54a9e2b187fa4c7460bdcec448e72838f33))
+* tidb test ([9fe42cf](https://github.com/Soontao/cds-mysql/commit/9fe42cfe8c312cdd0b644e1c49206b6f4179f286))
+
 ### [5.9.9](https://github.com/Soontao/cds-mysql/compare/v5.9.9-alpha.0...v5.9.9) (2022-05-16)
 
 
