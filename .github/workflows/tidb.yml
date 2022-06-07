@@ -1,5 +1,4 @@
 name: tidb-test
-
 on:
   push:
     branches:
@@ -34,9 +33,9 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - run: npm i -g npm
+      - run: npm i -g npm mysql2
 
-      - name: npm install, build
+      - name: npm install
         run: npm install
 
       - name: setup tidb user
