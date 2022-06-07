@@ -8,7 +8,8 @@
         port: 4000,
       })
 
-      await conn.query(`CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest'; GRANT ALL on cdstest.* to 'cdstest'@'%';`)
+      await conn.query(`CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest'; `)
+      await conn.query(`GRANT ALL on cdstest.* to 'cdstest'@'%';`)
 
       conn.destroy()
       process.exit(0)
