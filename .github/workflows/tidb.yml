@@ -19,9 +19,8 @@ jobs:
         options: --health-cmd="mysqladmin ping --host 127.0.0.1 --port 4000 -u root" --health-interval=30s --health-timeout=5s --health-retries=10 --name tidb
 
     steps:
-
       - uses: actions/checkout@v1
-        
+
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -35,15 +34,13 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: npm install, build
-        run: |
-          npm i -g npm
-          npm install
-          npm run build --if-present
+      - run: npm i -g npm
 
+      - name: npm install, build
+        run: npm install
 
       - name: setup tidb user
-        run: | 
+        run: |
           node -e "
             (
               async () => {
@@ -72,7 +69,7 @@ jobs:
         run: npm run test
         env:
           CI: true
-          CDS_REQUIRES_MYSQL_CREDENTIALS_HOST: '127.0.0.1'
+          CDS_REQUIRES_MYSQL_CREDENTIALS_HOST: "127.0.0.1"
           CDS_REQUIRES_MYSQL_CREDENTIALS_PORT: 4000
           CDS_REQUIRES_MYSQL_CREDENTIALS_DATABASE: cdstest
           CDS_REQUIRES_MYSQL_CREDENTIALS_USER: cdstest
