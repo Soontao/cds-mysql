@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: setup tidb user
-        run: docker exec -it tidb --host 127.0.0.1 --port 4000 -u root < docker/tidb/create_user.sql
+        run: docker exec -it tidb mysql --host 127.0.0.1 --port 4000 -u root < docker/tidb/create_user.sql
         
       - name: Use Node.js
         uses: actions/setup-node@v1
