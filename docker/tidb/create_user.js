@@ -13,6 +13,7 @@
       await conn.query(`GRANT ALL on cdstest.* to 'cdstest'@'%';`)
 
       conn.destroy()
+      console.log("user 'cdstest'@'%' created at '127.0.0.1:4000'")
       process.exit(0)
     } catch (error) {
       console.error('create user failed: ', error)

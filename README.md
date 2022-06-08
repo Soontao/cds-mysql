@@ -15,17 +15,23 @@
 
 ## Features
 
-- [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT`/`DROP`
-- [x] deep insert
+- [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
+- [x] deep insert for association/composition
+  - [ ] deep update test case
 - [x] full text search
 - [x] deploy & schema migration
 - [x] migration optimization (ignore drop in some case)
+  - [ ] ignore column length reduce and with warning
+  - [ ] model version, only incremental migration
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/generic#serving-media-data)
-- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
+- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data) with `sqlite` dialect
 - [ ] multi tenancy
   - [x] deploy model on-fly
   - [ ] create database on-demand
+    - [ ] permission check
+  - [ ] dynamic database credential provider
   - [ ] documentation
+  - [ ] admin database concept
 - [x] `$expand` navigation
 - [x] `$filter` with functions
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
@@ -35,11 +41,11 @@
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when create pool)
   - [ ] sync data model online
+  - [ ] sync CSV data when model changed
 - [ ] better E2E document/sample
 
 
 ## Setup
-
 
 put the `default-env.json` file into the root directory of your CAP project, with `mysql` credential information.
 
@@ -101,7 +107,7 @@ Then, write your own `cds` definitions & execute the `npm run deploy` to deploy 
 
 ## Usage
 
-> some detail usage
+> some advanced usage
 
 ### Auto Incremental Key
 
@@ -111,6 +117,7 @@ Then, write your own `cds` definitions & execute the `npm run deploy` to deploy 
 using {incrementID} from 'cds-mysql';
 
 // the entity `Animal` will have an auto-filled 'ID' field 
+// ONLY support single record insert
 entity Animal : incrementID {
   Name : String(255);
 }
@@ -131,8 +138,7 @@ entity Product : cuid {
 }
 ```
 
-
-### Database Setup (Cloud Foundry)
+### Setup Database for Cloud Foundry
 
 > if you want to run cds-mysql on cloud foundry
 
@@ -154,8 +160,8 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 
 ```mermaid
 graph LR
-    CDS[CDS Definition] --> |CDS compile to  sql| SQL[Compiled SQL]
-    SQL --> |ast parser| te[TypeORM Entity Metadata]
+    CDS[CDS Definition] --> |compile CDS to DDL| DDL[Compiled DDL]
+    DDL --> |ast parser| te[TypeORM Entity Metadata]
     te --> |use typeorm migrate schema|Schema[Database Schema]
 ```
 
