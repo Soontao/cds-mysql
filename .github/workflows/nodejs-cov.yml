@@ -7,13 +7,12 @@ on:
   pull_request:
     branches:
       - "*"
-  # daily check at 01:00 AM
   schedule:
     - cron: "56 18 * * *"
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     services:
       mysql:
@@ -27,17 +26,12 @@ jobs:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-        os: [ubuntu-latest]
-
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
 
       - name: Cache node modules
         uses: actions/cache@v1
@@ -45,13 +39,11 @@ jobs:
           cache-name: cache-node-modules
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: npm install, build
-        run: |
-          npm i -g npm
-          npm install
-          npm run build --if-present
+      - run: npm i -g npm
+
+      - run: npm ci
 
       - name: coverage
         run: npm run coverage
