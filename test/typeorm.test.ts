@@ -2,11 +2,13 @@ import { pick, range, sleep } from "@newdash/newdash";
 import { ConnectionOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
-import { cleanDB, getTestTypeORMOptions, loadCSN } from "./utils";
+import { cleanDB, doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
 
 describe("TypeORM Test Suite", () => {
 
   require("dotenv").config();
+
+  afterAll(doAfterAll);
 
   it("should support convert simple entity to EntitySchema", async () => {
     const csn = await loadCSN("./resources/people.cds");
@@ -110,8 +112,4 @@ describe("TypeORM Test Suite", () => {
 
   });
 
-  afterAll(async () => {
-    await sleep(100);
-    await cleanDB();
-  });
 });

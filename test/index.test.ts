@@ -2,11 +2,13 @@
 import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
 import cds_deploy from "@sap/cds/lib/deploy";
-import { cleanDB, createRandomName, isTiDBTest, loadCSN, setupEnv } from "./utils";
+import { cleanDB, createRandomName, doAfterAll, isTiDBTest, loadCSN, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
   setupEnv();
+
+  afterAll(doAfterAll);
 
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 
@@ -68,10 +70,6 @@ describe("CDS MySQL Basic Test Suite", () => {
     await cds_deploy(csn).to("mysql");
   });
 
-  afterAll(async () => {
-    // wait all table deployment
-    await sleep(500);
-    await cleanDB();
-  });
+
 
 });

@@ -1,7 +1,7 @@
 import { sleep } from "@newdash/newdash";
 import { cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
-import { cleanDB, setupEnv } from "./utils";
+import { cleanDB, doAfterAll, setupEnv } from "./utils";
 
 describe("Ref Test Suite", () => {
 
@@ -9,6 +9,8 @@ describe("Ref Test Suite", () => {
   const cds_deploy = require("@sap/cds/lib/deploy");
 
   setupEnv();
+
+  afterAll(doAfterAll);
 
   it("should support reference query", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/reference.cds"));
@@ -23,11 +25,5 @@ describe("Ref Test Suite", () => {
       }
     }));
   });
-
-  afterAll(async () => {
-    await sleep(100);
-    await cleanDB();
-  });
-
 
 });

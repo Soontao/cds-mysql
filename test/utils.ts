@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { sleep } from "@newdash/newdash";
 import { cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
 import { ConnectionOptions, createConnection } from "typeorm";
@@ -41,6 +42,13 @@ export const getTestTypeORMOptions = () => {
     { username: credentials.user }
   );
 };
+
+export async function doAfterAll() {
+  await sleep(100);
+  await cleanDB();
+  await cds?.db?.disconnect?.();
+  await sleep(100);
+}
 
 export const cleanDB = async () => {
   const options: ConnectionOptions = {

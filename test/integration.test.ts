@@ -3,7 +3,7 @@
 import sleep from "@newdash/newdash/sleep";
 import { readFileSync } from "fs";
 import path from "path";
-import { cleanDB, createRandomName } from "./utils";
+import { cleanDB, createRandomName, doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 
 
@@ -14,6 +14,8 @@ describe("Integration Test Suite", () => {
   client.defaults.auth = { username: "alice", password: "admin" };
 
   const ENTITIES = { PEOPLE: "People" };
+
+  afterAll(doAfterAll);
 
   it("should support basic query", async () => {
     const response = await client.get("/bank/Peoples");
@@ -263,11 +265,5 @@ describe("Integration Test Suite", () => {
     expect(response.data.value.length).toBe(0);
   });
 
-
-  afterAll(async () => {
-    await sleep(100);
-    await cleanDB();
-    await cds?.db?.disconnect?.();
-  });
 
 });

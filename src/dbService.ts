@@ -1,5 +1,4 @@
 import { cloneDeep } from "@newdash/newdash";
-import { LRUCacheProvider } from "@newdash/newdash/cacheProvider";
 import { cwdRequire, cwdRequireCDS, LinkedModel, Logger } from "cds-internal-tool";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
@@ -76,8 +75,11 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     this._delete = this._queries.delete(execute.delete, execute.update);
     this._run = this._queries.run(this._insert, this._read, this._update, this._delete, execute.cqn, execute.sql);
 
-    this._pools = new LRUCacheProvider(1024);
     this._logger = cwdRequireCDS().log("db|mysql");
+
+    if (this.options.credentials === undefined) {
+      throw new Error('mysql credentials lost')
+    }
   }
 
   private options: any;
@@ -100,7 +102,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _logger: Logger;
 
-  private _pools: LRUCacheProvider<string, Pool<Connection>>;
+  private _pools: Map<string, Pool<Connection> | Promise<Pool<Connection>>> = new Map();
 
   /**
    * get connection pool for tenant
@@ -111,32 +113,45 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    */
   private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
 
-    return this._pools.getOrCreate(tenant, async () => {
+    if (!this._pools.has(tenant)) {
 
-      const credential = await this.getTenantCredential(tenant);
+      this._pools.set(tenant,
+        (
+          async () => {
+            const credential = await this.getTenantCredential(tenant);
 
-      await this.deploy(await cwdRequireCDS().load(this.model["$sources"]), { tenant });
+            await this.deploy(await cwdRequireCDS().load(this.model["$sources"]), { tenant });
 
-      const poolOptions = {
-        min: 1,
-        max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
-        maxWaitingClients: MAX_QUEUE_SIZE,
-        evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
-        idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
-        ...this.options?.pool // overwrite by cds
-      };
+            const poolOptions = {
+              min: 1,
+              max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
+              maxWaitingClients: MAX_QUEUE_SIZE,
+              evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
+              idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
+              ...this.options?.pool // overwrite by cds
+            };
 
-      this._logger.info("creating pool for tenant", tenant, "with option", poolOptions);
+            this._logger.info("creating pool for tenant", tenant, "with option", poolOptions);
 
-      return createPool(
-        {
-          create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE } as any),
-          validate: (conn) => conn.query("SELECT 1").then(() => true).catch(() => false),
-          destroy: async (conn) => conn.destroy()
-        },
-        poolOptions,
-      );
-    });
+            return createPool(
+              {
+                create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE } as any),
+                validate: (conn) => conn.query("SELECT 1").then(() => true).catch(() => false),
+                destroy: async (conn) => {
+                  await conn.end()
+                }
+              },
+              poolOptions,
+            );
+          }
+        )()
+      )
+
+
+    }
+
+    return await this._pools.get(tenant)
+
   }
 
   /**
@@ -201,7 +216,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   public async disconnect() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [tenant, pool] of this._pools.entries()) {
-      await (<Pool<Connection>>pool).clear();
+      await (await pool).clear();
     }
   }
 
