@@ -29,7 +29,7 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
-          - 3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
 
     steps:
@@ -59,7 +59,7 @@ jobs:
         env:
           CI: true
           CDS_REQUIRES_MYSQL_CREDENTIALS_HOST: "127.0.0.1"
-          CDS_REQUIRES_MYSQL_CREDENTIALS_PORT: ${{ job.services.db.ports[3306] }}
+          CDS_REQUIRES_MYSQL_CREDENTIALS_PORT: 3306
           CDS_REQUIRES_MYSQL_CREDENTIALS_DATABASE: cdstest
           CDS_REQUIRES_MYSQL_CREDENTIALS_USER: cdstest
           CDS_REQUIRES_MYSQL_CREDENTIALS_PASSWORD: cdstest

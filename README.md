@@ -27,11 +27,14 @@
 - [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data) with `sqlite` dialect
 - [ ] multi tenancy
   - [x] deploy model on-fly
-  - [ ] create database on-demand
+  - [x] create database on-demand
     - [ ] permission check
+    - [ ] test
+    - [x] migrate CSV on-demand (with option)
   - [ ] dynamic database credential provider
-  - [ ] documentation
   - [ ] admin database concept
+    - [ ] `@admin` tenant entity & services
+  - [ ] documentation
 - [x] `$expand` navigation
 - [x] `$filter` with functions
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
