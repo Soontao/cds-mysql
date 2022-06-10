@@ -1,0 +1,16 @@
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "dialect": "sqlite",
+        "csv": {
+          "migrate": true
+        }
+      },
+      "mysql": {
+        "impl": "../../../src/index"
+      }
+    }
+  }
+}

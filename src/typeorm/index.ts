@@ -1,5 +1,4 @@
-import { migrateData } from "./csv";
 import { csnToEntity } from "./entity";
-import { migrate } from "./migrate";
+import { migrate, migrateData } from "./migrate";
 
 export { csnToEntity, migrate, migrateData };

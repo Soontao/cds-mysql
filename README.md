@@ -34,11 +34,13 @@
   - [ ] dynamic database credential provider
   - [ ] admin database concept
     - [ ] `@admin` tenant entity & services
+  - [ ] tenant credential refresh
   - [ ] documentation
 - [x] `$expand` navigation
 - [x] `$filter` with functions
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
 - [x] initial data provision by `CSV`
+  - [ ] better migration type/column/name adaption
 - [x] auto incremental key aspect (odata only, single records)
 - [x] mysql index
   - [ ] better error for not supported elements
@@ -94,19 +96,6 @@ edit your `package.json` > `cds` node
   }
 }
 ```
-
-edit your `package.json` > `scripts` node, add the `deploy` command
-
-```json
-{
-  "scripts": {
-    "deploy": "cds-mysql-deploy"
-  }
-}
-```
-
-Then, write your own `cds` definitions & execute the `npm run deploy` to deploy schema before server start.
-
 
 ## Usage
 

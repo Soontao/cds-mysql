@@ -2,9 +2,6 @@
   "name": "cds-mysql",
   "version": "5.9.10-0",
   "main": "lib/index.js",
-  "bin": {
-    "cds-mysql-deploy": "./bin/cds-mysql-deploy.js"
-  },
   "cds.main": "./index.cds",
   "description": "SAP CAP adapter for mysql",
   "scripts": {

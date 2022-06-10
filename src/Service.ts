@@ -1,6 +1,5 @@
-import { cloneDeep } from "@newdash/newdash";
 import { cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger } from "cds-internal-tool";
-import { createPool, Pool } from "generic-pool";
+import { createPool, Pool, Options as PoolOptions } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import type { DataSourceOptions } from "typeorm";
 import {
@@ -12,54 +11,30 @@ import {
   TENANT_DEFAULT
 } from "./constants";
 import execute from "./execute";
-import { csnToEntity, migrate, migrateData } from "./typeorm";
+import { csnToEntity, migrate } from "./typeorm";
+import { migrateData } from "./typeorm/migrate";
 import { checkCdsVersion } from "./utils";
+import { MySQLCredential, RleaseableConnection } from "./types";
+import { ShareMysqlTenantProvider, TenantProvider } from "./tenant";
 
-/**
- * raw mysql2 library required credential
- */
-interface MySQLCredential {
-  /**
-   * DB User Name
-   */
-  user: string;
-  /**
-   * DB Password
-   */
-  password?: string;
-  /**
-   * DB Database/Schema Name, default same with user name
-   */
-  database?: string;
-  /**
-   * DB HostName, default localhost
-   */
-  host?: string;
-  /**
-   * DB Connection Port, default 3306
-   */
-  port?: string | number;
-
-  ssl?: {
-    /**
-     * SSL ca cert in PEM text format 
-     */
-    ca?: string;
-  }
-}
-
-type RleaseableConnection = Connection & {
-  _release: () => void;
-}
+const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
+  min: 1,
+  max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
+  maxWaitingClients: MAX_QUEUE_SIZE,
+  evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
+  idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
+};
 
 /**
  * MySQL Database Adapter for SAP CAP Framework
  */
 export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sqlite/Service") {
+
   constructor(...args: any[]) {
     super(...args);
 
     checkCdsVersion();
+
     // REVISIT: official db api
     this._execute = execute;
 
@@ -75,9 +50,33 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     if (this.options.credentials === undefined) {
       throw new Error("mysql credentials lost");
     }
+
+    this._tenantProvider = new ShareMysqlTenantProvider(this); // TODO: extract to options
   }
 
-  private options: any;
+  private options: {
+    /**
+     * database credentials
+     */
+    credentials: MySQLCredential;
+    /**
+     * tenant configuration
+     */
+    tenant?: {
+      prefix?: string;
+      auto?: boolean;
+    };
+    /**
+     * connection pool options
+     */
+    pool?: PoolOptions;
+    csv?: {
+      /**
+       * migrate CSV on deployment
+       */
+      migrate?: boolean;
+    }
+  };
 
   private model: LinkedModel;
 
@@ -99,6 +98,8 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _pools: Map<string, Pool<Connection> | Promise<Pool<Connection>>> = new Map();
 
+  private _tenantProvider: TenantProvider;
+
   /**
    * get connection pool for tenant
    *
@@ -113,25 +114,38 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       this._pools.set(tenant,
         (
           async () => {
-            const credential = await this.getTenantCredential(tenant);
+            const credential = await this._tenantProvider.getCredential(tenant);
+            const poolOptions = { ...DEFAULT_POOL_OPTIONS, ...this.options?.pool }; // TODO: pool configuratino provider
+            const tenantCredential = { ...credential, dateStrings: true, charset: MYSQL_COLLATE };
 
-            await this.deploy(await cwdRequireCDS().load(this.model["$sources"]), { tenant });
+            if (this.options?.tenant?.auto !== false) {
+              const tenantModel = await cwdRequireCDS().load(this.model["$sources"]);
+              await this.deploy(tenantModel, { tenant });
 
-            const poolOptions = {
-              min: 1,
-              max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
-              maxWaitingClients: MAX_QUEUE_SIZE,
-              evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
-              idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
-              ...this.options?.pool // overwrite by cds
-            };
+              if (this.options?.csv?.migrate !== false) {
+                await migrateData(tenantCredential, tenantModel);
+              }
+              else {
+                this._logger.debug("csv migration disabled, skip migrate CSV for tenant", tenant);
+              }
 
-            this._logger.info("creating pool for tenant", tenant, "with option", poolOptions);
+            }
+            else {
+              this._logger.debug("auto tenant deploy disabled, skip auto deploy for tenant", tenant);
+            }
+
+            this._logger.info("creating connection pool for tenant", tenant, "with option", poolOptions);
 
             return createPool(
               {
-                create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE } as any),
-                validate: (conn) => conn.query("SELECT 1").then(() => true).catch(() => false),
+                create: () => createConnection(tenantCredential as any),
+                validate: (conn) => conn
+                  .query("SELECT 1")
+                  .then(() => true)
+                  .catch((err) => {
+                    this._logger.error("validate connection failed:", err);
+                    return false;
+                  }),
                 destroy: async (conn) => {
                   await conn.end();
                 }
@@ -150,28 +164,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
 
-  private _getTenantDatabaseName(tenant: string) {
-    const credential: MySQLCredential = cloneDeep(this.options.credentials);
-    if (tenant === TENANT_DEFAULT) {
-      return credential.database ?? credential.user;
-    }
-    const cds = cwdRequireCDS();
-    const tenant_db_prefix = cds.env.get("requires.mysql.tenant_prefix") ?? "tenant_db";
-    const candidate_name = `${tenant_db_prefix}_${tenant}`;
-    const final_name = candidate_name.replace(/[\W_]+/g, "");
-    return final_name;
-  }
 
-  /**
-   * overwrite this method to provide different databases for different tenants
-   *
-   * @param tenant
-   */
-  private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
-    const rt: MySQLCredential = cloneDeep(this.options.credentials);
-    rt.database = this._getTenantDatabaseName(tenant);
-    return rt;
-  }
 
   /**
    * acquire connection from pool
@@ -184,7 +177,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   public async acquire(context: EventContext): Promise<RleaseableConnection>;
 
   public async acquire(arg: any) {
-    const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || TENANT_DEFAULT;
+    const tenant = (typeof arg === "string" ? arg : arg?.user?.tenant) ?? TENANT_DEFAULT;
     const pool = await this.getPool(tenant);
     const conn = await pool.acquire();
     conn["_release"] = () => pool.release(conn);
@@ -209,7 +202,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @returns 
    */
   private async _getTypeOrmOption(tenant: string = TENANT_DEFAULT): Promise<DataSourceOptions> {
-    const credentials = await this.getTenantCredential(tenant);
+    const credentials = await this._tenantProvider.getCredential(tenant);
     return Object.assign(
       {},
       {
@@ -235,37 +228,6 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     }
   }
 
-  /**
-   * create tenant database 
-   * 
-   * @param tenant tenant id, if `undefined`, will skip 
-   * @returns 
-   */
-  private async _createDatabaseForTenant(tenant?: string) {
-    if (tenant === undefined || tenant === TENANT_DEFAULT) {
-      this._logger.debug("default tenant, skip creation database");
-      return;
-    }
-
-    const defaultConnection = await this.acquire(TENANT_DEFAULT);
-
-    try {
-      const databaseName = this._getTenantDatabaseName(tenant);
-      const [results] = await defaultConnection.query(`SHOW DATABASES LIKE '${databaseName}';`);
-      // @ts-ignore
-      if (results?.length === 0) {
-        await defaultConnection.query(`CREATE DATABASE \`${databaseName}\``); // mysql 5.6 not support 'if not exists'
-      }
-      else {
-        this._logger.debug("database", databaseName, "has existed, skip process");
-      }
-
-    }
-    finally {
-      defaultConnection._release();
-    }
-
-  }
 
   /**
    * 
@@ -278,17 +240,11 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     try {
       this._logger.info("migrating schema for tenant", tenant);
       if (tenant !== TENANT_DEFAULT) {
-        await this._createDatabaseForTenant(tenant);
+        await this._tenantProvider.createDatabase(tenant);
       }
       const entities = csnToEntity(model);
       const migrateOptions = await this._getTypeOrmOption(tenant);
       await migrate({ ...migrateOptions, entities });
-      if (this.options?.csv?.migrate !== false) {
-        await migrateData(this, model);
-      }
-      else {
-        this._logger.debug("csv migration disabled");
-      }
       this._logger.info("migrate finished for tenant", tenant);
       return true;
     } catch (error) {
