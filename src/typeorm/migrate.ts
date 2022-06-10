@@ -11,7 +11,6 @@ import { glob } from "glob";
 import CSV from "@sap/cds/lib/compile/etc/csv";
 import pick from "@newdash/newdash/pick";
 import isEmpty from "@newdash/newdash/isEmpty";
-import { MySQLCredential } from "../types";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 
 const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
@@ -56,7 +55,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
 }
 
 export async function migrateData(
-  credential: MySQLCredential,
+  credential: ConnectionOptions,
   model: LinkedModel,
   csvList?: Array<string>
 ): Promise<void> {

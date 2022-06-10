@@ -1,5 +1,6 @@
 import cloneDeep from "@newdash/newdash/cloneDeep";
 import { cwdRequireCDS, Logger } from "cds-internal-tool";
+import { ConnectionOptions, createConnection } from "mysql2/promise";
 import { TENANT_DEFAULT } from "./constants";
 import { MySQLDatabaseService } from "./Service";
 import { MySQLCredential } from "./types";
@@ -44,7 +45,7 @@ export abstract class TenantProvider {
    * 
    * @param tenant 
    */
-  abstract getCredential(tenant?: string): Promise<MySQLCredential>;
+  abstract getCredential(tenant?: string): Promise<ConnectionOptions>;
 
 }
 
@@ -61,30 +62,30 @@ export class ShareMysqlTenantProvider extends TenantProvider {
       return;
     }
 
-    const defaultConnection = await this._db.acquire(TENANT_DEFAULT);
+    const defaultTenantCredential = await this.getCredential(TENANT_DEFAULT);
+    const defaultTenantConnection = await createConnection(defaultTenantCredential);
 
     try {
       const databaseName = this.getTenantDatabaseName(tenant);
-      const [results] = await defaultConnection.query(`SHOW DATABASES LIKE '${databaseName}';`);
+      const [results] = await defaultTenantConnection.query(`SHOW DATABASES LIKE '${databaseName}';`);
       // @ts-ignore
       if (results?.length === 0) {
-        await defaultConnection.query(`CREATE DATABASE \`${databaseName}\``); // mysql 5.6 not support 'if not exists'
+        await defaultTenantConnection.query(`CREATE DATABASE \`${databaseName}\``); // mysql 5.6 not support 'if not exists'
       }
       else {
         this._logger.debug("database", databaseName, "is existed, skip process");
       }
-
     }
     finally {
-      defaultConnection._release();
+      await defaultTenantConnection.end();
     }
   }
 
-  public async getCredential(tenant: string): Promise<MySQLCredential> {
+  public async getCredential(tenant: string): Promise<ConnectionOptions> {
     return {
       ...this.options.credentials,
       database: this.getTenantDatabaseName(tenant)
-    };
+    } as any;
   }
 
 }
