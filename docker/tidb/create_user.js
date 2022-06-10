@@ -11,8 +11,8 @@
         port: mysqlPort,
       });
 
-      await conn.query(`CREATE DATABASE IF NOT EXISTS ${adminUserName};`);
-      await conn.query(`CREATE USER IF NOT EXISTS '${adminUserName}'@'%' IDENTIFIED BY '${adminUserName}';`);
+      await conn.query(`CREATE DATABASE ${adminUserName};`);
+      await conn.query(`CREATE USER '${adminUserName}'@'%' IDENTIFIED BY '${adminUserName}';`);
       await conn.query(`GRANT ALL PRIVILEGES ON *.* TO '${adminUserName}'@'%' WITH GRANT OPTION;`);
 
       conn.destroy();

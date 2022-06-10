@@ -250,7 +250,16 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     const defaultConnection = await this.acquire(TENANT_DEFAULT);
 
     try {
-      await defaultConnection.query(`CREATE DATABASE IF NOT EXISTS \`${this._getTenantDatabaseName(tenant)}\``);
+      const databaseName = this._getTenantDatabaseName(tenant);
+      const [results] = await defaultConnection.query(`SHOW DATABASES LIKE '${databaseName}';`);
+      // @ts-ignore
+      if (results?.length === 0) {
+        await defaultConnection.query(`CREATE DATABASE \`${databaseName}\``); // mysql 5.6 not support 'if not exists'
+      }
+      else {
+        this._logger.debug("database", databaseName, "has existed, skip process");
+      }
+
     }
     finally {
       defaultConnection._release();
