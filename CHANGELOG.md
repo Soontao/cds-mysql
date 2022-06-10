@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.10](https://github.com/Soontao/cds-mysql/compare/v5.9.10-0...v5.9.10) (2022-06-10)
+
+
+### Features
+
+* blob data csv provision ([18b9320](https://github.com/Soontao/cds-mysql/commit/18b932009b6539028f52a64982f00d7d1e292685))
+* multi tenancy ([25d0e3d](https://github.com/Soontao/cds-mysql/commit/25d0e3db8c0c0c19ad910033e0ef457bec366692))
+* remove cds_deploy ([b182ba3](https://github.com/Soontao/cds-mysql/commit/b182ba32769bb1ce702c4c1fff19e0435a6a6a1e))
+* rewrite CSV ([eb5be83](https://github.com/Soontao/cds-mysql/commit/eb5be835f24ab96f47729a7c4e1f5f5066f3f9c7))
+* test entity for csv upload ([8c4c5ce](https://github.com/Soontao/cds-mysql/commit/8c4c5ceedb0230300e694c9c5759fa9dbfa5e32e))
+* update share mysql tenant provider ([df9bc48](https://github.com/Soontao/cds-mysql/commit/df9bc48333af2da4efd7a23caeed0d8e54cfd337))
+
+
+### Bug Fixes
+
+* ci mysql port ([005f77e](https://github.com/Soontao/cds-mysql/commit/005f77e0a2724932a5e642c186e4f3099f467785))
+* lint ci ([29e0e13](https://github.com/Soontao/cds-mysql/commit/29e0e137aee8207c9f94f31eb6795f34f9b3aa9f))
+* old mysql database creation ([98c6d05](https://github.com/Soontao/cds-mysql/commit/98c6d05aa0a0d4ed7d7975b75ce9634cbbcaa6fa))
+
 ### [5.9.10-0](https://github.com/Soontao/cds-mysql/compare/v5.9.9...v5.9.10-0) (2022-06-07)
 
 
