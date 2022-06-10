@@ -23,6 +23,7 @@
 - [x] migration optimization (ignore drop in some case)
   - [ ] ignore column length reduce and with warning
   - [ ] model version, only incremental migration
+  - [ ] using `LinkedModel` element information for database migration
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/generic#serving-media-data)
 - [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data) with `sqlite` dialect
 - [ ] multi tenancy
@@ -40,7 +41,7 @@
 - [x] `$filter` with functions
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
 - [x] initial data provision by `CSV`
-  - [ ] better migration type/column/name adaption
+  - [x] better migration type/column/name adaption
 - [x] auto incremental key aspect (odata only, single records)
 - [x] mysql index
   - [ ] better error for not supported elements

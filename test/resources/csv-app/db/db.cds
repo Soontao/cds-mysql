@@ -18,5 +18,5 @@ entity ComplexTypeEntity : incrementID {
   SignTime   : Time;
   SignTmp    : Timestamp;
   GlobalUUID : UUID;
-  Avator     : Binary;
+  BlobDoc    : Binary;
 }

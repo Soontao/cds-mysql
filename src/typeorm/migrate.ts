@@ -1,7 +1,7 @@
 import "colors";
 import flattenDeep from "@newdash/newdash/flattenDeep";
 import uniq from "@newdash/newdash/uniq";
-import { cwdRequireCDS, LinkedModel } from "cds-internal-tool";
+import { cwdRequireCDS, EntityDefinition, LinkedModel } from "cds-internal-tool";
 import path from "path";
 import { DataSourceOptions } from "typeorm";
 import { SqlInMemory } from "typeorm/driver/SqlInMemory";
@@ -9,8 +9,6 @@ import { TypeORMLogger } from "./logger";
 import { CDSMySQLDataSource } from "./mysql";
 import { glob } from "glob";
 import CSV from "@sap/cds/lib/compile/etc/csv";
-import pick from "@newdash/newdash/pick";
-import isEmpty from "@newdash/newdash/isEmpty";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 
 const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
@@ -85,58 +83,90 @@ export async function migrateData(
       for (const csvFile of csvList) {
 
         const filename = path.basename(csvFile, ".csv");
-        const entity = filename.replace(/[_-]/g, "."); // name_space_entity.csv -> name.space.entity
+        const entityName = filename.replace(/[_-]/g, "."); // name_space_entity.csv -> name.space.entity
 
-        if (entity in model.definitions) {
-          const meta: any = model.definitions[entity];
+        if (entityName in model.definitions) {
+          const meta = model.definitions[entityName] as EntityDefinition;
 
           const entires: Array<Array<string>> = CSV.read(csvFile);
-          const tableName = entity.replace(/\./g, "_");
+          const tableName = entityName.replace(/\./g, "_");
 
           if (meta === undefined) {
-            logger.warn(entity, "is not in the model");
+            logger.warn(entityName, "is not in the model");
             continue;
           }
+
           const keys = Object.values(meta.elements)
             .filter((e: any) => e.key === true)
             .map((e: any) => e.name);
 
-          if (keys.length === 0) {
-            logger.warn("entity", entity.green, "not have any keys, can not execute CSV migration");
+          const [headers, ...rows] = entires;
+
+          const transformColumnsIndex = Object
+            .values(meta.elements)
+            .filter(ele => ["cds.Binary", "cds.LargeBinary", "cds.Integer"].includes(ele.type))
+            .map(ele => ({
+              index: headers.indexOf(ele.name),
+              type: ele.type,
+              columnName: ele.name,
+            }));
+
+
+          const existedKeysIndex = headers
+            .filter(header => keys.includes(header))
+            .map(existedKey => headers.indexOf(existedKey));
+
+          if (existedKeysIndex.length === 0) {
+            logger.warn("csv", csvFile, "do not provide any primary key, could not execute CSV migration");
             continue;
           }
 
+          if (transformColumnsIndex.length > 0) {
+            logger.debug("exist blob column in entity, ", entityName, ", transform");
+            for (const entry of rows) {
+              for (const transformColumn of transformColumnsIndex) {
+                if (entry[transformColumn.index].trim().length > 0) {
+                  switch (transformColumn.type) {
+                    case "cds.Binary": case "cds.LargeBinary":
+                      // @ts-ignore
+                      entry[transformColumn.index] = Buffer.from(entry[transformColumn.index], "base64");
+                      break;
+                    case "cds.Integer":
+                      // @ts-ignore
+                      entry[transformColumn.index] = parseInt(entry[transformColumn.index], 10);
+                    default:
+                      break;
+                  }
+
+                }
+              }
+            }
+          }
+
           if (entires.length > 1) {
-            logger.info("filling entity", entity.green, "with file", path.relative(process.cwd(), csvFile).green);
+            logger.info("filling entity", entityName.green, "with file", path.relative(process.cwd(), csvFile).green);
           } else {
             logger.warn("CSV file", path.relative(process.cwd(), csvFile).green, "is empty, skip processing");
             continue;
           }
 
-          const [headers, ...values] = entires;
+          const entryToWhereExpr = (entry: Array<string>) => {
+            const keyValues = [];
+            for (const existedKeyIndex of existedKeysIndex) {
+              keyValues.push(`${headers[existedKeyIndex]} = '${entry[existedKeyIndex]}'`);
+            }
 
-          const convertObject = (entry: Array<string>) => {
-            return headers.reduce((pre, headerName, index) => {
-              // TODO: check model
-              pre[headerName] = entry[index];
-              return pre;
-            }, {});
+            return keyValues.join(" AND ");
           };
+
 
           const batchInserts = [];
 
           const headerList = headers.join(", ");
 
-          for (const entry of values) {
-            const entryObject = convertObject(entry);
-            const keyFilter = pick(entryObject, keys);
-            if (isEmpty(keyFilter)) {
-              logger.error("entity", entity, "entry: ", entryObject, "not provide the key information, skip process");
-              continue;
-            }
+          for (const entry of rows) {
 
-            // TODO: other type test
-            const keyExpr = Object.entries(keyFilter).map(([key, value]) => `${key} = '${value}'`).join(" AND ");
+            const keyExpr = entryToWhereExpr(entry);
 
             const [[{ EXIST }]] = await connection
               .query(`SELECT COUNT(1) as EXIST FROM ${tableName} WHERE ${keyExpr}`) as any;
@@ -145,20 +175,20 @@ export async function migrateData(
               batchInserts.push(entry);
             }
             else {
-              logger.debug("entity", entity, "with key", keyFilter, "has existed, no process");
+              logger.debug("entity", entityName, "with key", keyExpr, "has existed, skip process");
             }
           }
 
           // batch insert
           if (batchInserts.length > 0) {
-            logger.debug("batch inserts:", entity, "with", batchInserts.length, "records");
+            logger.debug("batch inserts:", entityName, "with", batchInserts.length, "records");
 
             const [{ affectedRows }] = await connection
               .query(`INSERT INTO ${tableName} (${headerList}) VALUES ?`, [batchInserts]) as any;
 
             if (affectedRows !== batchInserts.length) {
               logger.warn(
-                "batch insert records for entity", entity,
+                "batch insert records for entity", entityName,
                 "with", batchInserts.length, "records",
                 "but db affectRows is", affectedRows,
                 "please CARE and CHECK the reason"
@@ -167,7 +197,7 @@ export async function migrateData(
 
           }
         } else {
-          logger.warn("not found entity", entity, "in definitions");
+          logger.warn("not found entity", entityName, "in definitions");
         }
 
       }

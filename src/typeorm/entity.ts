@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
+import { fuzzy, LinkedModel } from "cds-internal-tool";
 import MySQLParser, {
   ColumnDefinitionContext,
   CreateTableContext,
@@ -19,7 +20,7 @@ type TableName = string;
 
 // @ts-ignore
 const cds = global.cds || require("@sap/cds/lib");
-const logger = cds.log("mysql|db");
+const logger = cds.log("mysql|db|typeorm|entity");
 
 const TextColumnTypes: Array<ColumnType> = ["varchar", "varchar2", "nvarchar", "nvarchar2", "char"];
 
@@ -40,7 +41,7 @@ class CDSListener implements MySQLParserListener {
 
   private _currentStatement: string;
 
-  private _model: any;
+  private _model: LinkedModel;
 
   constructor(options: any) {
     this._entities = [];
@@ -56,7 +57,7 @@ class CDSListener implements MySQLParserListener {
     this._tmp.tableName = ctx.text;
   }
 
-  exitColumnDefinition(ctx: ColumnDefinitionContext) {
+  async exitColumnDefinition(ctx: ColumnDefinitionContext) {
     // mapping DDL column definition to schema options
     const name = ctx.columnName();
     const field = ctx.fieldDefinition();
@@ -65,6 +66,7 @@ class CDSListener implements MySQLParserListener {
     const floatOption = dataType.floatOptions();
     const attrs = field.columnAttribute();
 
+
     const column: EntitySchemaColumnOptions = {
       name: name.text,
       type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
@@ -72,8 +74,22 @@ class CDSListener implements MySQLParserListener {
       default: null
     };
 
+
+    const entityDef = fuzzy.findEntity(this._tmp.tableName, this._model);
+
+    const eleDef = fuzzy.findElement(entityDef, name.text);
+
+    // TODO: use element def directly
+    if (eleDef !== undefined) {
+      // force overwrite blob column
+      if (["cds.Binary", "cds.LargeBinary"].includes(eleDef.type)) {
+        column.type = "blob";
+      }
+    }
+
+
     // (5000)
-    if (length) {
+    if (length && column.type !== "blob") {
       const long1 = length.real_ulonglong_number();
       if (long1) {
         column.length = parseInt(long1?.text);
