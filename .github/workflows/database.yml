@@ -27,14 +27,7 @@ jobs:
       db:
         image: ${{ matrix.docker-images }}
         env:
-          MYSQL_DATABASE: cdstest
-          MYSQL_USER: cdstest
-          MYSQL_PASSWORD: cdstest
-          MYSQL_ROOT_PASSWORD: cdstest
-          MARIADB_DATABASE: cdstest
-          MARIADB_USER: cdstest
-          MARIADB_PASSWORD: cdstest
-          MARIADB_ROOT_PASSWORD: cdstest
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
@@ -54,10 +47,12 @@ jobs:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: install dependency
-        run: |
-          npm i -g npm
-          npm install
+      - run: npm i -g npm
+
+      - run: npm ci
+
+      - name: setup mysql user
+        run: node ./docker/tidb/create_user.js
 
       - name: test
         run: npm run test

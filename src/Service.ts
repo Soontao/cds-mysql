@@ -1,5 +1,5 @@
 import { cloneDeep } from "@newdash/newdash";
-import { cwdRequire, cwdRequireCDS, LinkedModel, Logger } from "cds-internal-tool";
+import { cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger } from "cds-internal-tool";
 import { createPool, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import type { DataSourceOptions } from "typeorm";
@@ -48,13 +48,8 @@ interface MySQLCredential {
   }
 }
 
-function toTenantDatabaseName(credentials: MySQLCredential, tenant = TENANT_DEFAULT) {
-  if (tenant === TENANT_DEFAULT) {
-    return credentials.database ?? credentials.user;
-  }
-  const cds = cwdRequireCDS();
-  const tenant_db_prefix = cds.env.get("requires.mysql.tenant_prefix") ?? "tenant_db";
-  return `${tenant_db_prefix}_${tenant}`;
+type RleaseableConnection = Connection & {
+  _release: () => void;
 }
 
 /**
@@ -154,6 +149,19 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   }
 
+
+  private _getTenantDatabaseName(tenant: string) {
+    const credential: MySQLCredential = cloneDeep(this.options.credentials);
+    if (tenant === TENANT_DEFAULT) {
+      return credential.database ?? credential.user;
+    }
+    const cds = cwdRequireCDS();
+    const tenant_db_prefix = cds.env.get("requires.mysql.tenant_prefix") ?? "tenant_db";
+    const candidate_name = `${tenant_db_prefix}_${tenant}`;
+    const final_name = candidate_name.replace(/[\W_]+/g, "");
+    return final_name;
+  }
+
   /**
    * overwrite this method to provide different databases for different tenants
    *
@@ -161,7 +169,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    */
   private async getTenantCredential(tenant?: string): Promise<MySQLCredential> {
     const rt: MySQLCredential = cloneDeep(this.options.credentials);
-    rt.database = toTenantDatabaseName(rt, tenant);
+    rt.database = this._getTenantDatabaseName(tenant);
     return rt;
   }
 
@@ -169,8 +177,12 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * acquire connection from pool
    *
    * @override
-   * @param arg
+   * @param tenant_id tenant id
    */
+  public async acquire(tenant_id: string): Promise<RleaseableConnection>;
+
+  public async acquire(context: EventContext): Promise<RleaseableConnection>;
+
   public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg.user.tenant) || TENANT_DEFAULT;
     const pool = await this.getPool(tenant);
@@ -213,6 +225,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     ) as any;
   }
 
+  /**
+   * dis connect from database, free all connections of all tenants
+   */
   public async disconnect() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [tenant, pool] of this._pools.entries()) {
@@ -221,19 +236,50 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   /**
+   * create tenant database 
+   * 
+   * @param tenant tenant id, if `undefined`, will skip 
+   * @returns 
+   */
+  private async _createDatabaseForTenant(tenant?: string) {
+    if (tenant === undefined || tenant === TENANT_DEFAULT) {
+      this._logger.debug("default tenant, skip creation database");
+      return;
+    }
+
+    const defaultConnection = await this.acquire(TENANT_DEFAULT);
+
+    try {
+      await defaultConnection.query(`CREATE DATABASE IF NOT EXISTS \`${this._getTenantDatabaseName(tenant)}\``);
+    }
+    finally {
+      defaultConnection._release();
+    }
+
+  }
+
+  /**
    * 
    * @param model plain CSN object
    * @param options deployment options
    * @returns 
    */
-  async deploy(model: any, options?: { tenant: string }) {
+  async deploy(model: LinkedModel, options?: { tenant: string }) {
     const tenant = options?.tenant ?? TENANT_DEFAULT;
     try {
       this._logger.info("migrating schema for tenant", tenant);
+      if (tenant !== TENANT_DEFAULT) {
+        await this._createDatabaseForTenant(tenant);
+      }
       const entities = csnToEntity(model);
       const migrateOptions = await this._getTypeOrmOption(tenant);
       await migrate({ ...migrateOptions, entities });
-      await migrateData(this, model);
+      if (this.options?.csv?.migrate !== false) {
+        await migrateData(this, model);
+      }
+      else {
+        this._logger.debug("csv migration disabled");
+      }
       this._logger.info("migrate finished for tenant", tenant);
       return true;
     } catch (error) {

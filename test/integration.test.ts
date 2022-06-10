@@ -12,8 +12,6 @@ describe("Integration Test Suite", () => {
   const client = setupTest(__dirname, "./resources/integration");
   client.defaults.auth = { username: "alice", password: "admin" };
 
-  const ENTITIES = { PEOPLE: "People" };
-
   afterAll(doAfterAll);
 
   it("should support basic query", async () => {
@@ -182,58 +180,6 @@ describe("Integration Test Suite", () => {
     expect(cds.db).toBeInstanceOf(require("../src/index"));
   });
 
-  it("should support migrate csv data", async () => {
-    const { migrateData } = require("../src/typeorm");
-    const migrateTo = async (version: string) => migrateData(
-      cds.db,
-      cds.model,
-      [path.join(__dirname, `./resources/integration/db/data/${version}/test_resources_integration_People.csv`)],
-    );
-    await migrateTo("v1");
-    const people5 = await cds.run(
-      SELECT
-        .one
-        .from(ENTITIES.PEOPLE)
-        .where({ Name: "People5" })
-    );
-    expect(people5).not.toBeNull();
-    expect((people5.ID)).toBe("e3cf83a0-2d99-11ec-8d3d-0242ac130003");
-
-    await migrateTo("v2");
-    const people1000005 = await cds.run(
-      SELECT
-        .one
-        .from(ENTITIES.PEOPLE)
-        .byKey("e3cf83a0-2d99-11ec-8d3d-0242ac130003")
-    );
-    expect(people1000005).not.toBeNull();
-    expect(people1000005.Name).toBe("People1000005");
-    expect(people1000005.Age).toBe(18);
-
-    await migrateTo("v3");
-    const peopleWithAge9999 = await cds.run(
-      SELECT
-        .one
-        .from(ENTITIES.PEOPLE)
-        .byKey("e3cf7edc-2d99-11ec-8d3d-0242ac130003")
-    );
-    expect(peopleWithAge9999).not.toBeNull();
-    expect(peopleWithAge9999.Name).toBe("PeopleWithAge9999");
-    expect(peopleWithAge9999.Age).toBe(9999);
-
-    // original also existed
-    expect(await cds.run(
-      SELECT
-        .one
-        .from(ENTITIES.PEOPLE)
-        .byKey("e3cf83a0-2d99-11ec-8d3d-0242ac130003")
-    )).toMatchObject({
-      Name: "People1000005",
-      Age: 18,
-    });
-
-  });
-
   it("should support create animal with incremental ID", async () => {
     let res = await client.get("/bank/DummyAnimals", { validateStatus: () => true });
     expect(res.status).toBe(200);
@@ -253,16 +199,6 @@ describe("Integration Test Suite", () => {
     expect(results[0].affectedRows).toBe(2);
   });
 
-  it.skip("should support multi-tenancy", async () => {
-    // TODO: must have create data base permission
-    const response = await client.get("/bank/Peoples", {
-      auth: {
-        username: "theo-on-tenant-2",
-        password: "any"
-      }
-    });
-    expect(response.data.value.length).toBe(0);
-  });
 
 
 });

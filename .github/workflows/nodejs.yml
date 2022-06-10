@@ -19,10 +19,7 @@ jobs:
       mysql:
         image: mariadb:10.8
         env:
-          MYSQL_DATABASE: cdstest
-          MYSQL_USER: cdstest
-          MYSQL_PASSWORD: cdstest
-          MYSQL_ROOT_PASSWORD: cdstest
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
@@ -49,6 +46,9 @@ jobs:
       - run: npm i -g npm
 
       - run: npm ci
+
+      - name: setup mysql user
+        run: node ./docker/tidb/create_user.js
 
       - name: test
         run: npm run test

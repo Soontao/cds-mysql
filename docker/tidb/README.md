@@ -24,9 +24,9 @@ mysqladmin ping --host 127.0.0.1 --port 4000 -u root
 ## User Creation
 
 ```sql
-CREATE DATABASE cdstest;
-CREATE USER 'cdstest'@'%' IDENTIFIED BY 'cdstest';
-GRANT ALL on cdstest.* to 'cdstest'@'%';
+CREATE DATABASE IF NOT EXISTS `cds_admin`;
+CREATE USER IF NOT EXISTS 'cds_admin'@'%' IDENTIFIED BY 'cds_admin'; 
+GRANT ALL PRIVILEGES ON *.* TO 'cds_admin'@'%' WITH GRANT OPTION;
 ```
 
 ## Env File

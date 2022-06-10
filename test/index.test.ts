@@ -1,11 +1,13 @@
 // @ts-nocheck
 import cds from "@sap/cds";
-import { createRandomName, doAfterAll, loadCSN, setupEnv } from "./utils";
+import { createRandomName, doAfterAll, doBeforeEach, loadCSN, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
   setupEnv();
 
+  beforeEach(doBeforeEach);
+  
   afterAll(doAfterAll);
 
   it("should support deploy simple entity (with e2e CRUD)", async () => {

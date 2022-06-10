@@ -3,7 +3,10 @@
     "requires": {
       "db": {
         "kind": "mysql",
-        "dialect": "sqlite"
+        "dialect": "sqlite",
+        "csv": {
+          "migrate": false
+        }
       },
       "mysql": {
         "impl": "../../../src/index"

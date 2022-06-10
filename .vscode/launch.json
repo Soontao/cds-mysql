@@ -19,7 +19,7 @@
         "--runInBand"
       ],
       "env": {
-        "DEBUG": "mysql"
+        "DEBUG": "db"
       },
       "sourceMaps": true,
       "cwd": "${workspaceFolder}",

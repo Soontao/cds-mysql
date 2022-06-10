@@ -43,6 +43,11 @@ export const getTestTypeORMOptions = () => {
   );
 };
 
+export async function doBeforeEach() {
+  await sleep(100);
+  await cleanDB();
+}
+
 export async function doAfterAll() {
   await sleep(100);
   await cleanDB();

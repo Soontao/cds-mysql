@@ -38,8 +38,10 @@ jobs:
       - name: install dependency
         run: npm ci
 
-      - name: setup tidb user
+      - name: setup mysql user
         run: node ./docker/tidb/create_user.js
+        env:
+          MYSQL_PORT: 4000
 
       - name: test
         run: npm run test

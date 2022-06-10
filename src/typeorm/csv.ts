@@ -2,13 +2,13 @@ import flattenDeep from "@newdash/newdash/flattenDeep";
 import { toHashCode } from "@newdash/newdash/functional/toHashCode";
 import { isEmpty } from "@newdash/newdash/isEmpty";
 import { pick } from "@newdash/newdash/pick";
-import type { CSN } from "@sap/cds/apis/csn";
 import cds from "@sap/cds/lib";
 import CSV from "@sap/cds/lib/compile/etc/csv";
 import "colors";
 import path from "path";
 import { glob } from "glob";
 import type { MySQLDatabaseService } from "../Service";
+import { DatabaseService, LinkedModel, TransactionMix } from "cds-internal-tool";
 
 // @ts-ignore
 const logger = cds.log("mysql|db");
@@ -29,10 +29,11 @@ const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
  * @param model
  * @param csvList csv file list
  */
-export async function migrateData(db: MySQLDatabaseService, model: CSN, csvList?: Array<string>) {
+export async function migrateData(db: MySQLDatabaseService, model: LinkedModel, csvList?: Array<string>) {
 
   csvList = csvList ?? flattenDeep(
     await Promise.all(
+      // @ts-ignore
       model.$sources
         .map(path.dirname)
         .map((dir: string) => `${dir}/**/*.csv`)
@@ -41,10 +42,11 @@ export async function migrateData(db: MySQLDatabaseService, model: CSN, csvList?
   );
 
   if (csvList.length > 0) {
+    
+    await db.tx(async (tx: TransactionMix & DatabaseService) => {
+      
+      logger.info("start migration CSV provision data");
 
-    logger.info("start migration CSV provision data");
-
-    await db.tx(async tx => {
       for (const csvFile of csvList) {
         const filename = path.basename(csvFile, ".csv");
         const entity = filename.replace(/_/g, "."); // name_space_entity.csv -> name.space.entity
