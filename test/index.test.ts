@@ -1,8 +1,6 @@
 // @ts-nocheck
-import { sleep } from "@newdash/newdash/sleep";
 import cds from "@sap/cds";
-import cds_deploy from "@sap/cds/lib/deploy";
-import { cleanDB, createRandomName, doAfterAll, isTiDBTest, loadCSN, setupEnv } from "./utils";
+import { createRandomName, doAfterAll, loadCSN, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
 
@@ -13,7 +11,7 @@ describe("CDS MySQL Basic Test Suite", () => {
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 
     const csn = await loadCSN("./resources/people.cds");
-    await cds_deploy(csn).to("mysql");
+    await cds.deploy(csn).to("mysql");
     const randomName = createRandomName();
     const randomName2 = createRandomName();
     // create item
@@ -47,27 +45,27 @@ describe("CDS MySQL Basic Test Suite", () => {
 
   it("should support deploy complex-type entity", async () => {
     const csn = await loadCSN("./resources/complex-type.cds");
-    await cds_deploy(csn).to("mysql");
+    await cds.deploy(csn).to("mysql");
   });
 
   it("should support deploy different property types entity", async () => {
     const csn = await loadCSN("./resources/property-type.cds");
-    await cds_deploy(csn).to("mysql");
+    await cds.deploy(csn).to("mysql");
   });
 
   it("should support deploy long name entity", async () => {
     const csn = await loadCSN("./resources/long-table-name.cds");
-    await cds_deploy(csn).to("mysql");
+    await cds.deploy(csn).to("mysql");
   });
 
   it("should support deploy view", async () => {
     const csn = await loadCSN("./resources/view.cds");
-    await cds_deploy(csn).to("mysql");
+    await cds.deploy(csn).to("mysql");
   });
 
   it("should support deploy large row size table", async () => {
     const csn = await loadCSN("./resources/big-size-table.cds");
-    await cds_deploy(csn).to("mysql");
+    await cds.deploy(csn).to("mysql");
   });
 
 

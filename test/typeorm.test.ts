@@ -1,8 +1,8 @@
-import { pick, range, sleep } from "@newdash/newdash";
+import { pick, range, } from "@newdash/newdash";
 import { ConnectionOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
-import { cleanDB, doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
+import { doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
 
 describe("TypeORM Test Suite", () => {
 

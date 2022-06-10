@@ -41,13 +41,13 @@ export = class CustomFunctionBuilder extends FunctionBuilder {
   }
 
   build() {
-    this._outputObj = { sql: [], values: [] }
-    this._handleFunction()
+    this._outputObj = { sql: [], values: [] };
+    this._handleFunction();
     // SELECT count ( 1 ) AS "total" FROM People ALIAS_1:
     // ERROR: FUNCTION cdstest.count does not exist in: 
     // TiDB will throw error: SELECT count ( 1 );
-    this._outputObj.sql = this._outputObj.sql.join('') // overwrite standard ' ', to adapt the TiDB
-    return this._outputObj
+    this._outputObj.sql = this._outputObj.sql.join(""); // overwrite standard ' ', to adapt the TiDB
+    return this._outputObj;
   }
 
   _handleFunction() {

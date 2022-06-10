@@ -1,3 +1,4 @@
+import flattenDeep from "@newdash/newdash/flattenDeep";
 import { toHashCode } from "@newdash/newdash/functional/toHashCode";
 import { isEmpty } from "@newdash/newdash/isEmpty";
 import { pick } from "@newdash/newdash/pick";
@@ -6,24 +7,44 @@ import cds from "@sap/cds/lib";
 import CSV from "@sap/cds/lib/compile/etc/csv";
 import "colors";
 import path from "path";
-import type { MySQLDatabaseService } from "../dbService";
+import { glob } from "glob";
+import type { MySQLDatabaseService } from "../Service";
 
 // @ts-ignore
 const logger = cds.log("mysql|db");
 
+const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
+  glob(pattern, (err, matches) => {
+    if (err) {
+      rej(err);
+    } else {
+      res(matches);
+    }
+  });
+});
+
 /**
  *
  * @param db database service
- * @param csvList
  * @param model
+ * @param csvList csv file list
  */
-export async function migrateData(db: MySQLDatabaseService, csvList: Array<string>, model: CSN) {
-  if (csvList.length > 0) {
-    logger.info("start migration CSV provision data");
-    // @ts-ignore
-    const tx = db.tx();
+export async function migrateData(db: MySQLDatabaseService, model: CSN, csvList?: Array<string>) {
 
-    try {
+  csvList = csvList ?? flattenDeep(
+    await Promise.all(
+      model.$sources
+        .map(path.dirname)
+        .map((dir: string) => `${dir}/**/*.csv`)
+        .map((pattern: string) => pGlob(pattern))
+    )
+  );
+
+  if (csvList.length > 0) {
+
+    logger.info("start migration CSV provision data");
+
+    await db.tx(async tx => {
       for (const csvFile of csvList) {
         const filename = path.basename(csvFile, ".csv");
         const entity = filename.replace(/_/g, "."); // name_space_entity.csv -> name.space.entity
@@ -99,12 +120,8 @@ export async function migrateData(db: MySQLDatabaseService, csvList: Array<strin
         }
       }
 
-      await tx.commit();
-    } catch (error) {
-      await tx.rollback();
-      throw error;
-    }
+      logger.info("CSV provision data migration successful");
+    });
 
-    logger.info("CSV provision data migration successful");
   }
 }

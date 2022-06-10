@@ -65,5 +65,5 @@ export const cleanDB = async () => {
 };
 
 export function isTiDBTest() {
-  return process.env.IS_TIDB === 'true'
+  return process.env.IS_TIDB === "true";
 }

@@ -8,7 +8,6 @@
     const process = require("process");
     const { get } = require("@newdash/newdash/get");
     const { pick } = require("@newdash/newdash/pick");
-    const { flattenDeep } = require("@newdash/newdash/flattenDeep");
     const { migrateData } = require("../lib/typeorm/csv");
     const { checkCdsVersion } = require("../lib/utils");
 
@@ -29,7 +28,6 @@
     };
 
     const cds = _require("@sap/cds");
-    const glob = _require("glob").sync;
     const logger = cds.log("mysql|db");
     const { env: { requires } } = cds;
 
@@ -92,14 +90,7 @@
 
       db.model = model;
 
-      const csvFiles = flattenDeep(
-        model.$sources
-          .map(path.dirname)
-          .map(dir => `${dir}/**/*.csv`)
-          .map(pattern => glob(pattern))
-      );
-
-      await migrateData(db, csvFiles, model);
+      await migrateData(db, model);
 
       await db.disconnect();
 

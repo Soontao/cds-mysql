@@ -12,7 +12,7 @@ import {
   TENANT_DEFAULT
 } from "./constants";
 import execute from "./execute";
-import { csnToEntity, migrate } from "./typeorm";
+import { csnToEntity, migrate, migrateData } from "./typeorm";
 import { checkCdsVersion } from "./utils";
 
 /**
@@ -78,7 +78,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     this._logger = cwdRequireCDS().log("db|mysql");
 
     if (this.options.credentials === undefined) {
-      throw new Error('mysql credentials lost')
+      throw new Error("mysql credentials lost");
     }
   }
 
@@ -138,19 +138,19 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
                 create: () => createConnection({ ...credential, dateStrings: true, charset: MYSQL_COLLATE } as any),
                 validate: (conn) => conn.query("SELECT 1").then(() => true).catch(() => false),
                 destroy: async (conn) => {
-                  await conn.end()
+                  await conn.end();
                 }
               },
               poolOptions,
             );
           }
         )()
-      )
+      );
 
 
     }
 
-    return await this._pools.get(tenant)
+    return await this._pools.get(tenant);
 
   }
 
@@ -233,6 +233,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       const entities = csnToEntity(model);
       const migrateOptions = await this._getTypeOrmOption(tenant);
       await migrate({ ...migrateOptions, entities });
+      await migrateData(this, model);
       this._logger.info("migrate finished for tenant", tenant);
       return true;
     } catch (error) {

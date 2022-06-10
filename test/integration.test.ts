@@ -1,9 +1,8 @@
 // @ts-nocheck
 
-import sleep from "@newdash/newdash/sleep";
 import { readFileSync } from "fs";
 import path from "path";
-import { cleanDB, createRandomName, doAfterAll } from "./utils";
+import { createRandomName, doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 
 
@@ -187,8 +186,8 @@ describe("Integration Test Suite", () => {
     const { migrateData } = require("../src/typeorm");
     const migrateTo = async (version: string) => migrateData(
       cds.db,
+      cds.model,
       [path.join(__dirname, `./resources/integration/db/data/${version}/test_resources_integration_People.csv`)],
-      cds.model
     );
     await migrateTo("v1");
     const people5 = await cds.run(

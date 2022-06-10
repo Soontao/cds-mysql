@@ -1,3 +1,4 @@
+import { cwdRequireCDS } from "cds-internal-tool";
 import { DataSourceOptions } from "typeorm";
 import { SqlInMemory } from "typeorm/driver/SqlInMemory";
 import { TypeORMLogger } from "./logger";
@@ -6,6 +7,7 @@ import { CDSMySQLDataSource } from "./mysql";
 export async function migrate(connectionOptions: DataSourceOptions, dryRun: true): Promise<SqlInMemory>;
 export async function migrate(connectionOptions: DataSourceOptions, dryRun?: false): Promise<void>;
 export async function migrate(connectionOptions: DataSourceOptions, dryRun = false): Promise<any> {
+  const logger = cwdRequireCDS().log("mysql|db");
   // TODO: lock for migration
   const ds = new CDSMySQLDataSource({
     ...connectionOptions,
@@ -21,9 +23,12 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
       return await builder.log();
     }
     await builder.build(); // execute build
-  } catch (error) {
+  }
+  catch (error) {
+    logger.error("migrate database failed:", error);
     throw error;
-  } finally {
+  }
+  finally {
     if (ds.isInitialized) {
       await ds.destroy();
     }
