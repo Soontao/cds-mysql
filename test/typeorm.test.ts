@@ -52,7 +52,7 @@ describe("TypeORM Test Suite", () => {
 
   it("should support migrate tables", async () => {
     const CSNs = await Promise.all(
-      range(1, 9)
+      range(1, 10)
         .map((idx) => `./resources/migrate/step-${idx}.cds`)
         .map(loadCSN)
     );
