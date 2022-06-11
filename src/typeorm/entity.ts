@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
-import { fuzzy, LinkedModel } from "cds-internal-tool";
+import { cwdRequireCDS, fuzzy, LinkedModel, Logger } from "cds-internal-tool";
 import MySQLParser, {
   ColumnDefinitionContext,
   CreateTableContext,
@@ -18,9 +18,7 @@ import { groupByKey, overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
 
-// @ts-ignore
-const cds = global.cds || require("@sap/cds/lib");
-const logger = cds.log("mysql|db|typeorm|entity");
+const logger: Logger = cwdRequireCDS().log("mysql|db|typeorm|entity");
 
 const TextColumnTypes: Array<ColumnType> = ["varchar", "varchar2", "nvarchar", "nvarchar2", "char"];
 
@@ -84,6 +82,17 @@ class CDSListener implements MySQLParserListener {
       // force overwrite blob column
       if (["cds.Binary", "cds.LargeBinary"].includes(eleDef.type)) {
         column.type = "blob";
+      }
+
+      // not association or composition
+      if(!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
+        const typeOrmColumnConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, eleDef);
+        if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
+          Object.assign(
+            column,
+            typeOrmColumnConfig,
+          );
+        }
       }
     }
 
@@ -171,38 +180,42 @@ class CDSListener implements MySQLParserListener {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   exitCreateTable(ctx: CreateTableContext) {
-    const entityDef = this.findEntityCSN(this._tmp.name);
+    const entityDef = fuzzy.findEntity(this._tmp.name, this._model);
     if (entityDef !== undefined) {
-      const schemaConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, entityDef);
+      const schemaConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, entityDef) as Partial<EntitySchemaOptionsWithDeps>;
 
-      if (schemaConfig !== undefined && Object.keys(schemaConfig).length > 0) {
-        this._tmp = Object.assign({}, schemaConfig, this._tmp);
+      // TODO: move to check
+      if (schemaConfig.indices?.length > 0) {
+        for (const indiceConfig of schemaConfig.indices) {
+          if (indiceConfig?.columns instanceof Array) {
+            for (const indexColumnName of indiceConfig.columns) {
+              if (typeof indexColumnName === "string") {
+                const columnEle = fuzzy.findElement(entityDef, indexColumnName);
+                if (columnEle === undefined) {
+                  logger.error(
+                    "entity", entityDef.name, 
+                    "index", indiceConfig.name, 
+                    "column", indexColumnName, 
+                    "not existed on entity definition"
+                  );
+                  // TODO: throw error
+                }
+              }
+            }
+          }
+        }
       }
 
-      Object
-        .values(entityDef.elements)
-        .forEach((elementDef: any) => {
-          // TODO: filter composition and association
-          const columnName = elementDef.name;
-          const columnConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, elementDef);
-          if (columnConfig !== undefined && Object.keys(columnConfig).length > 0 && columnName in this._tmp.columns) {
-            this._tmp.columns[columnName] = Object.assign(
-              {},
-              columnConfig,
-              this._tmp.columns[columnName],
-            );
-          }
-        });
+      if (schemaConfig !== undefined && Object.keys(schemaConfig).length > 0) {
+        Object.assign(this._tmp, schemaConfig);
+      }
+      // TODO: check 
 
     }
 
     // TODO: why its undefined ?
     this._entities.push(new EntitySchema(this._tmp));
     this._tmp = this.newEntitySchemaOption();
-  }
-
-  private findEntityCSN(tableName: string): any {
-    return Object.values(this._model.definitions).find((def: any) => def?.name?.split(".").join("_") === tableName);
   }
 
   exitTableConstraintDef(ctx: TableConstraintDefContext) {
