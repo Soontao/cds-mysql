@@ -4,11 +4,13 @@
       const adminUserName = process.env.MYSQL_ADMIN_USRE ?? "cdstest";
       const mysqlPort = parseInt(process.env.MYSQL_PORT ?? "3306");
       const mysqlHost = process.env.MYSQL_HOST ?? "127.0.0.1";
+      const mysqlPass = process.env.MYSQL_PASSWORD;
       const mysql = require("mysql2/promise");
       const conn = await mysql.createConnection({
         user: "root",
         host: mysqlHost,
         port: mysqlPort,
+        password: mysqlPass,
       });
 
       await conn.query(`CREATE DATABASE ${adminUserName};`);
