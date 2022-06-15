@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CSV App Test Suite should match the first record by axios client 1`] = `
+Object {
+  "@odata.context": "$metadata#TypeEntity/$entity",
+  "Active": true,
+  "Age": 19,
+  "BirthDay": "1995-11-11",
+  "BlobDoc": "SGVsbG8gQ0RTIEJpbmFyeQ==",
+  "GlobalUUID": "0da69f3e-3e49-46c6-9eee-3e7e62ddb15d",
+  "Height": 177.22,
+  "ID": 1,
+  "IDCard": 99132132,
+  "Name": "Theo 1",
+  "Sign": "2022-06-10T20:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "Weight": 123,
+}
+`;
+
+exports[`CSV App Test Suite should match the first record by cds API 1`] = `
+Object {
+  "Active": true,
+  "Age": 19,
+  "BirthDay": "1995-11-11",
+  "BlobDoc": Object {
+    "data": Array [
+      72,
+      101,
+      108,
+      108,
+      111,
+      32,
+      67,
+      68,
+      83,
+      32,
+      66,
+      105,
+      110,
+      97,
+      114,
+      121,
+    ],
+    "type": "Buffer",
+  },
+  "GlobalUUID": "0da69f3e-3e49-46c6-9eee-3e7e62ddb15d",
+  "Height": 177.22,
+  "ID": "1",
+  "IDCard": "99132132",
+  "Name": "Theo 1",
+  "Sign": "2022-06-10T20:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "Weight": "123",
+}
+`;
+
+exports[`CSV App Test Suite should match the second record by axios client 1`] = `
+Object {
+  "@odata.context": "$metadata#TypeEntity/$entity",
+  "Active": false,
+  "Age": 23,
+  "BirthDay": "1981-05-07",
+  "BlobDoc": "d3d3dw==",
+  "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7e",
+  "Height": 15435.43,
+  "ID": 2,
+  "IDCard": 321321,
+  "Name": "Theo 2",
+  "Sign": "2022-06-10T20:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "Weight": 322,
+}
+`;
+
+exports[`CSV App Test Suite should match the second record by cds API 1`] = `
+Object {
+  "Active": false,
+  "Age": 23,
+  "BirthDay": "1981-05-07",
+  "BlobDoc": Object {
+    "data": Array [
+      119,
+      119,
+      119,
+      119,
+    ],
+    "type": "Buffer",
+  },
+  "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7e",
+  "Height": 15435.43,
+  "ID": "2",
+  "IDCard": "321321",
+  "Name": "Theo 2",
+  "Sign": "2022-06-10T20:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "Weight": "322",
+}
+`;
+
+exports[`CSV App Test Suite should support automatically migrate csv data 1`] = `
+Object {
+  "@odata.context": "$metadata#Peoples",
+  "value": Array [
+    Object {
+      "ID": 1,
+      "Name": "Theo 1",
+    },
+    Object {
+      "ID": 2,
+      "Name": "Theo 2",
+    },
+  ],
+}
+`;
