@@ -185,7 +185,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
 - The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
 - The `Boolean` type is represented as `TINYINT(1)` in mysql server, as a result, `boolean default true/false` will be converted to `TINYINT DEFAULT 1/0`.
-- The `incrementId
+- The `incrementId` aspect could not works well with `managed composition` because mysql do not support `composite primary key` contains an `auto_increment` column
 
 ## [CHANGELOG](./CHANGELOG.md)
 
