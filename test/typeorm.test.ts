@@ -1,5 +1,5 @@
 import { pick, range, } from "@newdash/newdash";
-import { ConnectionOptions } from "typeorm";
+import { DataSourceOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
 import { doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
@@ -59,7 +59,9 @@ describe("TypeORM Test Suite", () => {
 
     const entityList = CSNs.map(csnToEntity);
 
-    const baseOption: ConnectionOptions = {
+    expect(entityList).toMatchSnapshot();
+
+    const baseOption: DataSourceOptions = {
       ...getTestTypeORMOptions(),
       name: "migrate-test-01",
       type: "mysql",
