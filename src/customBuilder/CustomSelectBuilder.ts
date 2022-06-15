@@ -1,5 +1,6 @@
 import { CSN } from "@sap/cds/apis/csn";
 import { SelectBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import { Definition } from "cds-internal-tool";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 export = class CustomSelectBuilder extends SelectBuilder {
@@ -28,6 +29,24 @@ export = class CustomSelectBuilder extends SelectBuilder {
     return FunctionBuilder;
   }
 
-  _forUpdate() {}
-  
+  get SelectBuilder() {
+    const SelectBuilder = require("./CustomSelectBuilder");
+    Object.defineProperty(this, "SelectBuilder", { value: SelectBuilder });
+    return SelectBuilder;
+  }
+
+  _forUpdate() { }
+
+  _fromElement(element: Definition, parent: any, i = 0) {
+    // avoid: ER_DERIVED_MUST_HAVE_ALIAS of mysql database 
+    // (double brackets without alias for inner table)
+    if (element.as === undefined && parent === undefined) {
+      return super._fromElement(
+        { ...element, as: `tmp_table_${i ?? 9}` },
+        parent,
+        i
+      );
+    }
+    return super._fromElement(element, parent, i);
+  }
 };

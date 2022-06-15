@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deep Operation Test Suite should support deep composition creation 1`] = `
+Object {
+  "@odata.context": "$metadata#Person(addresses())/$entity",
+  "ID": 1,
+  "Name": "Person 1",
+  "addresses": Array [
+    Object {
+      "City": "Chengdu",
+      "Country": "CN",
+      "ID": 1,
+      "createdAt": "2022-06-15T07:40:23.115Z",
+      "createdBy": "alice",
+      "modifiedAt": "2022-06-15T07:40:23.115Z",
+      "modifiedBy": "alice",
+      "up__ID": 1,
+    },
+    Object {
+      "City": "Shanghai",
+      "Country": "CN",
+      "ID": 2,
+      "createdAt": "2022-06-15T07:40:23.115Z",
+      "createdBy": "alice",
+      "modifiedAt": "2022-06-15T07:40:23.115Z",
+      "modifiedBy": "alice",
+      "up__ID": 1,
+    },
+    Object {
+      "City": "Shanghai",
+      "Country": "CN",
+      "ID": 3,
+      "createdAt": "2022-06-15T07:40:23.115Z",
+      "createdBy": "alice",
+      "modifiedAt": "2022-06-15T07:40:23.115Z",
+      "modifiedBy": "alice",
+      "up__ID": 1,
+    },
+  ],
+  "createdAt": "2022-06-15T07:40:23.115Z",
+  "createdBy": "alice",
+  "modifiedAt": "2022-06-15T07:40:23.115Z",
+  "modifiedBy": "alice",
+}
+`;

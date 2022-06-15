@@ -1,0 +1,17 @@
+{
+  "name": "deep-test-suite",
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "dialect": "sqlite",
+        "csv": {
+          "migrate": false
+        }
+      },
+      "mysql": {
+        "impl": "../../../src/index"
+      }
+    }
+  }
+}

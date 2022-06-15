@@ -43,6 +43,9 @@ export const getTestTypeORMOptions = () => {
   );
 };
 
+/**
+ * erase database table & data before each case
+ */
 export async function doBeforeEach() {
   await sleep(100);
   await cleanDB();
