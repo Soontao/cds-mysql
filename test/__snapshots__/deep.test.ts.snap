@@ -27,3 +27,47 @@ Object {
   ],
 }
 `;
+
+exports[`Deep Operation Test Suite should support deep update scenario: put update 1`] = `
+Object {
+  "@odata.context": "$metadata#Person(addresses())/$entity",
+  "ID": 1,
+  "Name": "Person 1 Updated by PUT",
+  "addresses": Array [
+    Object {
+      "City": "Unknown",
+      "Country": "UK",
+      "ID": 1,
+      "up__ID": 1,
+    },
+    Object {
+      "City": "Shanghai Updated",
+      "Country": "CN",
+      "ID": 3,
+      "up__ID": 1,
+    },
+  ],
+}
+`;
+
+exports[`Deep Operation Test Suite should support deep update scenario: patch update 1`] = `
+Object {
+  "@odata.context": "$metadata#Person(addresses())/$entity",
+  "ID": 1,
+  "Name": "Person 1 Updated by PATCH",
+  "addresses": Array [
+    Object {
+      "City": "Chengdu",
+      "Country": "CN",
+      "ID": 1,
+      "up__ID": 1,
+    },
+    Object {
+      "City": null,
+      "Country": "CN",
+      "ID": 3,
+      "up__ID": 1,
+    },
+  ],
+}
+`;

@@ -17,7 +17,7 @@
 
 - [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
 - [x] deep insert for association/composition
-  - [ ] deep update test case
+  - [ ] deep update/delete test case
 - [x] full text search
 - [x] deploy & schema migration
 - [x] migration optimization (ignore drop in some case)

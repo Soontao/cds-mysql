@@ -40,5 +40,47 @@ describe("Deep Operation Test Suite", () => {
     expect(response.data).toMatchSnapshot();
   });
 
+  it("should support deep update scenario", async () => {
+    let response = await client.put("/deep/Person(1)", {
+      ID: 1,
+      Name: "Person 1 Updated by PUT",
+      addresses: [
+        {
+          ID: 1,
+        },
+        {
+          ID: 3,
+          Country: "CN",
+          City: "Shanghai Updated",
+        },
+      ]
+    });
+    expect(response.status).toBe(200);
+
+    const { data } = await client.get("/deep/Person(1)?$expand=addresses");
+    expect(data).toMatchSnapshot("put update");
+
+    response = await client.patch("/deep/Person(1)", {
+      ID: 1,
+      Name: "Person 1 Updated by PATCH",
+      addresses: [
+        {
+          ID: 1,
+          Country: "CN",
+          City: "Chengdu",
+        },
+        {
+          ID: 3,
+          Country: "CN",
+        },
+      ]
+    });
+
+
+    const r2 = await client.get("/deep/Person(1)?$expand=addresses");
+    expect(r2.data).toMatchSnapshot("patch update");
+
+  });
+
 
 });
