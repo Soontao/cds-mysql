@@ -3,6 +3,20 @@ import { SelectBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import { Definition } from "cds-internal-tool";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
+/**
+ * create tmp number
+ * @returns 
+ */
+function nextTmpNumber() {
+  let tmp = nextTmpNumber?.tmp ?? 0;
+  tmp += 1;
+  tmp = tmp % 10000;
+  nextTmpNumber.tmp = tmp;
+  return tmp;
+}
+
+nextTmpNumber.tmp = 0;
+
 export = class CustomSelectBuilder extends SelectBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
@@ -42,7 +56,7 @@ export = class CustomSelectBuilder extends SelectBuilder {
     // (double brackets without alias for inner table)
     if (element.as === undefined && parent === undefined) {
       return super._fromElement(
-        { ...element, as: `tmp_table_${i ?? 9}` },
+        { ...element, as: `tmp_table_${nextTmpNumber()}` },
         parent,
         i
       );
