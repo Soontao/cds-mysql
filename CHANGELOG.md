@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.11](https://github.com/Soontao/cds-mysql/compare/v5.9.10...v5.9.11) (2022-06-15)
+
+
+### Features
+
+* deep insert test for composition ([f8fe60c](https://github.com/Soontao/cds-mysql/commit/f8fe60c6f718b7c7f12a1b5fc6997ec38b96f60a))
+* deep update test case ([edba2bc](https://github.com/Soontao/cds-mysql/commit/edba2bc89fd32a1f36741daedbb56f865e8bca0d))
+* provide snapshot for test ([5b97844](https://github.com/Soontao/cds-mysql/commit/5b978445ab69af6760fffc490cae09ff4dddea41))
+* validate for index ([f80ad77](https://github.com/Soontao/cds-mysql/commit/f80ad77abce4c682f626aa79089f8d3c1cadce99))
+
 ### [5.9.10](https://github.com/Soontao/cds-mysql/compare/v5.9.10-0...v5.9.10) (2022-06-10)
 
 
