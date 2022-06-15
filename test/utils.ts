@@ -2,7 +2,7 @@
 import { sleep } from "@newdash/newdash";
 import { cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
-import { ConnectionOptions, createConnection } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 import { v4 } from "uuid";
 import { MYSQL_CHARSET } from "../src/constants";
 
@@ -56,15 +56,16 @@ export async function doAfterAll() {
 }
 
 export const cleanDB = async () => {
-  const options: ConnectionOptions = {
+  const options: DataSourceOptions = {
     ...getTestTypeORMOptions(),
     name: "unit-test-clean-db",
   };
-  const conn = await createConnection(options);
+  const ds = new DataSource(options);
   try {
-    await conn.createQueryRunner().clearDatabase();
+    await ds.initialize();
+    await ds.createQueryRunner().clearDatabase();
   } finally {
-    if (conn.isInitialized) { await conn.destroy(); }
+    if (ds.isInitialized) { await ds.destroy(); }
   }
 
 };

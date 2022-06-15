@@ -16,41 +16,7 @@ describe("TypeORM Annotation Test Suite", () => {
       }
     `);
     const entities =  csnToEntity(csn);
-    expect(entities).toMatchObject([
-      {
-        options: {
-          indices: [
-            {
-              name: "NameIndex",
-              columns: [
-                "Name",
-              ],
-            },
-          ],
-          name: "Demo",
-          columns: {
-            ID: {
-              name: "ID",
-              type: "integer",
-              nullable: false,
-              default: undefined,
-              primary: true,
-            },
-            Name: {
-              name: "Name",
-              type: "nvarchar",
-              nullable: true,
-              default: null,
-              length: 255,
-            },
-          },
-          synchronize: true,
-          deps: [
-          ],
-          tableName: "Demo",
-        },
-      },
-    ]);
+    expect(entities).toMatchSnapshot();
   });
 
 });
