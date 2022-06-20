@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
-import { cwdRequireCDS, fuzzy, LinkedModel, Logger } from "cds-internal-tool";
+import { CSN, cwdRequireCDS, fuzzy, LinkedModel, Logger } from "cds-internal-tool";
 import MySQLParser, {
   ColumnDefinitionContext,
   CreateTableContext,
@@ -85,7 +85,7 @@ class CDSListener implements MySQLParserListener {
       }
 
       // not association or composition
-      if(!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
+      if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
         const typeOrmColumnConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, eleDef);
         if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
           Object.assign(
@@ -193,9 +193,9 @@ class CDSListener implements MySQLParserListener {
                 const columnEle = fuzzy.findElement(entityDef, indexColumnName);
                 if (columnEle === undefined) {
                   logger.error(
-                    "entity", entityDef.name, 
-                    "index", indiceConfig.name, 
-                    "column", indexColumnName, 
+                    "entity", entityDef.name,
+                    "index", indiceConfig.name,
+                    "column", indexColumnName,
                     "not existed on entity definition"
                   );
                   // TODO: throw error
@@ -295,9 +295,9 @@ class CDSListener implements MySQLParserListener {
 /**
  * convert csn to typeorm entities
  *
- * @param model CSN model
+ * @param model plain CSN model
  */
-export function csnToEntity(model: any): Array<EntitySchema> {
+export function csnToEntity(model: CSN): Array<EntitySchema> {
   overwriteCDSCoreTypes();
   const listener: CDSListener = new CDSListener({ model: cds.reflect(model) });
   const parser = new MySQLParser({ parserListener: listener });

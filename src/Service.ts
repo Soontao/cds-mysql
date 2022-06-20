@@ -1,4 +1,4 @@
-import { cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger } from "cds-internal-tool";
+import { CSN, cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger, memorized } from "cds-internal-tool";
 import { createPool, Pool, Options as PoolOptions } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import type { DataSourceOptions } from "typeorm";
@@ -24,6 +24,10 @@ const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
   idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
 };
+
+const _rawCSN = memorized(async (m: LinkedModel) => {
+  return await cwdRequireCDS().load(m["$sources"]);
+});
 
 /**
  * MySQL Database Adapter for SAP CAP Framework
@@ -63,6 +67,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
      * tenant configuration
      */
     tenant?: {
+      eagerDeploy?: Array<string>;
       prefix?: string;
       auto?: boolean;
     };
@@ -100,6 +105,17 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _tenantProvider: TenantProvider;
 
+  async init() {
+    await super.init();
+    if (this.options?.tenant?.auto !== false) {
+      if (this.options?.tenant?.eagerDeploy?.length > 0) {
+        for (const eagerDeployTenant of this.options?.tenant?.eagerDeploy) {
+          await this.deploy(await _rawCSN(this.model), { tenant: eagerDeployTenant });
+        }
+      }
+    }
+  }
+
   /**
    * get connection pool for tenant
    *
@@ -119,7 +135,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
             const tenantCredential = { ...credential, dateStrings: true, charset: MYSQL_COLLATE };
 
             if (this.options?.tenant?.auto !== false) {
-              const tenantModel = await cwdRequireCDS().load(this.model["$sources"]);
+              const tenantModel = await _rawCSN(this.model);
               await this.deploy(tenantModel, { tenant });
 
               if (this.options?.csv?.migrate !== false) {
@@ -235,7 +251,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @param options deployment options
    * @returns 
    */
-  async deploy(model: LinkedModel, options?: { tenant: string }) {
+  async deploy(model: CSN, options?: { tenant: string }) {
     const tenant = options?.tenant ?? TENANT_DEFAULT;
     try {
       this._logger.info("migrating schema for tenant", tenant);
