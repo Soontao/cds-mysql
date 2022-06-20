@@ -33,7 +33,7 @@ export interface MySQLCredential {
   }
 }
 
-export type RleaseableConnection = Connection & {
+export type ReleasableConnection = Connection & {
   /**
    * release connection to pool
    */

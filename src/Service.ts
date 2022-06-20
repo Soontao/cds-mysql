@@ -14,7 +14,7 @@ import execute from "./execute";
 import { csnToEntity, migrate } from "./typeorm";
 import { migrateData } from "./typeorm/migrate";
 import { checkCdsVersion } from "./utils";
-import { MySQLCredential, RleaseableConnection } from "./types";
+import { MySQLCredential, ReleasableConnection } from "./types";
 import { ShareMysqlTenantProvider, TenantProvider } from "./tenant";
 
 const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
@@ -172,9 +172,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @override
    * @param tenant_id tenant id
    */
-  public async acquire(tenant_id: string): Promise<RleaseableConnection>;
+  public async acquire(tenant_id: string): Promise<ReleasableConnection>;
 
-  public async acquire(context: EventContext): Promise<RleaseableConnection>;
+  public async acquire(context: EventContext): Promise<ReleasableConnection>;
 
   public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg?.user?.tenant) ?? TENANT_DEFAULT;
