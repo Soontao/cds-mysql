@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { doAfterAll, doBeforeEach } from "./utils";
+import { doAfterAll } from "./utils";
 import { setupTest } from "cds-internal-tool";
 
 describe("Tenant Test Suite", () => {
@@ -8,8 +8,6 @@ describe("Tenant Test Suite", () => {
   const client = setupTest(__dirname, "./resources/integration");
   client.defaults.auth = { username: "alice", password: "admin" };
 
-
-  beforeEach(doBeforeEach);
 
   afterAll(doAfterAll);
 

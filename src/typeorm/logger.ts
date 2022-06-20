@@ -3,7 +3,7 @@
 import cds from "@sap/cds";
 import { Logger, QueryRunner } from "typeorm";
 
-const logger = cds.log("mysql|db");
+const logger = cds.log("typeorm");
 
 export class TypeORMLogger implements Logger {
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {

@@ -32,6 +32,7 @@
     - [ ] permission check
     - [ ] test
     - [x] migrate CSV on-demand (with option)
+      - [ ] CSV aspect `predefined`
   - [ ] dynamic database credential provider
   - [ ] admin database concept
     - [ ] `@admin` tenant entity & services

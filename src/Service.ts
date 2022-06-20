@@ -112,7 +112,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     if (this.options?.tenant?.deploy?.auto !== false) {
       if (this.options?.tenant?.deploy?.eager?.length > 0) {
         for (const eagerDeployTenant of this.options?.tenant?.deploy?.eager) {
-          await this.deploy(await _rawCSN(this.model), { tenant: eagerDeployTenant });
+          await this.getPool(eagerDeployTenant);
         }
       }
     }
@@ -133,7 +133,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
         (
           async () => {
             const credential = await this._tenantProvider.getCredential(tenant);
-            const poolOptions = { ...DEFAULT_POOL_OPTIONS, ...this.options?.pool }; // TODO: pool configuratino provider
+            const poolOptions = { ...DEFAULT_POOL_OPTIONS, ...this.options?.pool }; // TODO: pool configuration provider
             const tenantCredential = { ...credential, dateStrings: true, charset: MYSQL_COLLATE };
 
             if (this.options?.tenant?.deploy?.auto !== false) {
@@ -171,7 +171,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
               poolOptions,
             );
           }
-        )()
+        )().then(pool => { this._pools.set(tenant, pool); return pool; })
       );
 
 
