@@ -67,9 +67,11 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
      * tenant configuration
      */
     tenant?: {
-      eagerDeploy?: Array<string>;
+      deploy?: {
+        auto?: boolean;
+        eager?: Array<string>;
+      }
       prefix?: string;
-      auto?: boolean;
     };
     /**
      * connection pool options
@@ -107,9 +109,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   async init() {
     await super.init();
-    if (this.options?.tenant?.auto !== false) {
-      if (this.options?.tenant?.eagerDeploy?.length > 0) {
-        for (const eagerDeployTenant of this.options?.tenant?.eagerDeploy) {
+    if (this.options?.tenant?.deploy?.auto !== false) {
+      if (this.options?.tenant?.deploy?.eager?.length > 0) {
+        for (const eagerDeployTenant of this.options?.tenant?.deploy?.eager) {
           await this.deploy(await _rawCSN(this.model), { tenant: eagerDeployTenant });
         }
       }
@@ -134,7 +136,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
             const poolOptions = { ...DEFAULT_POOL_OPTIONS, ...this.options?.pool }; // TODO: pool configuratino provider
             const tenantCredential = { ...credential, dateStrings: true, charset: MYSQL_COLLATE };
 
-            if (this.options?.tenant?.auto !== false) {
+            if (this.options?.tenant?.deploy?.auto !== false) {
               const tenantModel = await _rawCSN(this.model);
               await this.deploy(tenantModel, { tenant });
 

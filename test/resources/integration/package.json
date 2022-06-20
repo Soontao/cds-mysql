@@ -6,6 +6,14 @@
         "dialect": "sqlite",
         "csv": {
           "migrate": false
+        },
+        "tenant": {
+          "deploy": {
+            "eager": [
+              "tenant_default",
+              "e5f878d5-7985-407b-a1cb-87a8716f1904"
+            ]
+          }
         }
       },
       "mysql": {
