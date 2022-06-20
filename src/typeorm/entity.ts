@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
 import { trimPrefix, trimSuffix } from "@newdash/newdash";
-import { CSN, cwdRequireCDS, fuzzy, LinkedModel, Logger } from "cds-internal-tool";
+import { CSN, cwdRequireCDS, fuzzy, groupByKeyPrefix, LinkedModel, Logger } from "cds-internal-tool";
 import MySQLParser, {
   ColumnDefinitionContext,
   CreateTableContext,
@@ -14,7 +14,7 @@ import MySQLParser, {
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
-import { groupByKey, overwriteCDSCoreTypes } from "../utils";
+import { overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
 
@@ -86,7 +86,7 @@ class CDSListener implements MySQLParserListener {
 
       // not association or composition
       if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
-        const typeOrmColumnConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, eleDef);
+        const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
         if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
           Object.assign(
             column,
@@ -182,7 +182,7 @@ class CDSListener implements MySQLParserListener {
   exitCreateTable(ctx: CreateTableContext) {
     const entityDef = fuzzy.findEntity(this._tmp.name, this._model);
     if (entityDef !== undefined) {
-      const schemaConfig = groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, entityDef) as Partial<EntitySchemaOptionsWithDeps>;
+      const schemaConfig = groupByKeyPrefix(entityDef, ANNOTATION_CDS_TYPEORM_CONFIG) as Partial<EntitySchemaOptionsWithDeps>;
 
       // TODO: move to check
       if (schemaConfig.indices?.length > 0) {

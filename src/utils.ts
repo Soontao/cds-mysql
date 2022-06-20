@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 
+import { groupByKeyPrefix } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
 
 /**
@@ -28,15 +29,6 @@ export function checkCdsVersion() {
     throw new Error(`lib 'cds-mysql' requires '@sap/cds' with version: '${VERSION}', but installed '@sap/cds' version is: 
     ${cds.version}', please try other version 'cds-mysql'`);
   }
-}
-
-
-// TODO: reuse
-export function groupByKey(prefix: string, obj: any): Partial<typeof obj> {
-  return Object
-    .keys(obj)
-    .filter(key => key.startsWith(prefix))
-    .reduce((pre, cur) => { pre[cur.slice(cur === prefix ? prefix.length : (prefix.length + 1))] = obj[cur]; return pre; }, {});
 }
 
 /**
@@ -80,6 +72,6 @@ export function mustBeArray(obj: any): Array<any> {
 
 export const getIncrementalKey = memorized((entityDef: any): any | undefined => {
   const [key] = Object.values(entityDef?.keys)
-    .filter(keyEle => groupByKey(ANNOTATION_CDS_TYPEORM_CONFIG, keyEle)?.generated === "increment");
+    .filter(keyEle => groupByKeyPrefix(keyEle, ANNOTATION_CDS_TYPEORM_CONFIG)?.generated === "increment");
   return key;
 });
