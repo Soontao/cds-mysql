@@ -29,6 +29,43 @@ const _rawCSN = memorized(async (m: LinkedModel) => {
   return await cwdRequireCDS().load(m["$sources"]);
 });
 
+export interface MysqlDatabaseOptions {
+  /**
+   * database credentials
+   */
+  credentials: MySQLCredential;
+  /**
+   * tenant configuration
+   */
+  tenant?: {
+    deploy?: {
+      /**
+       * auto migrate database schema when connect to it
+       */
+      auto?: boolean;
+      /**
+       * eager deploy tenant id list 
+       * the migration of those tenants will be performed when server startup
+       */
+      eager?: Array<string>;
+    };
+    /**
+     * tenant database name prefix
+     */
+    prefix?: string;
+  };
+  /**
+   * connection pool options
+   */
+  pool?: PoolOptions;
+  csv?: {
+    /**
+     * migrate CSV on deployment
+     */
+    migrate?: boolean;
+  };
+}
+
 /**
  * MySQL Database Adapter for SAP CAP Framework
  */
@@ -58,32 +95,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     this._tenantProvider = new ShareMysqlTenantProvider(this); // TODO: extract to options
   }
 
-  private options: {
-    /**
-     * database credentials
-     */
-    credentials: MySQLCredential;
-    /**
-     * tenant configuration
-     */
-    tenant?: {
-      deploy?: {
-        auto?: boolean;
-        eager?: Array<string>;
-      }
-      prefix?: string;
-    };
-    /**
-     * connection pool options
-     */
-    pool?: PoolOptions;
-    csv?: {
-      /**
-       * migrate CSV on deployment
-       */
-      migrate?: boolean;
-    }
-  };
+  private options: MysqlDatabaseOptions;
 
   private model: LinkedModel;
 
