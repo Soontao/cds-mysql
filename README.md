@@ -90,7 +90,8 @@ edit your `package.json` > `cds` node
   "requires": {
     "db": {
       "kind": "mysql",
-      "dialect": "sqlite" // add this if you want to make `localized` elements works
+      // add 'dialect' if you want to let the `localized` elements work
+      "dialect": "sqlite" 
     },
     "mysql": {
       "impl": "cds-mysql"
