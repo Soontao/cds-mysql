@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.13](https://github.com/Soontao/cds-mysql/compare/v5.9.12...v5.9.13) (2022-06-21)
+
+
+### Features
+
+* csv aspect pre-delivery ([418c363](https://github.com/Soontao/cds-mysql/commit/418c363cbec3be8a1aa416966938a444a5a93c5d))
+* eager pool for eager deploy ([a8a5d66](https://github.com/Soontao/cds-mysql/commit/a8a5d66e1f907bfe2ecbbb954308a004092a0906))
+
 ### [5.9.12](https://github.com/Soontao/cds-mysql/compare/v5.9.11...v5.9.12) (2022-06-20)
 
 
