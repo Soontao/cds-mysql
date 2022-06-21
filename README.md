@@ -104,9 +104,9 @@ edit your `package.json` > `cds` node
 
 > some advanced usage
 
-### Auto Incremental Key
+### Auto Incremental Key Aspect
 
-> define entity with `incrementalID` aspect like cds built-in `cuid` aspect
+> define entity with `incrementalID` aspect to support the `AUTO_INCREMENT` syntax in `mysql` db
 
 ```groovy
 using {incrementID} from 'cds-mysql';
@@ -114,6 +114,24 @@ using {incrementID} from 'cds-mysql';
 // the entity `Animal` will have an auto-filled 'ID' field 
 // ONLY support single record insert
 entity Animal : incrementID {
+  Name : String(255);
+}
+```
+
+
+### CSV Migration
+
+`cds-mysql` has a built-in csv migrator, it will migrate data with key validation.
+
+- if key of entity is existed, skip
+- if key of entity not existed, insert (if the records has been deleted, its also will be inserted)
+
+> csv migrator will automatically fill the `PreDelivery` field as `true`
+
+```groovy
+using {incrementalKey, preDelivery} from 'cds-mysql';
+
+entity Person : incrementalKey, preDelivery {
   Name : String(255);
 }
 ```
@@ -133,7 +151,76 @@ entity Product : cuid {
 }
 ```
 
-### Setup Database for Cloud Foundry
+### Mysql Configurations
+
+> you can specify the configuration of `cds-mysql` at the `cds.requires.db` node
+
+```json
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "dialect": "sqlite",
+        "csv": { "migrate": false },
+        "tenant": {
+          "deploy": {
+            "eager": [
+              "default"
+            ]
+          }
+        }
+      },
+      "mysql": {
+        "impl": "cds-mysql"
+      }
+    }
+  }
+}
+```
+
+> interface
+
+```ts
+interface MysqlDatabaseOptions {
+  /**
+   * database credentials
+   */
+  credentials: MySQLCredential;
+  /**
+   * tenant configuration
+   */
+  tenant?: {
+    deploy?: {
+      /**
+       * auto migrate database schema when connect to it
+       */
+      auto?: boolean;
+      /**
+       * eager deploy tenant id list 
+       * the migration of those tenants will be performed when server startup
+       */
+      eager?: Array<string>;
+    };
+    /**
+     * tenant database name prefix
+     */
+    prefix?: string;
+  };
+  /**
+   * connection pool options
+   */
+  pool?: PoolOptions;
+  csv?: {
+    /**
+     * migrate CSV on deployment
+     */
+    migrate?: boolean;
+  };
+}
+```
+
+### Setup Database Credential for Cloud Foundry
 
 > if you want to run cds-mysql on cloud foundry
 
@@ -149,7 +236,7 @@ you can convert PEM cert to json format with [this document](https://docs.vmware
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 ```
 
-## Schema Migration
+### Schema Migration
 
 `cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, parse the `DDL` statements and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
 
@@ -164,12 +251,6 @@ graph LR
 It will be fully automatically, sync changed `columns`, `views`.
 
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
-
-**The mysql database must be empty (all table must be managed by cds-mysql, no pre-defined tables), otherwise the migration will be failed because typeorm detect the metadata by itself table**
-
-## Enhanced CSV Migration
-
-`cds-mysql-deploy` has a built-in csv migration tool, it will migrate data with key validation (enhance `cds` built-in one for sqlite).
 
 
 ## Compatibility Table

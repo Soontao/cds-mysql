@@ -20,7 +20,14 @@ define aspect incrementalKey : incrementID {}
  */
 define aspect preDelivery {
   /**
-   * is PreDelivery data or not
+   * is PreDelivery data, cds-mysql CSV migration will fill it as
+   * `true`
    */
   PreDelivery : Boolean default false;
+  /**
+   * when you want to delete the data, just set this field as `true`
+   * , and filter by service projection, so that the CSV migrator
+   * will not `re-import` the pre-delivery data
+   */
+  Disabled    : Boolean default false;
 }

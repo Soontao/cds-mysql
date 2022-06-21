@@ -1,12 +1,15 @@
 namespace test.resources.csv.app.db;
 
-using {incrementID} from '../../../../index';
+using {
+  incrementalKey,
+  preDelivery,
+} from '../../../../index';
 
-entity Person : incrementID {
+entity Person : incrementalKey, preDelivery {
   Name : String(255);
 }
 
-entity ComplexTypeEntity : incrementID {
+entity ComplexTypeEntity : incrementalKey, preDelivery {
   Name       : String(125);
   Age        : Integer;
   IDCard     : Integer64;

@@ -52,6 +52,13 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
   }
 }
 
+/**
+ * migrate CSV data
+ * 
+ * @param credential 
+ * @param model 
+ * @param csvList 
+ */
 export async function migrateData(
   credential: ConnectionOptions,
   model: LinkedModel,
@@ -86,24 +93,28 @@ export async function migrateData(
         const entityName = filename.replace(/[_-]/g, "."); // name_space_entity.csv -> name.space.entity
 
         if (entityName in model.definitions) {
-          const meta = model.definitions[entityName] as EntityDefinition;
+          const entityModel = model.definitions[entityName] as EntityDefinition;
 
-          const entires: Array<Array<string>> = CSV.read(csvFile);
-          const tableName = entityName.replace(/\./g, "_");
 
-          if (meta === undefined) {
+          if (entityModel === undefined) {
             logger.warn(entityName, "is not in the model");
             continue;
           }
 
-          const keys = Object.values(meta.elements)
+          // eslint-disable-next-line max-len
+          const preDeliveryModel = entityModel.includes.includes("preDelivery") && entityModel.elements["PreDelivery"].type === "cds.Boolean";
+
+          const entires: Array<Array<string>> = CSV.read(csvFile);
+          const tableName = entityName.replace(/\./g, "_");
+
+          const keys = Object.values(entityModel.elements)
             .filter((e: any) => e.key === true)
             .map((e: any) => e.name);
 
           const [headers, ...rows] = entires;
 
           const transformColumnsIndex = Object
-            .values(meta.elements)
+            .values(entityModel.elements)
             .filter(ele => ["cds.Binary", "cds.LargeBinary", "cds.Integer"].includes(ele.type))
             .map(ele => ({
               index: headers.indexOf(ele.name),
@@ -161,7 +172,9 @@ export async function migrateData(
 
 
           const batchInserts = [];
-
+          if (preDeliveryModel) {
+            headers.push("PreDelivery");
+          }
           const headerList = headers.join(", ");
 
           for (const entry of rows) {
@@ -172,6 +185,7 @@ export async function migrateData(
               .query(`SELECT COUNT(1) as EXIST FROM ${tableName} WHERE ${keyExpr}`) as any;
 
             if (EXIST === 0) {
+              if (preDeliveryModel) { entry.push(true as any); }
               batchInserts.push(entry);
             }
             else {
@@ -181,6 +195,7 @@ export async function migrateData(
 
           // batch insert
           if (batchInserts.length > 0) {
+
             logger.debug("batch inserts:", entityName, "with", batchInserts.length, "records");
 
             const [{ affectedRows }] = await connection
