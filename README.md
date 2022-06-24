@@ -109,7 +109,7 @@ edit your `package.json` > `cds` node
 
 > define entity with `incrementalID` aspect to support the `AUTO_INCREMENT` syntax in `mysql` db
 
-> **NOT COMPATIBLE** with deep composition/association operations
+> **NOT COMPATIBLE** with deep composition/association operations, its better to use the `@sap/cds/common - cuid` aspect for deep operations
 
 ```groovy
 using {incrementID} from 'cds-mysql';
