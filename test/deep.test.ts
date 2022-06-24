@@ -84,6 +84,7 @@ describe("Deep Operation Test Suite", () => {
 
   it("should support deletion", async () => {
     const response = await client.delete("/deep/Person(1)");
+    expect(response.data?.error?.message).toBeUndefined();
     expect(response.status).toBe(204);
   });
 
