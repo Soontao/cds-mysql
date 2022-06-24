@@ -4,7 +4,7 @@ import { DataSourceOptions } from "typeorm";
 import { SqlInMemory } from "typeorm/driver/SqlInMemory";
 import { TypeORMLogger } from "./logger";
 import { CDSMySQLDataSource } from "./mysql";
-import { CDSMysqlRuntimeSupportEntity } from "./support";
+import { supportEntities } from "./support";
 
 
 export async function migrate(connectionOptions: DataSourceOptions, dryRun: true): Promise<SqlInMemory>;
@@ -14,7 +14,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
   // TODO: lock for migration
   const ds = new CDSMySQLDataSource({
     ...connectionOptions,
-    entities: [...(connectionOptions?.entities as [] ?? []), CDSMysqlRuntimeSupportEntity],
+    entities: [...(connectionOptions?.entities as [] ?? []), ...supportEntities],
     logging: true,
     logger: TypeORMLogger,
   });
