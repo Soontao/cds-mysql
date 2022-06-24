@@ -5,7 +5,7 @@ export const CDSMysqlRuntimeSupportEntity: EntitySchema = new EntitySchema({
   name: "cds_mysql_runtime_support",
   tableName: "cds_mysql_runtime_support",
   columns: {
-    key: { type: "nvarchar", length: 255, primary: true, comment: "key" },
+    key: { type: "nvarchar", length: 80, primary: true, comment: "key" },
     value: {
       type: "nvarchar",
       length: 4000,
