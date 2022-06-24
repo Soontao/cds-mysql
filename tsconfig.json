@@ -2,8 +2,5 @@
   "extends": "./tsconfig.base",
   "include": [
     "src",
-  ],
-  "exclude": [
-    "commitlint.config.js"
   ]
 }

@@ -108,6 +108,8 @@ edit your `package.json` > `cds` node
 
 > define entity with `incrementalID` aspect to support the `AUTO_INCREMENT` syntax in `mysql` db
 
+> **NOT COMPATIBLE** with deep composition/association operations
+
 ```groovy
 using {incrementID} from 'cds-mysql';
 
@@ -183,13 +185,6 @@ entity Product : cuid {
 
 ```ts
 interface MysqlDatabaseOptions {
-  /**
-   * database credentials
-   */
-  credentials: MySQLCredential;
-  /**
-   * tenant configuration
-   */
   tenant?: {
     deploy?: {
       /**

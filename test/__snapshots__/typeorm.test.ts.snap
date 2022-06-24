@@ -1619,3 +1619,617 @@ WHERE People_0.Active = TRUE;",
   ],
 ]
 `;
+
+exports[`TypeORM Test Suite should support migrate tables: 0->1 1`] = `
+Array [
+  Object {
+    "parameters": undefined,
+    "query": "CREATE TABLE \`test_resources_migrate_People\` (\`ID\` varchar(36) NOT NULL, \`Name\` varchar(100) NULL, PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE TABLE \`cds_mysql_runtime_support\` (\`key\` varchar(255) NOT NULL, \`value\` varchar(4000) NOT NULL, PRIMARY KEY (\`key\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 1->2 1`] = `
+Array [
+  Object {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_People\` ADD \`Age\` int NULL",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_People\` DROP PRIMARY KEY",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_People\` ADD PRIMARY KEY (\`ID\`, \`Name\`)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_People\` CHANGE \`Name\` \`Name\` varchar(100) NOT NULL",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 2->3 1`] = `
+Array [
+  Object {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_People\` ADD \`Active\` tinyint NULL DEFAULT 0",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_ActivePeople\` AS SELECT
+  People_0.ID,
+  People_0.Name,
+  People_0.Age,
+  People_0.Active
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_ActivePeople",
+      "SELECT
+  People_0.ID,
+  People_0.Name,
+  People_0.Age,
+  People_0.Active
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 3->4 1`] = `
+Array [
+  Object {
+    "parameters": Array [
+      "VIEW",
+      "test_resources_migrate_ActivePeople",
+      "cdstest",
+    ],
+    "query": "DELETE FROM \`cdstest\`.\`typeorm_metadata\` WHERE \`type\` = ? AND \`name\` = ? AND \`schema\` = ?",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "DROP VIEW \`test_resources_migrate_ActivePeople\`",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_InActivePeople\` AS SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = FALSE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_InActivePeople",
+      "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = FALSE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_ActivePeople\` AS SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_ActivePeople",
+      "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_AllPeoples\` AS SELECT
+  ActivePeople_0.Name
+FROM test_resources_migrate_ActivePeople AS ActivePeople_0
+UNION SELECT
+  InActivePeople_1.Name
+FROM test_resources_migrate_InActivePeople AS InActivePeople_1;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_AllPeoples",
+      "SELECT
+  ActivePeople_0.Name
+FROM test_resources_migrate_ActivePeople AS ActivePeople_0
+UNION SELECT
+  InActivePeople_1.Name
+FROM test_resources_migrate_InActivePeople AS InActivePeople_1;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 4->5 1`] = `
+Array [
+  Object {
+    "parameters": undefined,
+    "query": "CREATE TABLE \`test_resources_migrate_Job\` (\`ID\` varchar(36) NOT NULL, \`Title\` varchar(255) NULL, \`Level\` int NULL, \`Active\` tinyint NULL DEFAULT 0, PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_ActiveJobs",
+      "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 5->6 1`] = `
+Array [
+  Object {
+    "parameters": Array [
+      "VIEW",
+      "test_resources_migrate_AllPeoples",
+      "cdstest",
+    ],
+    "query": "DELETE FROM \`cdstest\`.\`typeorm_metadata\` WHERE \`type\` = ? AND \`name\` = ? AND \`schema\` = ?",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "DROP VIEW \`test_resources_migrate_AllPeoples\`",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_AllPeoples\` AS SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_AllPeoples",
+      "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 6->7 1`] = `
+Array [
+  Object {
+    "parameters": Array [
+      "VIEW",
+      "test_resources_migrate_ActiveJobs",
+      "cdstest",
+    ],
+    "query": "DELETE FROM \`cdstest\`.\`typeorm_metadata\` WHERE \`type\` = ? AND \`name\` = ? AND \`schema\` = ?",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "DROP VIEW \`test_resources_migrate_ActiveJobs\`",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_Job\` ADD \`People_ID\` varchar(36) NULL",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_Job\` ADD \`People_Name\` varchar(100) NULL",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_ActiveJobs",
+      "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "test_resources_migrate_PeopleWithJob",
+      "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 7->8 1`] = `
+Array [
+  Object {
+    "parameters": undefined,
+    "query": "CREATE TABLE \`test_resources_migrate_Job_texts\` (\`locale\` varchar(14) NOT NULL, \`ID\` varchar(36) NOT NULL, \`Title\` varchar(255) NULL, PRIMARY KEY (\`locale\`, \`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_fr_test_resources_migrate_Job\` AS SELECT
+  L_0.ID,
+  coalesce(localized_fr_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_fr_test_resources_migrate_Job",
+      "SELECT
+  L_0.ID,
+  coalesce(localized_fr_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_fr_test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_fr_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_fr_test_resources_migrate_ActiveJobs",
+      "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_fr_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_de_test_resources_migrate_Job\` AS SELECT
+  L_0.ID,
+  coalesce(localized_de_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_de_test_resources_migrate_Job",
+      "SELECT
+  L_0.ID,
+  coalesce(localized_de_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_de_test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_de_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_de_test_resources_migrate_ActiveJobs",
+      "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_de_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_test_resources_migrate_Job\` AS SELECT
+  L_0.ID,
+  coalesce(localized_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_test_resources_migrate_Job",
+      "SELECT
+  L_0.ID,
+  coalesce(localized_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_test_resources_migrate_ActiveJobs",
+      "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_fr_test_resources_migrate_People\` AS SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_fr_test_resources_migrate_People",
+      "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_fr_test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_fr_test_resources_migrate_PeopleWithJob",
+      "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_de_test_resources_migrate_People\` AS SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_de_test_resources_migrate_People",
+      "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_de_test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_de_test_resources_migrate_PeopleWithJob",
+      "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_test_resources_migrate_People\` AS SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_test_resources_migrate_People",
+      "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+  Object {
+    "parameters": undefined,
+    "query": "CREATE VIEW \`localized_test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+  },
+  Object {
+    "parameters": Array [
+      "cdstest",
+      "VIEW",
+      "localized_test_resources_migrate_PeopleWithJob",
+      "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+    ],
+    "query": "INSERT INTO \`cdstest\`.\`typeorm_metadata\`(\`database\`, \`schema\`, \`table\`, \`type\`, \`name\`, \`value\`) VALUES (DEFAULT, ?, DEFAULT, ?, ?, ?)",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 8->9 1`] = `Array []`;
+
+exports[`TypeORM Test Suite should support sha256 hash: hash length 1`] = `64`;
+
+exports[`TypeORM Test Suite should support sha256 hash: hash value 1`] = `"28a01011d7022938a0a7ea81c32c4c76d1905e9f393efef7c90ccb24f1b227f4"`;

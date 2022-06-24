@@ -1,6 +1,8 @@
-import { pick, range, } from "@newdash/newdash";
+import { pick, range } from "@newdash/newdash";
+import path from "path";
 import { DataSourceOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
+import { sha256 } from "../src/typeorm/csv";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
 import { doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
 
@@ -68,8 +70,6 @@ describe("TypeORM Test Suite", () => {
       logging: false
     };
 
-    const EXPECTED_MIGRATE_DDL = require("./resources/migrate/expected.migrate.json");
-
     // do migration one by one
 
     for (let idx = 0; idx < entityList.length; idx++) {
@@ -80,20 +80,7 @@ describe("TypeORM Test Suite", () => {
         pick(query, "query", "parameters")
       );
 
-      // replace with current UT database name
-      const expected = EXPECTED_MIGRATE_DDL[migrationId];
-
-      for (let idx = 0; idx < ddl.length; idx++) {
-        const aDdl = ddl[idx];
-        const aExpected = expected[idx];
-
-        aExpected.query = aDdl.query;
-        aExpected.parameters = aDdl.parameters;
-
-        expect(aDdl.query).toBe(aExpected.query);
-
-        expect(aDdl.parameters).toStrictEqual(aExpected.parameters);
-      }
+      expect(ddl).toMatchSnapshot(migrationId);
 
       // perform really migration
       await migrate({ ...baseOption, entities: entities });
@@ -105,13 +92,12 @@ describe("TypeORM Test Suite", () => {
       expect(ddlAfterMigrate).toHaveLength(0);
     }
 
-    // utils for override the assert
-    // await writeFile(
-    //   path.join(__dirname, "./resources/migrate/expected.migrate.json"),
-    //   JSON.stringify(EXPECTED_MIGRATE_DDL, undefined, 2),
-    //   { encoding: "utf-8" }
-    // );
+  });
 
+  it("should support sha256 hash", async () => {
+    const hashOfBigSizeTableContent = await sha256(path.join(__dirname, "./resources/big-size-table.cds"));
+    expect(hashOfBigSizeTableContent.length).toMatchSnapshot("hash length");
+    expect(hashOfBigSizeTableContent).toMatchSnapshot("hash value");
   });
 
 });
