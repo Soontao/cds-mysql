@@ -1632,7 +1632,7 @@ Array [
   },
   Object {
     "parameters": undefined,
-    "query": "CREATE TABLE \`cds_mysql_runtime_support\` (\`key\` varchar(255) NOT NULL COMMENT 'key', \`value\` varchar(4000) NOT NULL COMMENT 'value', PRIMARY KEY (\`key\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+    "query": "CREATE TABLE \`cds_mysql_runtime_support\` (\`key\` varchar(80) NOT NULL COMMENT 'key', \`value\` varchar(4000) NOT NULL COMMENT 'value', PRIMARY KEY (\`key\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
   },
 ]
 `;
