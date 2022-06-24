@@ -47,7 +47,7 @@ export interface MysqlDatabaseOptions {
        * eager deploy tenant id list 
        * the migration of those tenants will be performed when server startup
        */
-      eager?: Array<string>;
+      eager?: Array<string> | string;
     };
     /**
      * tenant database name prefix
@@ -122,9 +122,22 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   async init() {
     await super.init();
     if (this.options?.tenant?.deploy?.auto !== false) {
-      if (this.options?.tenant?.deploy?.eager?.length > 0) {
-        for (const eagerDeployTenant of this.options?.tenant?.deploy?.eager) {
-          await this.getPool(eagerDeployTenant);
+      const eager = this.options.tenant?.deploy?.eager;
+      if (typeof eager === "string") {
+        await this.getPool(eager);
+      }
+      if (eager instanceof Array) {
+        for (const eagerDeployTenant of eager) {
+          if (typeof eagerDeployTenant === "string") {
+            await this.getPool(eagerDeployTenant);
+          }
+          else {
+            this._logger.warn(
+              "for 'tenant.deploy.eager' options",
+              "the value must be string or array of string",
+              "the value", eagerDeployTenant, "is not supported"
+            );
+          }
         }
       }
     }

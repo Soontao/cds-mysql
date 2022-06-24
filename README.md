@@ -32,7 +32,8 @@
     - [ ] permission check
     - [ ] test
     - [x] migrate CSV on-demand (with option)
-      - [ ] CSV aspect `predefined`
+      - [x] CSV aspect `preDelivery`
+      - [x] CSV migration with hash check
   - [ ] dynamic database credential provider
   - [ ] admin database concept
     - [ ] `@admin` tenant entity & services
@@ -89,9 +90,9 @@ edit your `package.json` > `cds` node
 {
   "requires": {
     "db": {
-      "kind": "mysql",
+      "kind": "mysql"
       // add 'dialect' if you want to let the `localized` elements work
-      "dialect": "sqlite" 
+      // "dialect": "sqlite" 
     },
     "mysql": {
       "impl": "cds-mysql"
@@ -129,6 +130,7 @@ entity Animal : incrementID {
 - if key of entity not existed, insert (if the records has been deleted, its also will be inserted)
 
 > csv migrator will automatically fill the `PreDelivery` field as `true`
+> for business, if user want to delete some data, just set the `Disabled` field as `true`
 
 ```groovy
 using {incrementalKey, preDelivery} from 'cds-mysql';
@@ -153,7 +155,7 @@ entity Product : cuid {
 }
 ```
 
-### Mysql Configurations
+### Configurations
 
 > you can specify the configuration of `cds-mysql` at the `cds.requires.db` node
 
@@ -167,15 +169,11 @@ entity Product : cuid {
         "csv": { "migrate": false },
         "tenant": {
           "deploy": {
-            "eager": [
-              "default"
-            ]
+            "eager": [ "default" ]
           }
         }
       },
-      "mysql": {
-        "impl": "cds-mysql"
-      }
+      "mysql": { "impl": "cds-mysql" }
     }
   }
 }
@@ -195,7 +193,7 @@ interface MysqlDatabaseOptions {
        * eager deploy tenant id list 
        * the migration of those tenants will be performed when server startup
        */
-      eager?: Array<string>;
+      eager?: Array<string> | string;
     };
     /**
      * tenant database name prefix

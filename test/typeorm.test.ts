@@ -4,11 +4,13 @@ import { DataSourceOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
 import { sha256 } from "../src/typeorm/csv";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
-import { doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
+import { cleanDB, doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
 
 describe("TypeORM Test Suite", () => {
 
   require("dotenv").config();
+
+  beforeAll(async () => { await cleanDB(); });
 
   afterAll(doAfterAll);
 
