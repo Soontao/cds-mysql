@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.14](https://github.com/Soontao/cds-mysql/compare/v5.9.13...v5.9.14) (2022-06-27)
+
+
+### Features
+
+* better CSV migrate ([d80662a](https://github.com/Soontao/cds-mysql/commit/d80662a53a221ee1578400db88edeb202cf05d74))
+* better CSV migration ([08da2ee](https://github.com/Soontao/cds-mysql/commit/08da2ee5b1f6d88393fd64e3a2231d6cad9e2e96))
+* partial CSV migration optimization ([c55bcbe](https://github.com/Soontao/cds-mysql/commit/c55bcbea19f74510023841c73fa860292992efdc))
+
+
+### Bug Fixes
+
+* lint ([0e0a361](https://github.com/Soontao/cds-mysql/commit/0e0a36127e07b3c2be08c1450d95a62ed6f9219f))
+* runtime support key ([42cd3bb](https://github.com/Soontao/cds-mysql/commit/42cd3bb5f183dc812ed8a264fab1b254bd4519c7))
+* runtime support table assert ([5011c13](https://github.com/Soontao/cds-mysql/commit/5011c131d1d0f7007a0396d5c29f69e9627656ba))
+* skip failed test ([3d313d4](https://github.com/Soontao/cds-mysql/commit/3d313d4bfda439ab6219d4116b1125bb4f8df149))
+
 ### [5.9.13](https://github.com/Soontao/cds-mysql/compare/v5.9.12...v5.9.13) (2022-06-21)
 
 
