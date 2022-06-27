@@ -114,7 +114,16 @@ export async function migrateData(
           .filter((e: any) => e.key === true)
           .map((e: any) => e.name);
 
-        const [headers, ...rows] = entires;
+        let [headers, ...rows] = entires;
+
+        // fuzzy mapping element
+        headers = headers.map(header => {
+          const element = fuzzy.findElement(entityModel, header);
+          if (element === undefined) {
+            throw new Error(`csv file '${csvFile}' column with header key '${header}' is not found in the entity '${entityModel.name}'`)
+          }
+          return element?.name
+        })
 
         const transformColumnsIndex = Object
           .values(entityModel.elements)

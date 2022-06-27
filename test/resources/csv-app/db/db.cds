@@ -1,9 +1,23 @@
 namespace test.resources.csv.app.db;
 
+using {cuid} from '@sap/cds/common';
+
 using {
   incrementalKey,
   preDelivery,
 } from '../../../../index';
+
+type Address {
+  Country  : String(255);
+  Province : String(255);
+  City     : String(255);
+  Street   : String(255);
+}
+
+entity House : cuid {
+  price   : Decimal;
+  address : Address;
+}
 
 entity Person : incrementalKey, preDelivery {
   Name : String(255);

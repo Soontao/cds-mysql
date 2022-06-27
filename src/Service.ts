@@ -162,11 +162,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
             const tenantCredential = { ...credential, dateStrings: true, charset: MYSQL_COLLATE };
 
             if (this.options?.tenant?.deploy?.auto !== false) {
-              const tenantModel = await _rawCSN(this.model);
-              await this.deploy(tenantModel, { tenant });
-
+              await this.deploy(await _rawCSN(this.model), { tenant });
               if (this.options?.csv?.migrate !== false) {
-                await migrateData(tenantCredential, tenantModel);
+                await migrateData(tenantCredential, this.model);
               }
               else {
                 this._logger.debug("csv migration disabled, skip migrate CSV for tenant", tenant);
