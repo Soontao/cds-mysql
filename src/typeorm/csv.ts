@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import flattenDeep from "@newdash/newdash/flattenDeep";
 import uniq from "@newdash/newdash/uniq";
 import CSV from "@sap/cds/lib/compile/etc/csv";
@@ -120,10 +121,14 @@ export async function migrateData(
         headers = headers.map(header => {
           const element = fuzzy.findElement(entityModel, header);
           if (element === undefined) {
-            throw new Error(`csv file '${csvFile}' column with header key '${header}' is not found in the entity '${entityModel.name}'`)
+            throw new Error(
+              `csv file '${csvFile}' column ` +
+              `with header key '${header}' is not found ` +
+              `in the entity '${entityModel.name}'`
+            );
           }
-          return element?.name
-        })
+          return element?.name;
+        });
 
         const transformColumnsIndex = Object
           .values(entityModel.elements)
@@ -139,13 +144,20 @@ export async function migrateData(
           .filter(header => keys.includes(header))
           .map(existedKey => headers.indexOf(existedKey));
 
-        if (existedKeysIndex.length === 0) {
-          logger.warn("csv", csvFile, "do not provide any primary key, could not execute CSV migration");
+        if (existedKeysIndex.length !== keys.length) {
+          logger.warn(
+            "csv", csvFile.green,
+            "do not provide enough primary key,",
+            "could not execute CSV migration"
+          );
           continue;
         }
 
         if (transformColumnsIndex.length > 0) {
-          logger.debug("exist blob column in entity, ", entityName, ", transform");
+          logger.debug(
+            "column with index ", transformColumnsIndex.join(", ").green,
+            "in entity ", entityName.green, "need to be transformed"
+          );
           for (const entry of rows) {
             for (const transformColumn of transformColumnsIndex) {
               if (entry[transformColumn.index].trim().length > 0) {
@@ -167,7 +179,11 @@ export async function migrateData(
         }
 
         if (entires.length > 1) {
-          logger.info("filling entity", entityName.green, "with file", path.relative(process.cwd(), csvFile).green);
+          logger.info(
+            "filling entity", entityName.green,
+            "with file", path.relative(process.cwd(), csvFile).green,
+            "with", entires.length, "items"
+          );
         } else {
           logger.warn("CSV file", path.relative(process.cwd(), csvFile).green, "is empty, skip processing");
           continue;
