@@ -82,8 +82,7 @@ describe("Deep Operation Test Suite", () => {
 
   });
 
-  // TODO: check why this fails for old mysql
-  it.skip("should support deletion", async () => {
+  it("should support deletion", async () => {
     const response = await client.delete("/deep/Person(1)");
     expect(response.data?.error?.message).toBeUndefined();
     expect(response.status).toBe(204);
