@@ -47,7 +47,8 @@
 - [x] auto incremental key aspect (odata only, single records)
 - [x] mysql index
   - [ ] better error for not supported elements
-- [x] automatically schema sync (when create pool)
+- [x] automatically schema sync (when connection pool provision)
+  - [ ] pre-built typeorm entity definitions
   - [ ] sync data model online
   - [ ] sync CSV data when model changed
 - [ ] better E2E document/sample

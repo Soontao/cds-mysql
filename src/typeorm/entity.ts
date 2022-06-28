@@ -186,15 +186,15 @@ class CDSListener implements MySQLParserListener {
 
       // TODO: move to check
       if (schemaConfig.indices?.length > 0) {
-        for (const indiceConfig of schemaConfig.indices) {
-          if (indiceConfig?.columns instanceof Array) {
-            for (const indexColumnName of indiceConfig.columns) {
+        for (const indexConfig of schemaConfig.indices) {
+          if (indexConfig?.columns instanceof Array) {
+            for (const indexColumnName of indexConfig.columns) {
               if (typeof indexColumnName === "string") {
                 const columnEle = fuzzy.findElement(entityDef, indexColumnName);
                 if (columnEle === undefined) {
                   logger.error(
                     "entity", entityDef.name,
-                    "index", indiceConfig.name,
+                    "index", indexConfig.name,
                     "column", indexColumnName,
                     "not existed on entity definition"
                   );
