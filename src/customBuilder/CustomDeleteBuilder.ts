@@ -1,9 +1,11 @@
 // @ts-nocheck
 import { CSN } from "@sap/cds/apis/csn";
 import DeleteBuilder from "@sap/cds/libx/_runtime/db/sql-builder/DeleteBuilder";
+import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
+import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
-export = class CustomDeleteBuilder extends DeleteBuilder {
+export class CustomDeleteBuilder extends DeleteBuilder {
 
   _outputObj: any;
 
@@ -17,15 +19,13 @@ export = class CustomDeleteBuilder extends DeleteBuilder {
   }
 
   get ReferenceBuilder() {
-    const ReferenceBuilder = require("./CustomReferenceBuilder");
-    Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
-    return ReferenceBuilder;
+    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
+    return CustomReferenceBuilder;
   }
 
   get ExpressionBuilder() {
-    const ExpressionBuilder = require("./CustomExpressionBuilder");
-    Object.defineProperty(this, "ExpressionBuilder", { value: ExpressionBuilder });
-    return ExpressionBuilder;
+    Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
+    return CustomExpressionBuilder;
   }
 
   _from() {

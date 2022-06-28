@@ -2,9 +2,11 @@
 import { CSN } from "@sap/cds/apis/csn";
 import { UpdateBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
+import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
+import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
-export = class CustomUpdateBuilder extends UpdateBuilder {
+export class CustomUpdateBuilder extends UpdateBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
@@ -13,15 +15,13 @@ export = class CustomUpdateBuilder extends UpdateBuilder {
   }
 
   get ReferenceBuilder() {
-    const ReferenceBuilder = require("./CustomReferenceBuilder");
-    Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
-    return ReferenceBuilder;
+    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
+    return CustomReferenceBuilder;
   }
 
   get ExpressionBuilder() {
-    const ExpressionBuilder = require("./CustomExpressionBuilder");
-    Object.defineProperty(this, "ExpressionBuilder", { value: ExpressionBuilder });
-    return ExpressionBuilder;
+    Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
+    return CustomExpressionBuilder;
   }
 
   _data(annotatedColumns) {

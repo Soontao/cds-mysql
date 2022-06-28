@@ -1,8 +1,9 @@
 import { CSN } from "@sap/cds/apis/csn";
 import { ReferenceBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
-export = class CustomReferenceBuilder extends ReferenceBuilder {
+export class CustomReferenceBuilder extends ReferenceBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
@@ -11,8 +12,7 @@ export = class CustomReferenceBuilder extends ReferenceBuilder {
   }
 
   get FunctionBuilder() {
-    const FunctionBuilder = require("./CustomFunctionBuilder");
-    Object.defineProperty(this, "FunctionBuilder", { value: FunctionBuilder });
-    return FunctionBuilder;
+    Object.defineProperty(this, "FunctionBuilder", { value: CustomFunctionBuilder });
+    return CustomFunctionBuilder;
   }
 };

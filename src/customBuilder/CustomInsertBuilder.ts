@@ -6,7 +6,7 @@ import * as dollar from "@sap/cds/libx/_runtime/db/sql-builder/dollar";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
-export = class CustomInsertBuilder extends InsertBuilder {
+export class CustomInsertBuilder extends InsertBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function

@@ -1,8 +1,11 @@
 import { CSN } from "@sap/cds/apis/csn";
 import { ExpressionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
+import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
+import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
-export = class CustomExpressionBuilder extends ExpressionBuilder {
+export class CustomExpressionBuilder extends ExpressionBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
@@ -11,21 +14,18 @@ export = class CustomExpressionBuilder extends ExpressionBuilder {
   }
 
   get ReferenceBuilder() {
-    const ReferenceBuilder = require("./CustomReferenceBuilder");
-    Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
-    return ReferenceBuilder;
+    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
+    return CustomReferenceBuilder;
   }
 
   get SelectBuilder() {
-    const SelectBuilder = require("./CustomSelectBuilder");
-    Object.defineProperty(this, "SelectBuilder", { value: SelectBuilder });
-    return SelectBuilder;
+    Object.defineProperty(this, "SelectBuilder", { value: CustomSelectBuilder });
+    return CustomSelectBuilder;
   }
 
   get FunctionBuilder() {
-    const FunctionBuilder = require("./CustomFunctionBuilder");
-    Object.defineProperty(this, "FunctionBuilder", { value: FunctionBuilder });
-    return FunctionBuilder;
+    Object.defineProperty(this, "FunctionBuilder", { value: CustomFunctionBuilder });
+    return CustomFunctionBuilder;
   }
 
 };

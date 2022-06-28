@@ -1,6 +1,9 @@
 import { CSN } from "@sap/cds/apis/csn";
 import { SelectBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import { Definition } from "cds-internal-tool";
+import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
+import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
+import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 /**
@@ -17,7 +20,7 @@ function nextTmpNumber() {
 
 nextTmpNumber.tmp = 0;
 
-export = class CustomSelectBuilder extends SelectBuilder {
+export class CustomSelectBuilder extends SelectBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
@@ -26,27 +29,23 @@ export = class CustomSelectBuilder extends SelectBuilder {
   }
 
   get ReferenceBuilder() {
-    const ReferenceBuilder = require("./CustomReferenceBuilder");
-    Object.defineProperty(this, "ReferenceBuilder", { value: ReferenceBuilder });
-    return ReferenceBuilder;
+    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
+    return CustomReferenceBuilder;
   }
 
   get ExpressionBuilder() {
-    const ExpressionBuilder = require("./CustomExpressionBuilder");
-    Object.defineProperty(this, "ExpressionBuilder", { value: ExpressionBuilder });
-    return ExpressionBuilder;
+    Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
+    return CustomExpressionBuilder;
   }
 
   get FunctionBuilder() {
-    const FunctionBuilder = require("./CustomFunctionBuilder");
-    Object.defineProperty(this, "FunctionBuilder", { value: FunctionBuilder });
-    return FunctionBuilder;
+    Object.defineProperty(this, "FunctionBuilder", { value: CustomFunctionBuilder });
+    return CustomFunctionBuilder;
   }
 
   get SelectBuilder() {
-    const SelectBuilder = require("./CustomSelectBuilder");
-    Object.defineProperty(this, "SelectBuilder", { value: SelectBuilder });
-    return SelectBuilder;
+    Object.defineProperty(this, "SelectBuilder", { value: CustomSelectBuilder });
+    return CustomSelectBuilder;
   }
 
   _forUpdate() { }
