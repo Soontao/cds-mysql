@@ -1630,10 +1630,6 @@ Array [
     "parameters": undefined,
     "query": "CREATE TABLE \`cds_mysql_csv_history\` (\`id\` int NOT NULL AUTO_INCREMENT COMMENT 'dummy id', \`entity\` varchar(500) NOT NULL COMMENT 'entity name', \`hash\` varchar(64) NOT NULL COMMENT 'sha256 hash', PRIMARY KEY (\`id\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
   },
-  Object {
-    "parameters": undefined,
-    "query": "CREATE TABLE \`cds_mysql_runtime_support\` (\`key\` varchar(80) NOT NULL COMMENT 'key', \`value\` varchar(4000) NOT NULL COMMENT 'value', PRIMARY KEY (\`key\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
-  },
 ]
 `;
 

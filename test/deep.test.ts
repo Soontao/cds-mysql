@@ -82,7 +82,15 @@ describe("Deep Operation Test Suite", () => {
 
   });
 
-  it("should support deletion", async () => {
+  it("should support deep query", async () => {
+    const response = await client.get("/deep/Person(1)?$expand=addresses");
+    expect(response.data?.error?.message).toBeUndefined();
+    expect(response.status).toBe(200);
+    expect(response.data).toMatchSnapshot();
+  });
+
+
+  it("should support deep deletion", async () => {
     const response = await client.delete("/deep/Person(1)");
     expect(response.data?.error?.message).toBeUndefined();
     expect(response.status).toBe(204);
