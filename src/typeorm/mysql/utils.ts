@@ -13,7 +13,7 @@ export function equalWithoutCase(s1: string, s2: string) {
   if (s1?.length === 0 && s2?.length === 0) {
     return true;
   }
-  if(s1 === s2) {
+  if (s1 === s2) {
     return true;
   }
   if (s1?.length === s2?.length && s1?.toLowerCase() === s2?.toLowerCase()) {
