@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.15](https://github.com/Soontao/cds-mysql/compare/v5.9.14...v5.9.15) (2022-06-30)
+
+
+### Features
+
+* add lock for migration ([50f1294](https://github.com/Soontao/cds-mysql/commit/50f129407becc4f2af8d628c2499eaa791303c76))
+* renavate auto merge ([e72c610](https://github.com/Soontao/cds-mysql/commit/e72c610c0ae6ee0cfe209047fc18ebf593c44daf))
+
+
+### Bug Fixes
+
+* delete for alias ([87fad92](https://github.com/Soontao/cds-mysql/commit/87fad9297222b30be67ed18385d6a03ca5e243a6))
+
 ### [5.9.14](https://github.com/Soontao/cds-mysql/compare/v5.9.13...v5.9.14) (2022-06-27)
 
 
