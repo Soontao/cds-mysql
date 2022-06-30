@@ -53,7 +53,7 @@
     "uuid": "8.3.2"
   },
   "overrides": {
-    "@sap/xsenv": "3.2.0"
+    "@sap/xsenv": "3.3.2"
   },
   "license": "MIT",
   "keywords": [
