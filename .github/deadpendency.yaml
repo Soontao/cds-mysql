@@ -1,0 +1,4 @@
+ignore-failures:
+  javascript:
+    - colors
+    - ts-mysql-parser
