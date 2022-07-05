@@ -5,9 +5,12 @@ import { doAfterAll } from "./utils";
 
 describe("fiori draft Test Suite", () => {
 
-  cwdRequireCDS();
+  const cds = cwdRequireCDS();
   const client = setupTest(__dirname, "./resources/fiori");
   client.defaults.auth = { username: "alice", password: "admin" };
+
+
+  beforeAll(async () => { jest.spyOn(cds.db, "run"); });
 
   afterAll(doAfterAll);
 
@@ -15,6 +18,20 @@ describe("fiori draft Test Suite", () => {
     const response = await client.get("/fiori/$metadata");
     expect(response.status).toBe(200);
     expect(response.data).toMatch(/Persons/);
+  });
+
+  const ID = "95f96069-e831-4e30-9567-37a1490b9385";
+
+  it("should support to create instance", async () => {
+    const response = await client.post("/fiori/Persons", {
+      ID,
+      Name: "Theo Sun",
+      Age: 26,
+    });
+    expect(response.status).toBe(201);
+    expect(response.data).toMatchSnapshot();
+    // @ts-ignore
+    expect(cds.db.run.mock.calls).toMatchSnapshot();
   });
 
 });
