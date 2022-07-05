@@ -30,8 +30,6 @@ describe("fiori draft Test Suite", () => {
     });
     expect(response.status).toBe(201);
     expect(response.data).toMatchSnapshot();
-    // @ts-ignore
-    expect(cds.db.run.mock.calls).toMatchSnapshot();
   });
 
 });
