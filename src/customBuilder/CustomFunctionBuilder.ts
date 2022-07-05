@@ -80,7 +80,7 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     if (not) this._outputObj.sql.push(")");
   }
 
-  _standardFunction(functionName, args) {
+  _standardFunction(functionName: string, args: string | Array<any>) {
     switch (functionName) {
       case "locate":
         functionName = "INSTR";
@@ -101,7 +101,8 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     this._outputObj.sql.push(functionName, "(");
     if (typeof args === "string") {
       this._outputObj.sql.push(args, ")");
-    } else {
+    }
+    else {
       this._addFunctionArgs(args);
       this._outputObj.sql.push(")");
     }
