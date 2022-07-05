@@ -74,28 +74,30 @@ class CDSListener implements MySQLParserListener {
 
 
     const entityDef = fuzzy.findEntity(this._tmp.tableName, this._model);
+    
+    if (entityDef !== undefined) {
+      // for draft table, it could not found metadata in model
+      const eleDef = fuzzy.findElement(entityDef, name.text);
 
-    const eleDef = fuzzy.findElement(entityDef, name.text);
+      // TODO: use element def directly
+      if (eleDef !== undefined) {
+        // force overwrite blob column
+        if (["cds.Binary", "cds.LargeBinary"].includes(eleDef.type)) {
+          column.type = "blob";
+        }
 
-    // TODO: use element def directly
-    if (eleDef !== undefined) {
-      // force overwrite blob column
-      if (["cds.Binary", "cds.LargeBinary"].includes(eleDef.type)) {
-        column.type = "blob";
-      }
-
-      // not association or composition
-      if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
-        const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
-        if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
-          Object.assign(
-            column,
-            typeOrmColumnConfig,
-          );
+        // not association or composition
+        if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
+          const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
+          if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
+            Object.assign(
+              column,
+              typeOrmColumnConfig,
+            );
+          }
         }
       }
     }
-
 
     // (5000)
     if (length && column.type !== "blob") {
@@ -299,7 +301,8 @@ class CDSListener implements MySQLParserListener {
  */
 export function csnToEntity(model: CSN): Array<EntitySchema> {
   overwriteCDSCoreTypes();
-  const listener: CDSListener = new CDSListener({ model: cds.reflect(model) });
+  // @ts-ignore
+  const listener: CDSListener = new CDSListener({ model: cds.compile.for.nodejs(model) });
   const parser = new MySQLParser({ parserListener: listener });
   const statements = cds.compile.to.sql(model);
   statements.forEach((stat: string) => {

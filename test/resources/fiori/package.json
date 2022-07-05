@@ -1,0 +1,21 @@
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "dialect": "sqlite",
+        "tenant": {
+          "deploy": {
+            "eager": "default"
+          }
+        },
+        "csv": {
+          "migrate": true
+        }
+      },
+      "mysql": {
+        "impl": "../../../src/index"
+      }
+    }
+  }
+}
