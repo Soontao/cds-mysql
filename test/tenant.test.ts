@@ -8,7 +8,6 @@ describe("Tenant Test Suite", () => {
   const client = setupTest(__dirname, "./resources/integration");
   client.defaults.auth = { username: "alice", password: "admin" };
 
-
   afterAll(doAfterAll);
 
   it("should support multi-tenancy", async () => {

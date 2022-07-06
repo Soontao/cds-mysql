@@ -49,11 +49,11 @@ jobs:
         run: npm run coverage
         env:
           CI: true
-          CDS_REQUIRES_MYSQL_CREDENTIALS_HOST: "127.0.0.1"
-          CDS_REQUIRES_MYSQL_CREDENTIALS_PORT: 3306
-          CDS_REQUIRES_MYSQL_CREDENTIALS_DATABASE: cdstest
-          CDS_REQUIRES_MYSQL_CREDENTIALS_USER: cdstest
-          CDS_REQUIRES_MYSQL_CREDENTIALS_PASSWORD: cdstest
+          CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
+          CDS_REQUIRES_DB_CREDENTIALS_PORT: 3306
+          CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cdstest
+          CDS_REQUIRES_DB_CREDENTIALS_USER: cdstest
+          CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cdstest
 
       - name: upload coverage
         uses: codecov/codecov-action@v3

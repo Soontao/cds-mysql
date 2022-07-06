@@ -13,7 +13,7 @@ describe("CDS MySQL Basic Test Suite", () => {
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 
     const csn = await loadCSN("./resources/people.cds");
-    await cds.deploy(csn).to("mysql");
+    await cds.deploy(csn).to("db");
     const randomName = createRandomName();
     const randomName2 = createRandomName();
     // create item
@@ -47,27 +47,27 @@ describe("CDS MySQL Basic Test Suite", () => {
 
   it("should support deploy complex-type entity", async () => {
     const csn = await loadCSN("./resources/complex-type.cds");
-    await cds.deploy(csn).to("mysql");
+    await cds.deploy(csn).to("db");
   });
 
   it("should support deploy different property types entity", async () => {
     const csn = await loadCSN("./resources/property-type.cds");
-    await cds.deploy(csn).to("mysql");
+    await cds.deploy(csn).to("db");
   });
 
   it("should support deploy long name entity", async () => {
     const csn = await loadCSN("./resources/long-table-name.cds");
-    await cds.deploy(csn).to("mysql");
+    await cds.deploy(csn).to("db");
   });
 
   it("should support deploy view", async () => {
     const csn = await loadCSN("./resources/view.cds");
-    await cds.deploy(csn).to("mysql");
+    await cds.deploy(csn).to("db");
   });
 
   it("should support deploy large row size table", async () => {
     const csn = await loadCSN("./resources/big-size-table.cds");
-    await cds.deploy(csn).to("mysql");
+    await cds.deploy(csn).to("db");
   });
 
 
