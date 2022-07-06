@@ -253,6 +253,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 |------------------|-------------------|
 | 5.8.x            | 5.9.x             |
 | 5.9.x            | 5.9.x             |
+| 6.x              | 6.x               |
 
 ## Limitation
 
