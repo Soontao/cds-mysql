@@ -260,7 +260,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   /**
-   * dis connect from database, free all connections of all tenants
+   * disconnect from database, free all connections of all tenants
    */
   public async disconnect() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

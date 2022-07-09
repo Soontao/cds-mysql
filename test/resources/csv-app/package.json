@@ -3,7 +3,6 @@
     "requires": {
       "db": {
         "kind": "mysql",
-        "dialect": "sqlite",
         "tenant": {
           "deploy": {
             "eager": "default"

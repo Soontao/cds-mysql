@@ -25,7 +25,7 @@
   - [ ] model version, only incremental migration
   - [ ] using `LinkedModel` element information for database migration
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/generic#serving-media-data)
-- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data) with `sqlite` dialect
+- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data) 
 - [ ] multi tenancy
   - [x] deploy model on-fly
   - [x] create database on-demand
@@ -50,7 +50,6 @@
 - [x] automatically schema sync (when connection pool provision)
   - [ ] pre-built typeorm entity definitions
   - [ ] sync data model online
-  - [ ] sync CSV data when model changed
 - [ ] better E2E document/sample
 
 
@@ -92,8 +91,6 @@ edit your `package.json` > `cds` node
   "requires": {
     "db": {
       "kind": "mysql"
-      // add 'dialect' if you want to let the `localized` elements work
-      // "dialect": "sqlite" 
     },
     "mysql": {
       "impl": "cds-mysql"
@@ -132,6 +129,7 @@ entity Animal : incrementID {
 
 > csv migrator will automatically fill the `PreDelivery` field as `true`
 > for business, if user want to delete some data, just set the `Disabled` field as `true`
+> content hash will be checked before migration, if one file has been migrated before, will skip it.
 
 ```groovy
 using {incrementalKey, preDelivery} from 'cds-mysql';
@@ -166,7 +164,6 @@ entity Product : cuid {
     "requires": {
       "db": {
         "kind": "mysql",
-        "dialect": "sqlite",
         "csv": { "migrate": false },
         "tenant": {
           "deploy": {
@@ -263,7 +260,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
 - The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
 - The `Boolean` type is represented as `TINYINT(1)` in mysql server, as a result, `boolean default true/false` will be converted to `TINYINT DEFAULT 1/0`.
-- The `incrementId` aspect could not works well with `managed composition` because mysql do not support `composite primary key` contains an `auto_increment` column
+- The `incrementID` aspect could not works well with `managed composition` because mysql do not support `composite primary key` contains an `auto_increment` column
 
 ## [CHANGELOG](./CHANGELOG.md)
 

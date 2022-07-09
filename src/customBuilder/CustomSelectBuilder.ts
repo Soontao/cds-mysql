@@ -50,6 +50,8 @@ export class CustomSelectBuilder extends SelectBuilder {
 
   _forUpdate() { }
 
+  _forShareLock() {}
+
   _fromElement(element: Definition, parent: any, i = 0) {
     // avoid: ER_DERIVED_MUST_HAVE_ALIAS of mysql database 
     // (double brackets without alias for inner table)

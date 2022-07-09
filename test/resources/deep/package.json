@@ -4,7 +4,6 @@
     "requires": {
       "db": {
         "kind": "mysql",
-        "dialect": "sqlite",
         "csv": {
           "migrate": false
         }

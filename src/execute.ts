@@ -4,6 +4,7 @@ import { isEmpty } from "@newdash/newdash/isEmpty";
 import { Query } from "@sap/cds/apis/cqn";
 import { getPostProcessMapper, postProcess } from "@sap/cds/libx/_runtime/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, expandV2, hasExpand, rawToExpanded } from "@sap/cds/libx/_runtime/db/expand";
+import { cwdRequire, cwdRequireCDS } from "cds-internal-tool";
 import { Connection, OkPacket } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
@@ -11,9 +12,12 @@ import CustomBuilder from "./customBuilder";
 import { sqlFactory } from "./sqlFactory";
 import { getIncrementalKey, mustBeArray } from "./utils";
 
-const cds = global.cds || require("@sap/cds/lib");
-const LOG = cds.log("mysql|db");
+const cds = cwdRequireCDS();
+const LOG = cds.log("mysql|db|SQL");
 const DEBUG = cds.debug("mysql|db");
+const coloredTxCommands = cwdRequire("@sap/cds/libx/_runtime/db/utils/coloredTxCommands");
+const SANITIZE_VALUES = process.env.NODE_ENV === "production" && cds.env.log.sanitize_values !== false;
+
 const _captureStack = DEBUG
   ? () => {
     const o = {};
@@ -22,16 +26,6 @@ const _captureStack = DEBUG
   }
   : () => undefined;
 
-const SANITIZE_VALUES = process.env.NODE_ENV === "production" && cds.env.log.sanitize_values !== false;
-
-/*
- * helpers
- */
-const _colored = {
-  BEGIN: "\x1b[1m\x1b[33mBEGIN\x1b[0m",
-  COMMIT: "\x1b[1m\x1b[32mCOMMIT\x1b[0m",
-  ROLLBACK: "\x1b[1m\x1b[91mROLLBACK\x1b[0m"
-};
 
 const _augmented = (err: Error, sql: string, values: any, o: any) => {
   err.query = sql;
@@ -42,7 +36,8 @@ const _augmented = (err: Error, sql: string, values: any, o: any) => {
 };
 
 function _executeSimpleSQL(dbc: Connection, sql: string, values: Array<any>) {
-  LOG._debug && LOG.debug(_colored[sql] || sql, values || "");
+  LOG._debug &&
+    LOG.debug(coloredTxCommands[sql] || sql, Array.isArray(values) ? (SANITIZE_VALUES ? ["***"] : values) : "");
   const o = _captureStack();
   try {
     return dbc.query(sql, values);

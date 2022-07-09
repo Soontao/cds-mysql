@@ -18,7 +18,7 @@ export const setupEnv = () => {
   } else {
     Object.assign(cds.env.requires.db, dbOpt);
   }
-  const mysqlOpt = { impl: path.join(__dirname, "../src"), dialect: "sqlite" };
+  const mysqlOpt = { impl: path.join(__dirname, "../src"), };
   if (cds.env.requires.db === undefined) {
     cds.env.requires.db = mysqlOpt;
   } else {

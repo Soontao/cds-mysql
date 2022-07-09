@@ -74,7 +74,7 @@ class CDSListener implements MySQLParserListener {
 
 
     const entityDef = fuzzy.findEntity(this._tmp.tableName, this._model);
-    
+
     if (entityDef !== undefined) {
       // for draft table, it could not found metadata in model
       const eleDef = fuzzy.findElement(entityDef, name.text);
@@ -300,11 +300,13 @@ class CDSListener implements MySQLParserListener {
  * @param model plain CSN model
  */
 export function csnToEntity(model: CSN): Array<EntitySchema> {
+  const cds = cwdRequireCDS()
   overwriteCDSCoreTypes();
   // @ts-ignore
   const listener: CDSListener = new CDSListener({ model: cds.compile.for.nodejs(model) });
   const parser = new MySQLParser({ parserListener: listener });
-  const statements = cds.compile.to.sql(model);
+  // force to use 'sqlite' as dialect to support localized elements
+  const statements = cds.compile.to.sql(model, { dialect: 'sqlite' });
   statements.forEach((stat: string) => {
     stat = stat.replace(/TIMESTAMP_TEXT/g, "TIMESTAMP"); // workaround for TIMESTAMP_TEXT type
     listener.setCurrentStatement(stat);
@@ -313,6 +315,10 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
       throw result.lexerError;
     }
     if (result.parserError) {
+      logger.error(
+        "prase statement", stat,
+        "failed, error", result.parserError
+      );
       throw result.parserError;
     }
   });
