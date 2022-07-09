@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { groupByKeyPrefix } from "cds-internal-tool";
+import { cwdRequire, cwdRequireCDS, groupByKeyPrefix } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
 
 /**
@@ -8,7 +8,7 @@ import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
  */
 export function overwriteCDSCoreTypes() {
 
-  const { cdsToSqlTypes } = require("@sap/cds-compiler/lib/render/utils/common");
+  const { cdsToSqlTypes } = cwdRequire("@sap/cds-compiler/lib/render/utils/common");
 
   cdsToSqlTypes.sqlite = {
     "cds.Binary": "CHAR",
@@ -23,7 +23,7 @@ export function overwriteCDSCoreTypes() {
  */
 export function checkCdsVersion() {
   const { VERSION } = require("./cds.version");
-  const cds = require("@sap/cds");
+  const cds = cwdRequireCDS()
   const intersects = require("semver/ranges/intersects");
   if (!intersects(cds.version, VERSION)) {
     throw new Error(`lib 'cds-mysql' requires '@sap/cds' with version: '${VERSION}', but installed '@sap/cds' version is: 

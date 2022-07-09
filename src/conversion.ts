@@ -1,4 +1,5 @@
 // conversion for OUTPUT (DB -> JSON)
+import { cwdRequireCDS } from "cds-internal-tool";
 import { DateTime, FixedOffsetZone } from "luxon";
 import { MYSQL_DATE_TIME_FORMAT } from "./constants";
 
@@ -54,8 +55,7 @@ const TYPE_POST_CONVERSION_MAP = new Map([
   ["cds.Timestamp", convertToISOTime]
 ]);
 
-// @ts-ignore
-if (cds.env.features.bigjs) {
+if (cwdRequireCDS().env.features.bigjs) {
   const Big = require("big.js");
   const convertToBig = (value: any) => new Big(value);
  
