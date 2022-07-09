@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/Soontao/cds-mysql/compare/v5.9.15...v6.0.0) (2022-07-09)
+
+
+### Features
+
+* support cds@6 ([af6a807](https://github.com/Soontao/cds-mysql/commit/af6a8073246603218124426f2c0f802ff248fbd6))
+
+
+### Bug Fixes
+
+* broken tests for cds@6 ([df05a94](https://github.com/Soontao/cds-mysql/commit/df05a9442886efb7487d7fb8db3f91adf78d4932))
+* **deps:** update dependency glob to v8 ([03fd1ec](https://github.com/Soontao/cds-mysql/commit/03fd1ecf913bb3faac2c5251641eba266bc29445))
+* fiori migration failed ([affabd1](https://github.com/Soontao/cds-mysql/commit/affabd147a2883561ce3db9957402dc87ce55f5c))
+
 ### [5.9.15](https://github.com/Soontao/cds-mysql/compare/v5.9.14...v5.9.15) (2022-06-30)
 
 
