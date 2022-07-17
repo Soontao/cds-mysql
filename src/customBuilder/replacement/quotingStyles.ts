@@ -19,7 +19,7 @@ export const enhancedQuotingStyles = {
   plain: (s: string) => {
     // * or already quoted?
     if (s === "*" || _isQuoted(s)) return s;
-    if (typeof s !== 'string') throw new Error(`string expected but ${typeof s} received`)
+    if (typeof s !== "string") throw new Error(`string expected but ${typeof s} received`);
     return _smartId(s);
   },
 };

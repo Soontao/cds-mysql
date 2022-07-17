@@ -1,3 +1,4 @@
+import "colors";
 import { CSN, cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger, memorized } from "cds-internal-tool";
 import { createPool, Pool, Options as PoolOptions } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
@@ -271,6 +272,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
 
   /**
+   * deploy (migrate) schema to (tenant) database
    * 
    * @param model plain CSN object
    * @param options deployment options
@@ -279,17 +281,17 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   async deploy(model: CSN, options?: { tenant: string }) {
     const tenant = options?.tenant ?? TENANT_DEFAULT;
     try {
-      this._logger.info("migrating schema for tenant", tenant);
+      this._logger.info("migrating schema for tenant", tenant.green);
       if (tenant !== TENANT_DEFAULT) {
         await this._tenantProvider.createDatabase(tenant);
       }
       const entities = csnToEntity(model);
       const migrateOptions = await this._getTypeOrmOption(tenant);
       await migrate({ ...migrateOptions, entities });
-      this._logger.info("migrate finished for tenant", tenant);
+      this._logger.info("migrate", "successful".green, "for tenant", tenant.green);
       return true;
     } catch (error) {
-      this._logger.info("migrate failed for tenant", tenant, error);
+      this._logger.info("migrate", "failed".red, "for tenant", tenant.red, error);
       throw error;
     }
   }

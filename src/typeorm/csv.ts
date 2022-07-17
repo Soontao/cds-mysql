@@ -42,7 +42,7 @@ export const sha256 = memorized(
       }
     });
   }
-)
+);
 
 
 /**
@@ -57,14 +57,13 @@ export async function migrateData(
   model: LinkedModel,
   csvList?: Array<string>
 ): Promise<void> {
-  const logger = cwdRequireCDS().log("mysql|db|migrate|typeorm");
+  const logger = cwdRequireCDS().log("db|mysql|migrate|typeorm");
   csvList = uniq(
     csvList ?? flattenDeep(
       await Promise.all(
         // @ts-ignore
-        model.$sources
-          .map(path.dirname)
-          .map((dir: string) => `${dir}/**/*.csv`) // TODO: only **/data, **/csv and **/src/data
+        uniq(model.$sources.map(path.dirname))
+          .map((dir: string) => `${dir}/{data,csv,src/data}/**/*.csv`) 
           .map((pattern: string) => pGlob(pattern))
       )
     )
@@ -268,7 +267,6 @@ export async function migrateData(
       await connection.end();
     }
   }
-
 
 
   logger.info("CSV provision data migration successful");
