@@ -40,7 +40,7 @@ export interface MysqlDatabaseOptions {
   tenant?: {
     deploy?: {
       /**
-       * auto migrate database schema when connect to it
+       * auto migrate database schema when connect to it (create pool)
        */
       auto?: boolean;
       /**

@@ -1,5 +1,5 @@
-import { CSN } from "@sap/cds/apis/csn";
 import { ExpressionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import type { CSN } from "cds-internal-tool";
 import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { CustomSelectBuilder } from "./CustomSelectBuilder";

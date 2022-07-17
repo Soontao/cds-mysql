@@ -9,6 +9,9 @@ import { CDSMySQLDataSource } from "./mysql";
 import { supportEntities } from "./support";
 
 
+const DEFAULT_MIGRATION_CHECK_INTERVAL_SEC = 5;
+
+
 export async function migrate(connectionOptions: DataSourceOptions, dryRun: true): Promise<SqlInMemory>;
 export async function migrate(connectionOptions: DataSourceOptions, dryRun?: false): Promise<void>;
 export async function migrate(connectionOptions: DataSourceOptions, dryRun = false): Promise<any> {
@@ -19,7 +22,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
     logging: true,
     logger: TypeORMLogger,
   });
-  
+
   try {
     await ds.initialize();
     for (; ;) {
@@ -30,8 +33,14 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
         break;
       }
       else {
-        logger.info("there are", COUNT, "queries running, wait for 5 seconds, then retry migration");
-        await sleep(5000); // TODO: timeout
+        logger.info(
+          "there are",
+          COUNT,
+          "queries running, wait for",
+          DEFAULT_MIGRATION_CHECK_INTERVAL_SEC,
+          "seconds, then retry migration"
+        );
+        await sleep(DEFAULT_MIGRATION_CHECK_INTERVAL_SEC * 1000);
       }
     }
     const builder = ds.driver.createSchemaBuilder();

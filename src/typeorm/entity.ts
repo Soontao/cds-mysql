@@ -300,13 +300,13 @@ class CDSListener implements MySQLParserListener {
  * @param model plain CSN model
  */
 export function csnToEntity(model: CSN): Array<EntitySchema> {
-  const cds = cwdRequireCDS()
+  const cds = cwdRequireCDS();
   overwriteCDSCoreTypes();
   // @ts-ignore
   const listener: CDSListener = new CDSListener({ model: cds.compile.for.nodejs(model) });
   const parser = new MySQLParser({ parserListener: listener });
   // force to use 'sqlite' as dialect to support localized elements
-  const statements = cds.compile.to.sql(model, { dialect: 'sqlite' });
+  const statements = cds.compile.to.sql(model, { dialect: "sqlite" });
   statements.forEach((stat: string) => {
     stat = stat.replace(/TIMESTAMP_TEXT/g, "TIMESTAMP"); // workaround for TIMESTAMP_TEXT type
     listener.setCurrentStatement(stat);

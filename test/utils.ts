@@ -1,12 +1,31 @@
 // @ts-nocheck
 import { sleep } from "@newdash/newdash";
-import { cwdRequireCDS } from "cds-internal-tool";
+import { CSN, cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { v4 } from "uuid";
 import { MYSQL_CHARSET } from "../src/constants";
 
 require("dotenv").config();
+
+/**
+ * 
+ * deploy CSN to database, and setup default database
+ * 
+ * @param csn 
+ * 
+ */
+export async function deploy(csn: CSN) {
+  const cds = cwdRequireCDS()
+  const { MySQLDatabaseService } = require("../src/Service")
+  cds.services.db = cds.db = new MySQLDatabaseService(
+    "db",
+    cds.linked(csn),
+    cds.env.requires.db
+  )
+  await cds.db.init()
+  await cds.db.deploy(csn)
+}
 
 export const createRandomName = () => v4().split("-").pop();
 

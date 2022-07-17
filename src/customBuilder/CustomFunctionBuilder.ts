@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { CSN } from "@sap/cds/apis/csn";
 import { FunctionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import type { CSN } from "cds-internal-tool";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { CustomSelectBuilder } from "./CustomSelectBuilder";
@@ -20,8 +20,6 @@ const STANDARD_FUNCTIONS_SET = new Set(["locate", "substring", "to_date", "to_ti
 export class CustomFunctionBuilder extends FunctionBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
-    // overwrite quote function
-    // @ts-ignore
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
   }
 

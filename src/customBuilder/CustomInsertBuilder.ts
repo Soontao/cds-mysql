@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { CSN } from "@sap/cds/apis/csn";
 import { InsertBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import getAnnotatedColumns from "@sap/cds/libx/_runtime/db/sql-builder/annotations";
 import * as dollar from "@sap/cds/libx/_runtime/db/sql-builder/dollar";
+import type { CSN } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 

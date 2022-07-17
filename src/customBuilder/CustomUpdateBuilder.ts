@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { CSN } from "@sap/cds/apis/csn";
 import { UpdateBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
+import type { CSN } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";

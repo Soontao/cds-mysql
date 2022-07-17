@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
-import { doAfterAll, setupEnv } from "./utils";
+import { deploy, doAfterAll, setupEnv } from "./utils";
 
 describe("Ref Test Suite", () => {
 
@@ -13,7 +13,8 @@ describe("Ref Test Suite", () => {
 
   it("should support reference query", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/reference.cds"));
-    await cds.deploy(csn).to("db");
+    await deploy(csn)
+
     const People = csn.definitions["test.resources.ref.People2"];
     const Detail = csn.definitions["test.resources.ref.Detail2"];
 
@@ -23,6 +24,7 @@ describe("Ref Test Suite", () => {
         in: SELECT.from(Detail).columns("PeopleID")
       }
     }));
+
   });
 
 });

@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { CSN } from "@sap/cds/apis/csn";
 import DeleteBuilder from "@sap/cds/libx/_runtime/db/sql-builder/DeleteBuilder";
+import type { CSN } from "cds-internal-tool";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";

@@ -2,7 +2,7 @@
 import flattenDeep from "@newdash/newdash/flattenDeep";
 import uniq from "@newdash/newdash/uniq";
 import CSV from "@sap/cds/lib/compile/etc/csv";
-import { cwdRequireCDS, fuzzy, LinkedModel } from "cds-internal-tool";
+import { cwdRequireCDS, fuzzy, LinkedModel, memorized } from "cds-internal-tool";
 import "colors";
 import { createHash } from "crypto";
 import fs from "fs";
@@ -24,24 +24,25 @@ export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) 
  * get sha256 hash for a file content
  * 
  * @param filename 
- * @returns 
+ * @returns the hash or target file
  */
-export function sha256(filename: string) {
-  return new Promise<string>((resolve, reject) => {
-    try {
-      const h = createHash("sha256");
-      const fd = fs.createReadStream(filename);
-      h.setEncoding("hex");
-      fd.on("error", reject);
-      fd.on("end", () => { h.end(); resolve(h.read()); });
-      fd.pipe(h);
-    }
-    catch (error) {
-      reject(error);
-    }
-  });
-
-}
+export const sha256 = memorized(
+  function sha256(filename: string) {
+    return new Promise<string>((resolve, reject) => {
+      try {
+        const h = createHash("sha256");
+        const fd = fs.createReadStream(filename);
+        h.setEncoding("hex");
+        fd.on("error", reject);
+        fd.on("end", () => { h.end(); resolve(h.read()); });
+        fd.pipe(h);
+      }
+      catch (error) {
+        reject(error);
+      }
+    });
+  }
+)
 
 
 /**
@@ -77,7 +78,7 @@ export async function migrateData(
 
       await connection.beginTransaction();
 
-      logger.info("start migrate CSV provision data");
+      logger.info("start provisioning data with CSV files");
 
       for (const csvFile of csvList) {
         const filename = path.basename(csvFile, ".csv");
@@ -89,13 +90,18 @@ export async function migrateData(
           logger.warn(entityName, "is not in the model");
           continue;
         }
-        // check the CSV has been migrated or not
+
+        // check the CSV has been provisioned or not
         const csvFileHash = await sha256(csvFile);
         const [csvFileHashExists] = await connection.query(
           "SELECT 1 FROM cds_mysql_csv_history WHERE entity = ? and hash = ?", [entityModel.name, csvFileHash]
         );
         if (csvFileHashExists instanceof Array && csvFileHashExists.length > 0) {
-          logger.info(csvFile, "with hash", csvFileHash, "has been migrated before, skip");
+          logger.info(
+            "file", csvFile,
+            "with hash", csvFileHash,
+            "has been provisioned before, skip"
+          );
           continue;
         }
         else {
@@ -111,6 +117,9 @@ export async function migrateData(
         const entires: Array<Array<string>> = CSV.read(csvFile);
         const tableName = entityName.replace(/\./g, "_");
 
+        /**
+         * key names of entity
+         */
         const keys = Object.values(entityModel.elements)
           .filter((e: any) => e.key === true)
           .map((e: any) => e.name);
@@ -146,9 +155,10 @@ export async function migrateData(
 
         if (existedKeysIndex.length !== keys.length) {
           logger.warn(
-            "csv", csvFile.green,
-            "do not provide enough primary key,",
-            "could not execute CSV migration"
+            "file", csvFile.yellow,
+            "do not provide enough primary keys",
+            keys,
+            "could not provision CSV, skip process"
           );
           continue;
         }
@@ -182,10 +192,14 @@ export async function migrateData(
           logger.info(
             "filling entity", entityName.green,
             "with file", path.relative(process.cwd(), csvFile).green,
-            "with", entires.length, "items"
+            "with", entires.length, "records"
           );
         } else {
-          logger.warn("CSV file", path.relative(process.cwd(), csvFile).green, "is empty, skip processing");
+          logger.warn(
+            "file",
+            path.relative(process.cwd(), csvFile).yellow,
+            "is empty, skip processing"
+          );
           continue;
         }
 
@@ -243,11 +257,11 @@ export async function migrateData(
 
       }
       await connection.commit();
-      logger.info("migrate CSV finished");
+      logger.info("provision CSV finished");
     }
     catch (error) {
       await connection.rollback();
-      logger.error("migrate CSV failed:", error);
+      logger.error("provision CSV failed:", error);
       throw error;
     }
     finally {

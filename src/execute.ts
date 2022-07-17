@@ -1,10 +1,10 @@
 // @ts-nocheck
 import { filter } from "@newdash/newdash/filter";
 import { isEmpty } from "@newdash/newdash/isEmpty";
-import { Query } from "@sap/cds/apis/cqn";
 import { getPostProcessMapper, postProcess } from "@sap/cds/libx/_runtime/db/data-conversion/post-processing";
 import { createJoinCQNFromExpanded, expandV2, hasExpand, rawToExpanded } from "@sap/cds/libx/_runtime/db/expand";
-import { cwdRequire, cwdRequireCDS } from "cds-internal-tool";
+import { CQN, cwdRequire, cwdRequireCDS, LinkedModel, User } from "cds-internal-tool";
+import { QueryObject } from "cds-internal-tool/lib/types/ql";
 import { Connection, OkPacket } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
@@ -13,8 +13,8 @@ import { sqlFactory } from "./sqlFactory";
 import { getIncrementalKey, mustBeArray } from "./utils";
 
 const cds = cwdRequireCDS();
-const LOG = cds.log("mysql|db|SQL");
-const DEBUG = cds.debug("mysql|db");
+const LOG = cds.log("db|mysql|sql");
+const DEBUG = cds.debug("db|mysql");
 const coloredTxCommands = cwdRequire("@sap/cds/libx/_runtime/db/utils/coloredTxCommands");
 const SANITIZE_VALUES = process.env.NODE_ENV === "production" && cds.env.log.sanitize_values !== false;
 
@@ -60,7 +60,14 @@ async function executeSelectSQL(dbc: Connection, sql: string, values: Array<any>
   }
 }
 
-function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
+function _processExpand(
+  model: LinkedModel,
+  dbc: Connection,
+  cqn: CQN,
+  user: User,
+  locale: string,
+  txTimestamp: any
+) {
   const queries = [];
   const expandQueries = createJoinCQNFromExpanded(cqn, model, false, locale);
 
@@ -80,7 +87,14 @@ function _processExpand(model, dbc, cqn, user, locale, txTimestamp) {
   return rawToExpanded(expandQueries, queries, cqn.SELECT.one, cqn._target);
 }
 
-function executeSelectCQN(model, dbc, query, user, locale, txTimestamp) {
+function executeSelectCQN(
+  model: LinkedModel,
+  dbc: Connection,
+  query: QueryObject,
+  user: User,
+  locale: string,
+  txTimestamp: any
+) {
   if (hasExpand(query)) {
     // expand: '**' or '*3' is handled by new impl
     if (query.SELECT.columns.some(c => c.expand && typeof c.expand === "string" && /^\*{1}[\d|*]+/.test(c.expand))) {
@@ -108,7 +122,14 @@ function executeSelectCQN(model, dbc, query, user, locale, txTimestamp) {
   );
 }
 
-function executeDeleteCQN(model, dbc, cqn, user, locale, txTimestamp) {
+function executeDeleteCQN(
+  model: LinkedModel,
+  dbc: Connection,
+  cqn: CQN,
+  user: User,
+  locale: string,
+  txTimestamp: any
+) {
   const { sql, values = [] } = sqlFactory(
     cqn,
     {
@@ -122,7 +143,13 @@ function executeDeleteCQN(model, dbc, cqn, user, locale, txTimestamp) {
   return _executeSimpleSQL(dbc, sql, values);
 }
 
-function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, postMapper: Function) {
+function executePlainSQL(
+  dbc: Connection,
+  sql: string,
+  values: Array<any> = [],
+  isOne: any,
+  postMapper: Function
+) {
   // support named binding parameters
   if (values && typeof values === "object" && !Array.isArray(values)) {
     values = new Proxy(values, {
@@ -143,8 +170,13 @@ function executePlainSQL(dbc: Connection, sql: string, values = [], isOne: any, 
   return _executeSimpleSQL(dbc, sql, Array.isArray(values[0]) ? values[0] : values);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function executeInsertSQL(dbc: Connection, sql: string, values?: any, query?: Query) {
+async function executeInsertSQL(
+  dbc: Connection,
+  sql: string,
+  values?: any,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  query?: QueryObject
+) {
   LOG._debug && LOG.debug(sql, SANITIZE_VALUES ? ["***"] : values);
 
   const o = _captureStack();
@@ -180,7 +212,14 @@ function _convertStreamValues(values) {
   return any ? Promise.all(values) : values;
 }
 
-async function executeInsertCQN(model: any, dbc: Connection, query: Query, user, locale, txTimestamp) {
+async function executeInsertCQN(
+  model: LinkedModel,
+  dbc: Connection,
+  query: QueryObject,
+  user: User,
+  locale: string,
+  txTimestamp: any
+) {
   const { sql, values = [] } = sqlFactory(
     query,
     {
@@ -207,7 +246,14 @@ async function executeInsertCQN(model: any, dbc: Connection, query: Query, user,
   return mappedResults;
 }
 
-async function executeUpdateCQN(model, dbc, cqn, user, locale, txTimestamp) {
+async function executeUpdateCQN(
+  model: LinkedModel,
+  dbc: Connection,
+  cqn: CQN,
+  user: User,
+  locale: string,
+  txTimestamp: any
+) {
   const { sql, values = [] } = sqlFactory(
     cqn,
     {
@@ -222,7 +268,14 @@ async function executeUpdateCQN(model, dbc, cqn, user, locale, txTimestamp) {
 }
 
 // e. g. DROP, CREATE TABLE
-function executeGenericCQN(model, dbc, cqn, user, locale, txTimestamp) {
+function executeGenericCQN(
+  model: LinkedModel,
+  dbc: Connection,
+  cqn: CQN,
+  user: User,
+  locale: string,
+  txTimestamp: any,
+) {
   const { sql, values = [] } = sqlFactory(
     cqn,
     {
