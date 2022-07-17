@@ -55,7 +55,7 @@
 
 ## Setup
 
-put the `default-env.json` file into the root directory of your CAP project, with `mysql` credential information.
+for development, just put the `default-env.json` file into the root directory of your CAP project, with `mysql` credential information.
 
 please **NOTICE** that, the `{ tags: ['mysql'] }` is the key which used for service credential lookup in CAP framework.
 
@@ -129,7 +129,7 @@ entity Animal : incrementID {
 
 > csv migrator will automatically fill the `PreDelivery` field as `true`
 > for business, if user want to delete some data, just set the `Disabled` field as `true`
-> content hash will be checked before migration, if one file has been migrated before, will skip it.
+> content hash will be checked before provisioned, if one file has been filled before, `cds-mysql` will skip processing it.
 
 ```groovy
 using {incrementalKey, preDelivery} from 'cds-mysql';
@@ -213,7 +213,7 @@ interface MysqlDatabaseOptions {
 
 ### Setup Database Credential for Cloud Foundry
 
-> if you want to run cds-mysql on cloud foundry
+> if you want to run cds-mysql on cloud foundry for production
 
 create mysql service by [`cf cups`](http://cli.cloudfoundry.org/en-US/cf/create-user-provided-service.html) with following format
 

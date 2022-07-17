@@ -117,3 +117,26 @@ Object {
   ],
 }
 `;
+
+exports[`CSV App Test Suite should support search 1`] = `
+Object {
+  "@odata.context": "$metadata#Houses",
+  "value": Array [
+    Object {
+      "ID": "97dc99ee-f61e-11ec-b939-0242ac120002",
+      "address_City": "Chengdu",
+      "address_Country": null,
+      "address_Province": null,
+      "address_Street": null,
+      "price": 100000,
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite should support search 2`] = `
+Object {
+  "@odata.context": "$metadata#Houses",
+  "value": Array [],
+}
+`;
