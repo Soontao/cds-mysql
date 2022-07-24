@@ -25,5 +25,6 @@
     "varchar",
     "VCAP"
   ],
-  "jest.autoRun": {}
+  "jest.autoRun": {},
+  "jest.jestCommandLine": "./node_modules/.bin/jest --passWithNoTests --runInBand --forceExit"
 }

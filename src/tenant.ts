@@ -2,7 +2,7 @@ import cloneDeep from "@newdash/newdash/cloneDeep";
 import { cwdRequireCDS, Logger } from "cds-internal-tool";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 import { TENANT_DEFAULT } from "./constants";
-import { MySQLDatabaseService } from "./Service";
+import { MysqlDatabaseOptions, MySQLDatabaseService } from "./Service";
 import { MySQLCredential } from "./types";
 
 export abstract class TenantProvider {
@@ -11,7 +11,10 @@ export abstract class TenantProvider {
 
   protected _logger: Logger;
 
-  protected get options() {
+  /**
+   * get the database options
+   */
+  protected get options(): MysqlDatabaseOptions {
     // @ts-ignore
     return this._db.options;
   }
@@ -21,16 +24,13 @@ export abstract class TenantProvider {
     this._logger = cwdRequireCDS().log("tenant");
   }
 
-  protected getTenantDatabaseName(tenant: string) {
-    const credential: MySQLCredential = cloneDeep(this.options.credentials);
+  protected getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
     if (tenant === TENANT_DEFAULT) {
-      return credential.database ?? credential.user;
+      return this.options.credentials.database ?? this.options.credentials.user;
     }
-    const cds = cwdRequireCDS();
-    const tenant_db_prefix = cds.env.get("requires.mysql.tenant.prefix") ?? "tenant_db";
-    const candidate_name = `${tenant_db_prefix}_${tenant}`;
-    const final_name = candidate_name.replace(/[\W_]+/g, "");
-    return final_name;
+    const tenant_db_prefix = this.options?.tenant?.prefix ?? "tenant_db";
+    const candidate_name = [tenant_db_prefix, "_", tenant].join("");
+    return candidate_name.replace(/[\W]+/g, "_");;
   }
 
   /**
@@ -70,7 +70,9 @@ export class ShareMysqlTenantProvider extends TenantProvider {
       const [results] = await defaultTenantConnection.query(`SHOW DATABASES LIKE '${databaseName}';`);
       // @ts-ignore
       if (results?.length === 0) {
+        this._logger.info("creating database", databaseName);
         await defaultTenantConnection.query(`CREATE DATABASE \`${databaseName}\``); // mysql 5.6 not support 'if not exists'
+        this._logger.info("database", databaseName, "created");
       }
       else {
         this._logger.debug("database", databaseName, "is existed, skip process");
