@@ -44,7 +44,7 @@
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
 - [x] initial data provision by `CSV`
   - [x] better migration type/column/name adaption
-- [x] auto incremental key aspect (odata only, single records)
+- [x] auto incremental key aspect (odata only, single record)
 - [x] mysql index
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
@@ -103,6 +103,33 @@ edit your `package.json` > `cds` node
 
 > some advanced usage
 
+### Schema Sync
+
+> `cds-mysql` will automatically migrate schema and pre-defined CSV data into database when connecting to database. 
+
+> just speicify the `requires.db.tenant.deploy.eager` to sync schema on startup
+
+```json
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "tenant": {
+          "deploy": {
+            "eager": [ "default", "<a-tenant-id here>" ]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Multi Tenancy
+
+- develop the single tenant application, use the `default` as tenant id
+- develop the multi-tenancy application, fill the `User.tenant` inforamtion for each `request`/`event`, and `cds-mysql` will automatically sync schema/CSV and provision connection pool for that tenant
+
 ### Auto Incremental Key Aspect
 
 > define entity with `incrementalID` aspect to support the `AUTO_INCREMENT` syntax in `mysql` db
@@ -154,7 +181,7 @@ entity Product : cuid {
 }
 ```
 
-### Configurations
+### Configurations Overview
 
 > you can specify the configuration of `cds-mysql` at the `cds.requires.db` node
 
@@ -184,7 +211,7 @@ interface MysqlDatabaseOptions {
   tenant?: {
     deploy?: {
       /**
-       * auto migrate database schema when connect to it
+       * auto migrate database schema when connect to it, default `true`,  specify `false` to disable the migration on startup/connection pool setup
        */
       auto?: boolean;
       /**

@@ -41,12 +41,17 @@ export interface MysqlDatabaseOptions {
   tenant?: {
     deploy?: {
       /**
-       * auto migrate database schema when connect to it (create pool)
+       * auto migrate database schema when connect to it (create pool),
+       * 
+       * default `true`
        */
       auto?: boolean;
       /**
        * eager deploy tenant id list 
-       * the migration of those tenants will be performed when server startup
+       * 
+       * schema sync of these tenants will be performed when server startup
+       * 
+       * default value is ['default']
        */
       eager?: Array<string> | string;
     };
@@ -56,12 +61,14 @@ export interface MysqlDatabaseOptions {
     prefix?: string;
   };
   /**
-   * connection pool options
+   * connection pool options for each tenant
    */
   pool?: PoolOptions;
   csv?: {
     /**
      * migrate CSV on deployment
+     * 
+     * default value `true`
      */
     migrate?: boolean;
   };
