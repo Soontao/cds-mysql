@@ -1,9 +1,7 @@
-import cloneDeep from "@newdash/newdash/cloneDeep";
 import { cwdRequireCDS, Logger } from "cds-internal-tool";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 import { TENANT_DEFAULT } from "./constants";
 import { MysqlDatabaseOptions, MySQLDatabaseService } from "./Service";
-import { MySQLCredential } from "./types";
 
 export abstract class TenantProvider {
 
