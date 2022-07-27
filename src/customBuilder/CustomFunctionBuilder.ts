@@ -16,7 +16,12 @@ const dateTimePlaceHolder = new Map([
   ["minute", "'%M'"]
 ]);
 
-const STANDARD_FUNCTIONS_SET = new Set(["locate", "substring", "to_date", "to_time"]);
+const STANDARD_FUNCTIONS = new Map([
+  ["locate", "INSTR"],
+  ["substring", "SUBSTR"],
+  ["to_date", "DATE"],
+  ["to_time", "TIME"],
+])
 
 export class CustomFunctionBuilder extends FunctionBuilder {
 
@@ -40,7 +45,7 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     return CustomSelectBuilder;
   }
 
-  build() {
+  public build() {
     this._outputObj = { sql: [], values: [] };
     this._handleFunction();
     // SELECT count ( 1 ) AS "total" FROM People ALIAS_1:
@@ -50,14 +55,14 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     return this._outputObj;
   }
 
-  _handleFunction() {
+  private _handleFunction() {
     const functionName = this._functionName();
     const args = this._functionArgs(); ``;
 
     if (dateTimePlaceHolder.has(functionName)) {
       this._timeFunction(functionName, args);
     }
-    else if (STANDARD_FUNCTIONS_SET.has(functionName)) {
+    else if (STANDARD_FUNCTIONS.has(functionName)) {
       this._standardFunction(functionName, args);
     }
     else if (functionName === "concat") {
@@ -83,25 +88,8 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     if (not) this._outputObj.sql.push(")");
   }
 
-  _standardFunction(functionName: string, args: string | Array<any>) {
-    switch (functionName) {
-      case "locate":
-        functionName = "INSTR";
-        break;
-      case "substring":
-        functionName = "substr";
-        break;
-      case "to_date":
-        functionName = "date";
-        break;
-      case "to_time":
-        functionName = "time";
-        break;
-      default:
-        break;
-    }
-
-    this._outputObj.sql.push(functionName, "(");
+  private _standardFunction(functionName: string, args: string | Array<any>) {
+    this._outputObj.sql.push(STANDARD_FUNCTIONS.get(functionName), "(");
     if (typeof args === "string") {
       this._outputObj.sql.push(args, ")");
     }
