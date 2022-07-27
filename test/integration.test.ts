@@ -65,12 +65,23 @@ describe("Integration Test Suite", () => {
       }
     });
 
+    expect(createdPeople.error).toBeUndefined()
     expect(createdPeople?.ID).not.toBeUndefined();
+    expect(createdPeople.RegisterDate).toMatchInlineSnapshot(`"2000-01-01"`)
+    expect(createdPeople.Detail.BirthDay).toMatchInlineSnapshot(`"1901-11-11"`)
 
+    // test with odata function
     const { data: retrievedItem } = await client.get(
       `/bank/Peoples?$filter=year(RegisterDate) eq 2000 and substring(Name,0,4) eq '${name.substring(0, 4)}'`
     );
     expect(retrievedItem?.value?.[0]?.Name).toBe(name);
+
+    const concatR1 = await client.get(
+      `/bank/Peoples?$filter=concat(Name,'1') eq '${name}1'`
+    );
+
+    expect(concatR1.status).toBe(200)
+    expect(concatR1.data.value).toHaveLength(1)
 
     const { data: retrievedItem2 } = await client.get(
       `/bank/Peoples?$filter=contains(Name,'${name.substring(0, 4)}')`

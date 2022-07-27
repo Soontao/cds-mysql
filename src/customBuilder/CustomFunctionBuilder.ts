@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { FunctionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
 import type { CSN } from "cds-internal-tool";
+import { func, ref, val } from "cds-internal-tool/lib/types/cxn";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { CustomSelectBuilder } from "./CustomSelectBuilder";
@@ -18,6 +19,7 @@ const dateTimePlaceHolder = new Map([
 const STANDARD_FUNCTIONS_SET = new Set(["locate", "substring", "to_date", "to_time"]);
 
 export class CustomFunctionBuilder extends FunctionBuilder {
+
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
@@ -50,15 +52,18 @@ export class CustomFunctionBuilder extends FunctionBuilder {
 
   _handleFunction() {
     const functionName = this._functionName();
-    const args = this._functionArgs();
+    const args = this._functionArgs(); ``;
 
     if (dateTimePlaceHolder.has(functionName)) {
       this._timeFunction(functionName, args);
-    } else if (STANDARD_FUNCTIONS_SET.has(functionName)) {
+    }
+    else if (STANDARD_FUNCTIONS_SET.has(functionName)) {
       this._standardFunction(functionName, args);
-    } else if (functionName === "seconds_between") {
-      this._secondsBetweenFunction(args);
-    } else {
+    }
+    else if (functionName === "concat") {
+      this._handleConcat(args);
+    }
+    else {
       super._handleFunction();
     }
   }
@@ -106,23 +111,27 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     }
   }
 
-  _handleConcat(args) {
+  private _handleConcat(args: Array<ref | val | func | string>) {
     const res = [];
     for (const arg of args) {
       if (arg.ref) {
         const { sql, values } = new this.ReferenceBuilder(arg, this._options, this._csn).build();
         res.push(sql);
         this._outputObj.values.push(...values);
-      } else if (arg.val) {
+      }
+      else if (arg.val) {
         if (typeof arg.val === "number") {
           res.push(arg.val);
-        } else {
+        }
+        else {
           this._outputObj.values.push(arg.val);
           res.push(this._options.placeholder);
         }
-      } else if (typeof arg === "string") {
+      }
+      else if (typeof arg === "string") {
         res.push(arg);
-      } else if (arg.func) {
+      }
+      else if (arg.func) {
         const { sql, values } = new FunctionBuilder(arg, this._options, this._csn).build();
         res.push(sql);
         this._outputObj.values.push(...values);
@@ -134,38 +143,12 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     this._outputObj.sql.push(")");
   }
 
-  _val(val) {
-    this._outputObj.sql.push("?");
-    this._outputObj.values.push(val);
-  }
-
-  _ref(ref) {
-    this._outputObj.sql.push(new this.ReferenceBuilder(ref, this._options, this._csn).build().sql);
-  }
-
-  _secondsBetweenFunction(args) {
-    this._outputObj.sql.push("DATE_FORMAT(");
-    if (args[1].val) {
-      this._val(args[1].val);
-    } else {
-      this._ref(args[1]);
-    }
-    this._outputObj.values.push("%s");
-    this._outputObj.sql.push(",?) - DATE_FORMAT(");
-    if (args[0].val) {
-      this._val(args[0].val);
-    } else {
-      this._ref(args[0]);
-    }
-    this._outputObj.values.push("%s");
-    this._outputObj.sql.push(",?)");
-  }
-
-  _timeFunction(functionName, args) {
+  _timeFunction(functionName: string, args: string | Array<any>) {
     this._outputObj.sql.push("DATE_FORMAT(");
     if (typeof args === "string") {
       this._outputObj.sql.push(args);
-    } else {
+    }
+    else {
       this._addFunctionArgs(args);
     }
     this._outputObj.sql.push(",", dateTimePlaceHolder.get(functionName));

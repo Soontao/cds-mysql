@@ -40,7 +40,7 @@
   - [ ] tenant credential refresh
   - [ ] documentation
 - [x] `$expand` navigation
-- [x] `$filter` with functions
+- [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
 - [x] initial data provision by `CSV`
   - [x] better migration type/column/name adaption

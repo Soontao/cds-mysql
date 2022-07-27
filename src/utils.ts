@@ -8,15 +8,15 @@ import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
  */
 export function overwriteCDSCoreTypes() {
 
-  if (!overwriteCDSCoreTypes['done'] === true) {
+  if (!overwriteCDSCoreTypes["done"] === true) {
     const { cdsToSqlTypes } = cwdRequire("@sap/cds-compiler/lib/render/utils/common");
     // remove some types, fallback to the `cdsToSqlTypes.standard` data type
     cdsToSqlTypes.sqlite = {
-      'cds.Binary': 'BLOB',
-      'cds.hana.BINARY': 'BLOB',
-      'cds.hana.SMALLDECIMAL': 'DECIMAL',
+      "cds.Binary": "BLOB",
+      "cds.hana.BINARY": "BLOB",
+      "cds.hana.SMALLDECIMAL": "DECIMAL",
     };
-    overwriteCDSCoreTypes['done'] = true;
+    overwriteCDSCoreTypes["done"] = true;
   }
 
 }
@@ -34,7 +34,7 @@ export function checkCdsVersion() {
   }
 }
 
-export { memorized, mustBeArray }
+export { memorized, mustBeArray };
 
 export const getIncrementalKey = memorized((entityDef: any): any | undefined => {
   const [key] = Object.values(entityDef?.keys)
