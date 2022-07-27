@@ -308,7 +308,6 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
   // force to use 'sqlite' as dialect to support localized elements
   const statements = cds.compile.to.sql(model, { dialect: "sqlite" });
   statements.forEach((stat: string) => {
-    stat = stat.replace(/TIMESTAMP_TEXT/g, "TIMESTAMP"); // workaround for TIMESTAMP_TEXT type
     listener.setCurrentStatement(stat);
     const result = parser.parse(stat);
     if (result.lexerError) {

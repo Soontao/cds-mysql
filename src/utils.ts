@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { cwdRequire, cwdRequireCDS, groupByKeyPrefix } from "cds-internal-tool";
+import { cwdRequire, cwdRequireCDS, groupByKeyPrefix, memorized, mustBeArray } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
 
 /**
@@ -8,13 +8,16 @@ import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
  */
 export function overwriteCDSCoreTypes() {
 
-  const { cdsToSqlTypes } = cwdRequire("@sap/cds-compiler/lib/render/utils/common");
-
-  cdsToSqlTypes.sqlite = {
-    "cds.Binary": "CHAR",
-    "cds.hana.BINARY": "CHAR",
-    "cds.hana.SMALLDECIMAL": "DECIMAL",
-  };
+  if (!overwriteCDSCoreTypes['done'] === true) {
+    const { cdsToSqlTypes } = cwdRequire("@sap/cds-compiler/lib/render/utils/common");
+    // remove some types, fallback to the `cdsToSqlTypes.standard` data type
+    cdsToSqlTypes.sqlite = {
+      'cds.Binary': 'BLOB',
+      'cds.hana.BINARY': 'BLOB',
+      'cds.hana.SMALLDECIMAL': 'DECIMAL',
+    };
+    overwriteCDSCoreTypes['done'] = true;
+  }
 
 }
 
@@ -31,44 +34,7 @@ export function checkCdsVersion() {
   }
 }
 
-/**
- * utils for memorized (sync) **ONE-parameter** function
- * 
- * @param func a function which only have one parameter
- * @returns 
- */
-export const memorized = <T extends (arg0: any) => any>(func: T): T => {
-  let cache: WeakMap<any, any>;
-
-  // @ts-ignore
-  return function (arg0: any) {
-    if (cache === undefined) {
-      if (typeof arg0 === "object") {
-        cache = new WeakMap();
-      } else {
-        cache = new Map();
-      }
-    }
-    if (!cache.has(arg0)) {
-      cache.set(arg0, func(arg0));
-    }
-    return cache.get(arg0);
-  };
-};
-
-export function mustBeArray<T extends Array<any>>(obj: T): T;
-export function mustBeArray(obj: null): [];
-export function mustBeArray(obj: undefined): [];
-export function mustBeArray<T extends object>(obj: T): [T];
-export function mustBeArray(obj: any): Array<any> {
-  if (obj instanceof Array) {
-    return obj;
-  }
-  if (obj === undefined || obj === null) {
-    return [];
-  }
-  return [obj];
-};
+export { memorized, mustBeArray }
 
 export const getIncrementalKey = memorized((entityDef: any): any | undefined => {
   const [key] = Object.values(entityDef?.keys)
