@@ -1,7 +1,7 @@
 (
   async () => {
     try {
-      const adminUserName = process.env.MYSQL_ADMIN_USRE ?? "cdstest";
+      const adminUserName = process.env.MYSQL_ADMIN_USRE ?? "cds_admin";
       const mysqlPort = parseInt(process.env.MYSQL_PORT ?? "3306");
       const mysqlHost = process.env.MYSQL_HOST ?? "127.0.0.1";
       const mysqlPass = process.env.MYSQL_PASSWORD;

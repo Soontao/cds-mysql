@@ -1,9 +1,9 @@
 // conversion for OUTPUT (DB -> JSON)
-import { cwdRequireCDS } from "cds-internal-tool";
+import { cwdRequire, cwdRequireCDS } from "cds-internal-tool";
 import { DateTime, FixedOffsetZone } from "luxon";
 import { MYSQL_DATE_TIME_FORMAT } from "./constants";
 
-const convertToBoolean = boolean => {
+const convertToBoolean = (boolean: any) => {
   if (boolean === null) {
     return null;
   }
@@ -56,9 +56,9 @@ const TYPE_POST_CONVERSION_MAP = new Map([
 ]);
 
 if (cwdRequireCDS().env.features.bigjs) {
-  const Big = require("big.js");
+  const Big = cwdRequire("big.js");
   const convertToBig = (value: any) => new Big(value);
- 
+
   TYPE_POST_CONVERSION_MAP.set("cds.Integer64", convertToBig);
   TYPE_POST_CONVERSION_MAP.set("cds.Decimal", convertToBig);
 }

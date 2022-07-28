@@ -28,7 +28,7 @@ describe("Tenant Test Suite", () => {
 
   it("should support get database name", () => {
     const s = new ShareMysqlTenantProvider(cwdRequireCDS().db)
-    expect(s['getTenantDatabaseName']()).toMatchInlineSnapshot(`"cdstest"`)
+    expect(s['getTenantDatabaseName']()).toMatchInlineSnapshot(`"cds_admin"`)
     expect(s['getTenantDatabaseName']("wwww-wwww-www")).toMatchInlineSnapshot(`"tenant_db_wwww_wwww_www"`)
     expect(s['getTenantDatabaseName']("3413242312432^&*(")).toMatchInlineSnapshot(`"tenant_db_3413242312432_"`)
     expect(s['getTenantDatabaseName']("+++wwww-wwww----www")).toMatchInlineSnapshot(`"tenant_db__wwww_wwww_www"`)

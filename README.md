@@ -102,11 +102,26 @@ edit your `package.json` > `cds` node
 
 > some advanced usage
 
-### Schema Sync
+### Schema Migration
+
+`cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, parse the `DDL` statements and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
+
+```mermaid
+graph LR
+    CDS[CDS Definition] --> |compile CDS to DDL| DDL[Compiled DDL]
+    DDL --> |ast parser| te[TypeORM Entity Metadata]
+    te --> |use typeorm migrate schema|Schema[Database Schema]
+```
+
+
+It will be fully automatically, sync changed `columns`, `views`.
+
+It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
+
 
 > `cds-mysql` will automatically migrate schema and pre-defined CSV data into database when connecting to database. 
 
-> just speicify the `requires.db.tenant.deploy.eager` to sync schema on startup
+> just specify the `requires.db.tenant.deploy.eager` to sync schema (of target tenants) at startup
 
 ```json
 {
@@ -126,8 +141,12 @@ edit your `package.json` > `cds` node
 
 ### Multi Tenancy
 
+> Out-of-Box multi-tenancy support
+
 - develop the single tenant application, use the `default` as tenant id
-- develop the multi-tenancy application, fill the `User.tenant` inforamtion for each `request`/`event`, and `cds-mysql` will automatically sync schema/CSV and provision connection pool for that tenant
+- develop the multi-tenancy application, fill the `User.tenant` information for each `request`/`event`, and `cds-mysql` will automatically sync schema/CSV and provision connection pool for that tenant
+  - data isolation in mysql database level, each tenant will own its own `database`
+  - better to create a `admin` user to `cds-mysql` so that `cds-mysql` could help you to create `database`
 
 ### Auto Incremental Key Aspect
 
@@ -253,21 +272,6 @@ you can convert PEM cert to json format with [this document](https://docs.vmware
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 ```
 
-### Schema Migration
-
-`cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, parse the `DDL` statements and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
-
-```mermaid
-graph LR
-    CDS[CDS Definition] --> |compile CDS to DDL| DDL[Compiled DDL]
-    DDL --> |ast parser| te[TypeORM Entity Metadata]
-    te --> |use typeorm migrate schema|Schema[Database Schema]
-```
-
-
-It will be fully automatically, sync changed `columns`, `views`.
-
-It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
 
 
 ## Compatibility Table

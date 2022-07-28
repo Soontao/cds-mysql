@@ -20,21 +20,3 @@ docker run -d --name tidb_inst -p 4000:4000 thedockerimages/tidb
 ```bash
 mysqladmin ping --host 127.0.0.1 --port 4000 -u root
 ```
-
-## User Creation
-
-```sql
-CREATE DATABASE IF NOT EXISTS `cds_admin`;
-CREATE USER IF NOT EXISTS 'cds_admin'@'%' IDENTIFIED BY 'cds_admin'; 
-GRANT ALL PRIVILEGES ON *.* TO 'cds_admin'@'%' WITH GRANT OPTION;
-```
-
-## Env File
-
-```env
-CDS_REQUIRES_MYSQL_CREDENTIALS_USER=root
-CDS_REQUIRES_MYSQL_CREDENTIALS_PASSWORD=
-CDS_REQUIRES_MYSQL_CREDENTIALS_DATABASE=test
-CDS_REQUIRES_MYSQL_CREDENTIALS_HOST=127.0.0.1
-CDS_REQUIRES_MYSQL_CREDENTIALS_PORT=4000
-```

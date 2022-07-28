@@ -43,7 +43,7 @@ jobs:
       - run: npm ci
 
       - name: setup mysql user
-        run: node ./docker/tidb/create_user.js
+        run: node ./docker/create_user.js
 
       - name: coverage
         run: npm run coverage
@@ -51,9 +51,9 @@ jobs:
           CI: true
           CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
           CDS_REQUIRES_DB_CREDENTIALS_PORT: 3306
-          CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cdstest
-          CDS_REQUIRES_DB_CREDENTIALS_USER: cdstest
-          CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cdstest
+          CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
+          CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
+          CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cds_admin
 
       - name: upload coverage
         uses: codecov/codecov-action@v3

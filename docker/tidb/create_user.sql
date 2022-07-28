@@ -1,3 +1,0 @@
-CREATE DATABASE IF NOT EXISTS `cds_admin`;
-CREATE USER IF NOT EXISTS 'cds_admin'@'%' IDENTIFIED BY 'cds_admin'; 
-GRANT ALL PRIVILEGES ON *.* TO 'cds_admin'@'%' WITH GRANT OPTION;
