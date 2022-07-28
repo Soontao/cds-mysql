@@ -49,6 +49,8 @@ jobs:
 
       - name: setup mysql user
         run: node ./docker/create_user.js
+        env:
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
 
       - name: test
         run: npm run test
