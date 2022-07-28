@@ -2,9 +2,10 @@
 
 [![npm version](https://img.shields.io/npm/v/cds-mysql?label=cds-mysql)](https://www.npmjs.com/package/cds-mysql)
 ![node-test](https://github.com/Soontao/cds-mysql/workflows/node-test/badge.svg)
+[![codecov](https://codecov.io/gh/Soontao/cds-mysql/branch/main/graph/badge.svg?token=xTt6AaHeuu)](https://codecov.io/gh/Soontao/cds-mysql)
 [![tidb-test](https://github.com/Soontao/cds-mysql/actions/workflows/tidb.yml/badge.svg)](https://github.com/Soontao/cds-mysql/actions/workflows/tidb.yml)
 [![database-test](https://github.com/Soontao/cds-mysql/actions/workflows/database.yml/badge.svg)](https://github.com/Soontao/cds-mysql/actions/workflows/database.yml)
-[![codecov](https://codecov.io/gh/Soontao/cds-mysql/branch/main/graph/badge.svg?token=xTt6AaHeuu)](https://codecov.io/gh/Soontao/cds-mysql)
+[![node-arm](https://github.com/Soontao/cds-mysql/actions/workflows/nodejs-arm.yml/badge.svg)](https://github.com/Soontao/cds-mysql/actions/workflows/nodejs-arm.yml)
 
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Soontao_cds-mysql&metric=security_rating)](https://sonarcloud.io/dashboard?id=Soontao_cds-mysql)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Soontao_cds-mysql&metric=sqale_index)](https://sonarcloud.io/dashboard?id=Soontao_cds-mysql)
@@ -41,6 +42,7 @@
 - [x] `$expand` navigation
 - [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
+- [x] test with `arm64` arch `nodejs` and `mysql`
 - [x] initial data provision by `CSV`
   - [x] better migration type/column/name adaption
 - [x] auto incremental key aspect (odata only, single record)
