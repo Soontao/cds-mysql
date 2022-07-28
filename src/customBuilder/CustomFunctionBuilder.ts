@@ -21,7 +21,7 @@ const STANDARD_FUNCTIONS = new Map([
   ["substring", "SUBSTR"],
   ["to_date", "DATE"],
   ["to_time", "TIME"],
-])
+]);
 
 export class CustomFunctionBuilder extends FunctionBuilder {
 
