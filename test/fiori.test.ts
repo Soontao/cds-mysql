@@ -28,6 +28,7 @@ describe("fiori draft Test Suite", () => {
       Name: "Theo Sun",
       Age: 26,
     });
+    expect(response.data?.error).toBeUndefined();
     expect(response.status).toBe(201);
     expect(response.data).toMatchSnapshot();
   });

@@ -1,101 +1,89 @@
 // @ts-nocheck
 import { InsertBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import getAnnotatedColumns from "@sap/cds/libx/_runtime/db/sql-builder/annotations";
-import * as dollar from "@sap/cds/libx/_runtime/db/sql-builder/dollar";
-import type { CSN } from "cds-internal-tool";
+import type { CSN, EntityDefinition } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 export class CustomInsertBuilder extends InsertBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
-    // overwrite quote function
-    // @ts-ignore
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
   }
 
-  /**
-   * Builds an Object based on the properties of the CQN object.
-   * @example <caption>Example output</caption>
-   * {
-   *    sql: 'INSERT INTO "T" ("a", "b", "c") VALUES (?, ?, ?)',
-   *    values: [1, 2, '\'asd\'']
-   * }
-   *
-   * @returns {{sql: string, values: Array}} Object with two properties.
-   *
-   * SQL string for prepared statement and array of values to replace the placeholders.
-   * Property values can be an Array of Arrays for Batch insert of multiple rows.
-   */
-  build() {
-    this._outputObj = {
-      sql: ["INSERT", "INTO"],
-      values: [],
-      columns: []
-    };
+  private _extOutputObj = {
+    columns: [],
+  };
 
-    // replace $ values
-    // REVISIT: better
-    if (this._obj.INSERT.entries) {
-      dollar.entries(this._obj.INSERT.entries, this._options.user, this._options.now);
-    } else if (this._obj.INSERT.values) {
-      dollar.values(this._obj.INSERT.values, this._options.user, this._options.now);
-    } else if (this._obj.INSERT.rows) {
-      dollar.rows(this._obj.INSERT.rows, this._options.user, this._options.now);
-    }
-
-    const entityName = this._into();
-
-    // side effect: sets this.uuidKeys if found any
-    this._findUuidKeys(entityName);
-
-    this._columnIndexesToDelete = [];
-    const annotatedColumns = getAnnotatedColumns(entityName, this._csn);
-
-    if (this._obj.INSERT.columns) {
-      this._removeAlreadyExistingInsertAnnotatedColumnsFromMap(annotatedColumns);
-      this._columns(annotatedColumns);
-    }
-
-    if (this._obj.INSERT.values || this._obj.INSERT.rows) {
-      if (annotatedColumns && !this._obj.INSERT.columns) {
-        // if columns not provided get indexes from csn
-        this._getAnnotatedColumnIndexes(annotatedColumns);
-      }
-
-      this._values(annotatedColumns);
-    } else if (this._obj.INSERT.entries && this._obj.INSERT.entries.length !== 0) {
-      this._entries(annotatedColumns);
-    }
-
-    if (this._obj.INSERT.as) {
-      this._as(this._obj.INSERT.as);
-    }
-
-    this._outputObj.sql = this._outputObj.sql.join(" ");
-
-    const entity = this._csn.definitions[entityName];
-
-    this._outputObj.columns.forEach((column: string, colIndex: number) => {
-      const columnType = entity?.elements?.[column]?.type;
-      this._outputObj.values.forEach((row) => {
-        const value = row[colIndex];
-        if (columnType && PRE_CONVERSION_MAP.has(columnType)) {
-          const val = PRE_CONVERSION_MAP.get(columnType)(value);
-          row[colIndex] = val;
-        }
-      });
-    });
-
+  public build() {
+    this._extOutputObj = { columns: [] };
+    super.build();
+    this._transform();
     return this._outputObj;
   }
 
-  _entriesSqlString(columns, placeholderNum, valuesAndSQLs) {
-    this._outputObj.columns.push(...columns);
+  /**
+   * do datatype transform for mysql
+   * 
+   * @mysql
+   */
+  private _transform() {
+    const entity = this._entity;
+    if (entity !== undefined) {
+      this._extOutputObj.columns.forEach((elementName: string, elementIndex: number) => {
+        const columnType = entity?.elements?.[elementName]?.type;
+        // if column type is needed for transformation
+        if (columnType !== undefined && PRE_CONVERSION_MAP.has(columnType)) {
+          const transformFunc = PRE_CONVERSION_MAP.get(columnType);
+          // guard against undefined
+          if (this._outputObj.values instanceof Array) {
+            for (const row of this._outputObj.values) {
+              row[elementIndex] = transformFunc(row[elementIndex]);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * get current CQN entity name
+   */
+  private get _entityName(): string | undefined {
+    if (typeof this._obj?.INSERT?.into === "string") {
+      return this._obj?.INSERT?.into;
+    }
+    if (typeof this._obj?.INSERT?.into?.ref === "object") {
+      return this._obj?.INSERT?.into?.ref?.[0];
+    }
+    return this._obj?.INSERT?.into?.name;
+  }
+
+  /**
+ * get current CQN entity definition
+ */
+  private get _entity(): EntityDefinition | undefined {
+    return this._csn?.definitions?.[this._entityName];
+  }
+
+  /**
+   * 
+   * @mysql
+   * @param columns 
+   * @param placeholderNum 
+   * @param valuesAndSQLs 
+   * @returns 
+   */
+  protected _entriesSqlString(columns, placeholderNum, valuesAndSQLs) {
+    this._extOutputObj.columns.push(...columns);
     return super._entriesSqlString(columns, placeholderNum, valuesAndSQLs);
   }
 
-  _columns(annotatedColumns) {
+  /**
+   * 
+   * @mysql
+   * @param annotatedColumns 
+   */
+  protected _columns(annotatedColumns) {
     this._outputObj.sql.push("(");
 
     const insertColumns = [...this._obj.INSERT.columns.map((col) => this._quoteElement(col))];
@@ -108,7 +96,8 @@ export class CustomInsertBuilder extends InsertBuilder {
       }
     }
 
-    this._outputObj.columns.push(...insertColumns);
+    // for mysql here changed
+    this._extOutputObj.columns.push(...insertColumns);
     this._outputObj.sql.push(insertColumns.join(", "));
 
     if (annotatedColumns) {
@@ -119,16 +108,12 @@ export class CustomInsertBuilder extends InsertBuilder {
     this._outputObj.sql.push(")");
   }
 
-  _columnAnnotatedAdded(annotatedColumns) {
-    const annotatedInsertColumnNames = this._getAnnotatedInsertColumnNames(annotatedColumns);
-
-    if (annotatedInsertColumnNames && annotatedInsertColumnNames.length !== 0) {
-      this._outputObj.columns.push(...annotatedInsertColumnNames);
-      this._outputObj.sql.push(",", annotatedInsertColumnNames.map((col) => this._quoteElement(col)).join(", "));
-    }
-  }
-
-  _createPlaceholderString() {
+  /**
+   * @mysql
+   * 
+   * @returns 
+   */
+  protected _createPlaceholderString() {
     // for mysql driver, it will automatically processing single & multiply insert
     return ["VALUES", "?"];
   }
