@@ -11,11 +11,6 @@ define aspect incrementID {
 }
 
 /**
- * alias of incrementID
- */
-define aspect incrementalKey : incrementID {}
-
-/**
  * preDelivery aspect for CSV provisioning
  */
 define aspect preDelivery {

@@ -4,7 +4,7 @@ exports[`fiori draft Test Suite should support to create instance 1`] = `
 Object {
   "@odata.context": "$metadata#Persons/$entity",
   "Address": null,
-  "Age": 25,
+  "Age": 26,
   "HasActiveEntity": false,
   "HasDraftEntity": false,
   "ID": "95f96069-e831-4e30-9567-37a1490b9385",

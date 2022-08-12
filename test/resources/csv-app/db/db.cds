@@ -3,7 +3,7 @@ namespace test.resources.csv.app.db;
 using {cuid} from '@sap/cds/common';
 
 using {
-  incrementalKey,
+  incrementID,
   preDelivery,
 } from '../../../../index';
 
@@ -23,11 +23,11 @@ entity House : cuid {
   address : Address;
 }
 
-entity Person : incrementalKey, preDelivery {
+entity Person : incrementID, preDelivery {
   Name : String(255);
 }
 
-entity ComplexTypeEntity : incrementalKey, preDelivery {
+entity ComplexTypeEntity : incrementID, preDelivery {
   Name       : String(125);
   Age        : Integer;
   IDCard     : Integer64;

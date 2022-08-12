@@ -177,9 +177,9 @@ entity Animal : incrementID {
 > content hash will be checked before provisioned, if one file has been filled before, `cds-mysql` will skip processing it.
 
 ```groovy
-using {incrementalKey, preDelivery} from 'cds-mysql';
+using {incrementID, preDelivery} from 'cds-mysql';
 
-entity Person : incrementalKey, preDelivery {
+entity Person : incrementID, preDelivery {
   Name : String(255);
 }
 ```
