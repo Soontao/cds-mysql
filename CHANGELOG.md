@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/Soontao/cds-mysql/compare/v6.0.0...v6.1.0) (2022-08-12)
+
+
+### Features
+
+* arm 64 support ([1ddb6e8](https://github.com/Soontao/cds-mysql/commit/1ddb6e8312cd85c5f39c7d7d12d2d15ec0a79390))
+* support cds@6.1 ([f21661e](https://github.com/Soontao/cds-mysql/commit/f21661efc037284d508423b7d09a186e2d68532c))
+* update quote style ([66690f3](https://github.com/Soontao/cds-mysql/commit/66690f38c502e3429a526db519c7c88ef2e28962))
+
+
+### Bug Fixes
+
+* ci ([ba036d8](https://github.com/Soontao/cds-mysql/commit/ba036d8e6d1e2db328c1aab08552448b1f63bde3))
+* **deps:** update dependency luxon to v3 ([49455c1](https://github.com/Soontao/cds-mysql/commit/49455c1c15462481407360f87348f5997b411012))
+* lint ([534f8ed](https://github.com/Soontao/cds-mysql/commit/534f8ed69251fef4371f2041d47c6c5097b496fb))
+* lint ([901fe05](https://github.com/Soontao/cds-mysql/commit/901fe05841c3d8d29793674bffa79c56419f84f8))
+
 ## [6.0.0](https://github.com/Soontao/cds-mysql/compare/v5.9.15...v6.0.0) (2022-07-09)
 
 
