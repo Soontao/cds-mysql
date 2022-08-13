@@ -33,6 +33,7 @@
     - [x] migrate CSV on-demand (with option)
       - [x] CSV aspect `preDelivery`
       - [x] CSV migration with hash check
+      - [ ] enhance `preDelivery` check by standalone table
   - [ ] dynamic database credential provider
   - [ ] admin database concept
     - [ ] `@admin` tenant entity & services
