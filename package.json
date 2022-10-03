@@ -28,7 +28,7 @@
     "@newdash/newdash": "^5.21.3",
     "cds-internal-tool": "^1.4.0",
     "colors": "^1.4.0",
-    "generic-pool": "^3.8.2",
+    "generic-pool": "^3.9.0",
     "glob": "^8.0.3",
     "luxon": "^3.0.3",
     "mysql2": "^2.3.3",
