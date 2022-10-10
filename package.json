@@ -33,7 +33,7 @@
     "luxon": "^3.0.3",
     "mysql2": "^2.3.3",
     "ts-mysql-parser": "^0.2.0",
-    "typeorm": "^0.3.9"
+    "typeorm": "^0.3.10"
   },
   "devDependencies": {
     "@types/generic-pool": "3.1.11",
