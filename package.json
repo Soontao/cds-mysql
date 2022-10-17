@@ -30,7 +30,7 @@
     "colors": "^1.4.0",
     "generic-pool": "^3.9.0",
     "glob": "^8.0.3",
-    "luxon": "^3.0.3",
+    "luxon": "^3.0.4",
     "mysql2": "^2.3.3",
     "ts-mysql-parser": "^0.2.0",
     "typeorm": "^0.3.9"
