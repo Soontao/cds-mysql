@@ -20,8 +20,9 @@
         "impl": "../../../src/index"
       },
       "auth": {
-        "kind": "basic-auth",
+        "kind": "basic",
         "users": {
+          "alice": { "roles": ["admin"] },
           "theo-on-tenant-2": {
             "tenant": "e5f878d5-7985-407b-a1cb-87a8716f1904"
           }
