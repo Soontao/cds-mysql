@@ -283,6 +283,7 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 | 5.9.x            | 5.9.x             |
 | 6.0.x            | 6.0.x             |
 | 6.1.x            | 6.1.x             |
+| 6.2.x            | 6.2.x             |
 
 ## Limitation
 
