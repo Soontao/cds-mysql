@@ -230,7 +230,9 @@ interface MysqlDatabaseOptions {
   tenant?: {
     deploy?: {
       /**
-       * auto migrate database schema when connect to it, default `true`,  specify `false` to disable the migration on startup/connection pool setup
+       * auto migrate database schema when connect to it
+       * default value is `true` 
+       * specify `false` to disable the migration on startup/connection pool setup
        */
       auto?: boolean;
       /**
