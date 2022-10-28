@@ -70,9 +70,13 @@ describe("TypeORM Test Suite", () => {
 
     await migrate({ ...baseOption, entities: entities });
 
+
   });
 
   it("should support migrate tables", async () => {
+
+    await cleanDB();
+
     const CSNs = await Promise.all(
       range(1, 10)
         .map((idx) => `./resources/migrate/step-${idx}.cds`)

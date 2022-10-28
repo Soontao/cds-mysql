@@ -40,15 +40,15 @@ describe("CSV App Test Suite", () => {
   });
 
   it("should support search", async () => {
-    const res1 = await client.get("/app/Houses?$search=Chengdu")
-    expect(res1.status).toBe(200)
-    expect(res1.data).toMatchSnapshot()
+    const res1 = await client.get("/app/Houses?$search=Chengdu");
+    expect(res1.status).toBe(200);
+    expect(res1.data).toMatchSnapshot();
 
     // TODO: search numeric failed
-    const res2 = await client.get("/app/Houses?$search=2357853")
-    expect(res2.data).toMatchSnapshot()
+    const res2 = await client.get("/app/Houses?$search=2357853");
+    expect(res2.data).toMatchSnapshot();
 
-  })
+  });
 
 
 });
