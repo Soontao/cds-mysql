@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/Soontao/cds-mysql/compare/v6.2.0-alpha.2...v6.2.0) (2022-10-28)
+
+
+### Bug Fixes
+
+* clob types ([7c33ecc](https://github.com/Soontao/cds-mysql/commit/7c33eccb36f96181c7f09cc0de9616b55c0be250))
+* keywords not supported ([4d99477](https://github.com/Soontao/cds-mysql/commit/4d99477031dc2b5f676186b9ccee6f7c539df397))
+* ut ([4e9b2f6](https://github.com/Soontao/cds-mysql/commit/4e9b2f6db5f4a67e7d83169550235b6bcf8e770a))
+* ut ([febe7a7](https://github.com/Soontao/cds-mysql/commit/febe7a7146f01a955318ef3fc520438952984795))
+
 ## [6.2.0-alpha.2](https://github.com/Soontao/cds-mysql/compare/v6.2.0-alpha.1...v6.2.0-alpha.2) (2022-10-28)
 
 ## [6.2.0-alpha.1](https://github.com/Soontao/cds-mysql/compare/v6.2.0-alpha.0...v6.2.0-alpha.1) (2022-10-28)
