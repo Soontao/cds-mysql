@@ -7,6 +7,7 @@ import MySQLParser, {
   CreateTableContext,
   CreateViewContext,
   MySQLParserListener,
+  SqlMode,
   TableConstraintDefContext,
   TableNameContext,
   TableRefContext
@@ -14,6 +15,7 @@ import MySQLParser, {
 import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
+import { _isQuoted } from "../customBuilder/replacement/quotingStyles";
 import { overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
@@ -51,7 +53,7 @@ class CDSListener implements MySQLParserListener {
   // >> CREATE TABLE
 
   exitTableName(ctx: TableNameContext) {
-    this._tmp.name = ctx.text;
+    this._tmp.name = _isQuoted(ctx.text) ? ctx.text.substring(1, ctx.text.length - 1) : ctx.text;
     this._tmp.tableName = ctx.text;
   }
 
@@ -64,9 +66,8 @@ class CDSListener implements MySQLParserListener {
     const floatOption = dataType.floatOptions();
     const attrs = field.columnAttribute();
 
-
     const column: EntitySchemaColumnOptions = {
-      name: name.text,
+      name: _isQuoted(name.text) ? name.text.substring(1, name.text.length - 1) : name.text,
       type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
       nullable: true, // default can be null
       default: null
@@ -80,7 +81,7 @@ class CDSListener implements MySQLParserListener {
       const eleDef = fuzzy.findElement(entityDef, name.text);
 
       // TODO: use element def directly
-      
+
       if (eleDef !== undefined) {
         // force overwrite blob column
         if (eleDef.type === "cds.Binary") {
@@ -311,7 +312,7 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
   overwriteCDSCoreTypes();
   // @ts-ignore
   const listener: CDSListener = new CDSListener({ model: cds.compile.for.nodejs(model) });
-  const parser = new MySQLParser({ parserListener: listener });
+  const parser = new MySQLParser({ parserListener: listener, mode: SqlMode.AnsiQuotes });
   // force to use 'sqlite' as dialect to support localized elements
   const statements = cds.compile.to.sql(model, { dialect: "sqlite" });
   statements.forEach((stat: string) => {

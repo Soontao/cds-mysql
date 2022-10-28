@@ -10,7 +10,7 @@ const _dialect = {
   asDelimitedId: (name: string) => `"${name.replace(/"/g, '""')}"`,
 };
 
-const _isQuoted = (s: string) => s.match(/^".*"$/);
+export const _isQuoted = (s: string) => s.match(/^".*"$/);
 const _slugify = (s: string) => s.replace(/\./g, "_");
 const _smartId = (s: string) => smartId(_slugify(s), _dialect);
 

@@ -22,4 +22,6 @@ entity People {
       Int32Property     : Int32;
       Int64Property     : Int64;
       Integer64Property : Integer64;
+      ![Create]         : Boolean default false;
+      ![Key]            : Integer not null;
 }

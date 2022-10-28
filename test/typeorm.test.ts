@@ -53,6 +53,25 @@ describe("TypeORM Test Suite", () => {
 
   });
 
+  it("should support migrate different prop type to mysql", async () => {
+    const csn = await loadCSN("./resources/property-type.cds");
+    const entities = csnToEntity(csn);
+    const baseOption: DataSourceOptions = {
+      ...getTestTypeORMOptions(),
+      name: "migrate-test-for-reserved-things",
+      type: "mysql",
+      logging: false
+    };
+    const ddl = (await migrate({ ...baseOption, entities: entities }, true)).upQueries.map((query) =>
+      pick(query, "query", "parameters")
+    );
+
+    expect(ddl).toMatchSnapshot();
+
+    await migrate({ ...baseOption, entities: entities });
+
+  });
+
   it("should support migrate tables", async () => {
     const CSNs = await Promise.all(
       range(1, 10)
