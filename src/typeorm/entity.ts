@@ -87,7 +87,7 @@ class CDSListener implements MySQLParserListener {
         }
 
         if (["cds.LargeString"].includes(eleDef.type)) {
-          column.type = "text";
+          column.type = "mediumtext";
         }
 
         // not association or composition

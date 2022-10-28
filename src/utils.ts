@@ -16,8 +16,8 @@ export function overwriteCDSCoreTypes() {
       "cds.hana.BINARY": "BLOB",
       "cds.hana.SMALLDECIMAL": "DECIMAL",
     };
-    cdsToSqlTypes.standard["cds.LargeString"] = "TEXT";
-    cdsToSqlTypes.standard["cds.hana.LargeString"] = "TEXT";
+    cdsToSqlTypes.standard["cds.LargeString"] = "MEDIUMTEXT";
+    cdsToSqlTypes.standard["cds.hana.LargeString"] = "MEDIUMTEXT";
     overwriteCDSCoreTypes["done"] = true;
   }
 
