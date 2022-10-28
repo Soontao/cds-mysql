@@ -24,7 +24,7 @@ const logger: Logger = cwdRequireCDS().log("mysql|db|typeorm|entity");
 
 const TextColumnTypes: Array<ColumnType> = ["varchar", "varchar2", "nvarchar", "nvarchar2", "char"];
 
-const DEFAULT_LENGTH = 5000;
+const DEFAULT_STRING_LENGTH = 5000;
 
 interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   /**
@@ -50,11 +50,16 @@ class CDSListener implements MySQLParserListener {
     this._model = options.model;
   }
 
+  private _getTextWithoutQuote(text: string) {
+    return _isQuoted(text) ? text.substring(1, text.length - 1) : text;
+  }
+
   // >> CREATE TABLE
 
   exitTableName(ctx: TableNameContext) {
-    this._tmp.name = _isQuoted(ctx.text) ? ctx.text.substring(1, ctx.text.length - 1) : ctx.text;
-    this._tmp.tableName = ctx.text;
+    const name = this._getTextWithoutQuote(ctx.text);
+    this._tmp.name = name;
+    this._tmp.tableName = name;
   }
 
   async exitColumnDefinition(ctx: ColumnDefinitionContext) {
@@ -67,7 +72,7 @@ class CDSListener implements MySQLParserListener {
     const attrs = field.columnAttribute();
 
     const column: EntitySchemaColumnOptions = {
-      name: _isQuoted(name.text) ? name.text.substring(1, name.text.length - 1) : name.text,
+      name: this._getTextWithoutQuote(name.text),
       type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
       nullable: true, // default can be null
       default: null
@@ -78,7 +83,7 @@ class CDSListener implements MySQLParserListener {
 
     if (entityDef !== undefined) {
       // for draft table, it could not found metadata in model
-      const eleDef = fuzzy.findElement(entityDef, name.text);
+      const eleDef = fuzzy.findElement(entityDef, column.name);
 
       // TODO: use element def directly
 
@@ -115,7 +120,7 @@ class CDSListener implements MySQLParserListener {
       }
       // default un-set length string,
       // will convert it to 'text' to avoid MySQL row 65565 bytes size limit
-      if (TextColumnTypes.includes(column.type) && column.length === DEFAULT_LENGTH) {
+      if (TextColumnTypes.includes(column.type) && column.length === DEFAULT_STRING_LENGTH) {
         column.type = "text";
         column.length = undefined;
       }
@@ -181,7 +186,7 @@ class CDSListener implements MySQLParserListener {
       });
     }
 
-    this._tmp.columns[name.text] = column;
+    this._tmp.columns[column.name] = column;
   }
 
   private newEntitySchemaOption(): EntitySchemaOptionsWithDeps {
