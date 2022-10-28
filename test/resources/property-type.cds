@@ -15,4 +15,6 @@ entity People {
         high   = 'high';
       };
       Avatar        : Binary(255);
+      Picture       : LargeString;
+      rank          : array of String(25);
 }

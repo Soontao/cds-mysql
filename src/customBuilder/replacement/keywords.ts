@@ -109,6 +109,7 @@ export const MYSQL_KEYWORDS = [
   "QUERY",
   "RAISE",
   "RANGE",
+  "RANK",
   "RECURSIVE",
   "REFERENCES",
   "REGEXP",

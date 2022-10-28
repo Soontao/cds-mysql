@@ -86,6 +86,10 @@ class CDSListener implements MySQLParserListener {
           column.type = "blob";
         }
 
+        if (["cds.LargeString"].includes(eleDef.type)) {
+          column.type = "text";
+        }
+
         // not association or composition
         if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
           const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
