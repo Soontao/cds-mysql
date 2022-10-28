@@ -50,6 +50,7 @@
 - [x] automatically schema sync (when connection pool provision)
   - [ ] pre-built typeorm entity definitions
   - [ ] sync data model online
+- [ ] datatype mapping table
 - [ ] better E2E document/sample
 
 

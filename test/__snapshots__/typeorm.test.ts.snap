@@ -1,5 +1,155 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Active element definition 1`] = `
+Object {
+  "default": true,
+  "name": "Active",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Age element definition 1`] = `
+Object {
+  "default": 10,
+  "name": "Age",
+  "nullable": true,
+  "type": "integer",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Avatar element definition 1`] = `
+Object {
+  "default": null,
+  "name": "Avatar",
+  "nullable": true,
+  "type": "blob",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.BirthDateTime element definition 1`] = `
+Object {
+  "default": null,
+  "name": "BirthDateTime",
+  "nullable": true,
+  "type": "timestamp",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.BirthDay element definition 1`] = `
+Object {
+  "default": undefined,
+  "name": "BirthDay",
+  "nullable": false,
+  "type": "date",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Credit element definition 1`] = `
+Object {
+  "default": 1,
+  "name": "Credit",
+  "nullable": true,
+  "precision": 10,
+  "scale": 2,
+  "type": "decimal",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.FullEmployee element definition 1`] = `
+Object {
+  "default": false,
+  "name": "FullEmployee",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Int16Property element definition 1`] = `
+Object {
+  "default": null,
+  "name": "Int16Property",
+  "nullable": true,
+  "type": "smallint",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Int32Property element definition 1`] = `
+Object {
+  "default": null,
+  "name": "Int32Property",
+  "nullable": true,
+  "type": "integer",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Int64Property element definition 1`] = `
+Object {
+  "default": null,
+  "name": "Int64Property",
+  "nullable": true,
+  "type": "bigint",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Integer64Property element definition 1`] = `
+Object {
+  "default": null,
+  "name": "Integer64Property",
+  "nullable": true,
+  "type": "bigint",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Name element definition 1`] = `
+Object {
+  "default": undefined,
+  "length": 20,
+  "name": "Name",
+  "nullable": false,
+  "primary": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Picture element definition 1`] = `
+Object {
+  "default": null,
+  "name": "Picture",
+  "nullable": true,
+  "type": "longtext",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Type element definition 1`] = `
+Object {
+  "default": undefined,
+  "length": 10,
+  "name": "Type",
+  "nullable": false,
+  "primary": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.UInt8Property element definition 1`] = `
+Object {
+  "default": null,
+  "name": "UInt8Property",
+  "nullable": true,
+  "type": "tinyint",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.rank element definition 1`] = `
+Object {
+  "default": null,
+  "name": "rank",
+  "nullable": true,
+  "type": "longtext",
+}
+`;
+
 exports[`TypeORM Test Suite should support migrate tables 1`] = `
 Array [
   Array [

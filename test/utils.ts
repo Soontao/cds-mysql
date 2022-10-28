@@ -16,15 +16,15 @@ require("dotenv").config();
  * 
  */
 export async function deploy(csn: CSN) {
-  const cds = cwdRequireCDS()
-  const { MySQLDatabaseService } = require("../src/Service")
+  const cds = cwdRequireCDS();
+  const { MySQLDatabaseService } = require("../src/Service");
   cds.services.db = cds.db = new MySQLDatabaseService(
     "db",
     cds.linked(csn),
     cds.env.requires.db
-  )
-  await cds.db.init()
-  await cds.db.deploy(csn)
+  );
+  await cds.db.init();
+  await cds.db.deploy(csn);
 }
 
 export const createRandomName = () => v4().split("-").pop();

@@ -47,11 +47,10 @@ describe("TypeORM Test Suite", () => {
     const [entity] = entities;
     const { columns } = entity.options;
 
-    expect(columns["Type"].primary).toBeTruthy();
-    expect(columns["Name"].primary).toBeTruthy();
-    expect(columns["BirthDay"].nullable).toBeFalsy();
-    expect(columns["FullEmployee"].default).toStrictEqual(false);
-    expect(columns["Active"].default).toStrictEqual(true);
+    for (const columnName of Object.keys(columns)) {
+      expect(columns[columnName]).toMatchSnapshot(`${entity.options.name}.${columnName} element definition`);
+    }
+
   });
 
   it("should support migrate tables", async () => {

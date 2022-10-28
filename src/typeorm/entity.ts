@@ -80,14 +80,17 @@ class CDSListener implements MySQLParserListener {
       const eleDef = fuzzy.findElement(entityDef, name.text);
 
       // TODO: use element def directly
+      
       if (eleDef !== undefined) {
         // force overwrite blob column
-        if (["cds.Binary", "cds.LargeBinary"].includes(eleDef.type)) {
+        if (eleDef.type === "cds.Binary") {
           column.type = "blob";
         }
-
-        if (["cds.LargeString"].includes(eleDef.type)) {
-          column.type = "mediumtext";
+        if (eleDef.type === "cds.LargeBinary") {
+          column.type = "longblob";
+        }
+        if (eleDef.type === "cds.LargeString") {
+          column.type = "longtext";
         }
 
         // not association or composition

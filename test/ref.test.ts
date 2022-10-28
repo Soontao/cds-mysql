@@ -13,7 +13,7 @@ describe("Ref Test Suite", () => {
 
   it("should support reference query", async () => {
     const csn = await cds.load(path.join(__dirname, "./resources/reference.cds"));
-    await deploy(csn)
+    await deploy(csn);
 
     const People = csn.definitions["test.resources.ref.People2"];
     const Detail = csn.definitions["test.resources.ref.Detail2"];
