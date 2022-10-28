@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0-alpha.1](https://github.com/Soontao/cds-mysql/compare/v6.2.0-alpha.0...v6.2.0-alpha.1) (2022-10-28)
+
+
+### Bug Fixes
+
+* large string issue ([480d47c](https://github.com/Soontao/cds-mysql/commit/480d47cc1a7d69403e98773caa46d25e11af1253))
+
 ## [6.2.0-alpha.0](https://github.com/Soontao/cds-mysql/compare/v6.1.0...v6.2.0-alpha.0) (2022-10-25)
 
 ## [6.1.0](https://github.com/Soontao/cds-mysql/compare/v6.0.0...v6.1.0) (2022-08-12)
