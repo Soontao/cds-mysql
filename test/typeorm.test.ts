@@ -68,9 +68,6 @@ describe("TypeORM Test Suite", () => {
 
     expect(ddl).toMatchSnapshot();
 
-    await migrate({ ...baseOption, entities: entities });
-
-
   });
 
   it("should support migrate tables", async () => {

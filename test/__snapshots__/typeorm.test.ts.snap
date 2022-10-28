@@ -63,6 +63,15 @@ Object {
 }
 `;
 
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Create element definition 1`] = `
+Object {
+  "default": false,
+  "name": "Create",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Credit element definition 1`] = `
 Object {
   "default": 1,
@@ -116,6 +125,15 @@ Object {
   "name": "Integer64Property",
   "nullable": true,
   "type": "bigint",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Key element definition 1`] = `
+Object {
+  "default": undefined,
+  "name": "Key",
+  "nullable": false,
+  "type": "integer",
 }
 `;
 
