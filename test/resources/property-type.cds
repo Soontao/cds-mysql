@@ -26,4 +26,5 @@ entity People {
       ![Key]              : Integer not null;
       DoubleProperty      : Double;
       StringWithoutLength : String;
+      LargeBinaryValue    : LargeBinary;
 }

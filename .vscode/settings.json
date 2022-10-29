@@ -16,10 +16,13 @@
     "luxon",
     "mariadb",
     "Millis",
+    "hana",
+    "nvarchar",
     "Rdbms",
     "TIDB",
     "TINYINT",
     "typeorm",
+    "ulonglong",
     "Unlocalized",
     "varchar",
     "VCAP"

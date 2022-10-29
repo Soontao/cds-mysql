@@ -22,7 +22,13 @@ type TableName = string;
 
 const logger: Logger = cwdRequireCDS().log("mysql|db|typeorm|entity");
 
-const TextColumnTypes: Array<ColumnType> = ["varchar", "varchar2", "nvarchar", "nvarchar2", "char"];
+const TextColumnTypes: Array<ColumnType> = [
+  "varchar",
+  "varchar2",
+  "nvarchar",
+  "nvarchar2",
+  "char"
+];
 
 const DEFAULT_STRING_LENGTH = 5000;
 
@@ -110,23 +116,28 @@ class CDSListener implements MySQLParserListener {
             );
           }
         }
+
       }
+
     }
 
-    // (5000)
-    if (length && column.type !== "blob") {
+
+    if (length) {
       const long1 = length.real_ulonglong_number();
       if (long1) {
         column.length = parseInt(long1?.text);
       }
+      // (5000)
       // default un-set length string,
       // will convert it to 'text' to avoid MySQL row 65565 bytes size limit
-      if (TextColumnTypes.includes(column.type) && column.length === DEFAULT_STRING_LENGTH) {
+      if (
+        TextColumnTypes.includes(column.type) &&
+        column.length === DEFAULT_STRING_LENGTH) {
         column.type = "text";
         column.length = undefined;
       }
     }
-
+  
     // (10, 2)
     if (floatOption) {
       column.precision = parseInt(floatOption.getChild(0).getChild(1).text);
@@ -135,7 +146,9 @@ class CDSListener implements MySQLParserListener {
 
     // DEFAULT
     if (attrs && attrs.length > 0) {
-      attrs.forEach((attr) => {
+
+      for (const attr of attrs) {
+
         if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
           column.nullable = false;
           column.default = undefined;
@@ -150,7 +163,7 @@ class CDSListener implements MySQLParserListener {
             let value = undefined;
 
             if (lit.boolLiteral()) {
-              const sBool = lit.boolLiteral().text.toLowerCase();
+              const sBool = lit.boolLiteral().text.toLowerCase().trim();
               if (sBool === "true") {
                 value = true;
               }
@@ -184,7 +197,7 @@ class CDSListener implements MySQLParserListener {
             }
           }
         }
-      });
+      }
     }
 
     this._tmp.columns[column.name] = column;
@@ -330,7 +343,7 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
     if (result.parserError) {
       logger.error(
         "prase statement", stat,
-        "failed, error", result.parserError
+        "failed, error", result.parserError.message
       );
       throw result.parserError;
     }

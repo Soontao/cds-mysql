@@ -13,11 +13,12 @@ export function overwriteCDSCoreTypes() {
     // remove some types, fallback to the `cdsToSqlTypes.standard` data type
     cdsToSqlTypes.sqlite = {
       "cds.Binary": "VARBINARY",
+      "cds.LargeBinary": "LONGBLOB",
       "cds.hana.BINARY": "VARBINARY",
       "cds.hana.SMALLDECIMAL": "DECIMAL",
+      "cds.LargeString": "LONGTEXT",
+      "cds.hana.LargeString": "LONGTEXT"
     };
-    cdsToSqlTypes.standard["cds.LargeString"] = "LONGTEXT";
-    cdsToSqlTypes.standard["cds.hana.LargeString"] = "LONGTEXT";
     overwriteCDSCoreTypes["done"] = true;
   }
 
