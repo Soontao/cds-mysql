@@ -12,8 +12,8 @@ export function overwriteCDSCoreTypes() {
     const { cdsToSqlTypes } = cwdRequire("@sap/cds-compiler/lib/render/utils/common");
     // remove some types, fallback to the `cdsToSqlTypes.standard` data type
     cdsToSqlTypes.sqlite = {
-      "cds.Binary": "BLOB",
-      "cds.hana.BINARY": "BLOB",
+      "cds.Binary": "VARBINARY",
+      "cds.hana.BINARY": "VARBINARY",
       "cds.hana.SMALLDECIMAL": "DECIMAL",
     };
     cdsToSqlTypes.standard["cds.LargeString"] = "LONGTEXT";

@@ -279,13 +279,11 @@ interface MysqlDatabaseOptions {
 | Time        | TIME         |
 | DateTime    | TIMESTAMP    |
 | Timestamp   | TIMESTAMP    |
-| String(LENGTH)      | NVARCHAR(LENGTH)     |
-| String      | TEXT     |
-| Binary      | BLOB         |
+| String(LENGTH)  | NVARCHAR(LENGTH)     |
+| String      | TEXT         |
+| Binary      | VARBINARY    |
 | LargeBinary | LONGBLOB     |
 | LargeString | LONGTEXT     |
-
-> Binary is fixed length ˋBLOBˋˋ, not support length
 
 ### Setup Database Credential for Cloud Foundry
 

@@ -90,7 +90,8 @@ class CDSListener implements MySQLParserListener {
       if (eleDef !== undefined) {
         // force overwrite blob column
         if (eleDef.type === "cds.Binary") {
-          column.type = "blob";
+          column.type = "varbinary";
+          column.length = eleDef.length;
         }
         if (eleDef.type === "cds.LargeBinary") {
           column.type = "longblob";
