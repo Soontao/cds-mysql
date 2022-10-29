@@ -7,7 +7,7 @@
       const mysqlPass = process.env.MYSQL_PASSWORD;
       const mysql = require("mysql2/promise");
       const conn = await mysql.createConnection({
-        user: "root",
+        user: process.env.MYSQL_ROOT_USER ?? "root",
         host: mysqlHost,
         port: mysqlPort,
         password: mysqlPass,
