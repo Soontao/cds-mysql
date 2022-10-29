@@ -65,6 +65,15 @@ Object {
 }
 `;
 
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.DoubleProperty element definition 1`] = `
+Object {
+  "default": null,
+  "name": "DoubleProperty",
+  "nullable": true,
+  "type": "double",
+}
+`;
+
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.FullEmployee element definition 1`] = `
 Object {
   "default": false,
@@ -136,6 +145,16 @@ Object {
   "name": "Picture",
   "nullable": true,
   "type": "longtext",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.StringWithoutLength element definition 1`] = `
+Object {
+  "default": null,
+  "length": undefined,
+  "name": "StringWithoutLength",
+  "nullable": true,
+  "type": "text",
 }
 `;
 

@@ -260,6 +260,33 @@ interface MysqlDatabaseOptions {
 }
 ```
 
+
+### Built-In Data Type
+
+| CDS Type    | MySQL Type   |
+|-------------|--------------|
+| UUID        | NVARCHAR(36) |
+| Boolean     | BOOLEAN      |
+| UInt8       | TINYINT      |
+| Int16       | SMALLINT     |
+| Int32       | INTEGER      |
+| Integer     | INTEGER      |
+| Int64       | BIGINT       |
+| Integer64   | BIGINT       |
+| Decimal     | DECIMAL      |
+| Double      | DOUBLE       |
+| Date        | DATE         |
+| Time        | TIME         |
+| DateTime    | TIMESTAMP    |
+| Timestamp   | TIMESTAMP    |
+| String(LENGTH)      | NVARCHAR(LENGTH)     |
+| String      | TEXT     |
+| Binary      | BLOB         |
+| LargeBinary | LONGBLOB     |
+| LargeString | LONGTEXT     |
+
+> Binary is fixed length ˋBLOBˋˋ, not support length
+
 ### Setup Database Credential for Cloud Foundry
 
 > if you want to run cds-mysql on cloud foundry for production
