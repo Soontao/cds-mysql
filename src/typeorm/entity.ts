@@ -64,7 +64,6 @@ class CDSListener implements MySQLParserListener {
     const name = ctx.columnName();
     const field = ctx.fieldDefinition();
     const dataType = field.dataType();
-    const length = dataType.fieldLength();
     const floatOption = dataType.floatOptions();
     const attrs = field.columnAttribute();
 
@@ -106,21 +105,13 @@ class CDSListener implements MySQLParserListener {
           }
         }
 
-        if (length) {
-          const long1 = length.real_ulonglong_number();
-          if (long1) {
-         
-            // column with String without length
-            // default un-set length string,
-            // will convert it to 'text' to avoid MySQL row 65565 bytes size limit
-            if (eleDef.type === "cds.String" && eleDef.length === undefined) {
-              column.type = "text";
-              column.length = undefined;
-            } else {
-              column.length = parseInt(long1?.text);
-            }
+        if (eleDef.length !== undefined) {
+          if (eleDef.length === 5000 && eleDef.type === "cds.String") {
+            column.length = undefined;
           }
-       
+          else {
+            column.length = eleDef.length;
+          }
         }
       }
 

@@ -1,5 +1,195 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.CreatedByUser element definition 1`] = `
+{
+  "default": null,
+  "length": 256,
+  "name": "CreatedByUser",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.CreationDateTime element definition 1`] = `
+{
+  "default": null,
+  "name": "CreationDateTime",
+  "nullable": true,
+  "type": "timestamp",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.DraftIsCreatedByMe element definition 1`] = `
+{
+  "default": null,
+  "name": "DraftIsCreatedByMe",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.DraftIsProcessedByMe element definition 1`] = `
+{
+  "default": null,
+  "name": "DraftIsProcessedByMe",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.DraftUUID element definition 1`] = `
+{
+  "default": undefined,
+  "length": 36,
+  "name": "DraftUUID",
+  "nullable": false,
+  "primary": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.InProcessByUser element definition 1`] = `
+{
+  "default": null,
+  "length": 256,
+  "name": "InProcessByUser",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.LastChangeDateTime element definition 1`] = `
+{
+  "default": null,
+  "name": "LastChangeDateTime",
+  "nullable": true,
+  "type": "timestamp",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.LastChangedByUser element definition 1`] = `
+{
+  "default": null,
+  "length": 256,
+  "name": "LastChangedByUser",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Address element definition 1`] = `
+{
+  "default": null,
+  "name": "Address",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Age element definition 1`] = `
+{
+  "default": 25,
+  "name": "Age",
+  "nullable": true,
+  "type": "integer",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.DraftAdministrativeData_DraftUUID element definition 1`] = `
+{
+  "default": undefined,
+  "name": "DraftAdministrativeData_DraftUUID",
+  "nullable": false,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.HasActiveEntity element definition 1`] = `
+{
+  "default": null,
+  "name": "HasActiveEntity",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.HasDraftEntity element definition 1`] = `
+{
+  "default": null,
+  "name": "HasDraftEntity",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.ID element definition 1`] = `
+{
+  "default": undefined,
+  "name": "ID",
+  "nullable": false,
+  "primary": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.IsActiveEntity element definition 1`] = `
+{
+  "default": null,
+  "name": "IsActiveEntity",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Name element definition 1`] = `
+{
+  "default": null,
+  "name": "Name",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Person.Address element definition 1`] = `
+{
+  "default": null,
+  "length": 255,
+  "name": "Address",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Person.Age element definition 1`] = `
+{
+  "default": 25,
+  "name": "Age",
+  "nullable": true,
+  "type": "integer",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Person.ID element definition 1`] = `
+{
+  "default": undefined,
+  "length": 36,
+  "name": "ID",
+  "nullable": false,
+  "primary": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Person.Name element definition 1`] = `
+{
+  "default": null,
+  "length": 255,
+  "name": "Name",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Active element definition 1`] = `
 {
   "default": true,

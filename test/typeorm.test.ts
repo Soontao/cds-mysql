@@ -53,6 +53,20 @@ describe("TypeORM Test Suite", () => {
 
   });
 
+  it("should support convert cuid aspect", async () => {
+    const csn = await loadCSN("./resources/fiori/srv/srv.cds");
+    const entities = csnToEntity(csn);
+
+    for (const entity of entities) {
+      const { columns } = entity.options;
+      for (const columnName of Object.keys(columns)) {
+        expect(columns[columnName]).toMatchSnapshot(`${entity.options.name}.${columnName} element definition`);
+      }
+    }
+
+  });
+
+
   it("should support migrate different prop type to mysql", async () => {
     const csn = await loadCSN("./resources/property-type.cds");
     const entities = csnToEntity(csn);
