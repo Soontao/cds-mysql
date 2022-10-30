@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.2.2](https://github.com/Soontao/cds-mysql/compare/v6.2.1...v6.2.2) (2022-10-30)
+
+
+### Bug Fixes
+
+* additional type for csv import ([7cae302](https://github.com/Soontao/cds-mysql/commit/7cae30204f9dcf7943e129ed4e9fc403c4037320))
+* cuid aspect issue ([c6e627f](https://github.com/Soontao/cds-mysql/commit/c6e627f807dfad850741c0a7cac26641867845bb))
+* fiori draft table metadata issue ([3dfbc6b](https://github.com/Soontao/cds-mysql/commit/3dfbc6b66917735672c60cc36e356135cf6682e3))
+* large binary ([f713195](https://github.com/Soontao/cds-mysql/commit/f713195218b496117411421269da5c44e6a00d70))
+* String length ([51839b9](https://github.com/Soontao/cds-mysql/commit/51839b9cf95fe8c20220c1aa1c57e2d2ce553a66))
+
 ### [6.2.1](https://github.com/Soontao/cds-mysql/compare/v6.2.0...v6.2.1) (2022-10-29)
 
 
