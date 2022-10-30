@@ -106,7 +106,7 @@ edit your `package.json` > `cds` node
 
 ### Schema Migration
 
-`cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, parse the `DDL` statements and convert it to `typeorm`-`EntitySchema` objects, then do the migration with `typeorm`.
+`cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, then parse the `DDL` statements, and convert them into `typeorm`-`EntitySchema` objects, then do the migration with `typeorm` existed migration functionality.
 
 ```mermaid
 graph LR
@@ -315,7 +315,7 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 
 ## Limitation
 
-- mysql 5.6 not support key length exceed 767 bytes
+- mysql `5.6` not support key length exceed `767` bytes
 - `date` column not support default `$now`
 - upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.

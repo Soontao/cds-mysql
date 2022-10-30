@@ -80,6 +80,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Address element definition 1`] = `
 {
   "default": null,
+  "length": 255,
   "name": "Address",
   "nullable": true,
   "type": "nvarchar",
@@ -98,6 +99,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.DraftAdministrativeData_DraftUUID element definition 1`] = `
 {
   "default": undefined,
+  "length": 36,
   "name": "DraftAdministrativeData_DraftUUID",
   "nullable": false,
   "type": "nvarchar",
@@ -125,6 +127,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.ID element definition 1`] = `
 {
   "default": undefined,
+  "length": 36,
   "name": "ID",
   "nullable": false,
   "primary": true,
@@ -144,6 +147,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Name element definition 1`] = `
 {
   "default": null,
+  "length": 255,
   "name": "Name",
   "nullable": true,
   "type": "nvarchar",

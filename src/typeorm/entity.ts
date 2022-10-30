@@ -74,6 +74,7 @@ class CDSListener implements MySQLParserListener {
       default: null
     };
 
+    // for drafts table, it should redirect to the correct entity
     const entityDef = fuzzy.findEntity(this._tmp.tableName, this._model);
 
     if (entityDef !== undefined) {
@@ -309,7 +310,7 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
   const cds = cwdRequireCDS();
   overwriteCDSCoreTypes();
   // @ts-ignore
-  const listener: CDSListener = new CDSListener({ model: cds.compile.for.nodejs(model) });
+  const listener: CDSListener = new CDSListener({ model: cds.linked(cds.compile.for.nodejs(model)) });
   const parser = new MySQLParser({ parserListener: listener, mode: SqlMode.AnsiQuotes });
   // force to use 'sqlite' as dialect to support localized elements
   const statements = cds.compile.to.sql(model, { dialect: "sqlite" });
