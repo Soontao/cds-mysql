@@ -45,6 +45,15 @@ export const sha256 = memorized(
 );
 
 
+const TRANSPORT_CDS_TYPES = [
+  "cds.Binary", 
+  "cds.LargeBinary", 
+  "cds.UInt8",
+  "cds.Int16",
+  "cds.Int32",
+  "cds.Integer",
+];
+
 /**
  * migrate CSV data
  * 
@@ -140,7 +149,7 @@ export async function migrateData(
 
         const transformColumnsIndex = Object
           .values(entityModel.elements)
-          .filter(ele => ["cds.Binary", "cds.LargeBinary", "cds.Integer"].includes(ele.type))
+          .filter(ele => TRANSPORT_CDS_TYPES.includes(ele.type))
           .map(ele => ({
             index: headers.indexOf(ele.name),
             type: ele.type,

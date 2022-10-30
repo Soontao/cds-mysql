@@ -23,7 +23,7 @@
   - [ ] ignore column length reduce and with warning
   - [ ] model version, only incremental migration
   - [ ] using `LinkedModel` element information for database migration
-- [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/generic#serving-media-data)
+- [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/media-data)
 - [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data) 
 - [ ] multi tenancy
   - [x] deploy model on-fly
