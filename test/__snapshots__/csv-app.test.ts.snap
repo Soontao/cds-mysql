@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CSV App Test Suite should match the first record by axios client 1`] = `
-Object {
+{
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": true,
   "Age": 19,
@@ -20,12 +20,12 @@ Object {
 `;
 
 exports[`CSV App Test Suite should match the first record by cds API 1`] = `
-Object {
+{
   "Active": true,
   "Age": 19,
   "BirthDay": "1995-11-11",
-  "BlobDoc": Object {
-    "data": Array [
+  "BlobDoc": {
+    "data": [
       72,
       101,
       108,
@@ -58,7 +58,7 @@ Object {
 `;
 
 exports[`CSV App Test Suite should match the second record by axios client 1`] = `
-Object {
+{
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": false,
   "Age": 23,
@@ -77,12 +77,12 @@ Object {
 `;
 
 exports[`CSV App Test Suite should match the second record by cds API 1`] = `
-Object {
+{
   "Active": false,
   "Age": 23,
   "BirthDay": "1981-05-07",
-  "BlobDoc": Object {
-    "data": Array [
+  "BlobDoc": {
+    "data": [
       119,
       119,
       119,
@@ -103,14 +103,14 @@ Object {
 `;
 
 exports[`CSV App Test Suite should support automatically migrate csv data 1`] = `
-Object {
+{
   "@odata.context": "$metadata#Peoples",
-  "value": Array [
-    Object {
+  "value": [
+    {
       "ID": 1,
       "Name": "Theo 1",
     },
-    Object {
+    {
       "ID": 2,
       "Name": "Theo 2",
     },
@@ -119,10 +119,10 @@ Object {
 `;
 
 exports[`CSV App Test Suite should support search 1`] = `
-Object {
+{
   "@odata.context": "$metadata#Houses",
-  "value": Array [
-    Object {
+  "value": [
+    {
       "ID": "97dc99ee-f61e-11ec-b939-0242ac120002",
       "address_City": "Chengdu",
       "address_Country": null,
@@ -135,8 +135,8 @@ Object {
 `;
 
 exports[`CSV App Test Suite should support search 2`] = `
-Object {
+{
   "@odata.context": "$metadata#Houses",
-  "value": Array [],
+  "value": [],
 }
 `;

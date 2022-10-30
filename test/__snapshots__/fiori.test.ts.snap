@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`fiori draft Test Suite should support to create instance 1`] = `
-Object {
+{
   "@odata.context": "$metadata#Persons/$entity",
   "Address": null,
   "Age": 26,

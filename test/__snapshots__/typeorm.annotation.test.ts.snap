@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TypeORM Annotation Test Suite should support index for model 1`] = `
-Array [
+[
   EntitySchema {
     "@instanceof": Symbol(EntitySchema),
-    "options": Object {
-      "columns": Object {
-        "ID": Object {
+    "options": {
+      "columns": {
+        "ID": {
           "default": undefined,
           "name": "ID",
           "nullable": false,
           "primary": true,
           "type": "integer",
         },
-        "Name": Object {
+        "Name": {
           "default": null,
           "length": 255,
           "name": "Name",
@@ -21,10 +21,10 @@ Array [
           "type": "nvarchar",
         },
       },
-      "deps": Array [],
-      "indices": Array [
-        Object {
-          "columns": Array [
+      "deps": [],
+      "indices": [
+        {
+          "columns": [
             "Name",
           ],
           "name": "NameIndex",
