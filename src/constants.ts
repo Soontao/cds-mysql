@@ -11,14 +11,14 @@ export const TENANT_DEFAULT = "default";
 export const CONNECTION_IDLE_CHECK_INTERVAL = 5 * 1000;
 
 /**
- * max queue items number to avoid over consuming for memory
- */
-export const MAX_QUEUE_SIZE = 1000;
-
-/**
  * the default maximum connections number for each tenant
  */
-export const DEFAULT_TENANT_CONNECTION_POOL_SIZE = 5;
+export const DEFAULT_TENANT_CONNECTION_POOL_SIZE = 20;
+
+/**
+ * max queue items number to avoid over consuming for memory
+ */
+export const MAX_QUEUE_SIZE = DEFAULT_TENANT_CONNECTION_POOL_SIZE * 1000;
 
 /**
  * the default connection idle timeout, after idle, it will be disconnected after next check

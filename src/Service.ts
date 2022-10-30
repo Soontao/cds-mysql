@@ -24,6 +24,7 @@ const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   maxWaitingClients: MAX_QUEUE_SIZE,
   evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
   idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
+  testOnBorrow: true,
 };
 
 const _rawCSN = memorized(async (m: LinkedModel) => {
