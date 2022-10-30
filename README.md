@@ -121,7 +121,7 @@ It will be fully automatically, sync changed `columns`, `views`.
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
 
 
-> `cds-mysql` will automatically migrate schema and pre-defined CSV data into database when connecting to database. 
+> `cds-mysql` will automatically migrate schema and pre-defined CSV data into database when connecting to database (generally it means server received the first request which need database operation). 
 
 > just specify the `requires.db.tenant.deploy.eager` to sync schema (of target tenants) at startup
 

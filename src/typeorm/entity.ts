@@ -80,8 +80,6 @@ class CDSListener implements MySQLParserListener {
       // for draft table, it could not found metadata in model
       const eleDef = fuzzy.findElement(entityDef, column.name);
 
-      // TODO: use element def directly
-
       if (eleDef !== undefined) {
         // force overwrite blob column
         if (eleDef.type === "cds.Binary") {
@@ -94,9 +92,17 @@ class CDSListener implements MySQLParserListener {
         if (eleDef.type === "cds.LargeString") {
           column.type = "longtext";
         }
+        if (eleDef.type === "cds.String" && eleDef.length === undefined) {
+          column.type = "text";
+          column.length = undefined;
+        }
+        if (eleDef.length !== undefined) {
+          column.length = eleDef.length;
+        }
         // not association or composition
         if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
           const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
+          // merge @cds.typeorm.config annotation
           if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
             Object.assign(
               column,
@@ -105,18 +111,11 @@ class CDSListener implements MySQLParserListener {
           }
         }
 
-        if (eleDef.length !== undefined) {
-          if (eleDef.length === 5000 && eleDef.type === "cds.String") {
-            column.length = undefined;
-          }
-          else {
-            column.length = eleDef.length;
-          }
-        }
       }
 
     }
 
+    // TODO: use element def directly
 
     // (10, 2)
     if (floatOption) {
