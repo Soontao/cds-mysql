@@ -170,6 +170,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
             const tenantCredential = { ...credential, dateStrings: true, charset: MYSQL_COLLATE };
 
             if (this.options?.tenant?.deploy?.auto !== false) {
+              // TODO: tenant model
               await this.deploy(await _rawCSN(this.model), { tenant });
               if (this.options?.csv?.migrate !== false) {
                 await migrateData(tenantCredential, this.model);
@@ -185,7 +186,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
             this._logger.info("creating connection pool for tenant", tenant, "with option", poolOptions);
 
-            return createPool(
+            const newPool = createPool(
               {
                 create: () => createConnection(tenantCredential as any),
                 validate: (conn) => conn
@@ -201,6 +202,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
               },
               poolOptions,
             );
+            return newPool;
           }
         )().then(pool => { this._pools.set(tenant, pool); return pool; })
       );

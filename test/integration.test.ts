@@ -1,10 +1,8 @@
 // @ts-nocheck
 
-import { readFileSync } from "fs";
-import path from "path";
 import { createRandomName, doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
-
+import { randomBytes } from "node:crypto";
 
 describe("Integration Test Suite", () => {
 
@@ -137,9 +135,9 @@ describe("Integration Test Suite", () => {
     expect(createdPeople?.Detail?.ID).not.toBeUndefined();
 
     const attachmentUri = `/bank/Details(${createdPeople.Detail.ID})/Attachment`;
-    const fileLocation = path.join(__dirname, "./tsconfig.json");
 
-    const data = readFileSync(fileLocation);
+    // TODO: add validation for max_allowed_packet
+    const data = randomBytes(1024 * 1024);
 
     await client.put(attachmentUri, data);
 

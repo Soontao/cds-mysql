@@ -8,12 +8,12 @@ export const TENANT_DEFAULT = "default";
 /**
  * the interval between idle connection check
  */
-export const CONNECTION_IDLE_CHECK_INTERVAL = 30 * 1000;
+export const CONNECTION_IDLE_CHECK_INTERVAL = 5 * 1000;
 
 /**
  * max queue items number to avoid over consuming for memory
  */
-export const MAX_QUEUE_SIZE = 1000 * 1000;
+export const MAX_QUEUE_SIZE = 1000;
 
 /**
  * the default maximum connections number for each tenant

@@ -22,15 +22,6 @@ type TableName = string;
 
 const logger: Logger = cwdRequireCDS().log("mysql|db|typeorm|entity");
 
-const TextColumnTypes: Array<ColumnType> = [
-  "varchar",
-  "varchar2",
-  "nvarchar",
-  "nvarchar2",
-  "char"
-];
-
-const DEFAULT_STRING_LENGTH = 5000;
 
 interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   /**
@@ -84,7 +75,6 @@ class CDSListener implements MySQLParserListener {
       default: null
     };
 
-
     const entityDef = fuzzy.findEntity(this._tmp.tableName, this._model);
 
     if (entityDef !== undefined) {
@@ -105,7 +95,6 @@ class CDSListener implements MySQLParserListener {
         if (eleDef.type === "cds.LargeString") {
           column.type = "longtext";
         }
-
         // not association or composition
         if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
           const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
@@ -117,27 +106,27 @@ class CDSListener implements MySQLParserListener {
           }
         }
 
+        if (length) {
+          const long1 = length.real_ulonglong_number();
+          if (long1) {
+         
+            // column with String without length
+            // default un-set length string,
+            // will convert it to 'text' to avoid MySQL row 65565 bytes size limit
+            if (eleDef.type === "cds.String" && eleDef.length === undefined) {
+              column.type = "text";
+              column.length = undefined;
+            } else {
+              column.length = parseInt(long1?.text);
+            }
+          }
+       
+        }
       }
 
     }
 
 
-    if (length) {
-      const long1 = length.real_ulonglong_number();
-      if (long1) {
-        column.length = parseInt(long1?.text);
-      }
-      // (5000)
-      // default un-set length string,
-      // will convert it to 'text' to avoid MySQL row 65565 bytes size limit
-      if (
-        TextColumnTypes.includes(column.type) &&
-        column.length === DEFAULT_STRING_LENGTH) {
-        column.type = "text";
-        column.length = undefined;
-      }
-    }
-  
     // (10, 2)
     if (floatOption) {
       column.precision = parseInt(floatOption.getChild(0).getChild(1).text);
