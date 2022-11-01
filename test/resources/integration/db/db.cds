@@ -1,11 +1,13 @@
-namespace test.resources.integration;
+namespace test.int;
 
 using {incrementID} from '../../../../index';
 
 
 using {
   cuid,
-  managed
+  managed,
+  temporal,
+  Currency
 } from '@sap/cds/common';
 
 entity People : cuid, managed {
@@ -57,4 +59,10 @@ entity Product : cuid {
 
 entity DummyAnimal : incrementID {
   Name : String(255);
+}
+
+entity ExchangeRate : temporal, managed {
+  key Source : Currency;
+  key Target : Currency;
+      Rate   : Decimal(10, 2);
 }

@@ -252,8 +252,12 @@ class CDSListener implements MySQLParserListener {
       this._tmp.name = viewName.text;
       this._tmp.tableName = viewName.text;
       // extract (SELECT FROM ...) part from original plain SQL
-      const exp = this._currentStatement.substr(select.start.startIndex, select.stop.stopIndex);
-      this._tmp.expression = exp;
+      const exp = this._currentStatement.substring(select.start.startIndex);
+      // REVISIT: maybe support time travel
+      // replace for temporal data
+      this._tmp.expression = exp
+        .replace(/< strftime\('%Y-%m-%dT%H:%M:%S\.001Z', 'now'\)/g, "<= NOW()")
+        .replace(/> strftime\('%Y-%m-%dT%H:%M:%S\.000Z', 'now'\)/g, "> NOW()");
     }
     this._entities.push(new EntitySchema(this._tmp));
     this._tmp = this.newEntitySchemaOption();

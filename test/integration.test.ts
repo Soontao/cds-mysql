@@ -3,6 +3,7 @@
 import { createRandomName, doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 import { randomBytes } from "node:crypto";
+import { DateTime } from "luxon";
 
 describe("Integration Test Suite", () => {
 
@@ -200,7 +201,7 @@ describe("Integration Test Suite", () => {
     expect(res.data.ID).not.toBeUndefined();
     const { results } = await cds.run(
       INSERT
-        .into("test.resources.integration.BankService.DummyAnimals")
+        .into("test.int.BankService.DummyAnimals")
         .entries({ Name: "horse 2" }, { Name: "horse 3" })
     );
 
@@ -208,6 +209,35 @@ describe("Integration Test Suite", () => {
     expect(results[0].affectedRows).toBe(2);
   });
 
+
+  it("should support create temporal data", async () => {
+
+
+    await client.post("/bank/ExchangeRates", {
+      Source_code: "USD",
+      Target_code: "CNY",
+      Rate: 123.22,
+      validFrom: DateTime.utc().startOf("day").minus({ days: 1 }).toISO(), // yesterday
+      validTo: DateTime.utc().startOf("day").toISO(), // today
+    });
+
+
+    await client.post("/bank/ExchangeRates", {
+      Source_code: "USD",
+      Target_code: "CNY",
+      Rate: 123.21,
+      validFrom: DateTime.utc().startOf("day").toISO(), // today
+      validTo: DateTime.utc().startOf("day").plus({ days: 1 }).toISO() // tomorrow
+    });
+
+    const { data } = await client.get("/bank/ExchangeRates");
+    expect(data).toMatchObject({
+      value: [
+        { "Rate": 123.21 }
+      ]
+    });
+
+  });
 
 
 });

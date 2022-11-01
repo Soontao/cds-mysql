@@ -17,6 +17,7 @@
 - [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
 - [x] deep insert for association/composition
   - [x] deep create/update/query/delete test case
+- [x] `temporal` data, not support [time-travel query](https://cap.cloud.sap/docs/guides/temporal-data#time-travel-queries)
 - [x] full text search
 - [x] deploy & schema migration
 - [x] migration optimization (ignore drop in some case)

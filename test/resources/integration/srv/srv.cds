@@ -1,12 +1,13 @@
-namespace test.resources.integration;
+namespace test.int;
 
-using {test.resources.integration} from '../db/db';
+using {test.int} from '../db/db';
 
 @requires : 'authenticated-user'
 service BankService {
-  entity Details      as projection on integration.Detail;
-  entity Peoples      as projection on integration.People;
-  entity Cards        as projection on integration.Card;
-  entity Products     as projection on integration.Product;
-  entity DummyAnimals as projection on integration.DummyAnimal;
+  entity Details       as projection on int.Detail;
+  entity Peoples       as projection on int.People;
+  entity Cards         as projection on int.Card;
+  entity Products      as projection on int.Product;
+  entity DummyAnimals  as projection on int.DummyAnimal;
+  entity ExchangeRates as projection on int.ExchangeRate;
 }
