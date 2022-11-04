@@ -217,8 +217,8 @@ describe("Integration Test Suite", () => {
       Source_code: "USD",
       Target_code: "CNY",
       Rate: 123.22,
-      validFrom: DateTime.utc().startOf("day").minus({ days: 1 }).toISO(), // yesterday
-      validTo: DateTime.utc().startOf("day").toISO(), // today
+      validFrom: DateTime.utc().startOf("day").minus({ days: 2 }).toISO(), 
+      validTo: DateTime.utc().startOf("day").minus({ days: 1 }).toISO()
     });
 
 
@@ -226,8 +226,8 @@ describe("Integration Test Suite", () => {
       Source_code: "USD",
       Target_code: "CNY",
       Rate: 123.21,
-      validFrom: DateTime.utc().startOf("day").toISO(), // today
-      validTo: DateTime.utc().startOf("day").plus({ days: 1 }).toISO() // tomorrow
+      validFrom: DateTime.utc().startOf("day").minus({ days: 1 }).toISO(),
+      validTo: DateTime.utc().startOf("day").plus({ days: 2 }).toISO() 
     });
 
     const { data } = await client.get("/bank/ExchangeRates");
