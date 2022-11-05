@@ -35,23 +35,21 @@
       - [x] CSV aspect `preDelivery`
       - [x] CSV migration with hash check
       - [ ] enhance `preDelivery` check by standalone table
+      - [ ] database handlers for `SELECT` and `DELETE`
   - [ ] dynamic database credential provider
   - [ ] admin database concept
     - [ ] `@admin` tenant entity & services
   - [ ] tenant credential refresh
-  - [ ] documentation
 - [x] `$expand` navigation
 - [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
 - [x] initial data provision by `CSV`
   - [x] better migration type/column/name adaption
-- [x] auto incremental key aspect (odata only, single record)
+- [x] auto incremental key aspect
 - [x] mysql index
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
-  - [ ] pre-built typeorm entity definitions
-  - [ ] sync data model online
-- [ ] datatype mapping table
+- [ ] `SELECT FOR UPDATE`
 - [ ] better E2E document/sample
 
 
