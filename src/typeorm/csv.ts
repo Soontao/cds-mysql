@@ -177,8 +177,8 @@ export async function migrateData(
 
         if (transformColumnsIndex.length > 0) {
           logger.debug(
-            "column with index ", transformColumnsIndex.join(", ").green,
-            "in entity ", entityName.green, "need to be transformed"
+            "columns", transformColumnsIndex,
+            "in entity", entityName.green, "need to be transformed"
           );
           for (const entry of (rows as Array<Array<any>>)) {
             for (const transformColumn of transformColumnsIndex) {
