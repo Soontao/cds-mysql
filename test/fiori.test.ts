@@ -1,5 +1,5 @@
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
-import { cleanDB } from "./utils";
+import { doAfterAll } from "./utils";
 
 
 
@@ -10,10 +10,9 @@ describe("fiori draft Test Suite", () => {
   client.defaults.auth = { username: "alice", password: "admin" };
 
 
-  beforeAll(async () => {
-    await cleanDB();
-    jest.spyOn(cds.db, "run");
-  });
+  beforeAll(() => { jest.spyOn(cds.db, "run"); });
+
+  afterAll(doAfterAll);
 
 
   it("should support get metadata", async () => {

@@ -36,7 +36,7 @@ export abstract class TenantProvider {
   }
 
   protected getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
-    return formatTenantDatabaseName(this.options.credentials, this.options.tenant.prefix, tenant);
+    return formatTenantDatabaseName(this.options?.credentials, this.options?.tenant?.prefix, tenant);
   }
 
   /**

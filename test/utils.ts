@@ -93,7 +93,12 @@ export const cleanDB = async () => {
     try {
       await ds.initialize();
       await ds.createQueryRunner().clearDatabase();
-    } finally {
+    }
+    catch (error) {
+      // do nothing
+      console.debug("clean db", tenant, "failed", error);
+    }
+    finally {
       if (ds.isInitialized) { await ds.destroy(); }
     }
   }
