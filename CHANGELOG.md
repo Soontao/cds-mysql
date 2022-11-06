@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0-alpha.1](https://github.com/Soontao/cds-mysql/compare/v6.3.0-alpha.0...v6.3.0-alpha.1) (2022-11-06)
+
+
+### Bug Fixes
+
+* clean db util ([14ee78b](https://github.com/Soontao/cds-mysql/commit/14ee78bcf7f8098264de96a23caacbffb115d249))
+* datetime import and time zone issue ([1652698](https://github.com/Soontao/cds-mysql/commit/16526986bca3f0b82d7fd9676f60f8b3a660540f))
+* ut ([1f65e5f](https://github.com/Soontao/cds-mysql/commit/1f65e5f3815f061270b44a935a684484b8344ef2))
+
 ## [6.3.0-alpha.0](https://github.com/Soontao/cds-mysql/compare/v6.2.2...v6.3.0-alpha.0) (2022-11-06)
 
 
