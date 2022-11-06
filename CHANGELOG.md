@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0-alpha.0](https://github.com/Soontao/cds-mysql/compare/v6.2.2...v6.3.0-alpha.0) (2022-11-06)
+
+
+### Features
+
+* cds 6.3.0 ([e367d7e](https://github.com/Soontao/cds-mysql/commit/e367d7eb2b7b4b3855ab2ba07c87223c9293b430))
+* locking reads ([4e93133](https://github.com/Soontao/cds-mysql/commit/4e93133ca7a8f74d2a2bfeee6a3e356048f058e2))
+* temporal aspect ([5b2f176](https://github.com/Soontao/cds-mysql/commit/5b2f176adbbdaca68d07e0aefab638bb8223472e))
+
 ### [6.2.2](https://github.com/Soontao/cds-mysql/compare/v6.2.1...v6.2.2) (2022-10-30)
 
 
