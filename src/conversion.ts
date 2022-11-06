@@ -28,7 +28,7 @@ const convertInt64ToString = int64 => {
 };
 
 const convertToISOTime = (value: string) => {
-  if (value === null) {
+  if (value === null || value === undefined) {
     return value;
   }
   const dateTime = DateTime.fromFormat(value, MYSQL_DATE_TIME_FORMAT, {
