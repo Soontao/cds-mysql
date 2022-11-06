@@ -25,7 +25,7 @@
   - [ ] model version, only incremental migration
   - [ ] using `LinkedModel` element information for database migration
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/media-data)
-- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data) 
+- [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
 - [ ] multi tenancy
   - [x] deploy model on-fly
   - [x] create database on-demand
@@ -49,9 +49,8 @@
 - [x] mysql index
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
-- [ ] `SELECT FOR UPDATE`
+- [x] SELECT `FOR UPDATE`/`LOCK IN SHARE MODE`
 - [ ] better E2E document/sample
-
 
 ## Setup
 
@@ -68,9 +67,7 @@ for the supported options in `credentials` node, just ref the [mysql official co
       {
         "label": "user-provided",
         "name": "remote-mysql-service",
-        "tags": [
-          "mysql"
-        ],
+        "tags": ["mysql"],
         "credentials": {
           "host": "mysql.host.name.com",
           "user": "user",
@@ -88,14 +85,14 @@ edit your `package.json` > `cds` node
 
 ```json5
 {
-  "requires": {
-    "db": {
-      "kind": "mysql"
+  requires: {
+    db: {
+      kind: "mysql",
     },
-    "mysql": {
-      "impl": "cds-mysql"
-    }
-  }
+    mysql: {
+      impl: "cds-mysql",
+    },
+  },
 }
 ```
 
@@ -114,13 +111,11 @@ graph LR
     te --> |use typeorm migrate schema|Schema[Database Schema]
 ```
 
-
 It will be fully automatically, sync changed `columns`, `views`.
 
 It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
 
-
-> `cds-mysql` will automatically migrate schema and pre-defined CSV data into database when connecting to database (generally it means server received the first request which need database operation). 
+> `cds-mysql` will automatically migrate schema and pre-defined CSV data into database when connecting to database (generally it means server received the first request which need database operation).
 
 > just specify the `requires.db.tenant.deploy.eager` to sync schema (of target tenants) at startup
 
@@ -131,7 +126,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
       "db": {
         "tenant": {
           "deploy": {
-            "eager": [ "default", "<a-tenant-id here>" ]
+            "eager": ["default", "<a-tenant-id here>"]
           }
         }
       }
@@ -158,13 +153,12 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 ```groovy
 using {incrementID} from 'cds-mysql';
 
-// the entity `Animal` will have an auto-filled 'ID' field 
+// the entity `Animal` will have an auto-filled 'ID' field
 // ONLY support single record insert
 entity Animal : incrementID {
   Name : String(255);
 }
 ```
-
 
 ### CSV Migration
 
@@ -213,7 +207,7 @@ entity Product : cuid {
         "csv": { "migrate": false },
         "tenant": {
           "deploy": {
-            "eager": [ "default" ]
+            "eager": ["default"]
           }
         }
       },
@@ -231,12 +225,12 @@ interface MysqlDatabaseOptions {
     deploy?: {
       /**
        * auto migrate database schema when connect to it
-       * default value is `true` 
+       * default value is `true`
        * specify `false` to disable the migration on startup/connection pool setup
        */
       auto?: boolean;
       /**
-       * eager deploy tenant id list 
+       * eager deploy tenant id list
        * the migration of those tenants will be performed when server startup
        */
       eager?: Array<string> | string;
@@ -259,30 +253,29 @@ interface MysqlDatabaseOptions {
 }
 ```
 
-
 ### Built-In Data Type
 
-| CDS Type    | MySQL Type   |
-|-------------|--------------|
-| UUID        | NVARCHAR(36) |
-| Boolean     | BOOLEAN      |
-| UInt8       | TINYINT      |
-| Int16       | SMALLINT     |
-| Int32       | INTEGER      |
-| Integer     | INTEGER      |
-| Int64       | BIGINT       |
-| Integer64   | BIGINT       |
-| Decimal     | DECIMAL      |
-| Double      | DOUBLE       |
-| Date        | DATE         |
-| Time        | TIME         |
-| DateTime    | TIMESTAMP    |
-| Timestamp   | TIMESTAMP    |
-| String(LENGTH)  | NVARCHAR(LENGTH)     |
-| String      | TEXT         |
-| Binary      | VARBINARY    |
-| LargeBinary | LONGBLOB     |
-| LargeString | LONGTEXT     |
+| CDS Type       | MySQL Type       |
+| -------------- | ---------------- |
+| UUID           | NVARCHAR(36)     |
+| Boolean        | BOOLEAN          |
+| UInt8          | TINYINT          |
+| Int16          | SMALLINT         |
+| Int32          | INTEGER          |
+| Integer        | INTEGER          |
+| Int64          | BIGINT           |
+| Integer64      | BIGINT           |
+| Decimal        | DECIMAL          |
+| Double         | DOUBLE           |
+| Date           | DATE             |
+| Time           | TIME             |
+| DateTime       | TIMESTAMP        |
+| Timestamp      | TIMESTAMP        |
+| String(LENGTH) | NVARCHAR(LENGTH) |
+| String         | TEXT             |
+| Binary         | VARBINARY        |
+| LargeBinary    | LONGBLOB         |
+| LargeString    | LONGTEXT         |
 
 ### Setup Database Credential for Cloud Foundry
 
@@ -300,12 +293,10 @@ you can convert PEM cert to json format with [this document](https://docs.vmware
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 ```
 
-
-
 ## Compatibility Table
 
 | @sap/cds version | cds-mysql version |
-|------------------|-------------------|
+| ---------------- | ----------------- |
 | 5.8.x            | 5.9.x             |
 | 5.9.x            | 5.9.x             |
 | 6.0.x            | 6.0.x             |

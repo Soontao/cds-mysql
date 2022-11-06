@@ -2,10 +2,16 @@
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
   "editor.useTabStops": true,
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.organizeImports": false
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
   },
   "cSpell.words": [
     "CURDATE",

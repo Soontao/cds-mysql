@@ -1,5 +1,5 @@
 import { SelectBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import type { CSN, Definition } from "cds-internal-tool";
+import { CSN, cwdRequireCDS, Definition } from "cds-internal-tool";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
@@ -7,6 +7,8 @@ import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 /**
  * create tmp number
+ * 
+ * @internal
  * @returns 
  */
 function nextTmpNumber() {
@@ -19,7 +21,7 @@ function nextTmpNumber() {
 
 nextTmpNumber.tmp = 0;
 
-export class CustomSelectBuilder extends SelectBuilder {
+export class CustomSelectBuilder extends (SelectBuilder as any) {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
@@ -47,9 +49,22 @@ export class CustomSelectBuilder extends SelectBuilder {
     return CustomSelectBuilder;
   }
 
-  _forUpdate() { }
+  /**
+   * @see [Locking Reads](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
+   */
+  _forUpdate() {
+    this._outputObj.sql.push("FOR UPDATE");
+    if (this._obj.SELECT.forUpdate.wait !== undefined) {
+      cwdRequireCDS().log("ql").warn("cds-mysql do not support 'wait' parameter of forUpdate");
+    }
+  }
 
-  _forShareLock() {}
+  /**
+   * @see [Locking Reads](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
+   */
+  _forShareLock() {
+    this._outputObj.sql.push("LOCK IN SHARE MODE");
+  }
 
   _fromElement(element: Definition, parent: any, i = 0) {
     // avoid: ER_DERIVED_MUST_HAVE_ALIAS of mysql database 

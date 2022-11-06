@@ -212,12 +212,11 @@ describe("Integration Test Suite", () => {
 
   it("should support create temporal data", async () => {
 
-
     await client.post("/bank/ExchangeRates", {
       Source_code: "USD",
       Target_code: "CNY",
       Rate: 123.22,
-      validFrom: DateTime.utc().startOf("day").minus({ days: 2 }).toISO(), 
+      validFrom: DateTime.utc().startOf("day").minus({ days: 2 }).toISO(),
       validTo: DateTime.utc().startOf("day").minus({ days: 1 }).toISO()
     });
 
@@ -227,7 +226,7 @@ describe("Integration Test Suite", () => {
       Target_code: "CNY",
       Rate: 123.21,
       validFrom: DateTime.utc().startOf("day").minus({ days: 1 }).toISO(),
-      validTo: DateTime.utc().startOf("day").plus({ days: 2 }).toISO() 
+      validTo: DateTime.utc().startOf("day").plus({ days: 2 }).toISO()
     });
 
     const { data } = await client.get("/bank/ExchangeRates");
@@ -237,6 +236,27 @@ describe("Integration Test Suite", () => {
       ]
     });
 
+  });
+
+  it("should support select forUpdate", async () => {
+
+    const { data: createdCard } = await client.post("/bank/Cards", {
+      Number: "Card Number 03",
+      ExampleDT1: null,
+      Credit: 0,
+      Debit: 0,
+    });
+
+    expect(createdCard.ID).not.toBeUndefined();
+
+    await Promise.all(
+      Array(10).fill(0).map(() => client.post("/bank/AddOneCreditToCard", {
+        ID: createdCard.ID
+      }))
+    );
+
+    const s = await client.get(`/bank/Cards(${createdCard.ID})`);
+    expect(s.data.Credit).toBe(10);
   });
 
 

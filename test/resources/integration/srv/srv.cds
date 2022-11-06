@@ -10,4 +10,5 @@ service BankService {
   entity Products      as projection on int.Product;
   entity DummyAnimals  as projection on int.DummyAnimal;
   entity ExchangeRates as projection on int.ExchangeRate;
+  action AddOneCreditToCard(ID : UUID) returns Cards;
 }
