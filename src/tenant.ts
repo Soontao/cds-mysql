@@ -2,6 +2,19 @@ import { cwdRequireCDS, Logger } from "cds-internal-tool";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 import { TENANT_DEFAULT } from "./constants";
 import { MysqlDatabaseOptions, MySQLDatabaseService } from "./Service";
+import { MySQLCredential } from "./types";
+
+
+export function formatTenantDatabaseName(
+  credentials: MySQLCredential,
+  tenant_db_prefix = "tenant_db",
+  tenant: string = TENANT_DEFAULT
+) {
+  if (tenant === TENANT_DEFAULT) {
+    return credentials?.database ?? credentials?.user;
+  }
+  return [tenant_db_prefix, "_", tenant].join("").replace(/[\W]+/g, "_");;
+}
 
 export abstract class TenantProvider {
 
@@ -23,12 +36,7 @@ export abstract class TenantProvider {
   }
 
   protected getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
-    if (tenant === TENANT_DEFAULT) {
-      return this.options.credentials.database ?? this.options.credentials.user;
-    }
-    const tenant_db_prefix = this.options?.tenant?.prefix ?? "tenant_db";
-    const candidate_name = [tenant_db_prefix, "_", tenant].join("");
-    return candidate_name.replace(/[\W]+/g, "_");;
+    return formatTenantDatabaseName(this.options.credentials, this.options.tenant.prefix, tenant);
   }
 
   /**

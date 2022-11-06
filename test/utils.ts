@@ -5,6 +5,7 @@ import path from "path";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { v4 } from "uuid";
 import { MYSQL_CHARSET } from "../src/constants";
+import { formatTenantDatabaseName } from "../src/tenant";
 
 require("dotenv").config();
 
@@ -78,16 +79,23 @@ export async function doAfterAll() {
 }
 
 export const cleanDB = async () => {
-  const options: DataSourceOptions = {
-    ...getTestTypeORMOptions(),
-    name: "unit-test-clean-db",
-  };
-  const ds = new DataSource(options);
-  try {
-    await ds.initialize();
-    await ds.createQueryRunner().clearDatabase();
-  } finally {
-    if (ds.isInitialized) { await ds.destroy(); }
+  // after cds@6.3.0, alice and other dummy users will have default tenant id
+  // so, clean all tenants database
+
+  // TODO: t2 tenant for erin and fred
+  for (const tenant of [undefined, "t1"]) {
+    const options: DataSourceOptions = {
+      ...getTestTypeORMOptions(),
+      name: "unit-test-clean-db",
+      database: formatTenantDatabaseName(cds.env.requires.db.credentials, undefined, tenant)
+    };
+    const ds = new DataSource(options);
+    try {
+      await ds.initialize();
+      await ds.createQueryRunner().clearDatabase();
+    } finally {
+      if (ds.isInitialized) { await ds.destroy(); }
+    }
   }
 
 };
