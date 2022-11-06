@@ -7,8 +7,10 @@ import "colors";
 import { createHash } from "crypto";
 import fs from "fs";
 import { glob } from "glob";
+import { DateTime } from "luxon";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 import path from "path";
+import { MYSQL_DATE_TIME_FORMAT } from "../constants";
 
 export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
   glob(pattern, (err, matches) => {
@@ -46,12 +48,14 @@ export const sha256 = memorized(
 
 
 const TRANSPORT_CDS_TYPES = [
-  "cds.Binary", 
-  "cds.LargeBinary", 
+  "cds.Binary",
+  "cds.LargeBinary",
   "cds.UInt8",
   "cds.Int16",
   "cds.Int32",
   "cds.Integer",
+  "cds.DateTime",
+  "cds.Timestamp",
 ];
 
 /**
@@ -72,7 +76,7 @@ export async function migrateData(
       await Promise.all(
         // @ts-ignore
         uniq(model.$sources.map(path.dirname))
-          .map((dir: string) => `${dir}/{data,csv,src/data}/**/*.csv`) 
+          .map((dir: string) => `${dir}/{data,csv,src/data}/**/*.csv`)
           .map((pattern: string) => pGlob(pattern))
       )
     )
@@ -176,17 +180,23 @@ export async function migrateData(
             "column with index ", transformColumnsIndex.join(", ").green,
             "in entity ", entityName.green, "need to be transformed"
           );
-          for (const entry of rows) {
+          for (const entry of (rows as Array<Array<any>>)) {
             for (const transformColumn of transformColumnsIndex) {
-              if (entry[transformColumn.index].trim().length > 0) {
+              if (entry[transformColumn.index]?.trim?.().length > 0) {
                 switch (transformColumn.type) {
+                  // REVISIT: if binary as where condition, here will have issue.
                   case "cds.Binary": case "cds.LargeBinary":
-                    // @ts-ignore
                     entry[transformColumn.index] = Buffer.from(entry[transformColumn.index], "base64");
                     break;
                   case "cds.Integer":
-                    // @ts-ignore
                     entry[transformColumn.index] = parseInt(entry[transformColumn.index], 10);
+                    break;
+                  case "cds.DateTime": case "cds.Timestamp":
+                    entry[transformColumn.index] = DateTime
+                      .fromISO(entry[transformColumn.index], { setZone: true })
+                      .toUTC()
+                      .toFormat(MYSQL_DATE_TIME_FORMAT);
+                    break;
                   default:
                     break;
                 }

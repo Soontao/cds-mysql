@@ -12,9 +12,9 @@ exports[`CSV App Test Suite should match the first record by axios client 1`] = 
   "ID": 1,
   "IDCard": 99132132,
   "Name": "Theo 1",
-  "Sign": "2022-06-10T20:35:10Z",
+  "Sign": "2022-06-10T12:35:10Z",
   "SignTime": "20:35:10",
-  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
   "Weight": 123,
 }
 `;
@@ -50,9 +50,9 @@ exports[`CSV App Test Suite should match the first record by cds API 1`] = `
   "ID": "1",
   "IDCard": "99132132",
   "Name": "Theo 1",
-  "Sign": "2022-06-10T20:35:10Z",
+  "Sign": "2022-06-10T12:35:10Z",
   "SignTime": "20:35:10",
-  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
   "Weight": "123",
 }
 `;
@@ -67,11 +67,11 @@ exports[`CSV App Test Suite should match the second record by axios client 1`] =
   "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7e",
   "Height": 15435.43,
   "ID": 2,
-  "IDCard": 321321,
+  "IDCard": 3213214312412341,
   "Name": "Theo 2",
-  "Sign": "2022-06-10T20:35:10Z",
+  "Sign": "2022-06-10T12:35:10Z",
   "SignTime": "20:35:10",
-  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
   "Weight": 322,
 }
 `;
@@ -93,12 +93,31 @@ exports[`CSV App Test Suite should match the second record by cds API 1`] = `
   "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7e",
   "Height": 15435.43,
   "ID": "2",
-  "IDCard": "321321",
+  "IDCard": "3213214312412341",
   "Name": "Theo 2",
-  "Sign": "2022-06-10T20:35:10Z",
+  "Sign": "2022-06-10T12:35:10Z",
   "SignTime": "20:35:10",
-  "SignTmp": "2022-06-10T20:35:10.000Z",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
   "Weight": "322",
+}
+`;
+
+exports[`CSV App Test Suite should support ISO format date string 1`] = `
+{
+  "@odata.context": "$metadata#TypeEntity/$entity",
+  "Active": false,
+  "Age": 23,
+  "BirthDay": "1981-05-07",
+  "BlobDoc": null,
+  "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7f",
+  "Height": 15435.43,
+  "ID": 3,
+  "IDCard": 581493248932,
+  "Name": "Theo 3",
+  "Sign": "2022-06-13T12:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-12T12:35:10.000Z",
+  "Weight": 322,
 }
 `;
 

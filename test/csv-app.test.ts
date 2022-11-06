@@ -34,6 +34,12 @@ describe("CSV App Test Suite", () => {
     expect(data).toMatchSnapshot();
   });
 
+  it("should support ISO format date string", async () => {
+    const { data } = await client.get("/app/TypeEntity(3)");
+    expect(data).toMatchSnapshot();
+  });
+
+
   it("should match the second record by cds API", async () => {
     const values = await cds.run(SELECT.one.from("test.resources.csv.app.srv.AppService.TypeEntity", 2));
     expect(values).toMatchSnapshot();
