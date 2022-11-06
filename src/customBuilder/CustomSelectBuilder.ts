@@ -1,9 +1,11 @@
-import { SelectBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import { CSN, cwdRequireCDS, Definition } from "cds-internal-tool";
+import { CSN, cwdRequire, cwdRequireCDS, Definition } from "cds-internal-tool";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+
+const { SelectBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
+
 
 /**
  * create tmp number

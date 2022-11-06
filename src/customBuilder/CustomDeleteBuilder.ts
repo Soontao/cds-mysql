@@ -1,15 +1,11 @@
-// @ts-nocheck
-import DeleteBuilder from "@sap/cds/libx/_runtime/db/sql-builder/DeleteBuilder";
-import type { CSN } from "cds-internal-tool";
+import { CSN, cwdRequire } from "cds-internal-tool";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
+const { DeleteBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
+
 export class CustomDeleteBuilder extends DeleteBuilder {
-
-  _outputObj: any;
-
-  _obj: any;
 
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);

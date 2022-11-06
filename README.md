@@ -83,16 +83,16 @@ for the supported options in `credentials` node, just ref the [mysql official co
 
 edit your `package.json` > `cds` node
 
-```json5
+```json
 {
-  requires: {
-    db: {
-      kind: "mysql",
+  "requires": {
+    "db": {
+      "kind": "mysql"
     },
-    mysql: {
-      impl: "cds-mysql",
-    },
-  },
+    "mysql": {
+      "impl": "cds-mysql"
+    }
+  }
 }
 ```
 
@@ -302,6 +302,7 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 | 6.0.x            | 6.0.x             |
 | 6.1.x            | 6.1.x             |
 | 6.2.x            | 6.2.x             |
+| 6.3.x            | 6.3.x             |
 
 ## Limitation
 

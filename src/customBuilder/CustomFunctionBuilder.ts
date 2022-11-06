@@ -1,11 +1,11 @@
-// @ts-nocheck
-import { FunctionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import type { CSN } from "cds-internal-tool";
+import { CSN, cwdRequire } from "cds-internal-tool";
 import { func, ref, val } from "cds-internal-tool/lib/types/cxn";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+
+const { FunctionBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 
 const dateTimePlaceHolder = new Map([
   ["year", "'%Y'"],
@@ -57,7 +57,7 @@ export class CustomFunctionBuilder extends FunctionBuilder {
 
   private _handleFunction() {
     const functionName = this._functionName();
-    const args = this._functionArgs(); ``;
+    const args = this._functionArgs();
 
     if (dateTimePlaceHolder.has(functionName)) {
       this._timeFunction(functionName, args);
@@ -99,7 +99,7 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     }
   }
 
-  private _handleConcat(args: Array<ref | val | func | string>) {
+  private _handleConcat(args: Array<ref | val | func | string | any>) {
     const res = [];
     for (const arg of args) {
       if (arg.ref) {

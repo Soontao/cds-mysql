@@ -1,9 +1,9 @@
-import { ReferenceBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import type { CSN } from "cds-internal-tool";
+import { CSN, cwdRequire } from "cds-internal-tool";
 import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+const { ReferenceBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 
-export class CustomReferenceBuilder extends ReferenceBuilder {
+export class CustomReferenceBuilder extends (ReferenceBuilder as any) {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function

@@ -1,10 +1,9 @@
-// @ts-nocheck
-import { UpdateBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import type { CSN } from "cds-internal-tool";
+import { CSN, cwdRequire } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+const { UpdateBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 
 export class CustomUpdateBuilder extends UpdateBuilder {
   constructor(obj: any, options: any, csn: CSN) {

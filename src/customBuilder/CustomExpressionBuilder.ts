@@ -1,9 +1,11 @@
-import { ExpressionBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import type { CSN } from "cds-internal-tool";
+import { CSN, cwdRequire } from "cds-internal-tool";
 import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+
+const { ExpressionBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
+
 
 export class CustomExpressionBuilder extends ExpressionBuilder {
   constructor(obj: any, options: any, csn: CSN) {

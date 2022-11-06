@@ -1,8 +1,9 @@
-// @ts-nocheck
-import { InsertBuilder } from "@sap/cds/libx/_runtime/db/sql-builder";
-import type { CSN, EntityDefinition } from "cds-internal-tool";
+import { CSN, cwdRequire, EntityDefinition } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+
+const { InsertBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
+
 
 export class CustomInsertBuilder extends InsertBuilder {
   constructor(obj: any, options: any, csn: CSN) {
