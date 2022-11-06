@@ -2,19 +2,19 @@
 
 [![npm version](https://img.shields.io/npm/v/cds-mysql?label=cds-mysql)](https://www.npmjs.com/package/cds-mysql)
 ![node-test](https://github.com/Soontao/cds-mysql/workflows/node-test/badge.svg)
-[![codecov](https://codecov.io/gh/Soontao/cds-mysql/branch/main/graph/badge.svg?token=xTt6AaHeuu)](https://codecov.io/gh/Soontao/cds-mysql)
 [![tidb-test](https://github.com/Soontao/cds-mysql/actions/workflows/tidb.yml/badge.svg)](https://github.com/Soontao/cds-mysql/actions/workflows/tidb.yml)
 [![database-test](https://github.com/Soontao/cds-mysql/actions/workflows/database.yml/badge.svg)](https://github.com/Soontao/cds-mysql/actions/workflows/database.yml)
 
+[![codecov](https://codecov.io/gh/Soontao/cds-mysql/branch/main/graph/badge.svg?token=xTt6AaHeuu)](https://codecov.io/gh/Soontao/cds-mysql)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Soontao_cds-mysql&metric=security_rating)](https://sonarcloud.io/dashboard?id=Soontao_cds-mysql)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Soontao_cds-mysql&metric=sqale_index)](https://sonarcloud.io/dashboard?id=Soontao_cds-mysql)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Soontao_cds-mysql&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=Soontao_cds-mysql)
 
-> `MySQL`/`MariaDB`/`TiDB` adapter for [SAP CAP Framework](https://cap.cloud.sap/docs/about/), inspired by [cds-pg](https://github.com/sapmentors/cds-pg).
+> `MySQL`/`MariaDB`/`TiDB` adapter for [CAP Framework](https://cap.cloud.sap/docs/about/), this module is heavily inspired by the [cds-pg](https://github.com/sapmentors/cds-pg) module.
 
 ## Setup
 
-for development, just put the `default-env.json` file into the root directory of your CAP project, with `mysql` credential information.
+for local development, just simply create the `default-env.json` file into the root directory of your CAP project, and put the `mysql` credential into that. (remember **don't** commit this file into your git repository)
 
 please **NOTICE** that, the `{ tags: ['mysql'] }` is the key which used for service credential lookup in CAP framework.
 
@@ -56,7 +56,7 @@ edit your `package.json` > `cds` node
 }
 ```
 
-now, the cds server (`cds run`) should could be connected to the mysql server correctly. The database schema will be automatically migrated when the firstly time received CRUD request.
+now, the cds server (`cds run`) should could be connected to the mysql server correctly. The database schema will be automatically migrated when **the firstly time received CRUD request**.
 
 ## [Advanced Usage](./docs/ADVANCED_USAGE.md)
 
