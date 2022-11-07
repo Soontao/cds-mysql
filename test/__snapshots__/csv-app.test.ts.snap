@@ -159,3 +159,68 @@ exports[`CSV App Test Suite should support search 2`] = `
   "value": [],
 }
 `;
+
+exports[`CSV App Test Suite should support simple average aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(average_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "average_price": 671400,
+      "average_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite should support simple countdistinct aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(countdistinct_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "countdistinct_price": 4,
+      "countdistinct_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite should support simple max aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(max_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "max_price": 2357853,
+      "max_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite should support simple min aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(min_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "min_price": 23423,
+      "min_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite should support simple sum aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(sum_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "sum_price": 2685600,
+      "sum_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
