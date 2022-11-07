@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
-import { trimPrefix, trimSuffix } from "@newdash/newdash";
 import { CSN, cwdRequireCDS, fuzzy, groupByKeyPrefix, LinkedModel, Logger } from "cds-internal-tool";
 import MySQLParser, {
   ColumnDefinitionContext,
@@ -64,14 +63,12 @@ class CDSListener implements MySQLParserListener {
     const name = ctx.columnName();
     const field = ctx.fieldDefinition();
     const dataType = field.dataType();
-    const floatOption = dataType.floatOptions();
     const attrs = field.columnAttribute();
 
     const column: EntitySchemaColumnOptions = {
       name: this._getTextWithoutQuote(name.text),
       type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
       nullable: true, // default can be null
-      default: null
     };
 
     // for drafts table, it should redirect to the correct entity
@@ -100,6 +97,25 @@ class CDSListener implements MySQLParserListener {
         if (eleDef.length !== undefined) {
           column.length = eleDef.length;
         }
+
+        // Decimal(10, 2)
+        if (eleDef.precision !== undefined) {
+          column.precision = eleDef.precision;
+        }
+        if (eleDef.scale !== undefined) {
+          column.scale = eleDef.scale;
+        }
+
+        // not null
+        if (eleDef.notNull === true) {
+          column.nullable = false;
+        }
+
+        // default value, only for val expr
+        if (eleDef.default?.val !== undefined) {
+          column.default = eleDef.default?.val;
+        }
+
         // not association or composition
         if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
           const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
@@ -118,59 +134,19 @@ class CDSListener implements MySQLParserListener {
 
     // TODO: use element def directly
 
-    // (10, 2)
-    if (floatOption) {
-      column.precision = parseInt(floatOption.getChild(0).getChild(1).text);
-      column.scale = parseInt(floatOption.getChild(0).getChild(3).text);
-    }
-
     // DEFAULT
     if (attrs && attrs.length > 0) {
 
       for (const attr of attrs) {
 
-        if (attr.NOT_SYMBOL() && attr.nullLiteral()) {
-          column.nullable = false;
-          column.default = undefined;
-        }
-
         // is DEFAULT value
         if (attr.DEFAULT_SYMBOL()) {
-          const sign = attr.signedLiteral();
-          if (sign) {
-            const lit = sign.literal();
-
-            let value = undefined;
-
-            if (lit.boolLiteral()) {
-              const sBool = lit.boolLiteral().text.toLowerCase().trim();
-              if (sBool === "true") {
-                value = true;
-              }
-              if (sBool === "false") {
-                value = false;
-              }
-            }
-            if (lit.numLiteral()) {
-              value = parseFloat(lit.numLiteral().text);
-            }
-            if (lit.nullLiteral()) {
-              value = null;
-            }
-            if (lit.textLiteral()) {
-              value = trimSuffix(trimPrefix(lit.textLiteral().text, "'"), "'");
-            }
-
-            column.default = value;
-          }
-
           const now = attr.NOW_SYMBOL();
-
           // current_timestamp
           if (now) {
             if (column.type === "date") {
               logger?.debug(
-                `column(${column.name}) default value skipped, because mysql not support create 'date' column with default value '${now.text}'`
+                `column(${column.name}) default value skipped, because for 'date' datatype, mysql not support the default value '${now.text}'`
               );
             } else {
               column.default = () => "CURRENT_TIMESTAMP()";
