@@ -77,6 +77,14 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     this._handleLikewiseFunc(args);
   }
 
+  _handleCountdistinct(args) {
+    // without this, there is no space between 'distinct' keyword and key fields
+    this._outputObj.sql.push("count", "(", "DISTINCT", " ");
+    if (typeof args === "string") this._outputObj.sql.push(args);
+    else this._addFunctionArgs(args);
+    this._outputObj.sql.push(")");
+  }
+
   _createLikeComparisonForColumn(not, left, right) {
     if (not) {
       this._outputObj.sql.push("(", " ", left, " ", "IS NULL", " ", "OR", " ");

@@ -23,7 +23,7 @@ export class CustomUpdateBuilder extends UpdateBuilder {
     return CustomExpressionBuilder;
   }
 
-  _data(annotatedColumns) {
+  _data(annotatedColumns, entity) {
     const sql = [];
     const data = this._obj.UPDATE.data || {};
     const withObj = this._obj.UPDATE.with || {};
@@ -32,15 +32,20 @@ export class CustomUpdateBuilder extends UpdateBuilder {
     this._removeAlreadyExistingUpdateAnnotatedColumnsFromMap(annotatedColumns, resMap);
 
     this._addAnnotatedUpdateColumns(resMap, annotatedColumns);
-    const entity = this._csn.definitions[this._obj.UPDATE.entity];
+
+    if (entity && entity.keys) {
+      resMap.forEach((value, key, map) => {
+        if (key in entity.keys) map.delete(key);
+      });
+    }
 
     resMap.forEach((value, key) => {
-      const columnType = entity.elements?.[key]?.type;
       if (value && value.sql) {
         sql.push(`${this._quoteElement(key)} = ${value.sql}`);
         this._outputObj.values.push(...value.values);
       } else {
         sql.push(`${this._quoteElement(key)} = ?`);
+        const columnType = entity?.elements?.[key]?.type;
         // convert value for specific type
         if (columnType && PRE_CONVERSION_MAP.has(columnType)) {
           value = PRE_CONVERSION_MAP.get(columnType)(value);
