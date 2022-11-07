@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0-beta.0](https://github.com/Soontao/cds-mysql/compare/v6.3.0-alpha.1...v6.3.0-beta.0) (2022-11-07)
+
+
+### Features
+
+* more column info from CSN ([7685b20](https://github.com/Soontao/cds-mysql/commit/7685b2032c01179d3bb0cec6d31f0b8e19920194))
+* support distinct count for analytic ([2c7fd87](https://github.com/Soontao/cds-mysql/commit/2c7fd875e699ae152d6b61bc345beb124ded7335))
+
+
+### Bug Fixes
+
+* iso time ([31503f9](https://github.com/Soontao/cds-mysql/commit/31503f93681cbb8d7ca1b696542cc8689f066210))
+
 ## [6.3.0-alpha.1](https://github.com/Soontao/cds-mysql/compare/v6.3.0-alpha.0...v6.3.0-alpha.1) (2022-11-06)
 
 
