@@ -2,7 +2,6 @@
 
 exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.CreatedByUser element definition 1`] = `
 {
-  "default": null,
   "length": 256,
   "name": "CreatedByUser",
   "nullable": true,
@@ -12,7 +11,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 
 exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.CreationDateTime element definition 1`] = `
 {
-  "default": null,
   "name": "CreationDateTime",
   "nullable": true,
   "type": "timestamp",
@@ -21,7 +19,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 
 exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.DraftIsCreatedByMe element definition 1`] = `
 {
-  "default": null,
   "name": "DraftIsCreatedByMe",
   "nullable": true,
   "type": "boolean",
@@ -30,7 +27,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 
 exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.DraftIsProcessedByMe element definition 1`] = `
 {
-  "default": null,
   "name": "DraftIsProcessedByMe",
   "nullable": true,
   "type": "boolean",
@@ -50,7 +46,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 
 exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.InProcessByUser element definition 1`] = `
 {
-  "default": null,
   "length": 256,
   "name": "InProcessByUser",
   "nullable": true,
@@ -60,7 +55,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 
 exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.LastChangeDateTime element definition 1`] = `
 {
-  "default": null,
   "name": "LastChangeDateTime",
   "nullable": true,
   "type": "timestamp",
@@ -69,7 +63,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 
 exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdministrativeData.LastChangedByUser element definition 1`] = `
 {
-  "default": null,
   "length": 256,
   "name": "LastChangedByUser",
   "nullable": true,
@@ -79,7 +72,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Address element definition 1`] = `
 {
-  "default": null,
   "length": 255,
   "name": "Address",
   "nullable": true,
@@ -98,28 +90,27 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.DraftAdministrativeData_DraftUUID element definition 1`] = `
 {
-  "default": undefined,
   "length": 36,
   "name": "DraftAdministrativeData_DraftUUID",
-  "nullable": false,
+  "nullable": true,
   "type": "nvarchar",
 }
 `;
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.HasActiveEntity element definition 1`] = `
 {
-  "default": null,
+  "default": false,
   "name": "HasActiveEntity",
-  "nullable": true,
+  "nullable": false,
   "type": "boolean",
 }
 `;
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.HasDraftEntity element definition 1`] = `
 {
-  "default": null,
+  "default": false,
   "name": "HasDraftEntity",
-  "nullable": true,
+  "nullable": false,
   "type": "boolean",
 }
 `;
@@ -137,7 +128,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.IsActiveEntity element definition 1`] = `
 {
-  "default": null,
+  "default": true,
   "name": "IsActiveEntity",
   "nullable": true,
   "type": "boolean",
@@ -146,7 +137,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Name element definition 1`] = `
 {
-  "default": null,
   "length": 255,
   "name": "Name",
   "nullable": true,
@@ -156,7 +146,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 
 exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Person.Address element definition 1`] = `
 {
-  "default": null,
   "length": 255,
   "name": "Address",
   "nullable": true,
@@ -186,7 +175,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_f
 
 exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Person.Name element definition 1`] = `
 {
-  "default": null,
   "length": 255,
   "name": "Name",
   "nullable": true,
@@ -214,7 +202,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Avatar element definition 1`] = `
 {
-  "default": null,
   "length": 255,
   "name": "Avatar",
   "nullable": true,
@@ -224,7 +211,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.BirthDateTime element definition 1`] = `
 {
-  "default": null,
   "name": "BirthDateTime",
   "nullable": true,
   "type": "timestamp",
@@ -233,7 +219,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.BirthDay element definition 1`] = `
 {
-  "default": undefined,
   "name": "BirthDay",
   "nullable": false,
   "type": "date",
@@ -262,7 +247,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.DoubleProperty element definition 1`] = `
 {
-  "default": null,
   "name": "DoubleProperty",
   "nullable": true,
   "type": "double",
@@ -280,7 +264,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Int16Property element definition 1`] = `
 {
-  "default": null,
   "name": "Int16Property",
   "nullable": true,
   "type": "smallint",
@@ -289,7 +272,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Int32Property element definition 1`] = `
 {
-  "default": null,
   "name": "Int32Property",
   "nullable": true,
   "type": "integer",
@@ -298,7 +280,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Int64Property element definition 1`] = `
 {
-  "default": null,
   "name": "Int64Property",
   "nullable": true,
   "type": "bigint",
@@ -307,7 +288,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Integer64Property element definition 1`] = `
 {
-  "default": null,
   "name": "Integer64Property",
   "nullable": true,
   "type": "bigint",
@@ -316,7 +296,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Key element definition 1`] = `
 {
-  "default": undefined,
   "name": "Key",
   "nullable": false,
   "type": "integer",
@@ -325,7 +304,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.LargeBinaryValue element definition 1`] = `
 {
-  "default": null,
   "name": "LargeBinaryValue",
   "nullable": true,
   "type": "longblob",
@@ -345,7 +323,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Picture element definition 1`] = `
 {
-  "default": null,
   "name": "Picture",
   "nullable": true,
   "type": "longtext",
@@ -354,7 +331,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.StringWithoutLength element definition 1`] = `
 {
-  "default": null,
   "length": undefined,
   "name": "StringWithoutLength",
   "nullable": true,
@@ -375,7 +351,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.UInt8Property element definition 1`] = `
 {
-  "default": null,
   "name": "UInt8Property",
   "nullable": true,
   "type": "tinyint",
@@ -384,7 +359,6 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.rank element definition 1`] = `
 {
-  "default": null,
   "name": "rank",
   "nullable": true,
   "type": "longtext",
@@ -420,7 +394,6 @@ exports[`TypeORM Test Suite should support migrate tables 1`] = `
             "type": "nvarchar",
           },
           "Name": {
-            "default": null,
             "length": 100,
             "name": "Name",
             "nullable": true,
@@ -440,7 +413,6 @@ exports[`TypeORM Test Suite should support migrate tables 1`] = `
       "options": {
         "columns": {
           "Age": {
-            "default": null,
             "name": "Age",
             "nullable": true,
             "type": "integer",
@@ -481,7 +453,6 @@ exports[`TypeORM Test Suite should support migrate tables 1`] = `
             "type": "boolean",
           },
           "Age": {
-            "default": null,
             "name": "Age",
             "nullable": true,
             "type": "integer",
@@ -542,7 +513,6 @@ WHERE People_0.Active = TRUE;",
             "type": "boolean",
           },
           "Age": {
-            "default": null,
             "name": "Age",
             "nullable": true,
             "type": "integer",
@@ -645,13 +615,11 @@ FROM test_resources_migrate_InActivePeople AS InActivePeople_1;",
             "type": "nvarchar",
           },
           "Level": {
-            "default": null,
             "name": "Level",
             "nullable": true,
             "type": "integer",
           },
           "Title": {
-            "default": null,
             "length": 255,
             "name": "Title",
             "nullable": true,
@@ -792,13 +760,11 @@ FROM test_resources_migrate_InActivePeople AS InActivePeople_1;",
             "type": "nvarchar",
           },
           "Level": {
-            "default": null,
             "name": "Level",
             "nullable": true,
             "type": "integer",
           },
           "Title": {
-            "default": null,
             "length": 255,
             "name": "Title",
             "nullable": true,
@@ -935,27 +901,23 @@ WHERE People_0.Active = TRUE;",
             "type": "nvarchar",
           },
           "Level": {
-            "default": null,
             "name": "Level",
             "nullable": true,
             "type": "integer",
           },
           "People_ID": {
-            "default": null,
             "length": 36,
             "name": "People_ID",
             "nullable": true,
             "type": "nvarchar",
           },
           "People_Name": {
-            "default": null,
             "length": 100,
             "name": "People_Name",
             "nullable": true,
             "type": "nvarchar",
           },
           "Title": {
-            "default": null,
             "length": 255,
             "name": "Title",
             "nullable": true,
@@ -1109,7 +1071,6 @@ WHERE People_0.Active = TRUE;",
             "type": "nvarchar",
           },
           "Title": {
-            "default": null,
             "length": 255,
             "name": "Title",
             "nullable": true,
@@ -1149,27 +1110,23 @@ WHERE People_0.Active = TRUE;",
             "type": "nvarchar",
           },
           "Level": {
-            "default": null,
             "name": "Level",
             "nullable": true,
             "type": "integer",
           },
           "People_ID": {
-            "default": null,
             "length": 36,
             "name": "People_ID",
             "nullable": true,
             "type": "nvarchar",
           },
           "People_Name": {
-            "default": null,
             "length": 100,
             "name": "People_Name",
             "nullable": true,
             "type": "nvarchar",
           },
           "Title": {
-            "default": null,
             "length": 255,
             "name": "Title",
             "nullable": true,
@@ -1572,7 +1529,6 @@ WHERE People_0.Active = TRUE;",
             "type": "nvarchar",
           },
           "Title": {
-            "default": null,
             "length": 255,
             "name": "Title",
             "nullable": true,
@@ -1612,27 +1568,23 @@ WHERE People_0.Active = TRUE;",
             "type": "nvarchar",
           },
           "Level": {
-            "default": null,
             "name": "Level",
             "nullable": true,
             "type": "integer",
           },
           "People_ID": {
-            "default": null,
             "length": 36,
             "name": "People_ID",
             "nullable": true,
             "type": "nvarchar",
           },
           "People_Name": {
-            "default": null,
             "length": 100,
             "name": "People_Name",
             "nullable": true,
             "type": "nvarchar",
           },
           "Title": {
-            "default": null,
             "length": 255,
             "name": "Title",
             "nullable": true,
