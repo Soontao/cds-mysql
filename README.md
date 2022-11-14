@@ -74,7 +74,7 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 ## Features
 
 - [x] fundamental `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
-  - [x] *experimental* support `UPSERT` by `INSERT ... ON DUPLICATE KEY UPDATE` statement
+  - [x] *experimental* support [`UPSERT`](./docs/ADVANCED_USAGE.md#upsert) by `INSERT ... ON DUPLICATE KEY UPDATE` statement
 - [x] deep insert for association/composition
   - [x] deep create/update/query/delete test case
 - [x] `temporal` aspect, but not support [time-travel query](https://cap.cloud.sap/docs/guides/temporal-data#time-travel-queries)
