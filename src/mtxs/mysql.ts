@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { cwdRequire, cwdRequireCDS } from "cds-internal-tool";
+import { cwdRequireCDS } from "cds-internal-tool";
 
 const cds = cwdRequireCDS(), { db } = cds.requires;
 const LOG = cds.log("cds-mysql");
@@ -7,8 +7,6 @@ const LOG = cds.log("cds-mysql");
 const activated = db?.kind === "mysql" && "MySQL database";
 
 if (activated) {
-
-  cwdRequire("@sap/cds-mtxs/srv/plugins/common/metadata"); // apply general subscribe/unsubscribe event
 
   /**
    * tenant 0 name
@@ -19,10 +17,7 @@ if (activated) {
     return process.env.CDS_REQUIRES_MULTITENANCY_T0 ?? "t0";
   }
 
-  // override t0 table creation
-  const SaasProvisioningService = cwdRequire("@sap/cds-mtxs/srv/cf/saas-provisioning-service");
-
-  SaasProvisioningService.prototype._resubscribeT0IfNeeded = async function _resubscribeT0IfNeeded() {
+  async function resubscribeT0IfNeeded() {
     const ds = await cds.connect.to("cds.xt.DeploymentService");
     await ds.tx({ tenant: this._t0 }, async tx => {
       if (!await tx.needsT0Redeployment()) return;
@@ -34,6 +29,28 @@ if (activated) {
   cds.once("served", () => {
 
     const { "cds.xt.DeploymentService": ds } = cds.services;
+
+    ds.on("subscribe", async (req, next) => {
+      await next();
+      // REVISIT: Use UPSERT instead
+      const { tenant: t, metadata } = req.data;
+      if (t === _t0()) return await next();
+      try {
+        await cds.tx({ tenant: _t0() }, tx =>
+          tx.run(INSERT.into(Tenants, { ID: t, metadata: JSON.stringify(metadata) }))
+        );
+      } catch (e) {
+        if (e.message !== "ENTITY_ALREADY_EXISTS") throw e;
+      }
+    });
+
+    ds.on("unsubscribe", async (req, next) => {
+      await next();
+      const { tenant: t } = req.data;
+      await cds.tx({ tenant: _t0() }, tx =>
+        tx.run(DELETE.from(Tenants).where({ ID: { "=": t } }))
+      );
+    });
 
     ds.on("subscribe", async function (req) {
       const { tenant: t, options } = req.data;
@@ -98,6 +115,7 @@ if (activated) {
       return mp.getCsn({ tenant, toggles: ["*"], activated: true }); // REVISIT: ['*'] should be the default
     }
 
+    resubscribeT0IfNeeded().catch(LOG.error);
 
     // workaround for MySQL:
     if (!cds.env.requires.multitenancy) cds.env.requires.multitenancy = true;
