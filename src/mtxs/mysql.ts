@@ -4,6 +4,7 @@ import { cwdRequireCDS } from "cds-internal-tool";
 const cds = cwdRequireCDS(), { db } = cds.requires;
 const LOG = cds.log("cds-mysql");
 
+const Tenants = "cds.xt.Tenants";
 const activated = db?.kind === "mysql" && "MySQL database";
 
 if (activated) {
@@ -17,18 +18,25 @@ if (activated) {
     return process.env.CDS_REQUIRES_MULTITENANCY_T0 ?? "t0";
   }
 
-  async function resubscribeT0IfNeeded() {
-    const ds = await cds.connect.to("cds.xt.DeploymentService");
-    await ds.tx({ tenant: this._t0 }, async tx => {
-      if (!await tx.needsT0Redeployment()) return;
-      const csn = await cds.load(`${__dirname}/t0.cds`);
-      await tx.subscribe({ tenant: this._t0, options: { csn } });
-    });
-  };
-
   cds.once("served", () => {
 
     const { "cds.xt.DeploymentService": ds } = cds.services;
+
+    async function needsT0Redeployment() {
+      const tables = await ds.getTables(_t0());
+      if (!(tables.includes("cds_xt_jobs") && tables.includes("cds_xt_tenants"))) {
+        return true;
+      }
+      return false;
+    }
+
+    async function resubscribeT0IfNeeded() {
+      await ds.tx({ tenant: _t0() }, async tx => {
+        if (!await needsT0Redeployment()) return;
+        const csn = await cds.load(`${__dirname}/t0.cds`);
+        await tx.subscribe({ tenant: this._t0, options: { csn } });
+      });
+    };
 
     ds.on("subscribe", async (req, next) => {
       await next();
@@ -75,15 +83,6 @@ if (activated) {
       await cds.db?.disconnect(t);
     });
 
-    // REVISIT: I think we should have a review on these creeping APIs ;)
-
-    ds.on("needsT0Redeployment", async function needsT0Redeployment() {
-      const tables = await this.getTables(_t0());
-      if (!(tables.includes("cds_xt_jobs") && tables.includes("cds_xt_tenants"))) {
-        return true;
-      }
-      return false;
-    });
 
     ds.on("hasTenant", async req => {
       const { tenant: t } = req.data;
