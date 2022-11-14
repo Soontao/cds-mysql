@@ -5,14 +5,14 @@
 > use `upsert` by a internal indicator
 
 ```js
+const { UPSERT } = require("cds-mysql");
+
 module.exports = class DemoService extends cds.ApplicationService {
 
   async _upsert(req) {
     const { Products } = this.entities;
     const { data } = req;
-    const q = INSERT.into(Products).entries(data);
-    q.INSERT._upsert = true; // set the internal indicator
-    return this.run(q);
+    return this.run(UPSERT.into(Products).entries(data));
   }
 
 };

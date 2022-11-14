@@ -130,6 +130,15 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _tenantProvider: TenantProvider;
 
+  /**
+   * create upsert query
+   */
+  public static get UPSERT() {
+    const i = cwdRequireCDS().ql.INSERT();
+    i.INSERT["_upsert"] = true;
+    return i;
+  };
+
   async init() {
     await super.init();
     if (this.options?.tenant?.deploy?.auto !== false) {

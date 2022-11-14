@@ -1,4 +1,5 @@
 const { cwdRequireCDS } = require("cds-internal-tool");
+const { UPSERT } = require("../../../../src");
 
 const cds = cwdRequireCDS();
 
@@ -12,9 +13,7 @@ module.exports = class DemoService extends cds.ApplicationService {
   async _upsert(req) {
     const { Products } = this.entities;
     const { data } = req;
-    const q = INSERT.into(Products).entries(data);
-    q.INSERT._upsert = true;
-    return this.run(q);
+    return this.run(UPSERT.into(Products).entries(data));
   }
 
 };
