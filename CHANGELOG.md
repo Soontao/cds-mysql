@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0-beta.1](https://github.com/Soontao/cds-mysql/compare/v6.3.0-beta.0...v6.3.0-beta.1) (2022-11-14)
+
+
+### Features
+
+* basic support for mtxs ([606510f](https://github.com/Soontao/cds-mysql/commit/606510f8566ac621e3b627649156a45373ba804c))
+* improve UPSERT ([d6faa89](https://github.com/Soontao/cds-mysql/commit/d6faa8997b1e56f12227542d95ad059becb749ea))
+* support UPSERT ([3396b95](https://github.com/Soontao/cds-mysql/commit/3396b958c6f740dd6d2e1d0642863afd63b99930))
+
+
+### Bug Fixes
+
+* issues of mtxs ([afb23b2](https://github.com/Soontao/cds-mysql/commit/afb23b2d96c86225e530efebd8ffd28732e7fe9c))
+* mtxs t0 migration ([96a1888](https://github.com/Soontao/cds-mysql/commit/96a1888d37b8dac4c14f9e010126b6ceeee49daa))
+* t0 deployment ([baf7543](https://github.com/Soontao/cds-mysql/commit/baf75434ff6a5e9aac3b75de78cb905f43cdddcb))
+* test ([457120a](https://github.com/Soontao/cds-mysql/commit/457120aeb9b26cf0bfd198f8ce0dd4814aa44a5f))
+
 ## [6.3.0-beta.0](https://github.com/Soontao/cds-mysql/compare/v6.3.0-alpha.1...v6.3.0-beta.0) (2022-11-07)
 
 
