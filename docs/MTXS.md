@@ -19,7 +19,7 @@
           "model": "cds-mysql/mtxs/DeploymentService.cds"
         },
         "mysql": {
-          "impl": "cds-mysql/mtxs/index"
+          "impl": "cds-mysql"
         }
       }
     }
