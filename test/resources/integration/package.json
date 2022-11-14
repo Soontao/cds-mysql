@@ -1,12 +1,6 @@
 {
   "cds": {
-    "plugins": [
-      "../../../src/mtxs"
-    ],
     "requires": {
-      "multitenancy": true,
-      "extensibility": true,
-      "toggles": true,
       "db": {
         "kind": "mysql",
         "dialect": "sqlite",
@@ -22,8 +16,17 @@
           }
         }
       },
-      "mysql": {
-        "impl": "../../../src/index"
+      "cds.xt.SaasProvisioningService": true,
+      "cds.xt.ModelProviderService": true,
+      "cds.xt.ExtensibilityService": true,
+      "cds.xt.DeploymentService": true,
+      "kinds": {
+        "cds.xt.DeploymentService": {
+          "model": "../../../mtxs/DeploymentService.cds"
+        },
+        "mysql": {
+          "impl": "../../../src/index"
+        }
       },
       "auth": {
         "kind": "basic",

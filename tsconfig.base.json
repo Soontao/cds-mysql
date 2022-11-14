@@ -2,7 +2,7 @@
   "compilerOptions": {
     "charset": "UTF-8",
     "newLine": "lf",
-    "target": "ES2019",
+    "target": "ES2021",
     "module": "CommonJS",
     "allowJs": true,
     "sourceMap": true,
@@ -16,7 +16,8 @@
     "declaration": true,
     "lib": [
       "DOM",
-      "ES2019"
+      "ES2019",
+      "ES2022"
     ],
   },
   "buildOptions": {
