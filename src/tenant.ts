@@ -5,6 +5,8 @@ import { MysqlDatabaseOptions, MySQLDatabaseService } from "./Service";
 import { MySQLCredential } from "./types";
 
 
+// TODO: maybe fully replaced with @sap/cds-mtxs module
+
 export function formatTenantDatabaseName(
   credentials: MySQLCredential,
   tenant_db_prefix = "tenant_db",

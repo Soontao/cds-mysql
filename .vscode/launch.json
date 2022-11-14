@@ -4,12 +4,17 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "deploy",
-      "program": "${workspaceFolder}/bin/cds-mysql-deploy.js",
-      "cwd": "/Users/i337313/repos/tmp/ut-example",
+      "name": "run integration",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "cds-ts",
+        "run"
+      ],
+      "cwd": "${workspaceFolder}/test/resources/integration",
       "skipFiles": [
         "<node_internals>/**"
-      ]
+      ],
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "type": "node",

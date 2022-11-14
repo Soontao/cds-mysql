@@ -9,7 +9,8 @@ module.exports = {
   ],
   "coveragePathIgnorePatterns": [
     "node_modules/",
-    "src/typeorm/mysql"
+    "src/typeorm/mysql",
+    "src/mtxs",
   ],
   "testEnvironment": "node",
   "testRegex": "/test/.*\\.test\\.ts$",
