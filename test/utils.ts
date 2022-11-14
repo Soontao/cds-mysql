@@ -83,10 +83,10 @@ export const cleanDB = async () => {
   // so, clean all tenants database
 
   // TODO: t2 tenant for erin and fred
-  for (const tenant of [undefined, "t1"]) {
+  for (const tenant of [undefined, "t0", "t1", "e5f878d5-7985-407b-a1cb-87a8716f1904"]) {
     const options: DataSourceOptions = {
       ...getTestTypeORMOptions(),
-      name: "unit-test-clean-db",
+      name: `unit-test-clean-db-${cds.utils.uuid()}`,
       database: formatTenantDatabaseName(cds.env.requires.db.credentials, undefined, tenant)
     };
     const ds = new DataSource(options);

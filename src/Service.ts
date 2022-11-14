@@ -151,7 +151,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @param tenant 
    * @returns 
    */
-  private async _csn4(tenant: string) {
+  public async csn4(tenant: string) {
     const { "cds.xt.ModelProviderService": mp } = cds.services;
     return (mp as any).getCsn({ tenant, toggles: ["*"], activated: true });
   }
@@ -208,7 +208,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     if (ds !== undefined) {
       // with deployment service
       if (await this._hasTenant(tenantId)) {
-        await (ds as any).deploy(tenantId, { csn: await this._csn4(tenantId) });
+        await (ds as any).deploy(tenantId, { csn: await this.csn4(tenantId) });
       }
       else {
         await (ds as any).deploy(tenantId, { csn: await _rawCSN(this.model) });

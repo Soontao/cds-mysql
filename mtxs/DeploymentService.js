@@ -13,10 +13,6 @@ function _t0() {
   return process.env.CDS_REQUIRES_MULTITENANCY_T0 ?? "t0";
 }
 
-async function csn4(tenant) {
-  const { "cds.xt.ModelProviderService": mp } = cds.services;
-  return mp.getCsn({ tenant, toggles: ["*"], activated: true });
-}
 
 module.exports = class DeploymentService extends cds.ApplicationService {
 
@@ -60,7 +56,7 @@ module.exports = class DeploymentService extends cds.ApplicationService {
 
     this.on("deploy", async function (req) {
       const { tenant: t, options } = req.data;
-      const csn = await options?.csn || await csn4();
+      const csn = await options?.csn || await cds.db.csn4();
       LOG.info("(re-)deploying MySQL database for tenant:", t);
       cds.context = { tenant: t };
       return await cds.db.deploy(csn, { tenant: t });
@@ -68,7 +64,7 @@ module.exports = class DeploymentService extends cds.ApplicationService {
 
     this.on(["upgrade", "extend"], async function (req) {
       const { tenant: t } = req.data;
-      return this.deploy(t, { csn: csn4(t) });
+      return this.deploy(t, { csn: await cds.db.csn4(t) });
     });
 
     this.on("unsubscribe", async function unsubscribe(req) {
