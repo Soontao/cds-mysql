@@ -73,11 +73,6 @@ module.exports = class DeploymentService extends cds.ApplicationService {
       await cds.db?.disconnect(t);
     });
 
-    this.on("getTenantDb", req => {
-      const { tenant: t } = req.data;
-      return cds.db._tenantProvider.getCredential(t);
-    });
-
     this.on("getTables", async (req) => {
       const { tenant: t } = req.data;
       const tenantDatabaseName = cds.db._tenantProvider.getTenantDatabaseName(t);
