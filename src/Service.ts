@@ -272,12 +272,19 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   /**
    * disconnect from database, free all connections of all tenants
+   * 
+   * @param tenant optional tenant id, if without that, close all pools 
    */
-  public async disconnect() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [tenant, pool] of this._pools.entries()) {
+  public async disconnect(tenant?: string) {
+    if (tenant !== undefined && this._pools.has(tenant)) {
+      const pool = await this._pools.get(tenant);
+      await pool.clear();
+      return;
+    }
+    for (const pool of this._pools.values()) {
       await (await pool).clear();
     }
+
   }
 
 
