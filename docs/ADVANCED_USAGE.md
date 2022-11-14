@@ -1,5 +1,23 @@
 ## Advanced Usage
 
+### UPSERT
+
+> use `upsert` by a internal indicator
+
+```js
+module.exports = class DemoService extends cds.ApplicationService {
+
+  async _upsert(req) {
+    const { Products } = this.entities;
+    const { data } = req;
+    const q = INSERT.into(Products).entries(data);
+    q.INSERT._upsert = true; // set the internal indicator
+    return this.run(q);
+  }
+
+};
+```
+
 ### Schema Migration
 
 `cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, then parse the `DDL` statements, and convert them into `typeorm`-`EntitySchema` objects, then do the migration with `typeorm` existed migration functionality.
@@ -192,3 +210,4 @@ you can convert PEM cert to json format with [this document](https://docs.vmware
 ```bash
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 ```
+

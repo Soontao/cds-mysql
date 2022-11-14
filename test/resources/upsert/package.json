@@ -1,0 +1,35 @@
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "dialect": "sqlite",
+        "csv": {
+          "migrate": false
+        },
+        "tenant": {
+          "deploy": {
+            "eager": [
+              "default"
+            ]
+          }
+        }
+      },
+      "kinds": {
+        "mysql": {
+          "impl": "../../../src/index"
+        }
+      },
+      "auth": {
+        "kind": "basic",
+        "users": {
+          "alice": {
+            "roles": [
+              "admin"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

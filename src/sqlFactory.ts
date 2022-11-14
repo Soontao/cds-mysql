@@ -1,12 +1,4 @@
-import {
-  CreateBuilder,
-  DeleteBuilder,
-  DropBuilder,
-  InsertBuilder,
-  SelectBuilder,
-  UpdateBuilder
-} from "@sap/cds/libx/_runtime/db/sql-builder";
-import type { CQN, CSN } from "cds-internal-tool";
+import { CQN, CSN, cwdRequire } from "cds-internal-tool";
 
 const _getCustomBuilderIfExists = (options, type) => {
   if (options && options.customBuilder) {
@@ -47,6 +39,14 @@ const build = (cqn: CQN, options?: any, csn?: CSN): string => {
     throw new Error("Cannot build SQL. No CQN object provided.");
   }
 
+  const {
+    CreateBuilder,
+    DeleteBuilder,
+    DropBuilder,
+    InsertBuilder,
+    SelectBuilder,
+    UpdateBuilder
+  } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
   const build = (Builder) => {
     return new Builder(cqn, options, csn).build();
   };

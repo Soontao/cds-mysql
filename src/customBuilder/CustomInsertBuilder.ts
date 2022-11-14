@@ -4,21 +4,31 @@ import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const { InsertBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 
-
 export class CustomInsertBuilder extends InsertBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
   }
 
-  private _extOutputObj = {
-    columns: [],
-  };
+  private _extOutputObj = { columns: [] };
 
   public build() {
     this._extOutputObj = { columns: [] };
     super.build();
     this._transform();
+    // for upsert
+    if (this._obj?.INSERT?._upsert === true) {
+      // replace insert keyword
+      this._outputObj.sql = [
+        this._outputObj.sql,
+        " ",
+        "ON DUPLICATE KEY UPDATE",
+        " ",
+        this._extOutputObj.columns.map(
+          col => `${this._quoteElement(col)} = VALUES(${this._quoteElement(col)})`
+        ).join(", ")
+      ].join("");
+    }
     return this._outputObj;
   }
 

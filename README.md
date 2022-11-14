@@ -73,7 +73,8 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 
 ## Features
 
-- [x] basic `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
+- [x] fundamental `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
+  - [x] *experimental* support `UPSERT` by `INSERT ... ON DUPLICATE KEY UPDATE` statement
 - [x] deep insert for association/composition
   - [x] deep create/update/query/delete test case
 - [x] `temporal` aspect, but not support [time-travel query](https://cap.cloud.sap/docs/guides/temporal-data#time-travel-queries)
@@ -109,7 +110,7 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
-- [x] (BETA) [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
+- [x] *experimental* [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
   - [ ] extensibility
 - [ ] better E2E document/sample
 
