@@ -49,8 +49,10 @@ edit your `package.json` > `cds` node
     "db": {
       "kind": "mysql"
     },
-    "mysql": {
-      "impl": "cds-mysql"
+    "kinds": {
+      "mysql": {
+        "impl": "cds-mysql"
+      }
     }
   }
 }
@@ -58,7 +60,7 @@ edit your `package.json` > `cds` node
 
 now, the cds server (`cds run`) should could be connected to the mysql server correctly. The database schema will be automatically migrated when **the firstly time received CRUD request**.
 
-## [Advanced Usage](./docs/ADVANCED_USAGE.md)
+## [Advanced Usage Guide](./docs/ADVANCED_USAGE.md)
 
 ## Compatibility Table
 

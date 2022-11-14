@@ -12,8 +12,10 @@
           "migrate": true
         }
       },
-      "mysql": {
-        "impl": "../../../src/index"
+      "kinds": {
+        "mysql": {
+          "impl": "../../../src/index"
+        }
       }
     }
   }

@@ -8,8 +8,10 @@
           "migrate": false
         }
       },
-      "mysql": {
-        "impl": "../../../src/index"
+      "kinds": {
+        "mysql": {
+          "impl": "../../../src/index"
+        }
       }
     }
   }
