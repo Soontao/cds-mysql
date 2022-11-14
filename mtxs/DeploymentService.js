@@ -12,29 +12,20 @@ const Tenants = "cds.xt.Tenants";
 function _t0() {
   return process.env.CDS_REQUIRES_MULTITENANCY_T0 ?? "t0";
 }
+
 async function csn4(tenant) {
   const { "cds.xt.ModelProviderService": mp } = cds.services;
   return mp.getCsn({ tenant, toggles: ["*"], activated: true });
 }
 module.exports = class DeploymentService extends cds.ApplicationService {
-  async needsT0Redeployment() {
-    const tables = await this.getTables(_t0());
-    if (!(tables.includes("cds_xt_jobs") && tables.includes("cds_xt_tenants"))) {
-      return true;
-    }
-    return false;
-  }
 
   async resubscribeT0IfNeeded() {
     await this.tx({ tenant: _t0() }, async (tx) => {
-      if (!await this.needsT0Redeployment())
-        return;
       const csn = await cds.load(`${__dirname}/t0.cds`);
-      await tx.subscribe({ tenant: this._t0, options: { csn } });
+      await tx.deploy({ tenant: _t0(), options: { csn } });
     });
   }
 
-  ;
   async init() {
     await super.init();
     this.on("subscribe", async (req, next) => {

@@ -167,25 +167,47 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
         (
           async () => {
             const credential = await this._tenantProvider.getCredential(tenant);
-            const poolOptions = { ...DEFAULT_POOL_OPTIONS, ...this.options?.pool }; // TODO: pool configuration provider
-            const tenantCredential = { ...credential, dateStrings: true, charset: MYSQL_COLLATE };
+
+            // TODO: pool configuration provider
+            const poolOptions = {
+              ...DEFAULT_POOL_OPTIONS,
+              ...this.options?.pool
+            };
+            const tenantCredential = {
+              ...credential,
+              dateStrings: true,
+              charset: MYSQL_COLLATE
+            };
 
             if (this.options?.tenant?.deploy?.auto !== false) {
+
               // TODO: tenant model
               await this.deploy(await _rawCSN(this.model), { tenant });
+
               if (this.options?.csv?.migrate !== false) {
                 await migrateData(tenantCredential, this.model);
               }
               else {
-                this._logger.debug("csv migration disabled, skip migrate CSV for tenant", tenant);
+                this._logger.debug(
+                  "csv migration disabled, skip migrate CSV for tenant",
+                  tenant
+                );
               }
 
             }
             else {
-              this._logger.debug("auto tenant deploy disabled, skip auto deploy for tenant", tenant);
+              this._logger.debug(
+                "auto tenant deploy disabled, skip auto deploy for tenant",
+                tenant
+              );
             }
 
-            this._logger.info("creating connection pool for tenant", tenant, "with option", poolOptions);
+            this._logger.info(
+              "creating connection pool for tenant",
+              tenant,
+              "with option",
+              poolOptions
+            );
 
             const newPool = createPool(
               {
@@ -214,9 +236,6 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     return await this._pools.get(tenant);
 
   }
-
-
-
 
   /**
    * acquire connection from pool
