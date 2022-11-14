@@ -109,7 +109,8 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
-- [ ] [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md)
+- [x] (BETA) [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
+  - [ ] extensibility
 - [ ] better E2E document/sample
 
 ## Limitation

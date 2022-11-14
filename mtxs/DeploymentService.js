@@ -17,6 +17,7 @@ async function csn4(tenant) {
   const { "cds.xt.ModelProviderService": mp } = cds.services;
   return mp.getCsn({ tenant, toggles: ["*"], activated: true });
 }
+
 module.exports = class DeploymentService extends cds.ApplicationService {
 
   async resubscribeT0IfNeeded() {
@@ -72,15 +73,8 @@ module.exports = class DeploymentService extends cds.ApplicationService {
 
     this.on("unsubscribe", async function unsubscribe(req) {
       const { tenant: t } = req.data;
+      // TODO: configuration of really DROP database
       await cds.db?.disconnect(t);
-    });
-
-    this.on("hasTenant", async (req) => {
-      const { tenant: t } = req.data;
-      const tenantDatabaseName = cds.db._tenantProvider.getTenantDatabaseName(t);
-      // eslint-disable-next-line max-len
-      const [{ "COUNT": count }] = await cds.tx({ tenant: t }, tx => tx.run(`SELECT COUNT(*) AS COUNT FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '${tenantDatabaseName}'`));
-      return count > 0;
     });
 
     this.on("getTenantDb", req => {

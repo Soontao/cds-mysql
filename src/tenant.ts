@@ -37,7 +37,7 @@ export abstract class TenantProvider {
     this._logger = cwdRequireCDS().log("tenant");
   }
 
-  protected getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
+  public getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
     return formatTenantDatabaseName(this.options?.credentials, this.options?.tenant?.prefix, tenant);
   }
 

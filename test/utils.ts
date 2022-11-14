@@ -96,7 +96,7 @@ export const cleanDB = async () => {
     }
     catch (error) {
       // do nothing
-      console.debug("clean db", tenant, "failed", error);
+      console.debug("clean db", tenant, "failed", error.message, "but its ok");
     }
     finally {
       if (ds.isInitialized) { await ds.destroy(); }

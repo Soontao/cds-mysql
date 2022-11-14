@@ -2,7 +2,7 @@ import "colors";
 import { CSN, cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger, memorized } from "cds-internal-tool";
 import { createPool, Pool, Options as PoolOptions } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
-import type { DataSourceOptions } from "typeorm";
+import type { DataSource, DataSourceOptions } from "typeorm";
 import {
   CONNECTION_IDLE_CHECK_INTERVAL,
   DEFAULT_CONNECTION_IDLE_TIMEOUT,
@@ -17,6 +17,8 @@ import { migrateData } from "./typeorm/migrate";
 import { checkCdsVersion } from "./utils";
 import { MySQLCredential, ReleasableConnection } from "./types";
 import { ShareMysqlTenantProvider, TenantProvider } from "./tenant";
+import { CDSMySQLDataSource } from "./typeorm/mysql";
+import { TypeORMLogger } from "./typeorm/logger";
 
 const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   min: 1,
@@ -131,24 +133,88 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   async init() {
     await super.init();
     if (this.options?.tenant?.deploy?.auto !== false) {
-      const eager = this.options.tenant?.deploy?.eager;
-      if (typeof eager === "string") {
-        await this.getPool(eager);
-      }
-      if (eager instanceof Array) {
-        for (const eagerDeployTenant of eager) {
-          if (typeof eagerDeployTenant === "string") {
-            await this.getPool(eagerDeployTenant);
+      let eager = this.options.tenant?.deploy?.eager;
+      if (eager !== undefined) {
+        if (typeof eager === "string") { eager = [eager]; }
+        cds.once("served", async () => {
+          for (const tenant of eager) {
+            await this._syncTenant(tenant);
           }
-          else {
-            this._logger.warn(
-              "for 'tenant.deploy.eager' options",
-              "the value must be string or array of string",
-              "the value", eagerDeployTenant, "is not supported"
-            );
-          }
-        }
+        });
       }
+    }
+  }
+
+  /**
+   * get CSN for tenant
+   * 
+   * @param tenant 
+   * @returns 
+   */
+  private async _csn4(tenant: string) {
+    const { "cds.xt.ModelProviderService": mp } = cds.services;
+    return (mp as any).getCsn({ tenant, toggles: ["*"], activated: true });
+  }
+
+  /**
+   * run admin operations
+   * 
+   * NOTICE, there is pool for this queries
+   * 
+   * @param runner 
+   * @returns 
+   */
+  private async _runWithAdminConnection<T = any>(runner: (ds: DataSource) => Promise<T>): Promise<T> {
+    const credential = await this._getTypeOrmOption();
+    const ds = new CDSMySQLDataSource({
+      ...credential,
+      name: `admin-conn-${cds.utils.uuid()}`,
+      entities: [],
+      type: "mysql",
+      logger: TypeORMLogger,
+      synchronize: false,
+    } as any);
+
+    try {
+      await ds.initialize();
+      return await runner(ds);
+    }
+    catch (err) {
+      this._logger.error("check database failed", err);
+      throw err;
+    }
+    finally {
+      if (ds && ds.isInitialized) {
+        await ds.destroy();
+      }
+    }
+  }
+
+  private async _hasTenant(tenant?: string) {
+
+    return this._runWithAdminConnection(async ds => {
+      const tenantDatabaseName = this._tenantProvider.getTenantDatabaseName(tenant);
+      const [{ COUNT }] = await ds.query(
+        "SELECT COUNT(*) AS COUNT FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",
+        [tenantDatabaseName]
+      );
+      return COUNT > 0;
+    });
+
+  }
+
+  private async _syncTenant(tenantId: string) {
+    const { "cds.xt.DeploymentService": ds } = cds.services;
+    if (ds !== undefined) {
+      // with deployment service
+      if (await this._hasTenant(tenantId)) {
+        await (ds as any).deploy(tenantId, { csn: await this._csn4(tenantId) });
+      }
+      else {
+        await (ds as any).deploy(tenantId, { csn: await _rawCSN(this.model) });
+      }
+    } else {
+      await this.deploy(await _rawCSN(this.model), { tenant: tenantId });
     }
   }
 
@@ -181,8 +247,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
             if (this.options?.tenant?.deploy?.auto !== false) {
 
-              // TODO: tenant model
-              await this.deploy(await _rawCSN(this.model), { tenant });
+              await this._syncTenant(tenant);
 
               if (this.options?.csv?.migrate !== false) {
                 await migrateData(tenantCredential, this.model);
@@ -269,6 +334,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   /**
    * get type orm option for migration or other usage
+   * 
    * @param tenant 
    * @returns 
    */
