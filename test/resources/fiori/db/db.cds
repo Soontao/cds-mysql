@@ -7,3 +7,10 @@ entity Person : cuid {
   Age     : Integer default 25;
   Address : String(255);
 }
+
+entity Form : cuid {
+  f1 : String(255);
+  f2 : String(255);
+  f3 : Integer;
+  f4 : Decimal;
+}

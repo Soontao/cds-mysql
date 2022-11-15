@@ -70,6 +70,87 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 }
 `;
 
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.DraftAdministrativeData_DraftUUID element definition 1`] = `
+{
+  "length": 36,
+  "name": "DraftAdministrativeData_DraftUUID",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.HasActiveEntity element definition 1`] = `
+{
+  "default": false,
+  "name": "HasActiveEntity",
+  "nullable": false,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.HasDraftEntity element definition 1`] = `
+{
+  "default": false,
+  "name": "HasDraftEntity",
+  "nullable": false,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.ID element definition 1`] = `
+{
+  "default": undefined,
+  "length": 36,
+  "name": "ID",
+  "nullable": false,
+  "primary": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.IsActiveEntity element definition 1`] = `
+{
+  "default": true,
+  "name": "IsActiveEntity",
+  "nullable": true,
+  "type": "boolean",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.f1 element definition 1`] = `
+{
+  "length": 255,
+  "name": "f1",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.f2 element definition 1`] = `
+{
+  "length": 255,
+  "name": "f2",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.f3 element definition 1`] = `
+{
+  "name": "f3",
+  "nullable": true,
+  "type": "integer",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.f4 element definition 1`] = `
+{
+  "name": "f4",
+  "nullable": true,
+  "type": "decimal",
+}
+`;
+
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.Address element definition 1`] = `
 {
   "length": 255,
@@ -141,6 +222,51 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
   "name": "Name",
   "nullable": true,
   "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Form.ID element definition 1`] = `
+{
+  "default": undefined,
+  "length": 36,
+  "name": "ID",
+  "nullable": false,
+  "primary": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Form.f1 element definition 1`] = `
+{
+  "length": 255,
+  "name": "f1",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Form.f2 element definition 1`] = `
+{
+  "length": 255,
+  "name": "f2",
+  "nullable": true,
+  "type": "nvarchar",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Form.f3 element definition 1`] = `
+{
+  "name": "f3",
+  "nullable": true,
+  "type": "integer",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_fiori_db_Form.f4 element definition 1`] = `
+{
+  "name": "f4",
+  "nullable": true,
+  "type": "decimal",
 }
 `;
 
