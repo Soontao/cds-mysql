@@ -156,7 +156,16 @@ exports[`CSV App Test Suite should support search 1`] = `
 exports[`CSV App Test Suite should support search 2`] = `
 {
   "@odata.context": "$metadata#Houses",
-  "value": [],
+  "value": [
+    {
+      "ID": "97dc9cb4-f61e-11ec-b939-0242ac120002",
+      "address_City": "Shanghai",
+      "address_Country": null,
+      "address_Province": null,
+      "address_Street": null,
+      "price": 2357853,
+    },
+  ],
 }
 `;
 

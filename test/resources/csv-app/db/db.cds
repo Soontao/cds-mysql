@@ -14,10 +14,13 @@ type Address {
   Street   : String(255);
 }
 
-@cds.search : [
-  address,
-  price
-]
+@cds.search : {
+  address_Country,
+  address_Province,
+  address_City,
+  address_Street,
+  price,
+}
 entity House : cuid {
   price   : Decimal;
   address : Address;
