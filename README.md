@@ -119,9 +119,9 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 
 ## Limitation
 
-- mysql `5.6` not support key length exceed `767` bytes
+- mysql `5.6` does not support key length exceed `767` bytes
 - mysql does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
-- `date` column not support default `$now`
+- `date` column not support default value `$now`
 - upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
 - The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.

@@ -26,3 +26,7 @@
   }
 }
 ```
+
+## Known Issues
+
+- cause `cds-mysql` will automatically migrate tenants for non-existed tenant, so the `cds.xt.Tenants` maybe not have all tenants
