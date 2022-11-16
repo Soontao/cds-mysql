@@ -1,8 +1,7 @@
 import "colors";
-import { CSN, cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger, memorized } from "cds-internal-tool";
-import { createPool, Pool, Options as PoolOptions } from "generic-pool";
+import { CSN, cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger } from "cds-internal-tool";
+import { createPool, Options as PoolOptions, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
-import type { DataSource, DataSourceOptions } from "typeorm";
 import {
   CONNECTION_IDLE_CHECK_INTERVAL,
   DEFAULT_CONNECTION_IDLE_TIMEOUT,
@@ -12,13 +11,10 @@ import {
   TENANT_DEFAULT
 } from "./constants";
 import execute from "./execute";
-import { csnToEntity, migrate } from "./typeorm";
+import { AdminTool } from "./AdminTool";
 import { migrateData } from "./typeorm/migrate";
-import { checkCdsVersion } from "./utils";
 import { MySQLCredential, ReleasableConnection } from "./types";
-import { ShareMysqlTenantProvider, TenantProvider } from "./tenant";
-import { CDSMySQLDataSource } from "./typeorm/mysql";
-import { TypeORMLogger } from "./typeorm/logger";
+import { checkCdsVersion } from "./utils";
 
 const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   min: 1,
@@ -29,9 +25,6 @@ const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   testOnBorrow: true,
 };
 
-const _rawCSN = memorized(async (m: LinkedModel) => {
-  return await cwdRequireCDS().load(m["$sources"]);
-});
 
 export interface MysqlDatabaseOptions {
   /**
@@ -103,8 +96,10 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       throw new Error("mysql credentials lost");
     }
 
-    this._tenantProvider = new ShareMysqlTenantProvider(this); // TODO: extract to options
+    this._tool = new AdminTool();
   }
+
+  private _tool: AdminTool;
 
   private options: MysqlDatabaseOptions;
 
@@ -128,8 +123,6 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _pools: Map<string, Pool<Connection> | Promise<Pool<Connection>>> = new Map();
 
-  private _tenantProvider: TenantProvider;
-
   /**
    * create upsert query
    */
@@ -141,89 +134,22 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   async init() {
     await super.init();
+    this._registerEagerDeploy();
+  }
+
+  private _registerEagerDeploy() {
     if (this.options?.tenant?.deploy?.auto !== false) {
       let eager = this.options.tenant?.deploy?.eager;
-      if (eager !== undefined) {
-        if (typeof eager === "string") { eager = [eager]; }
-        cds.once("served", async () => {
-          for (const tenant of eager) {
-            await this._syncTenant(tenant);
-          }
-        });
-      }
-    }
-  }
 
-  /**
-   * get CSN for tenant
-   * 
-   * @param tenant 
-   * @returns 
-   */
-  public async csn4(tenant: string) {
-    const { "cds.xt.ModelProviderService": mp } = cds.services;
-    return (mp as any).getCsn({ tenant, toggles: ["*"], activated: true });
-  }
+      if (eager === undefined) { return; }
 
-  /**
-   * run admin operations
-   * 
-   * NOTICE, there is pool for this queries
-   * 
-   * @param runner 
-   * @returns 
-   */
-  private async _runWithAdminConnection<T = any>(runner: (ds: DataSource) => Promise<T>): Promise<T> {
-    const credential = await this._getTypeOrmOption();
-    const ds = new CDSMySQLDataSource({
-      ...credential,
-      name: `admin-conn-${cds.utils.uuid()}`,
-      entities: [],
-      type: "mysql",
-      logger: TypeORMLogger,
-      synchronize: false,
-    } as any);
-
-    try {
-      await ds.initialize();
-      return await runner(ds);
-    }
-    catch (err) {
-      this._logger.error("check database failed", err);
-      throw err;
-    }
-    finally {
-      if (ds && ds.isInitialized) {
-        await ds.destroy();
-      }
-    }
-  }
-
-  private async _hasTenant(tenant?: string) {
-
-    return this._runWithAdminConnection(async ds => {
-      const tenantDatabaseName = this._tenantProvider.getTenantDatabaseName(tenant);
-      const [{ COUNT }] = await ds.query(
-        "SELECT COUNT(*) AS COUNT FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",
-        [tenantDatabaseName]
-      );
-      return COUNT > 0;
-    });
-
-  }
-
-  private async _syncTenant(tenantId: string) {
-    const { "cds.xt.DeploymentService": ds } = cds.services;
-    if (ds !== undefined) {
-      // with deployment service
-      if (await this._hasTenant(tenantId)) {
-        await (ds as any).deploy(tenantId, { csn: await this.csn4(tenantId) });
-      }
-      else {
-        await (ds as any).deploy(tenantId, { csn: await _rawCSN(this.model) });
-      }
-    } else {
-      await this.deploy(await _rawCSN(this.model), { tenant: tenantId });
+      if (typeof eager === "string") { eager = [eager]; }
+      // TODO: eager deploy maybe cause cds.xt.Tenants in-consistence
+      cds.once("served", async () => {
+        for (const tenant of eager) {
+          await this.getPool(tenant);
+        }
+      });
     }
   }
 
@@ -237,78 +163,81 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
 
     if (!this._pools.has(tenant)) {
-
-      this._pools.set(tenant,
-        (
-          async () => {
-            const credential = await this._tenantProvider.getCredential(tenant);
-
-            // TODO: pool configuration provider
-            const poolOptions = {
-              ...DEFAULT_POOL_OPTIONS,
-              ...this.options?.pool
-            };
-            const tenantCredential = {
-              ...credential,
-              dateStrings: true,
-              charset: MYSQL_COLLATE
-            };
-
-            if (this.options?.tenant?.deploy?.auto !== false) {
-
-              await this._syncTenant(tenant);
-
-              if (this.options?.csv?.migrate !== false) {
-                await migrateData(tenantCredential, this.model);
-              }
-              else {
-                this._logger.debug(
-                  "csv migration disabled, skip migrate CSV for tenant",
-                  tenant
-                );
-              }
-
-            }
-            else {
-              this._logger.debug(
-                "auto tenant deploy disabled, skip auto deploy for tenant",
-                tenant
-              );
-            }
-
-            this._logger.info(
-              "creating connection pool for tenant",
-              tenant,
-              "with option",
-              poolOptions
-            );
-
-            const newPool = createPool(
-              {
-                create: () => createConnection(tenantCredential as any),
-                validate: (conn) => conn
-                  .query("SELECT 1")
-                  .then(() => true)
-                  .catch((err) => {
-                    this._logger.error("validate connection failed:", err);
-                    return false;
-                  }),
-                destroy: async (conn) => {
-                  await conn.end();
-                }
-              },
-              poolOptions,
-            );
-            return newPool;
-          }
-        )().then(pool => { this._pools.set(tenant, pool); return pool; })
+      this._pools.set(
+        tenant,
+        this._createPoolFor(tenant).then(
+          pool => { this._pools.set(tenant, pool); return pool; }
+        )
       );
-
-
     }
 
     return await this._pools.get(tenant);
 
+  }
+
+  private async _createPoolFor(tenant?: string) {
+    const credential = await this._tool.getMySQLCredential(tenant);
+
+    // TODO: pool configuration provider
+    const poolOptions = {
+      ...DEFAULT_POOL_OPTIONS,
+      ...this.options?.pool
+    };
+    const tenantCredential = {
+      ...credential,
+      dateStrings: true,
+      charset: MYSQL_COLLATE
+    };
+
+    if (tenant !== this._tool.getAdminTenantName()) {
+      // for non-t0 tenants
+      if (this.options?.tenant?.deploy?.auto !== false) {
+
+        await this._tool.syncTenant(tenant);
+
+        if (this.options?.csv?.migrate !== false) {
+          await migrateData(tenantCredential, this.model);
+        }
+        else {
+          this._logger.debug(
+            "csv migration disabled, skip migrate CSV for tenant",
+            tenant
+          );
+        }
+
+      }
+      else {
+        this._logger.debug(
+          "auto tenant deploy disabled, skip auto deploy for tenant",
+          tenant
+        );
+      }
+    }
+
+    this._logger.info(
+      "creating connection pool for tenant",
+      tenant,
+      "with option",
+      poolOptions
+    );
+
+    const newPool = createPool(
+      {
+        create: () => createConnection(tenantCredential as any),
+        validate: (conn) => conn
+          .query("SELECT 1")
+          .then(() => true)
+          .catch((err) => {
+            this._logger.error("validate connection failed:", err);
+            return false;
+          }),
+        destroy: async (conn) => {
+          await conn.end();
+        }
+      },
+      poolOptions,
+    );
+    return newPool;
   }
 
   /**
@@ -341,28 +270,6 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     }
   }
 
-  /**
-   * get type orm option for migration or other usage
-   * 
-   * @param tenant 
-   * @returns 
-   */
-  private async _getTypeOrmOption(tenant: string = TENANT_DEFAULT): Promise<DataSourceOptions> {
-    const credentials = await this._tenantProvider.getCredential(tenant);
-    return Object.assign(
-      {},
-      {
-        name: `cds-deploy-connection-${tenant ?? "main"}`,
-        type: "mysql",
-        entities: []
-      },
-      credentials,
-      {
-        // typeorm need the 'username' field as username
-        username: credentials.user
-      }
-    ) as any;
-  }
 
   /**
    * disconnect from database, free all connections of all tenants
@@ -370,9 +277,11 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @param tenant optional tenant id, if without that, close all pools 
    */
   public async disconnect(tenant?: string) {
-    if (tenant !== undefined && this._pools.has(tenant)) {
-      const pool = await this._pools.get(tenant);
-      await pool.clear();
+    if (tenant !== undefined) {
+      if (this._pools.has(tenant)) {
+        const pool = await this._pools.get(tenant);
+        await pool.clear();
+      }
       return;
     }
     for (const pool of this._pools.values()) {
@@ -390,20 +299,16 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @returns 
    */
   async deploy(model: CSN, options?: { tenant: string }) {
-    const tenant = options?.tenant ?? TENANT_DEFAULT;
-    try {
-      this._logger.info("migrating schema for tenant", tenant.green);
-      if (tenant !== TENANT_DEFAULT) {
-        await this._tenantProvider.createDatabase(tenant);
-      }
-      const entities = csnToEntity(model);
-      const migrateOptions = await this._getTypeOrmOption(tenant);
-      await migrate({ ...migrateOptions, entities });
-      this._logger.info("migrate", "successful".green, "for tenant", tenant.green);
-      return true;
-    } catch (error) {
-      this._logger.info("migrate", "failed".red, "for tenant", tenant.red, error);
-      throw error;
-    }
+    await this._tool.deploy(model, options?.tenant);
   }
+
+  /**
+   * get db admin tool
+   * 
+   * @returns 
+   */
+  public getAdminTool() {
+    return this._tool;
+  }
+
 }

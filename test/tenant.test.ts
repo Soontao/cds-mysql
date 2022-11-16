@@ -1,9 +1,8 @@
 // @ts-nocheck
 
 import { doAfterAll } from "./utils";
-import { cwdRequireCDS, setupTest } from "cds-internal-tool";
+import { setupTest } from "cds-internal-tool";
 
-import { ShareMysqlTenantProvider } from "../src/tenant";
 
 describe("Tenant Test Suite", () => {
 
@@ -26,14 +25,20 @@ describe("Tenant Test Suite", () => {
     expect(response.data.value.length).toBe(0);
   });
 
-  it("should support get database name", () => {
-    const s = new ShareMysqlTenantProvider(cwdRequireCDS().db);
-    expect(s["getTenantDatabaseName"]()).toMatchInlineSnapshot(`"cds_admin"`);
-    expect(s["getTenantDatabaseName"]("wwww-wwww-www")).toMatchInlineSnapshot(`"tenant_db_wwww_wwww_www"`);
-    expect(s["getTenantDatabaseName"]("3413242312432^&*(")).toMatchInlineSnapshot(`"tenant_db_3413242312432_"`);
-    expect(s["getTenantDatabaseName"]("+++wwww-wwww----www")).toMatchInlineSnapshot(`"tenant_db__wwww_wwww_www"`);
-
+  it("should support subscribe tenant", async () => {
+    await client.put("/-/cds/saas-provisioning/tenant/t192", {}, {
+      auth: {
+        username: "yves"
+      }
+    });
   });
 
+  it("should support unsubscribe tenant", async () => {
+    await client.delete("/-/cds/saas-provisioning/tenant/t192", {
+      auth: {
+        username: "yves"
+      }
+    });
+  });
 
 });
