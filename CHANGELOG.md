@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0-beta.2](https://github.com/Soontao/cds-mysql/compare/v6.3.0-beta.1...v6.3.0-beta.2) (2022-11-16)
+
+
+### Features
+
+* improve fiori feature ([3238631](https://github.com/Soontao/cds-mysql/commit/3238631b6dc4c9499bd26ae300d9c0d5017167ec))
+
 ## [6.3.0-beta.1](https://github.com/Soontao/cds-mysql/compare/v6.3.0-beta.0...v6.3.0-beta.1) (2022-11-14)
 
 
