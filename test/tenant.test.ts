@@ -35,7 +35,7 @@ describe("Tenant Test Suite", () => {
 
   it("should support upgrade all tenant", async () => {
     await client.post(
-      "/-/cds/saas-provisioning/tenant/upgrade",
+      "/-/cds/saas-provisioning/upgrade",
       {
         "tenants": ["*"]
       },

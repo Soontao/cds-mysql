@@ -2,7 +2,7 @@
 
 exports[`SQL Factory Test Suite should support build a complex SELECT projection 1`] = `
 {
-  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People tmp_table_1 WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
+  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People tmp_table_2 WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
   "values": [
     "Theo",
     "2022-11-17",
@@ -11,4 +11,4 @@ exports[`SQL Factory Test Suite should support build a complex SELECT projection
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_init_People"`;
+exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_int_People tmp_table_1"`;
