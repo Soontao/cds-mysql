@@ -31,10 +31,10 @@ const _getCustomBuilderIfExists = (options, type) => {
  * @param cqn The CQN object used to build the SQL string
  * @param options The configuration object for delimiters and placeholders.
  * @param csn CSN
- * @returns The SQL string
+ * @returns 
  * @throws Error if no valid CQN object provided
  */
-const build = (cqn: CQN, options?: any, csn?: CSN): string => {
+const build = (cqn: CQN, options?: any, csn?: CSN): { sql: string, values: Array<any> } => {
   if (!cqn) {
     throw new Error("Cannot build SQL. No CQN object provided.");
   }

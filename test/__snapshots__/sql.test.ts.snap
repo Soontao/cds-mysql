@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SQL Factory Test Suite should support build a complex SELECT projection 1`] = `
+{
+  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People tmp_table_1 WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
+  "values": [
+    "Theo",
+    2022-11-17T00:00:00.000Z,
+    2022-11-18T00:00:00.000Z,
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_init_People"`;
