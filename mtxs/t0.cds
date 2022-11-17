@@ -13,5 +13,5 @@ entity Jobs {
 
 entity Tenants {
   key ID       : TenantID;
-      metadata : String;
+      metadata : LargeString;
 }

@@ -257,24 +257,12 @@ export class AdminTool {
   }
 
   /**
-   * check the database is empty or not 
-   * 
-   * @param tenant 
-   * @returns 
-   */
-  async isEmptyDatabase(tenant?: string): Promise<boolean> {
-    return (await this.getTables(tenant)).length > 0;
-  }
-
-  /**
    * deploy admin tenant if required
+   * 
    * @returns 
    */
   async deployT0() {
     const t0 = this.getAdminTenantName();
-    if ((await this.hasTenantDatabase(t0)) && (await this.isEmptyDatabase(t0))) {
-      return;
-    }
     // TODO: additional CSN configuration
     const csn = await cds.load(`${__dirname}/../mtxs/t0.cds`);
     this._logger.info("deploy admin tenant", t0);
