@@ -27,15 +27,15 @@ describe("SQL Factory Test Suite", () => {
   });
 
   it("should support build a complex SELECT projection", () => {
-    // REVISIT: maybe select between date will have issue
+    // REVISIT: maybe select between datetime will have issue
     const r = toSQL(
       SELECT.from("test.int.People").columns("Name", "Age", "RegisterDate").where(
         {
           Name: { "=": "Theo" },
           Age: { "<=": 15 },
           RegisterDate: {
-            between: new Date("2022-11-17T00:00:00.000Z"),
-            and: new Date("2022-11-18T00:00:00.000Z")
+            between: "2022-11-17",
+            and: "2022-11-17"
           }
         }
       )
