@@ -33,6 +33,20 @@ describe("Tenant Test Suite", () => {
     });
   });
 
+  it("should support upgrade all tenant", () => {
+    await client.post(
+      "/-/cds/saas-provisioning/tenant/upgrade",
+      {
+        "tenants": ["*"]
+      },
+      {
+        auth: {
+          username: "yves"
+        }
+      }
+    );
+  });
+
   it("should support unsubscribe tenant", async () => {
     await client.delete("/-/cds/saas-provisioning/tenant/t192", {
       auth: {

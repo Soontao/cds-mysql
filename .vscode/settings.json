@@ -36,5 +36,23 @@
     "VCAP"
   ],
   "jest.autoRun": {},
-  "jest.jestCommandLine": "./node_modules/.bin/jest --passWithNoTests --runInBand --forceExit"
+  "jest.jestCommandLine": "./node_modules/.bin/jest --passWithNoTests --runInBand --forceExit",
+  "todohighlight.keywords": [
+    "REVISIT:",
+    "TODO:",
+    "ISSUE:",
+    "REFACTOR:"
+  ],
+  "todohighlight.exclude": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.vscode/**",
+    "**/.github/**",
+    "**/_output/**",
+    "**/*.min.*",
+    "**/*.map",
+    "**/.next/**"
+  ]
 }

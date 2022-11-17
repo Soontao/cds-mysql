@@ -1,5 +1,5 @@
 import "colors";
-import { CSN, cwdRequire, cwdRequireCDS, EventContext, LinkedModel, Logger } from "cds-internal-tool";
+import { CSN, cwdRequire, cwdRequireCDS, EntityDefinition, EventContext, LinkedModel, Logger } from "cds-internal-tool";
 import { createPool, Options as PoolOptions, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import {
@@ -125,8 +125,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   /**
    * create upsert query
+   * 
    */
-  public static get UPSERT() {
+  public static get UPSERT(): import("./types").UPSERT {
     const i = cwdRequireCDS().ql.INSERT();
     i.INSERT["_upsert"] = true;
     return i;
@@ -135,6 +136,10 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   async init() {
     await super.init();
     this._registerEagerDeploy();
+  }
+
+  public upsert(entity: string | EntityDefinition) {
+    return MySQLDatabaseService.UPSERT.into(entity);
   }
 
   private _registerEagerDeploy() {
@@ -279,11 +284,13 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   public async disconnect(tenant?: string) {
     if (tenant !== undefined) {
       if (this._pools.has(tenant)) {
+        this._logger.info("disconnect mysql database for tenant", tenant);
         const pool = await this._pools.get(tenant);
         await pool.clear();
       }
       return;
     }
+    this._logger.info("disconnect mysql database for all tenants");
     for (const pool of this._pools.values()) {
       await (await pool).clear();
     }

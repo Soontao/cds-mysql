@@ -69,28 +69,62 @@ export class AdminTool {
     const databaseName = this.getTenantDatabaseName(tenant);
 
     await this.runWithAdminConnection(async ds => {
-      const databases = await ds.query(`SHOW DATABASES LIKE '${databaseName}';`);
-      if (databases?.length === 0) {
-        this._logger.info("creating database", databaseName);
-        await ds.query(`CREATE DATABASE ${databaseName}`); // mysql 5.6 not support 'if not exists'
-        this._logger.info("database", databaseName, "created");
+      if (await this.hasTenantDatabase(tenant)) {
+        this._logger.info(
+          "try to create database",
+          databaseName,
+          "for tenant",
+          tenant,
+          "but its already existed"
+        );
+        return;
       }
+      this._logger.info("creating database", databaseName);
+      // mysql 5.6 not support 'if not exists'
+      await ds.query(`CREATE DATABASE ${databaseName}`);
+      this._logger.info("database", databaseName, "created");
     });
 
   }
 
+  /**
+   * drop database for tenant
+   * 
+   * @param tenant 
+   */
+  public async dropDatabase(tenant: string) {
+    this._logger.info("drop database for tenant", tenant);
+
+    if (tenant === undefined) {
+      throw new Error("tenant id must be provided for database drop");
+    }
+
+    await this.runWithAdminConnection(async ds => {
+      const databaseName = this.getTenantDatabaseName(tenant);
+      this._logger.info("drop database", databaseName);
+      await ds.query(`DROP DATABASE ${databaseName}`);
+      this._logger.info("drop database", databaseName, "successful");
+    });
+  }
+
+  /**
+   * get csn for tenant
+   * 
+   * @param tenant 
+   * @returns 
+   */
   public async csn4(tenant?: string) {
     const { "cds.xt.ModelProviderService": mp } = cds.services;
     return (mp as any).getCsn({ tenant, toggles: ["*"], activated: true });
   }
 
   /**
-   * get type orm option for migration or other usage
+   * get typeorm ds option for migration or other usage
    * 
    * @param tenant 
    * @returns 
    */
-  public async getTypeOrmOption(tenant: string = TENANT_DEFAULT): Promise<DataSourceOptions> {
+  public async getDataSourceOption(tenant: string = TENANT_DEFAULT): Promise<DataSourceOptions> {
     const credentials = await this.getMySQLCredential(tenant);
     return Object.assign(
       {},
@@ -112,18 +146,20 @@ export class AdminTool {
    * 
    * NOTICE, there is no pool for this queries
    * 
+   * CAREFULLY use this please
+   * 
    * @param runner 
-   * @returns 
+   * @returns the returned value of runner 
    */
   public async runWithAdminConnection<T = any>(runner: (ds: DataSource) => Promise<T>): Promise<T> {
-    const credential = await this.getTypeOrmOption();
+    const credential = await this.getDataSourceOption();
     const ds = new CDSMySQLDataSource({
       ...credential,
       name: `admin-conn-${cds.utils.uuid()}`,
       entities: [],
       type: "mysql",
       logger: TypeORMLogger,
-      synchronize: false,
+      synchronize: false, // no sync
     } as any);
 
     try {
@@ -131,7 +167,7 @@ export class AdminTool {
       return await runner(ds);
     }
     catch (err) {
-      this._logger.error("check database failed", err);
+      this._logger.error("run with admin connection failed", err);
       throw err;
     }
     finally {
@@ -185,7 +221,7 @@ export class AdminTool {
       this._logger.info("migrating schema for tenant", tenant.green);
       if (tenant !== TENANT_DEFAULT) { await this.createDatabase(tenant); }
       const entities = csnToEntity(model);
-      const migrateOptions = await this.getTypeOrmOption(tenant);
+      const migrateOptions = await this.getDataSourceOption(tenant);
       await migrate({ ...migrateOptions, entities });
       this._logger.info("migrate", "successful".green, "for tenant", tenant.green);
       return true;

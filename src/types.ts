@@ -1,4 +1,9 @@
 import { Connection } from "mysql2/promise";
+import { INSERT } from "cds-internal-tool/lib/types/ql";
+
+export declare class UPSERT<T = any> extends INSERT<T> {
+
+}
 
 /**
  * raw mysql2 library required credential
