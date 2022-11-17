@@ -33,7 +33,7 @@ describe("Tenant Test Suite", () => {
     });
   });
 
-  it("should support upgrade all tenant", () => {
+  it("should support upgrade all tenant", async () => {
     await client.post(
       "/-/cds/saas-provisioning/tenant/upgrade",
       {
