@@ -7,7 +7,6 @@ exports[`TypeORM Annotation Test Suite should support index for model 1`] = `
     "options": {
       "columns": {
         "ID": {
-          "default": undefined,
           "name": "ID",
           "nullable": false,
           "primary": true,
@@ -20,7 +19,6 @@ exports[`TypeORM Annotation Test Suite should support index for model 1`] = `
           "type": "nvarchar",
         },
       },
-      "deps": [],
       "indices": [
         {
           "columns": [

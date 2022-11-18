@@ -1,17 +1,13 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
-import { CSN, cwdRequireCDS, fuzzy, groupByKeyPrefix, LinkedModel, Logger } from "cds-internal-tool";
+import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, LinkedModel, Logger } from "cds-internal-tool";
 import MySQLParser, {
-  ColumnDefinitionContext,
-  CreateTableContext,
   CreateViewContext,
   MySQLParserListener,
-  SqlMode,
-  TableConstraintDefContext,
-  TableNameContext,
+  SqlMode, TableNameContext,
   TableRefContext
 } from "ts-mysql-parser";
-import { ColumnType, EntitySchema, EntitySchemaColumnOptions } from "typeorm";
+import { EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
 import { _isQuoted } from "../customBuilder/replacement/quotingStyles";
@@ -26,8 +22,41 @@ interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   /**
    * this view/table maybe depends other view/tables
    */
-  deps: TableName[];
+  deps?: TableName[];
 }
+
+const buildInTypes = {
+  "cds.String": "NVARCHAR",
+  "cds.hana.NCHAR": "NCHAR",
+  "cds.hana.VARCHAR": "VARCHAR",
+  "cds.hana.CHAR": "CHAR",
+  "cds.hana.CLOB": "CLOB",
+  "cds.Decimal": "DECIMAL",
+  "cds.DecimalFloat": "DECIMAL",
+  "cds.Integer64": "BIGINT",
+  "cds.Integer": "INTEGER",
+  "cds.Int64": "BIGINT",
+  "cds.Int32": "INTEGER",
+  "cds.Int16": "SMALLINT",
+  "cds.UInt8": "TINYINT",
+  "cds.hana.SMALLINT": "SMALLINT",
+  "cds.hana.TINYINT": "TINYINT",
+  "cds.Double": "DOUBLE",
+  "cds.hana.REAL": "REAL",
+  "cds.Date": "DATE",
+  "cds.Time": "TIME",
+  "cds.DateTime": "TIMESTAMP",
+  "cds.Timestamp": "TIMESTAMP",
+  "cds.Boolean": "BOOLEAN",
+  "cds.UUID": "NVARCHAR",
+
+  "cds.Binary": "VARBINARY",
+  "cds.LargeBinary": "LONGBLOB",
+  "cds.hana.BINARY": "VARBINARY",
+  "cds.hana.SMALLDECIMAL": "DECIMAL",
+  "cds.LargeString": "LONGTEXT",
+  "cds.hana.LargeString": "LONGTEXT"
+};
 
 
 class CDSListener implements MySQLParserListener {
@@ -54,167 +83,15 @@ class CDSListener implements MySQLParserListener {
 
   exitTableName(ctx: TableNameContext) {
     const name = this._getTextWithoutQuote(ctx.text);
-    this._tmp.name = name;
-    this._tmp.tableName = name;
-  }
-
-  async exitColumnDefinition(ctx: ColumnDefinitionContext) {
-    // mapping DDL column definition to schema options
-    const name = ctx.columnName();
-    const field = ctx.fieldDefinition();
-    const dataType = field.dataType();
-    const attrs = field.columnAttribute();
-
-    const column: EntitySchemaColumnOptions = {
-      name: this._getTextWithoutQuote(name.text),
-      type: <ColumnType>dataType.getChild(0).text.toLowerCase(),
-      nullable: true, // default can be null
-    };
-
-    // for drafts table, it should redirect to the correct entity
-    const entityDef = fuzzy.findEntity(this._tmp.tableName, this._model);
-
-    if (entityDef !== undefined) {
-      // for draft table, it could not found metadata in model
-      const eleDef = fuzzy.findElement(entityDef, column.name);
-
-      if (eleDef !== undefined) {
-        // force overwrite blob column
-        if (eleDef.type === "cds.Binary") {
-          column.type = "varbinary";
-          column.length = eleDef.length;
-        }
-        if (eleDef.type === "cds.LargeBinary") {
-          column.type = "longblob";
-        }
-        if (eleDef.type === "cds.LargeString") {
-          column.type = "longtext";
-        }
-        if (eleDef.type === "cds.String" && eleDef.length === undefined) {
-          column.type = "text";
-          column.length = undefined;
-        }
-        if (eleDef.length !== undefined) {
-          column.length = eleDef.length;
-        }
-
-        // Decimal(10, 2)
-        if (eleDef.precision !== undefined) {
-          column.precision = eleDef.precision;
-        }
-        if (eleDef.scale !== undefined) {
-          column.scale = eleDef.scale;
-        }
-
-        // not null
-        if (eleDef.notNull === true) {
-          column.nullable = false;
-        }
-
-        // default value, only for val expr
-        if (eleDef.default?.val !== undefined) {
-          column.default = eleDef.default?.val;
-        }
-
-        // not association or composition
-        if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
-          const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
-          // merge @cds.typeorm.config annotation
-          if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
-            Object.assign(
-              column,
-              typeOrmColumnConfig,
-            );
-          }
-        }
-
-      }
-
-    }
-
-    // TODO: use element def directly
-
-    // DEFAULT
-    if (attrs && attrs.length > 0) {
-
-      for (const attr of attrs) {
-
-        // is DEFAULT value
-        if (attr.DEFAULT_SYMBOL()) {
-          const now = attr.NOW_SYMBOL();
-          // current_timestamp
-          if (now) {
-            if (column.type === "date") {
-              logger?.debug(
-                `column(${column.name}) default value skipped, because for 'date' datatype, mysql not support the default value '${now.text}'`
-              );
-            } else {
-              column.default = () => "CURRENT_TIMESTAMP()";
-            }
-          }
-        }
-      }
-    }
-
-    this._tmp.columns[column.name] = column;
+    const entityDef = fuzzy.findEntity(name, this._model);
+    this._entities.push(new EntitySchema(buildSchema(entityDef)));
+    this._tmp = this.newEntitySchemaOption();
   }
 
   private newEntitySchemaOption(): EntitySchemaOptionsWithDeps {
     return { name: "", columns: {}, synchronize: true, deps: [] };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  exitCreateTable(ctx: CreateTableContext) {
-    const entityDef = fuzzy.findEntity(this._tmp.name, this._model);
-    if (entityDef !== undefined) {
-      const schemaConfig = groupByKeyPrefix(entityDef, ANNOTATION_CDS_TYPEORM_CONFIG) as Partial<EntitySchemaOptionsWithDeps>;
-
-      // TODO: move to check
-      if (schemaConfig.indices?.length > 0) {
-        for (const indexConfig of schemaConfig.indices) {
-          if (indexConfig?.columns instanceof Array) {
-            for (const indexColumnName of indexConfig.columns) {
-              if (typeof indexColumnName === "string") {
-                const columnEle = fuzzy.findElement(entityDef, indexColumnName);
-                if (columnEle === undefined) {
-                  logger.error(
-                    "entity", entityDef.name,
-                    "index", indexConfig.name,
-                    "column", indexColumnName,
-                    "not existed on entity definition"
-                  );
-                  // TODO: throw error
-                }
-              }
-            }
-          }
-        }
-      }
-
-      if (schemaConfig !== undefined && Object.keys(schemaConfig).length > 0) {
-        Object.assign(this._tmp, schemaConfig);
-      }
-      // TODO: check 
-
-    }
-
-    // TODO: why its undefined ?
-    this._entities.push(new EntitySchema(this._tmp));
-    this._tmp = this.newEntitySchemaOption();
-  }
-
-  exitTableConstraintDef(ctx: TableConstraintDefContext) {
-    // PRIMARY KEY (COLUMN);
-    if (ctx.PRIMARY_SYMBOL() && ctx.KEY_SYMBOL()) {
-      const keyList = ctx.keyListVariants().keyList();
-      const keyParts = keyList.keyPart();
-      keyParts.forEach((keyPart) => {
-        this._tmp.columns[keyPart.text].primary = true;
-        this._tmp.columns[keyPart.text].nullable = false;
-        this._tmp.columns[keyPart.text].default = undefined;
-      });
-    }
-  }
 
   // << CREATE TABLE
 
@@ -252,20 +129,7 @@ class CDSListener implements MySQLParserListener {
    */
   public getEntitySchemas(): Array<EntitySchema> {
     if (this._entities && this._entities.length > 0) {
-      // order by graph
-      const g = new Graph();
-      this._entities.forEach((entity) => {
-        const { deps, tableName } = <EntitySchemaOptionsWithDeps>entity.options;
-        g.setNode(tableName, entity);
-        if (deps && deps.length > 0) {
-          // VIEW
-          deps.forEach((dep) => g.setEdge(tableName, dep));
-        }
-      });
-      return alg
-        .topsort(g)
-        .reverse()
-        .map((node) => g.node(node));
+      return sortEntitySchemas(this._entities);
     }
 
     return this._entities;
@@ -280,6 +144,178 @@ class CDSListener implements MySQLParserListener {
     this._currentStatement = stat;
   }
 }
+
+function buildSchema(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
+
+  let name = entityDef.name.replace(/\./g, "_");
+
+  if (entityDef["@odata.draft.enabled"] === true) {
+    name += "_drafts";
+  }
+
+  const schema: Partial<EntitySchemaOptionsWithDeps> = {
+    name,
+    tableName: name,
+    synchronize: true,
+  };
+
+  schema.columns = Object
+    .values(entityDef.elements)
+    .filter(ele => ele?.virtual !== true && !["cds.Association", "cds.Composition"].includes(ele.type))
+    .map(ele => buildColumn(ele)).reduce((pre, cur) => { pre[cur.name] = cur; return pre; }, {});
+
+
+  const schemaConfig = groupByKeyPrefix(entityDef, ANNOTATION_CDS_TYPEORM_CONFIG) as Partial<EntitySchemaOptionsWithDeps>;
+
+  // TODO: move to check
+  if (schemaConfig.indices?.length > 0) {
+    for (const indexConfig of schemaConfig.indices) {
+      if (indexConfig?.columns instanceof Array) {
+        for (const indexColumnName of indexConfig.columns) {
+          if (typeof indexColumnName === "string") {
+            const columnEle = fuzzy.findElement(entityDef, indexColumnName);
+            if (columnEle === undefined) {
+              logger.error(
+                "entity", entityDef.name,
+                "index", indexConfig.name,
+                "column", indexColumnName,
+                "not existed on entity definition"
+              );
+              // TODO: throw error
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (schemaConfig !== undefined && Object.keys(schemaConfig).length > 0) {
+    Object.assign(schema, schemaConfig);
+  }
+
+  return schema as any;
+}
+
+function sortEntitySchemas(entities: Array<EntitySchema>): Array<EntitySchema> {
+
+  // order by graph
+  const g = new Graph();
+  entities.forEach((entity) => {
+    const { deps, tableName } = <EntitySchemaOptionsWithDeps>entity.options;
+    g.setNode(tableName, entity);
+    if (deps && deps.length > 0) { // VIEW
+      deps.forEach((dep) => g.setEdge(tableName, dep));
+    }
+  });
+
+  return alg.topsort(g).reverse().map((node) => g.node(node));
+
+}
+
+function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
+  const column: Partial<EntitySchemaColumnOptions> = {
+    name: eleDef.name,
+    nullable: true,
+  };
+  const cds = cwdRequireCDS();
+
+  if (eleDef instanceof cds.builtin.classes.array) {
+    // for array of type
+    column.type = buildInTypes["cds.LargeString"].toLowerCase() as any;
+  }
+  else if (!(eleDef.type in buildInTypes)) {
+    logger.error("cds type", eleDef.type, "is not supported");
+  }
+  else {
+    column.type = buildInTypes[eleDef.type].toLowerCase();
+  }
+
+  // force overwrite blob column
+  if (eleDef.type === "cds.Binary") {
+    column.length = eleDef.length;
+  }
+
+  if (eleDef.type === "cds.String" && eleDef.length === undefined) {
+    column.type = "text";
+    column.length = undefined;
+  }
+
+  // primary key
+  if (eleDef.key === true) {
+    column.primary = true;
+    column.nullable = false;
+  }
+
+  // for temporary table valid from
+  if (eleDef["@cds.valid.from"] === true) {
+    column.primary = true;
+    column.nullable = false;
+  }
+
+  if (eleDef.length !== undefined) {
+    column.length = eleDef.length;
+  }
+
+  // Decimal(10, 2)
+  if (eleDef.precision !== undefined) {
+    column.precision = eleDef.precision;
+  }
+
+  if (eleDef.scale !== undefined) {
+    column.scale = eleDef.scale;
+  }
+
+  // not null
+  if (eleDef.notNull === true) {
+    column.nullable = false;
+  }
+
+  // default value, only for val expr
+  if (eleDef.default?.val !== undefined) {
+    column.default = eleDef.default?.val;
+  }
+
+  if (eleDef.default?.func !== undefined) {
+    if (column.type === "date" && String(eleDef.default?.func).toLowerCase() === "now") {
+      logger?.debug(
+        `column(${column.name}) default value skipped, because for 'date' datatype, mysql not support the default value '${eleDef.default?.func}()'`
+      );
+    } else {
+      column.default = () => `${String(eleDef.default?.func).toUpperCase()}()`;
+    }
+  }
+
+  // not association or composition
+  if (!["cds.Association", "cds.Composition"].includes(eleDef.type)) {
+    const typeOrmColumnConfig = groupByKeyPrefix(eleDef, ANNOTATION_CDS_TYPEORM_CONFIG);
+    // merge @cds.typeorm.config annotation
+    if (typeOrmColumnConfig !== undefined && Object.keys(typeOrmColumnConfig).length > 0) {
+      Object.assign(
+        column,
+        typeOrmColumnConfig,
+      );
+    }
+  }
+
+  return column as any;
+}
+
+// function convertSqlToSchema(model: LinkedModel, ddl: string): EntitySchemaOptionsWithDeps {
+//   ddl = ddl.trim()
+
+//   if (ddl.startsWith("CREATE TABLE")) {
+//     const tableStart = "CREATE TABLE ".length
+//     const tableName = ddl.substring(tableStart, ddl.indexOf(" ", tableStart))
+//     const schema: EntitySchemaOptionsWithDeps = {}
+//     return schema
+//   }
+
+//   if (ddl.startsWith("CREATE VIEW")) {
+
+//   }
+
+//   throw new TypeError(`can not process sql: ${ddl}`)
+// }
 
 /**
  * convert csn to typeorm entities
