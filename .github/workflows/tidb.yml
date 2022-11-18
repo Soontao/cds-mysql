@@ -2,10 +2,10 @@ name: tidb-test
 on:
   push:
     branches:
-      - "*"
+      - '*'
   pull_request:
     branches:
-      - "*"
+      - '*'
 
 jobs:
   tidb:
@@ -41,13 +41,14 @@ jobs:
       - name: setup mysql user
         run: node ./docker/create_user.js
         env:
+          IS_TIDB: true
           MYSQL_PORT: 4000
 
       - name: test
         run: npm run test
         env:
           CI: true
-          CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
+          CDS_REQUIRES_DB_CREDENTIALS_HOST: '127.0.0.1'
           CDS_REQUIRES_DB_CREDENTIALS_PORT: 4000
           CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin

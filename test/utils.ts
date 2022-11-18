@@ -89,11 +89,16 @@ export const cleanDB = async () => {
 
   try {
     await ds.initialize();
-    for (const tenant of [undefined, "t0", "t1", "t2", "t193", "e5f878d5-7985-407b-a1cb-87a8716f1904"]) {
+    for (const tenant of [undefined, "t0", "t1", "t2", "t192", "e5f878d5-7985-407b-a1cb-87a8716f1904"]) {
       const database = formatTenantDatabaseName(cds.env.requires.db.credentials, undefined, tenant);
       const results = await ds.query(`SHOW DATABASES LIKE '${database}'`);
-      if (results.length > 0) {
+      if (results.length === 0) {
+        continue;
+      }
+      if (tenant === undefined) {
         await ds.createQueryRunner().clearDatabase(database);
+      } else {
+        await ds.query(`DROP DATABASE ${database}`);
       }
     }
   }
@@ -105,7 +110,3 @@ export const cleanDB = async () => {
     if (ds.isInitialized) { await ds.destroy(); }
   }
 };
-
-export function isTiDBTest() {
-  return process.env.IS_TIDB === "true";
-}

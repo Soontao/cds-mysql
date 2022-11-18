@@ -17,6 +17,11 @@
       await conn.query(`CREATE USER '${adminUserName}'@'%' IDENTIFIED BY '${adminUserName}';`);
       await conn.query(`GRANT ALL PRIVILEGES ON *.* TO '${adminUserName}'@'%' WITH GRANT OPTION;`);
 
+      if (process.env.IS_TIDB !== undefined) {
+        // workaround for tidb
+        await conn.query("SET @@global.tidb_enable_clustered_index = OFF");
+      }
+
       conn.destroy();
       console.log(`user '${adminUserName}'@'%' created at '127.0.0.1:${mysqlPort}'`);
       process.exit(0);
