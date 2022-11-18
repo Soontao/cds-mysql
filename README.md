@@ -82,46 +82,43 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 - [x] `fiori` draft support
   - [x] `draftPrepare`/`draftEdit`/`draftActivate` test case
 - [x] `temporal` aspect, but not support [time-travel query](https://cap.cloud.sap/docs/guides/temporal-data#time-travel-queries)
+- [x] `incrementID` auto incremental key aspect
+- [x] `preDelivery` CSV aspect
+  - [x] migrate CSV on-demand (with option)
+  - [x] CSV migration with hash check
+  - [ ] enhance `preDelivery` check by standalone table
+  - [ ] database handlers for `SELECT` and `DELETE`
 - [x] full text search
-- [x] migration optimization (ignore drop in some case)
+- [x] schema migration optimization (ignore drop in some case)
   - [ ] ignore column length reduce and with warning
   - [ ] model version, only incremental migration
   - [ ] using `LinkedModel` element information for database migration
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/media-data)
 - [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
-- [ ] multi tenancy
+- [x] multi tenancy
   - [x] deploy model on-fly
   - [x] create database on-demand
     - [ ] permission check
-    - [ ] test
-    - [x] migrate CSV on-demand (with option)
-      - [x] CSV aspect `preDelivery`
-      - [x] CSV migration with hash check
-      - [ ] enhance `preDelivery` check by standalone table
-      - [ ] database handlers for `SELECT` and `DELETE`
-  - [ ] dynamic database credential provider
   - [ ] admin database concept
     - [ ] `@admin` tenant entity & services
-  - [ ] tenant credential refresh
+  - [x] _experimental_ [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
+    - [ ] extensibility
 - [x] `$expand` navigation
 - [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
 - [x] initial data provision by `CSV`
   - [x] better migration type/column/name adaption
-- [x] auto incremental key aspect
 - [x] mysql index
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
-- [x] _experimental_ [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
-  - [ ] extensibility
 - [ ] better E2E document/sample
 
 ## Limitation
 
 - mysql `5.6` does not support key length exceed `767` bytes
 - mysql does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
-- tidb dost not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so user have to choose between `modifying the PK` and `enabling the clustered index`
+- TiDB does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so user have to choose between `modifying the PK` and `enabling the clustered index`
 - `date` column not support default value `$now`
 - upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
