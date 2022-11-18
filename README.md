@@ -121,6 +121,7 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 
 - mysql `5.6` does not support key length exceed `767` bytes
 - mysql does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
+- tidb dost not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so user have to choose between `modifying the PK` and `enabling the clustered index`
 - `date` column not support default value `$now`
 - upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
