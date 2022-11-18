@@ -1,28 +1,8 @@
 /* eslint-disable max-len */
 
-import { cwdRequire, cwdRequireCDS, groupByKeyPrefix, memorized, mustBeArray } from "cds-internal-tool";
+import { cwdRequireCDS, groupByKeyPrefix, memorized, mustBeArray } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
 
-/**
- * overwrite cds compiler type mapping
- */
-export function overwriteCDSCoreTypes() {
-
-  if (!overwriteCDSCoreTypes["done"] === true) {
-    const { cdsToSqlTypes } = cwdRequire("@sap/cds-compiler/lib/render/utils/common");
-    // remove some types, fallback to the `cdsToSqlTypes.standard` data type
-    cdsToSqlTypes.sqlite = {
-      "cds.Binary": "VARBINARY",
-      "cds.LargeBinary": "LONGBLOB",
-      "cds.hana.BINARY": "VARBINARY",
-      "cds.hana.SMALLDECIMAL": "DECIMAL",
-      "cds.LargeString": "LONGTEXT",
-      "cds.hana.LargeString": "LONGTEXT"
-    };
-    overwriteCDSCoreTypes["done"] = true;
-  }
-
-}
 
 /**
  * check cds version, if cds version is not match the `cds-mysql` required version, will throw error

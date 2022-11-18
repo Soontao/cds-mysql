@@ -1,17 +1,10 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
-import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, LinkedModel, Logger } from "cds-internal-tool";
-import MySQLParser, {
-  CreateViewContext,
-  MySQLParserListener,
-  SqlMode, TableNameContext,
-  TableRefContext
-} from "ts-mysql-parser";
+import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, Logger } from "cds-internal-tool";
+import MySQLParser, { MySQLParserListener, SqlMode, TableRefContext } from "ts-mysql-parser";
 import { EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
-import { _isQuoted } from "../customBuilder/replacement/quotingStyles";
-import { overwriteCDSCoreTypes } from "../utils";
 
 type TableName = string;
 
@@ -60,92 +53,28 @@ const buildInTypes = {
 
 
 class CDSListener implements MySQLParserListener {
-  private _entities: Array<EntitySchema>;
 
-  private _tmp: EntitySchemaOptionsWithDeps;
+  private _deps: Array<string>;
 
-  private _currentStatement: string;
-
-  private _model: LinkedModel;
-
-  constructor(options: any) {
-    this._entities = [];
-    this._tmp = this.newEntitySchemaOption();
-    this._currentStatement = "";
-    this._model = options.model;
+  constructor() {
+    this._deps = [];
   }
-
-  private _getTextWithoutQuote(text: string) {
-    return _isQuoted(text) ? text.substring(1, text.length - 1) : text;
-  }
-
-  // >> CREATE TABLE
-
-  exitTableName(ctx: TableNameContext) {
-    const name = this._getTextWithoutQuote(ctx.text);
-    const entityDef = fuzzy.findEntity(name, this._model);
-    this._entities.push(new EntitySchema(buildSchema(entityDef)));
-    this._tmp = this.newEntitySchemaOption();
-  }
-
-  private newEntitySchemaOption(): EntitySchemaOptionsWithDeps {
-    return { name: "", columns: {}, synchronize: true, deps: [] };
-  }
-
-
-  // << CREATE TABLE
 
   // >> CREATE VIEW
-
-  exitCreateView(ctx: CreateViewContext) {
-    const viewName = ctx.viewName();
-    const select = ctx.viewTail()?.viewSelect();
-    if (viewName && select) {
-      this._tmp.type = "view";
-      this._tmp.name = viewName.text;
-      this._tmp.tableName = viewName.text;
-      // extract (SELECT FROM ...) part from original plain SQL
-      const exp = this._currentStatement.substring(select.start.startIndex);
-      // REVISIT: maybe support time travel
-      // replace for temporal data
-      this._tmp.expression = exp
-        .replace(/< strftime\('%Y-%m-%dT%H:%M:%S\.001Z', 'now'\)/g, "<= NOW()")
-        .replace(/> strftime\('%Y-%m-%dT%H:%M:%S\.000Z', 'now'\)/g, "> NOW()");
-    }
-    this._entities.push(new EntitySchema(this._tmp));
-    this._tmp = this.newEntitySchemaOption();
-  }
 
   exitTableRef(ctx: TableRefContext) {
     // SELECT FROM (TABLEREF), for view reference
     // ANY JOIN FROM (TABLEREF)
-    this._tmp.deps.push(ctx.text);
+    this._deps.push(ctx.text);
   }
 
   // << CREATE VIEW
 
-  /**
-   * get entity schemas after parsing
-   */
-  public getEntitySchemas(): Array<EntitySchema> {
-    if (this._entities && this._entities.length > 0) {
-      return sortEntitySchemas(this._entities);
-    }
+  public getDeps() { return this._deps; }
 
-    return this._entities;
-  }
-
-  /**
-   * set current statement
-   *
-   * @param stat
-   */
-  public setCurrentStatement(stat: string) {
-    this._currentStatement = stat;
-  }
 }
 
-function buildSchema(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
+function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
 
   let name = entityDef.name.replace(/\./g, "_");
 
@@ -195,6 +124,40 @@ function buildSchema(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
 
   return schema as any;
 }
+
+function buildView(name: string, stat: string): EntitySchemaOptions<any> {
+  const options: Partial<EntitySchemaOptionsWithDeps> = {
+    type: "view",
+    name: name,
+    columns: {},
+    tableName: name,
+    synchronize: true,
+  };
+  options.expression = stat.substring(stat.indexOf("SELECT"));
+  options.expression = options.expression
+    .replace(/< strftime\('%Y-%m-%dT%H:%M:%S\.001Z', 'now'\)/g, "<= NOW()")
+    .replace(/> strftime\('%Y-%m-%dT%H:%M:%S\.000Z', 'now'\)/g, "> NOW()");
+  const listener = new CDSListener();
+  const parser = new MySQLParser({ parserListener: listener, mode: SqlMode.AnsiQuotes });
+  const result = parser.parse(stat);
+  if (result.lexerError) {
+    logger.error(
+      "prase statement", stat,
+      "failed, error", result.lexerError.message
+    );
+    throw TypeError("parse DDL statement failed");
+  }
+  if (result.parserError) {
+    logger.error(
+      "prase statement", stat,
+      "failed, error", result.parserError.message
+    );
+    throw TypeError("parse DDL statement failed");
+  }
+  options.deps = listener.getDeps();
+  return options as any;
+}
+
 
 function sortEntitySchemas(entities: Array<EntitySchema>): Array<EntitySchema> {
 
@@ -300,22 +263,19 @@ function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
   return column as any;
 }
 
-// function convertSqlToSchema(model: LinkedModel, ddl: string): EntitySchemaOptionsWithDeps {
-//   ddl = ddl.trim()
-
-//   if (ddl.startsWith("CREATE TABLE")) {
-//     const tableStart = "CREATE TABLE ".length
-//     const tableName = ddl.substring(tableStart, ddl.indexOf(" ", tableStart))
-//     const schema: EntitySchemaOptionsWithDeps = {}
-//     return schema
-//   }
-
-//   if (ddl.startsWith("CREATE VIEW")) {
-
-//   }
-
-//   throw new TypeError(`can not process sql: ${ddl}`)
-// }
+function extractInfo(ddl: string): { type: "table" | "view" | "unknown", name: string } {
+  if (ddl.startsWith("CREATE TABLE")) {
+    const start = "CREATE TABLE ".length;
+    const name = ddl.substring(start, ddl.indexOf(" ", start));
+    return { type: "table", name };
+  }
+  if (ddl.startsWith("CREATE VIEW")) {
+    const start = "CREATE VIEW ".length;
+    const name = ddl.substring(start, ddl.indexOf(" ", start));
+    return { type: "view", name };
+  }
+  return { type: "unknown", name: "unknown" };
+}
 
 /**
  * convert csn to typeorm entities
@@ -324,25 +284,28 @@ function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
  */
 export function csnToEntity(model: CSN): Array<EntitySchema> {
   const cds = cwdRequireCDS();
-  overwriteCDSCoreTypes();
-  // @ts-ignore
-  const listener: CDSListener = new CDSListener({ model: cds.linked(cds.compile.for.nodejs(model)) });
-  const parser = new MySQLParser({ parserListener: listener, mode: SqlMode.AnsiQuotes });
+  const linkedModel = cds.reflect(cds.compile.for.nodejs(model));
   // force to use 'sqlite' as dialect to support localized elements
-  const statements = cds.compile.to.sql(model, { dialect: "sqlite" });
+  const statements = cds.compile.to.sql(model, { dialect: "sqlite" }) as Array<string>;
+
+  const entities: Array<EntitySchema> = [];
+
   statements.forEach((stat: string) => {
-    listener.setCurrentStatement(stat);
-    const result = parser.parse(stat);
-    if (result.lexerError) {
-      throw result.lexerError;
-    }
-    if (result.parserError) {
-      logger.error(
-        "prase statement", stat,
-        "failed, error", result.parserError.message
-      );
-      throw result.parserError;
+    const { type, name } = extractInfo(stat);
+    switch (type) {
+      case "table":
+        entities.push(new EntitySchema(buildEntity(fuzzy.findEntity(name, linkedModel))));
+        break;
+      case "view":
+        entities.push(new EntitySchema(buildView(name, stat)));
+        break;
+      default:
+        logger.error("unknown DDL type", stat);
+        break;
     }
   });
-  return listener.getEntitySchemas();
+
+  return sortEntitySchemas(entities);
 }
+
+
