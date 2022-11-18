@@ -81,28 +81,29 @@ export async function doAfterAll() {
 export const cleanDB = async () => {
   // after cds@6.3.0, alice and other dummy users will have default tenant id
   // so, clean all tenants database
+  const options: DataSourceOptions = {
+    ...getTestTypeORMOptions(),
+    name: `unit-test-clean-db-${cds.utils.uuid()}`,
+  };
+  const ds = new DataSource(options);
 
-  // TODO: t2 tenant for erin and fred
-  for (const tenant of [undefined, "t0", "t1", "e5f878d5-7985-407b-a1cb-87a8716f1904"]) {
-    const options: DataSourceOptions = {
-      ...getTestTypeORMOptions(),
-      name: `unit-test-clean-db-${cds.utils.uuid()}`,
-      database: formatTenantDatabaseName(cds.env.requires.db.credentials, undefined, tenant)
-    };
-    const ds = new DataSource(options);
-    try {
-      await ds.initialize();
-      await ds.createQueryRunner().clearDatabase();
-    }
-    catch (error) {
-      // do nothing
-      console.debug("clean db", tenant, "failed", error.message, "but its ok");
-    }
-    finally {
-      if (ds.isInitialized) { await ds.destroy(); }
+  try {
+    await ds.initialize();
+    for (const tenant of [undefined, "t0", "t1", "t2", "t193", "e5f878d5-7985-407b-a1cb-87a8716f1904"]) {
+      const database = formatTenantDatabaseName(cds.env.requires.db.credentials, undefined, tenant);
+      const results = await ds.query(`SHOW DATABASES LIKE '${database}'`);
+      if (results.length > 0) {
+        await ds.createQueryRunner().clearDatabase(database);
+      }
     }
   }
-
+  catch (error) {
+    // do nothing
+    console.debug("clean db", tenant, "failed", error.message, "but its ok");
+  }
+  finally {
+    if (ds.isInitialized) { await ds.destroy(); }
+  }
 };
 
 export function isTiDBTest() {
