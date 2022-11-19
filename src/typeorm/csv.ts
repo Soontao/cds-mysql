@@ -107,20 +107,22 @@ export async function migrateData(
 
         // check the CSV has been provisioned or not
         const csvFileHash = await sha256(csvFile);
+
         const [csvFileHashExists] = await connection.query(
           "SELECT ENTITY, HASH FROM ?? WHERE ENTITY = ? FOR UPDATE",
           [TABLE_CSV_HISTORY, entityModel.name, csvFileHash]
-        );
+        ) as any as [Array<{ ENTITY: string, HASH: string }>];
         if (csvFileHashExists instanceof Array && csvFileHashExists.length > 0) {
-          if (csvFileHashExists[0]["HASH"] == csvFileHash) {
+          if (csvFileHashExists[0].HASH === csvFileHash) {
             logger.info(
               "file", csvFile,
               "with hash", csvFileHash,
-              "has been provisioned before, skip"
+              "has been provisioned before, skip processing"
             );
             continue;
           }
           else {
+            // TODO: test CSV file change
             // existed but CSV hash different
             await connection.query(
               "UPDATE ?? SET HASH = ? WHERE ENTITY = ?",

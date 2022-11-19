@@ -1,5 +1,6 @@
 import { doAfterAll } from "./utils";
-import { setupTest } from "cds-internal-tool";
+import { cwdRequireCDS, setupTest } from "cds-internal-tool";
+import path from "path";
 
 
 describe("CSV App Test Suite", () => {
@@ -65,6 +66,12 @@ describe("CSV App Test Suite", () => {
     const res = await client.get("/app/TypeEntity?$filter=SignTmp eq 2022-06-12T12:35:10.000Z");
     expect(res.status).toBe(200);
     expect(res.data?.value?.[0]?.ID).toBe(3);
+  });
+
+  it("should support migrate again", async () => {
+    cwdRequireCDS().db?.["deploy"]?.(
+      await cwdRequireCDS().load("*", { root: path.join(__dirname, "./resources/csv-app") })
+    );
   });
 
   for (const aggrMethod of ["sum", "min", "max", "average", "countdistinct"]) {
