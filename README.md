@@ -92,7 +92,7 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 - [x] schema migration optimization (ignore drop in some case)
   - [ ] ignore column length reduce and with warning
   - [ ] model version, only incremental migration
-  - [ ] using `LinkedModel` element information for database migration
+  - [x] using `LinkedModel` element information for database migration
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/media-data)
 - [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
 - [x] multi tenancy
