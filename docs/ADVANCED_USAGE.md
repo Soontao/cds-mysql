@@ -12,7 +12,7 @@ module.exports = class DemoService extends cds.ApplicationService {
   async _upsert(req) {
     const { Products } = this.entities;
     const { data } = req;
-    return this.run(UPSERT.into(Products).entries(data));
+    return this.run(UPSERT().into(Products).entries(data));
   }
 
 };

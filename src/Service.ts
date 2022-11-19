@@ -126,7 +126,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * create upsert query
    * 
    */
-  public static get UPSERT(): import("./types").UPSERT {
+  public static UPSERT(): import("./types").UPSERT {
     const i = cwdRequireCDS().ql.INSERT();
     i.INSERT["_upsert"] = true;
     return i;
@@ -138,7 +138,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   public upsert(entity: string | EntityDefinition) {
-    return MySQLDatabaseService.UPSERT.into(entity);
+    return MySQLDatabaseService.UPSERT().into(entity);
   }
 
   private _registerEagerDeploy() {
