@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0](https://github.com/Soontao/cds-mysql/compare/v6.3.0-beta.2...v6.3.0) (2022-11-19)
+
+
+### Features
+
+* refactor csv migration ([464324d](https://github.com/Soontao/cds-mysql/commit/464324db6686ef4a8ce6291adad21ef2f388198c))
+* refactor entity parser ([e22908c](https://github.com/Soontao/cds-mysql/commit/e22908c02c720a2806c5abc3ce4808c3838777fc))
+
+
+### Bug Fixes
+
+* test for tidb cluster index ([dfec8f0](https://github.com/Soontao/cds-mysql/commit/dfec8f041569d673f6d2ac48f2501a657b276019))
+* ut ([fbe5cbe](https://github.com/Soontao/cds-mysql/commit/fbe5cbe800cb6b6be55e5a954d404d8f6d53adfa))
+* ut ([49fb72b](https://github.com/Soontao/cds-mysql/commit/49fb72b1f532b58ca913b0ddc5dd1724f4f683d9))
+* ut ([433d1a9](https://github.com/Soontao/cds-mysql/commit/433d1a9738a2e4e63ab3769d47064080fcc47c5c))
+
 ## [6.3.0-beta.2](https://github.com/Soontao/cds-mysql/compare/v6.3.0-beta.1...v6.3.0-beta.2) (2022-11-16)
 
 
