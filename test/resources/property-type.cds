@@ -27,4 +27,8 @@ entity People {
       DoubleProperty      : Double;
       StringWithoutLength : String;
       LargeBinaryValue    : LargeBinary;
+      Date1               : Date default $now;
+      Date2               : Date default now();
+      DateTime1           : DateTime default now();
+      DateTime2           : DateTime default current_timestamp();
 }

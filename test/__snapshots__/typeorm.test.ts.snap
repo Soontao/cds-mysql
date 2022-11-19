@@ -368,6 +368,40 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 }
 `;
 
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Date1 element definition 1`] = `
+{
+  "name": "Date1",
+  "nullable": true,
+  "type": "date",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Date2 element definition 1`] = `
+{
+  "name": "Date2",
+  "nullable": true,
+  "type": "date",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.DateTime1 element definition 1`] = `
+{
+  "default": [Function],
+  "name": "DateTime1",
+  "nullable": true,
+  "type": "timestamp",
+}
+`;
+
+exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.DateTime2 element definition 1`] = `
+{
+  "default": [Function],
+  "name": "DateTime2",
+  "nullable": true,
+  "type": "timestamp",
+}
+`;
+
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.DoubleProperty element definition 1`] = `
 {
   "name": "DoubleProperty",
@@ -770,7 +804,7 @@ exports[`TypeORM Test Suite should support migrate different prop type to mysql 
 [
   {
     "parameters": undefined,
-    "query": "CREATE TABLE \`test_property_type_People\` (\`Name\` varchar(20) NOT NULL DEFAULT 'Unknown', \`Age\` int NULL DEFAULT '10', \`Credit\` decimal(10,2) NULL DEFAULT '1.00', \`FullEmployee\` tinyint NULL DEFAULT 0, \`Active\` tinyint NULL DEFAULT 1, \`BirthDay\` date NOT NULL, \`BirthDateTime\` timestamp NULL, \`Type\` varchar(10) NOT NULL, \`Avatar\` varbinary(255) NULL, \`Picture\` longtext NULL, \`rank\` longtext NULL, \`UInt8Property\` tinyint NULL, \`Int16Property\` smallint NULL, \`Int32Property\` int NULL, \`Int64Property\` bigint NULL, \`Integer64Property\` bigint NULL, \`Create\` tinyint NULL DEFAULT 0, \`Key\` int NOT NULL, \`DoubleProperty\` double NULL, \`StringWithoutLength\` text NULL, \`LargeBinaryValue\` longblob NULL, PRIMARY KEY (\`Name\`, \`Type\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+    "query": "CREATE TABLE \`test_property_type_People\` (\`Name\` varchar(20) NOT NULL DEFAULT 'Unknown', \`Age\` int NULL DEFAULT '10', \`Credit\` decimal(10,2) NULL DEFAULT '1.00', \`FullEmployee\` tinyint NULL DEFAULT 0, \`Active\` tinyint NULL DEFAULT 1, \`BirthDay\` date NOT NULL, \`BirthDateTime\` timestamp NULL, \`Type\` varchar(10) NOT NULL, \`Avatar\` varbinary(255) NULL, \`Picture\` longtext NULL, \`rank\` longtext NULL, \`UInt8Property\` tinyint NULL, \`Int16Property\` smallint NULL, \`Int32Property\` int NULL, \`Int64Property\` bigint NULL, \`Integer64Property\` bigint NULL, \`Create\` tinyint NULL DEFAULT 0, \`Key\` int NOT NULL, \`DoubleProperty\` double NULL, \`StringWithoutLength\` text NULL, \`LargeBinaryValue\` longblob NULL, \`Date1\` date NULL, \`Date2\` date NULL, \`DateTime1\` timestamp NULL DEFAULT NOW(), \`DateTime2\` timestamp NULL DEFAULT CURRENT_TIMESTAMP(), PRIMARY KEY (\`Name\`, \`Type\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
   },
 ]
 `;
