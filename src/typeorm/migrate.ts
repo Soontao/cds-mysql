@@ -6,11 +6,8 @@ import { DataSourceOptions } from "typeorm";
 import { SqlInMemory } from "typeorm/driver/SqlInMemory";
 import { TypeORMLogger } from "./logger";
 import { CDSMySQLDataSource } from "./mysql";
-import { supportEntities } from "./support";
-
 
 const DEFAULT_MIGRATION_CHECK_INTERVAL_SEC = 5;
-
 
 export async function migrate(connectionOptions: DataSourceOptions, dryRun: true): Promise<SqlInMemory>;
 export async function migrate(connectionOptions: DataSourceOptions, dryRun?: false): Promise<void>;
@@ -18,7 +15,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
   const logger = cwdRequireCDS().log("mysql|db|migrate|typeorm");
   const ds = new CDSMySQLDataSource({
     ...connectionOptions,
-    entities: [...(connectionOptions?.entities as [] ?? []), ...supportEntities],
+    entities: connectionOptions?.entities ?? [],
     logging: true,
     logger: TypeORMLogger,
   });

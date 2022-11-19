@@ -58,6 +58,8 @@ const TRANSPORT_CDS_TYPES = [
   "cds.Timestamp",
 ];
 
+const TABLE_CSV_HISTORY = "community_mysql_csv_history";
+
 /**
  * migrate CSV data
  * 
@@ -106,25 +108,43 @@ export async function migrateData(
         // check the CSV has been provisioned or not
         const csvFileHash = await sha256(csvFile);
         const [csvFileHashExists] = await connection.query(
-          "SELECT 1 FROM cds_mysql_csv_history WHERE entity = ? and hash = ?", [entityModel.name, csvFileHash]
+          "SELECT ENTITY, HASH FROM ?? WHERE ENTITY = ? FOR UPDATE",
+          [TABLE_CSV_HISTORY, entityModel.name, csvFileHash]
         );
         if (csvFileHashExists instanceof Array && csvFileHashExists.length > 0) {
-          logger.info(
-            "file", csvFile,
-            "with hash", csvFileHash,
-            "has been provisioned before, skip"
-          );
-          continue;
+          if (csvFileHashExists[0]["HASH"] == csvFileHash) {
+            logger.info(
+              "file", csvFile,
+              "with hash", csvFileHash,
+              "has been provisioned before, skip"
+            );
+            continue;
+          }
+          else {
+            // existed but CSV hash different
+            await connection.query(
+              "UPDATE ?? SET HASH = ? WHERE ENTITY = ?",
+              [TABLE_CSV_HISTORY, csvFileHash, entityModel.name]
+            );
+          }
         }
         else {
           await connection.query(
-            "INSERT INTO cds_mysql_csv_history (entity, hash) VALUES (?, ?)",
-            [entityModel.name, csvFileHash]
+            "INSERT INTO ?? (entity, hash) VALUES (?, ?)",
+            [TABLE_CSV_HISTORY, entityModel.name, csvFileHash]
           );
         }
 
         // eslint-disable-next-line max-len
         const isPreDeliveryModel = entityModel.includes?.includes?.("preDelivery") && entityModel.elements?.["PreDelivery"]?.type === "cds.Boolean";
+
+        if (!isPreDeliveryModel) {
+          logger.warn(
+            "entity", entityName,
+            "with CSV data but not extended with 'preDelivery' aspect, skip processing"
+          );
+          continue;
+        }
 
         const entires: Array<Array<string>> = CSV.read(csvFile);
         const tableName = entityName.replace(/\./g, "_");

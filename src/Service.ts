@@ -1,7 +1,8 @@
-import "colors";
 import { CSN, cwdRequire, cwdRequireCDS, EntityDefinition, EventContext, LinkedModel, Logger } from "cds-internal-tool";
+import "colors";
 import { createPool, Options as PoolOptions, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
+import { AdminTool } from "./AdminTool";
 import {
   CONNECTION_IDLE_CHECK_INTERVAL,
   DEFAULT_CONNECTION_IDLE_TIMEOUT,
@@ -11,8 +12,6 @@ import {
   TENANT_DEFAULT
 } from "./constants";
 import execute from "./execute";
-import { AdminTool } from "./AdminTool";
-import { migrateData } from "./typeorm/migrate";
 import { MySQLCredential, ReleasableConnection } from "./types";
 import { checkCdsVersion } from "./utils";
 
@@ -197,19 +196,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     if (tenant !== this._tool.getAdminTenantName()) {
       // for non-t0 tenants
       if (this.options?.tenant?.deploy?.auto !== false) {
-
         await this._tool.syncTenant(tenant);
-
-        if (this.options?.csv?.migrate !== false) {
-          await migrateData(tenantCredential, this.model);
-        }
-        else {
-          this._logger.debug(
-            "csv migration disabled, skip migrate CSV for tenant",
-            tenant
-          );
-        }
-
       }
       else {
         this._logger.debug(

@@ -3,8 +3,8 @@
  */
 define aspect incrementID {
   /**
-   * Auto Incremental Primary Key for entity, with mysql native
-   * `AUTO_INCREMENT` support
+   * Auto Incremental Primary Key for entity, with mysql native `AUTO_INCREMENT`
+   * support
    */
   @cds.typeorm.config : {generated : 'increment'}
   key ID : Integer64
@@ -25,4 +25,18 @@ define aspect preDelivery {
    * will not `re-import` the pre-delivery data
    */
   Disabled    : Boolean default false;
+}
+
+/**
+ * csv migrate history
+ */
+entity community.mysql.csv.history : incrementID {
+  /**
+   * entity name
+   */
+  ![entity] : String(500);
+  /**
+   * csv hash
+   */
+  hash      : String(64);
 }

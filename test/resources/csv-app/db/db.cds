@@ -21,7 +21,7 @@ type Address {
   address_Street,
   price,
 }
-entity House : cuid {
+entity House : cuid, preDelivery {
   price   : Decimal;
   address : Address;
 }

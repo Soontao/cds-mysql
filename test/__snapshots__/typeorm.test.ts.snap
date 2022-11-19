@@ -493,10 +493,6 @@ exports[`TypeORM Test Suite should support migrate different prop type to mysql 
     "parameters": undefined,
     "query": "CREATE TABLE \`test_property_type_People\` (\`Name\` varchar(20) NOT NULL DEFAULT 'Unknown', \`Age\` int NULL DEFAULT '10', \`Credit\` decimal(10,2) NULL DEFAULT '1.00', \`FullEmployee\` tinyint NULL DEFAULT 0, \`Active\` tinyint NULL DEFAULT 1, \`BirthDay\` date NOT NULL, \`BirthDateTime\` timestamp NULL, \`Type\` varchar(10) NOT NULL, \`Avatar\` varbinary(255) NULL, \`Picture\` longtext NULL, \`rank\` longtext NULL, \`UInt8Property\` tinyint NULL, \`Int16Property\` smallint NULL, \`Int32Property\` int NULL, \`Int64Property\` bigint NULL, \`Integer64Property\` bigint NULL, \`Create\` tinyint NULL DEFAULT 0, \`Key\` int NOT NULL, \`DoubleProperty\` double NULL, \`StringWithoutLength\` text NULL, \`LargeBinaryValue\` longblob NULL, PRIMARY KEY (\`Name\`, \`Type\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
   },
-  {
-    "parameters": undefined,
-    "query": "CREATE TABLE \`cds_mysql_csv_history\` (\`id\` int NOT NULL AUTO_INCREMENT COMMENT 'dummy id', \`entity\` varchar(500) NOT NULL COMMENT 'entity name', \`hash\` varchar(64) NOT NULL COMMENT 'sha256 hash', PRIMARY KEY (\`id\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
-  },
 ]
 `;
 
@@ -2061,10 +2057,6 @@ exports[`TypeORM Test Suite should support migrate tables: 0->1 1`] = `
   {
     "parameters": undefined,
     "query": "CREATE TABLE \`test_resources_migrate_People\` (\`ID\` varchar(36) NOT NULL, \`Name\` varchar(100) NULL, PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
-  },
-  {
-    "parameters": undefined,
-    "query": "CREATE TABLE \`cds_mysql_csv_history\` (\`id\` int NOT NULL AUTO_INCREMENT COMMENT 'dummy id', \`entity\` varchar(500) NOT NULL COMMENT 'entity name', \`hash\` varchar(64) NOT NULL COMMENT 'sha256 hash', PRIMARY KEY (\`id\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
   },
 ]
 `;

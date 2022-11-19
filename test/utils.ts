@@ -19,9 +19,10 @@ require("dotenv").config();
 export async function deploy(csn: CSN) {
   const cds = cwdRequireCDS();
   const { MySQLDatabaseService } = require("../src/Service");
+  cds.model = cds.linked(csn);
   cds.services.db = cds.db = new MySQLDatabaseService(
     "db",
-    cds.linked(csn),
+    cds.model,
     cds.env.requires.db
   );
   await cds.db.init();

@@ -4,7 +4,7 @@ import { DataSource, DataSourceOptions } from "typeorm";
 import { TENANT_DEFAULT } from "./constants";
 import { MysqlDatabaseOptions } from "./Service";
 import { formatTenantDatabaseName } from "./tenant";
-import { migrate } from "./typeorm";
+import { migrate, migrateData } from "./typeorm";
 import { csnToEntity } from "./typeorm/entity";
 import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
@@ -47,7 +47,7 @@ export class AdminTool {
    * @param tenant 
    * @returns 
    */
-  public getMySQLCredential(tenant: string): Promise<import("mysql2").ConnectionOptions> {
+  public getMySQLCredential(tenant: string): import("mysql2").ConnectionOptions {
     return {
       ...this._options.credentials,
       database: this.getTenantDatabaseName(tenant),
@@ -223,6 +223,17 @@ export class AdminTool {
       const entities = csnToEntity(model);
       const migrateOptions = await this.getDataSourceOption(tenant);
       await migrate({ ...migrateOptions, entities });
+      // @ts-ignore
+      if (cds.env?.get?.("requires.db.csv.migrate") !== false) {
+        // REVISIT: global model not suitable for extensibility
+        await migrateData(this.getMySQLCredential(tenant), cwdRequireCDS().model);
+      }
+      else {
+        this._logger.info(
+          "csv migration disabled, skip migrate CSV for tenant",
+          tenant
+        );
+      }
       this._logger.info("migrate", "successful".green, "for tenant", tenant.green);
       return true;
     } catch (error) {
