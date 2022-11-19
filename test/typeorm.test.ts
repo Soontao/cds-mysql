@@ -1,4 +1,5 @@
 import { pick, range } from "@newdash/newdash";
+import { cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
 import { DataSourceOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
@@ -24,6 +25,14 @@ describe("TypeORM Test Suite", () => {
     const csn = await loadCSN("./resources/complex-type.cds");
     const entities = csnToEntity(csn);
     expect(entities).toHaveLength(1);
+  });
+
+  it("should support extensions for csv app", async () => {
+    const csn = await cwdRequireCDS().load("*", {
+      root: path.join(__dirname, "./resources/csv-app")
+    });
+    const entities = csnToEntity(csn);
+    expect(entities).toMatchSnapshot();
   });
 
   it("should support compare with string without case sensitive", () => {

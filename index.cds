@@ -30,13 +30,13 @@ define aspect preDelivery {
 /**
  * csv migrate history
  */
-entity community.mysql.csv.history : incrementID {
-  /**
-   * entity name
-   */
-  ![entity] : String(500);
-  /**
-   * csv hash
-   */
-  hash      : String(64);
+entity community.mysql.csv.history {
+     /**
+      * entity name
+      */
+  key![entity] : String(500);
+     /**
+      * csv hash
+      */
+     hash      : String(64);
 }
