@@ -55,6 +55,18 @@ describe("CSV App Test Suite", () => {
 
   });
 
+  it("should support filter by datetime", async () => {
+    const res = await client.get("/app/TypeEntity?$filter=Sign eq 2022-06-13T12:35:10Z");
+    expect(res.status).toBe(200);
+    expect(res.data?.value?.[0]?.ID).toBe(3);
+  });
+
+  it("should support filter by datetimeoffset", async () => {
+    const res = await client.get("/app/TypeEntity?$filter=SignTmp eq 2022-06-12T12:35:10.000Z");
+    expect(res.status).toBe(200);
+    expect(res.data?.value?.[0]?.ID).toBe(3);
+  });
+
   for (const aggrMethod of ["sum", "min", "max", "average", "countdistinct"]) {
     it(`should support simple ${aggrMethod} aggregation`, async () => {
       const res1 = await client.get(`/app/Houses?$apply=aggregate(price with ${aggrMethod} as ${aggrMethod}_price)`);
