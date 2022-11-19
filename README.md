@@ -116,6 +116,7 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 
 ## Limitation
 
+- the maximum length of a table name is 64 characters - so the `length of entity name with namespace` cannot exceed 64 chars
 - mysql `5.6` does not support key length exceed `767` bytes
 - mysql does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
 - TiDB does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so user have to choose between `modifying the PK` and `enabling the clustered index`

@@ -494,7 +494,7 @@ exports[`TypeORM Test Suite should support extensions for csv app 1`] = `
     "options": {
       "columns": {
         "entity": {
-          "length": 500,
+          "length": 64,
           "name": "entity",
           "nullable": false,
           "primary": true,
