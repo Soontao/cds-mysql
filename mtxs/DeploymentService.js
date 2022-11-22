@@ -1,4 +1,5 @@
 "use strict";
+require("colors");
 const { cwdRequireCDS } = require("cds-internal-tool");
 const cds = cwdRequireCDS();
 const logger = cds.log("mtx");
@@ -41,13 +42,13 @@ module.exports = class DeploymentService extends cds.ApplicationService {
     this.on("deploy", async function (req) {
       const { tenant: t, options } = req.data;
       const csn = await options?.csn ?? await tool.csn4();
-      logger.info("(re-)deploying database for tenant:", t);
+      logger.info("(re-)deploying database for tenant:", t.green);
       return await tool.deploy(csn, t);
     });
 
     this.on(["upgrade", "extend"], async function (req) {
       const { tenant: t } = req.data;
-      logger.info(req.event, "for tenant", t);
+      logger.info(req.event, "for tenant", t.green);
       return this.deploy(t, { csn: await tool.csn4(t) });
     });
 

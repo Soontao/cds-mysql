@@ -1,3 +1,4 @@
+import { uniq } from "@newdash/newdash/uniq";
 import { CSN, cwdRequire, cwdRequireCDS, EntityDefinition, EventContext, LinkedModel, Logger } from "cds-internal-tool";
 import "colors";
 import { createPool, Options as PoolOptions, Pool } from "generic-pool";
@@ -143,17 +144,48 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _registerEagerDeploy() {
     if (this.options?.tenant?.deploy?.auto !== false) {
-      let eager = this.options.tenant?.deploy?.eager;
-
-      if (eager === undefined) { return; }
+      const cds = cwdRequireCDS();
+      let eager = this.options.tenant?.deploy?.eager ?? [TENANT_DEFAULT];
 
       if (typeof eager === "string") { eager = [eager]; }
-      // TODO: eager deploy maybe cause cds.xt.Tenants in-consistence
-      cds.once("served", async () => {
-        for (const tenant of eager) {
-          await this.getPool(tenant);
-        }
-      });
+
+      // auth users tenants (when use basic/dummy auth)
+      const tenantsFromUsers = Object
+        .values(cds.env.get("requires.auth.users") ?? {})
+        .filter((u: any) => typeof u?.tenant === "string").map((u: any) => u.tenant);
+
+      this._logger.info("tenants from users", tenantsFromUsers);
+
+      if (tenantsFromUsers.length > 0) {
+        eager.push(...tenantsFromUsers);
+      }
+
+      eager = uniq(eager);
+
+      this._logger.info("eager deploy tenants", eager);
+
+      if (eager.length > 0) {
+        cds.once("served", async () => {
+          const { "cds.xt.DeploymentService": ds } = cds.services;
+          for (const tenant of eager) {
+            if (ds !== undefined) {
+              await ds.tx((tx: any) => tx.subscribe(
+                tenant,
+                {
+                  subscribedTenantId: tenant,
+                  eventType: "CREATE"
+                }
+              ));
+            }
+            else {
+              await this._tool.syncTenant(tenant);
+            }
+
+          }
+        });
+      }
+
+
     }
   }
 
@@ -165,7 +197,13 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @param tenant
    */
   private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
-
+    if (!(await this._tool.hasTenantDatabase(tenant))) {
+      this._logger.error(
+        "tenant", tenant,
+        "is not found in database, did you forgot to subscribe that?"
+      );
+      throw cwdRequireCDS()["error"]("tenant not found", tenant);
+    }
     if (!this._pools.has(tenant)) {
       this._pools.set(
         tenant,
@@ -180,31 +218,18 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   private async _createPoolFor(tenant?: string) {
-    const credential = await this._tool.getMySQLCredential(tenant);
+    const credential = this._tool.getMySQLCredential(tenant);
 
-    // TODO: pool configuration provider
     const poolOptions = {
       ...DEFAULT_POOL_OPTIONS,
       ...this.options?.pool
     };
+
     const tenantCredential = {
       ...credential,
       dateStrings: true,
       charset: MYSQL_COLLATE
     };
-
-    if (tenant !== this._tool.getAdminTenantName()) {
-      // for non-t0 tenants
-      if (this.options?.tenant?.deploy?.auto !== false) {
-        await this._tool.syncTenant(tenant);
-      }
-      else {
-        this._logger.debug(
-          "auto tenant deploy disabled, skip auto deploy for tenant",
-          tenant
-        );
-      }
-    }
 
     this._logger.info(
       "creating connection pool for tenant",

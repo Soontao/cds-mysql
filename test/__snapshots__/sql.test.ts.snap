@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK query 1`] = `
+{
+  "sql": "SELECT * FROM test_int_People tmp_table_4 WHERE Name = ? LOCK IN SHARE MODE",
+  "values": [
+    "Theo",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query 1`] = `
+{
+  "sql": "SELECT * FROM test_int_People tmp_table_3 WHERE Name = ? FOR UPDATE",
+  "values": [
+    "Theo",
+  ],
+}
+`;
+
 exports[`SQL Factory Test Suite should support build a complex SELECT projection 1`] = `
 {
   "sql": "SELECT Name, Age, RegisterDate FROM test_int_People tmp_table_2 WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
@@ -12,3 +30,19 @@ exports[`SQL Factory Test Suite should support build a complex SELECT projection
 `;
 
 exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_int_People tmp_table_1"`;
+
+exports[`SQL Factory Test Suite should support insert columns 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, Age, RegisterDate , createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    "c83b5945-f7c2-48f0-ad6f-0e9b048ab2e3",
+    "Theo",
+    15,
+    "2022-11-17",
+    "2022-11-22T14:54:59.340Z",
+    "ANONYMOUS",
+    "2022-11-22T14:54:59.340Z",
+    "ANONYMOUS",
+  ],
+}
+`;
