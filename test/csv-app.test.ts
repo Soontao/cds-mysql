@@ -81,9 +81,9 @@ describe("CSV App Test Suite", () => {
     );
   });
 
-  for (const aggrMethod of ["sum", "min", "max", "average", "countdistinct"]) {
-    it(`should support simple ${aggrMethod} aggregation`, async () => {
-      const res1 = await client.get(`/app/Houses?$apply=aggregate(price with ${aggrMethod} as ${aggrMethod}_price)`);
+  for (const aggregation of ["sum", "min", "max", "average", "countdistinct"]) {
+    it(`should support simple ${aggregation} aggregation`, async () => {
+      const res1 = await client.get(`/app/Houses?$apply=aggregate(price with ${aggregation} as ${aggregation}_price)`);
       expect(res1.status).toBe(200);
       expect(res1.data).toMatchSnapshot();
     });
