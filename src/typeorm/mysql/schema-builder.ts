@@ -40,7 +40,7 @@ export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
   protected async createNewTables(): Promise<void> {
     for (const metadata of this.entityToSyncMetadatas) {
       // check if table does not exist yet
-      const existTable = this.queryRunner.loadedTables.find(table => 
+      const existTable = this.queryRunner.loadedTables.find(table =>
         equalWithoutCase(this.getTablePath(table), this.getTablePath(metadata))
       );
       if (existTable)
@@ -58,24 +58,29 @@ export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
   protected async createViews(): Promise<void> {
     for (const metadata of this.viewEntityToSyncMetadatas) {
       // check if view does not exist yet
-      const existView = this.queryRunner.loadedViews.find(view => {
-        const viewExpression = typeof view.expression === "string" 
-          ? view.expression.trim() 
-          : view.expression(this.connection).getQuery();
-        const metadataExpression = typeof metadata.expression === "string" 
-          ? metadata.expression.trim() 
-          : metadata.expression!(this.connection).getQuery();
-        return equalWithoutCase(this.getTablePath(view), this.getTablePath(metadata)) 
-          && equalWithoutCase(viewExpression, metadataExpression);
+      const existView = this.queryRunner.loadedViews.find((view) => {
+        const viewExpression =
+          typeof view.expression === "string"
+            ? view.expression.trim()
+            : view.expression(this.connection).getQuery();
+        const metadataExpression =
+          typeof metadata.expression === "string"
+            ? metadata.expression.trim()
+            : metadata.expression!(this.connection).getQuery();
+        return (
+          equalWithoutCase(this.getTablePath(view), this.getTablePath(metadata)) &&
+          equalWithoutCase(viewExpression, metadataExpression)
+        );
       });
-      if (existView)
-        continue;
+      if (existView) continue;
 
-      this.connection.logger.logSchemaBuild(`creating a new view: ${this.getTablePath(metadata)}`);
+      this.connection.logger.logSchemaBuild(
+        `creating a new view: ${this.getTablePath(metadata)}`,
+      );
 
       // create a new view and sync it in the database
       const view = View.create(metadata, this.connection.driver);
-      await this.queryRunner.createView(view);
+      await this.queryRunner.createView(view, true);
       this.queryRunner.loadedViews.push(view);
     }
   }
