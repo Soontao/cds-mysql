@@ -288,19 +288,15 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
   // force to use 'sqlite' as dialect to support localized elements
   const statements = cds.compile.to.sql(model, { dialect: "sqlite" }) as Array<string>;
 
-  const entities: Array<EntitySchema> = [];
-
-  statements.forEach((stat: string) => {
-    const { type, name } = extractInfo(stat);
+  const entities: Array<EntitySchema> = statements.map(statement => {
+    const { type, name } = extractInfo(statement);
     switch (type) {
       case "table":
-        entities.push(new EntitySchema(buildEntity(fuzzy.findEntity(name, linkedModel))));
-        break;
+        return new EntitySchema(buildEntity(fuzzy.findEntity(name, linkedModel)));
       case "view":
-        entities.push(new EntitySchema(buildView(name, stat)));
-        break;
+        return new EntitySchema(buildView(name, statement));
       default:
-        logger.error("unknown DDL type", stat);
+        logger.error("unknown DDL type", statement);
         break;
     }
   });

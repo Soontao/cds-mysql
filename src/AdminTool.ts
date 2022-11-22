@@ -9,6 +9,9 @@ import { csnToEntity } from "./typeorm/entity";
 import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
 
+/**
+ * get raw CSN from linked model
+ */
 export const _rawCSN = memorized(async (m: LinkedModel) => {
   return await cwdRequireCDS().load(m["$sources"]);
 });

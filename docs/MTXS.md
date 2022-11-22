@@ -2,7 +2,7 @@
 
 > support multitenancy/extensibility and feature toggles with `@sap/cds-mtxs` module
 
-## Enable
+## Enablement
 
 > you need manually enable each service, because there are some conflicts in `mtxs` internal shortcuts
 
@@ -27,6 +27,10 @@
 }
 ```
 
+- the database connection user should have the permission to create/delete new database(schema)
+- unsubscribe a tenant will really `DROP` the tenant database(schema)
+
 ## Known Issues
 
 - cause `cds-mysql` will automatically migrate tenants for non-existed tenant, so the `cds.xt.Tenants` maybe not have all tenants
+- extensibility still not verified
