@@ -68,6 +68,13 @@ describe("CSV App Test Suite", () => {
     expect(res.data?.value?.[0]?.ID).toBe(3);
   });
 
+  it("should support filter by datetimeoffset with timezone", async () => {
+    const res = await client.get("/app/TypeEntity?$filter=SignTmp eq 2022-06-12T20:35:10.000+08:00");
+    expect(res.status).toBe(200);
+    expect(res.data?.value?.[0]?.ID).toBe(3);
+  });
+
+
   it("should support migrate again", async () => {
     cwdRequireCDS().db?.["deploy"]?.(
       await cwdRequireCDS().load("*", { root: path.join(__dirname, "./resources/csv-app") })
