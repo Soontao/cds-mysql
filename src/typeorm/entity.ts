@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
-import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, Logger } from "cds-internal-tool";
+import { CQN, CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, LinkedModel, Logger } from "cds-internal-tool";
 import MySQLParser, { MySQLParserListener, SqlMode, TableRefContext } from "ts-mysql-parser";
 import { EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
@@ -50,7 +50,6 @@ const buildInTypes = {
   "cds.LargeString": "LONGTEXT",
   "cds.hana.LargeString": "LONGTEXT"
 };
-
 
 class CDSListener implements MySQLParserListener {
 
@@ -132,11 +131,14 @@ function buildView(name: string, stat: string): EntitySchemaOptions<any> {
     columns: {},
     tableName: name,
     synchronize: true,
+    deps: [],
   };
+
   options.expression = stat.substring(stat.indexOf("SELECT"));
   options.expression = options.expression
     .replace(/< strftime\('%Y-%m-%dT%H:%M:%S\.001Z', 'now'\)/g, "<= NOW()")
     .replace(/> strftime\('%Y-%m-%dT%H:%M:%S\.000Z', 'now'\)/g, "> NOW()");
+
   const listener = new CDSListener();
   const parser = new MySQLParser({ parserListener: listener, mode: SqlMode.AnsiQuotes });
   const result = parser.parse(stat);
@@ -155,6 +157,8 @@ function buildView(name: string, stat: string): EntitySchemaOptions<any> {
     throw TypeError("parse DDL statement failed");
   }
   options.deps = listener.getDeps();
+
+
   return options as any;
 }
 
@@ -163,13 +167,13 @@ function sortEntitySchemas(entities: Array<EntitySchema>): Array<EntitySchema> {
 
   // order by graph
   const g = new Graph();
-  entities.forEach((entity) => {
+  for (const entity of entities) {
     const { deps, tableName } = <EntitySchemaOptionsWithDeps>entity.options;
     g.setNode(tableName, entity);
-    if (deps && deps.length > 0) { // VIEW
-      deps.forEach((dep) => g.setEdge(tableName, dep));
+    for (const dep of (deps ?? [])) {
+      g.setEdge(tableName, dep);
     }
-  });
+  }
 
   return alg.topsort(g).reverse().map((node) => g.node(node));
 
@@ -276,6 +280,7 @@ function extractInfo(ddl: string): { type: "table" | "view" | "unknown", name: s
   }
   return { type: "unknown", name: "unknown" };
 }
+
 
 /**
  * convert csn to typeorm entities
