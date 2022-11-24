@@ -105,7 +105,9 @@ describe("TypeORM Test Suite", () => {
 
     const entityList = CSNs.map(csnToEntity);
 
-    expect(entityList).toMatchSnapshot();
+    for (const entity of entityList) {
+      expect(entity).toMatchSnapshot();
+    }
 
     const baseOption: DataSourceOptions = {
       ...getTestTypeORMOptions(),
