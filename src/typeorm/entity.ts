@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
-import { CQN, CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, LinkedModel, Logger } from "cds-internal-tool";
+import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, Logger } from "cds-internal-tool";
 import MySQLParser, { MySQLParserListener, SqlMode, TableRefContext } from "ts-mysql-parser";
 import { EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
