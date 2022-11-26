@@ -151,8 +151,10 @@ export async function migrateData(
           logger.info("csv history table is not ready, skip duplicated migration check");
         }
 
-        // eslint-disable-next-line max-len
-        const isPreDeliveryModel = entityModel.includes?.includes?.("preDelivery") && entityModel.elements?.["PreDelivery"]?.type === "cds.Boolean";
+        const isPreDeliveryModel = (
+          entityModel.includes?.includes?.("preDelivery") &&
+          entityModel.elements?.["PreDelivery"]?.type === "cds.Boolean"
+        );
 
         const CSV = cwdRequire("@sap/cds/lib/compile/etc/csv");
         const entires: Array<Array<string>> = CSV.read(csvFile);
@@ -183,6 +185,7 @@ export async function migrateData(
         const transformColumnsIndex = Object
           .values(entityModel.elements)
           .filter(ele => TRANSPORT_CDS_TYPES.includes(ele.type))
+          .filter(ele => headers.includes(ele.name)) // only process columns in CSV files
           .map(ele => ({
             index: headers.indexOf(ele.name),
             type: ele.type,
