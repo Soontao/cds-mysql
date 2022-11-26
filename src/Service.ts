@@ -150,9 +150,11 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       if (typeof eager === "string") { eager = [eager]; }
 
       // auth users tenants (when use basic/dummy auth)
-      const tenantsFromUsers = Object
-        .values(cds.env.get("requires.auth.users") ?? {})
-        .filter((u: any) => typeof u?.tenant === "string").map((u: any) => u.tenant);
+      const tenantsFromUsers = uniq(
+        Object
+          .values(cds.env.get("requires.auth.users") ?? {})
+          .filter((u: any) => typeof u?.tenant === "string").map((u: any) => u.tenant)
+      );
 
       this._logger.info("tenants from users", tenantsFromUsers);
 

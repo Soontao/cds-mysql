@@ -1,8 +1,7 @@
 /* eslint-disable prefer-const */
 import flattenDeep from "@newdash/newdash/flattenDeep";
 import uniq from "@newdash/newdash/uniq";
-import CSV from "@sap/cds/lib/compile/etc/csv";
-import { cwdRequireCDS, fuzzy, LinkedModel, memorized } from "cds-internal-tool";
+import { cwdRequire, cwdRequireCDS, fuzzy, LinkedModel, memorized } from "cds-internal-tool";
 import "colors";
 import { createHash } from "crypto";
 import fs from "fs";
@@ -140,14 +139,7 @@ export async function migrateData(
         // eslint-disable-next-line max-len
         const isPreDeliveryModel = entityModel.includes?.includes?.("preDelivery") && entityModel.elements?.["PreDelivery"]?.type === "cds.Boolean";
 
-        if (!isPreDeliveryModel) {
-          logger.warn(
-            "entity", entityName,
-            "with CSV data but not extended with 'preDelivery' aspect, skip processing"
-          );
-          continue;
-        }
-
+        const CSV = cwdRequire("@sap/cds/lib/compile/etc/csv");
         const entires: Array<Array<string>> = CSV.read(csvFile);
         const tableName = entityName.replace(/\./g, "_");
 
