@@ -71,7 +71,9 @@ export async function migrateData(
   model: LinkedModel,
   csvList?: Array<string>
 ): Promise<void> {
-  const logger = cwdRequireCDS().log("db|mysql|migrate|typeorm");
+
+  const cds = cwdRequireCDS();
+  const logger = cds.log("db|mysql|migrate|typeorm");
   csvList = uniq(
     csvList ?? flattenDeep(
       await Promise.all(
@@ -93,6 +95,11 @@ export async function migrateData(
 
       logger.info("start provisioning data with CSV files");
 
+      const [csvHistory] = await connection
+        .query(`SHOW TABLES LIKE '${TABLE_CSV_HISTORY}'`) as any as Array<any>;
+
+      const withHistoryTable = csvHistory?.length > 0;
+
       for (const csvFile of csvList) {
         const filename = path.basename(csvFile, ".csv");
         const entityName = filename.replace(/[_-]/g, "."); // name_space_entity.csv -> name.space.entity
@@ -107,33 +114,41 @@ export async function migrateData(
         // check the CSV has been provisioned or not
         const csvFileHash = await sha256(csvFile);
 
-        const [csvFileHashExists] = await connection.query(
-          "SELECT ENTITY, HASH FROM ?? WHERE ENTITY = ? FOR UPDATE",
-          [TABLE_CSV_HISTORY, entityModel.name, csvFileHash]
-        ) as any as [Array<{ ENTITY: string, HASH: string }>];
-        if (csvFileHashExists instanceof Array && csvFileHashExists.length > 0) {
-          if (csvFileHashExists[0].HASH === csvFileHash) {
-            logger.info(
-              "file", csvFile,
-              "with hash", csvFileHash,
-              "has been provisioned before, skip processing"
-            );
-            continue;
+        // if csv history table was setup for target tenant
+        if (withHistoryTable) {
+
+          const [csvFileHashExists] = await connection.query(
+            "SELECT ENTITY, HASH FROM ?? WHERE ENTITY = ? FOR UPDATE",
+            [TABLE_CSV_HISTORY, entityModel.name, csvFileHash]
+          ) as any as [Array<{ ENTITY: string, HASH: string }>];
+
+          if (csvFileHashExists instanceof Array && csvFileHashExists.length > 0) {
+            if (csvFileHashExists[0].HASH === csvFileHash) {
+              logger.info(
+                "file", csvFile,
+                "with hash", csvFileHash,
+                "has been provisioned before, skip processing"
+              );
+              continue;
+            }
+            else {
+              // TODO: test CSV file change
+              // existed but CSV hash different
+              await connection.query(
+                "UPDATE ?? SET HASH = ? WHERE ENTITY = ?",
+                [TABLE_CSV_HISTORY, csvFileHash, entityModel.name]
+              );
+            }
           }
           else {
-            // TODO: test CSV file change
-            // existed but CSV hash different
             await connection.query(
-              "UPDATE ?? SET HASH = ? WHERE ENTITY = ?",
-              [TABLE_CSV_HISTORY, csvFileHash, entityModel.name]
+              "INSERT INTO ?? (entity, hash) VALUES (?, ?)",
+              [TABLE_CSV_HISTORY, entityModel.name, csvFileHash]
             );
           }
         }
         else {
-          await connection.query(
-            "INSERT INTO ?? (entity, hash) VALUES (?, ?)",
-            [TABLE_CSV_HISTORY, entityModel.name, csvFileHash]
-          );
+          logger.info("csv history table is not ready, skip duplicated migration check");
         }
 
         // eslint-disable-next-line max-len
@@ -156,7 +171,7 @@ export async function migrateData(
         headers = headers.map(header => {
           const element = fuzzy.findElement(entityModel, header);
           if (element === undefined) {
-            throw new Error(
+            throw cds.error(
               `csv file '${csvFile}' column ` +
               `with header key '${header}' is not found ` +
               `in the entity '${entityModel.name}'`
@@ -263,8 +278,10 @@ export async function migrateData(
             batchInserts.push(entry);
           }
           else {
+            // REVISIT: parameter: UPDATE or SKIP
             logger.debug("entity", entityName, "with key", keyExpr, "has existed, skip process");
           }
+
         }
 
         // batch insert

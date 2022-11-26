@@ -80,6 +80,8 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
     checkCdsVersion();
 
+    const cds = cwdRequireCDS();
+
     // REVISIT: official db api
     this._execute = execute;
 
@@ -88,12 +90,20 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     this._read = this._queries.read(execute.select, execute.stream);
     this._update = this._queries.update(execute.update, execute.select);
     this._delete = this._queries.delete(execute.delete, execute.update);
-    this._run = this._queries.run(this._insert, this._read, this._update, this._delete, execute.cqn, execute.sql);
 
-    this._logger = cwdRequireCDS().log("db|mysql");
+    this._run = this._queries.run(
+      this._insert,
+      this._read,
+      this._update,
+      this._delete,
+      execute.cqn,
+      execute.sql
+    );
+
+    this._logger = cds.log("db|mysql");
 
     if (this.options.credentials === undefined) {
-      throw new Error("mysql credentials lost");
+      throw cds.error("mysql credentials not found");
     }
 
     this._tool = new AdminTool();
@@ -204,7 +214,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
         "tenant", tenant,
         "is not found in database, did you forgot to subscribe that?"
       );
-      throw cwdRequireCDS()["error"]("tenant not found", tenant);
+      throw cwdRequireCDS().error(`tenant '${tenant}' database is not found, maybe forgot to setup?`);
     }
     if (!this._pools.has(tenant)) {
       this._pools.set(
