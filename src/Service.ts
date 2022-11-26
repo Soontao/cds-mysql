@@ -310,13 +310,16 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       if (this._pools.has(tenant)) {
         this._logger.info("disconnect mysql database for tenant", tenant);
         const pool = await this._pools.get(tenant);
+        await pool.drain();
         await pool.clear();
       }
       return;
     }
     this._logger.info("disconnect mysql database for all tenants");
-    for (const pool of this._pools.values()) {
-      await (await pool).clear();
+    for (let pool of this._pools.values()) {
+      pool = await pool;
+      await pool.drain();
+      await pool.clear();
     }
 
   }
