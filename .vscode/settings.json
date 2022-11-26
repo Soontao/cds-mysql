@@ -29,6 +29,7 @@
     "mtxs",
     "nvarchar",
     "Rdbms",
+    "sflight",
     "SMALLDECIMAL",
     "TIDB",
     "TINYINT",

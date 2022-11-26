@@ -1,7 +1,5 @@
 # Useful Scripts
 
-
-
 ## k8s
 
 connect to k8s mysql service
@@ -22,9 +20,10 @@ CDS_REQUIRES_DB_CREDENTIALS_PORT=33306
 
 ## User Creation
 
+> create user for multitenancy
+
 ```sql
 CREATE DATABASE IF NOT EXISTS `cds_admin`;
-CREATE USER IF NOT EXISTS 'cds_admin'@'%' IDENTIFIED BY 'cds_admin'; 
+CREATE USER IF NOT EXISTS 'cds_admin'@'%' IDENTIFIED BY 'cds_admin';
 GRANT ALL PRIVILEGES ON *.* TO 'cds_admin'@'%' WITH GRANT OPTION;
 ```
-

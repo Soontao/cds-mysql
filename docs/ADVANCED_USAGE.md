@@ -8,14 +8,24 @@
 const { UPSERT } = require("cds-mysql");
 
 module.exports = class DemoService extends cds.ApplicationService {
-
   async _upsert(req) {
     const { Products } = this.entities;
     const { data } = req;
     return this.run(UPSERT().into(Products).entries(data));
   }
-
 };
+```
+
+### Configuration credential by environments
+
+> as CAP supported, developer could also use `environments` to configure the database credential
+
+```bash
+CDS_REQUIRES_DB_CREDENTIALS_USER=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_PASSWORD=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_DATABASE=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_HOST=127.0.0.1
+CDS_REQUIRES_DB_CREDENTIALS_PORT=3306
 ```
 
 ### Schema Migration
@@ -210,4 +220,3 @@ you can convert PEM cert to json format with [this document](https://docs.vmware
 ```bash
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 ```
-

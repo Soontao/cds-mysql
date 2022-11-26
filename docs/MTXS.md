@@ -30,6 +30,12 @@
 - the database connection user should have the permission to create/delete new database(schema)
 - unsubscribe a tenant will really `DROP` the tenant database(schema)
 
+## Database User
+
+for multitenancy, `cds-mysql` will try to create `database/schema` for each tenant, so the database user need to have the permission to `CREATE DATABASE` and `DROP DATABASE`
+
+Please ref [here](../SCRIPTS.md#user-creation) to get an example to create user.
+
 ## Tenant Users
 
 > CDS Built-In Mocked Users
@@ -84,5 +90,4 @@
 
 ## Known Issues
 
-- cause `cds-mysql` will automatically migrate tenants for non-existed tenant, so the `cds.xt.Tenants` maybe not have all tenants
-- extensibility still not verified
+- extensibility is still not verified

@@ -14,9 +14,7 @@
 
 ## Setup
 
-for local development, just simply create the `default-env.json` file into the root directory of your CAP project, and put the `mysql` credential into that. (remember **don't** commit this file into your git repository)
-
-please **NOTICE** that, the `{ tags: ['mysql'] }` is the key which used for service credential lookup in CAP framework.
+for local development, firstly developer need to create a `default-env.json` file into the root directory of your CAP project, and put the development `mysql` credential into that. (remember **don't** commit this file into your git repository). (or [use system environments](./docs/ADVANCED_USAGE.md#configuration-credential-by-environments) to configure)
 
 for the supported options in `credentials` node, just ref the [mysql official connection options document](https://www.npmjs.com/package/mysql#connection-options)
 
@@ -41,7 +39,7 @@ for the supported options in `credentials` node, just ref the [mysql official co
 }
 ```
 
-edit your `package.json` > `cds` node
+then setup the `mysql` database driver for cds -> edit the `package.json` > `cds` node
 
 ```json
 {
@@ -59,6 +57,10 @@ edit your `package.json` > `cds` node
 ```
 
 now, the cds server (`cds run`) should could be connected to the mysql server correctly. The database schema will be automatically migrated when **the firstly time received CRUD request**.
+
+---
+
+in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight) to get the `mysql` version of official `cap-sflight` example, and it works well.
 
 ## [Advanced Usage Guide](./docs/ADVANCED_USAGE.md)
 
@@ -111,7 +113,7 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
-- [ ] better E2E document/sample
+- [x] better E2E document/sample - [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight)
 
 ## Limitation
 
