@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.3](https://github.com/Soontao/cds-mysql/compare/v6.3.2...v6.3.3) (2022-11-26)
+
+
+### Bug Fixes
+
+* improve the CSV migration ([267c3be](https://github.com/Soontao/cds-mysql/commit/267c3be1787dffce4b1e1a971c74b977e3e69456))
+
 ### [6.3.2](https://github.com/Soontao/cds-mysql/compare/v6.3.1...v6.3.2) (2022-11-26)
 
 
