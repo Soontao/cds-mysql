@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.2](https://github.com/Soontao/cds-mysql/compare/v6.3.1...v6.3.2) (2022-11-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cds-internal-tool to v1.5.6 ([87af9df](https://github.com/Soontao/cds-mysql/commit/87af9df1dac8ccac02ca73cf518b6bbd900184ba))
+
 ### [6.3.1](https://github.com/Soontao/cds-mysql/compare/v6.3.0...v6.3.1) (2022-11-19)
 
 
