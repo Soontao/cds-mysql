@@ -7,7 +7,7 @@ import { MYSQL_DATE_TIME_FORMAT } from "./constants";
  * 
  * @param value 
  */
-function adaptToMySQLDateTime(value: string) {
+export function adaptToMySQLDateTime(value: string) {
   if (value === null) {
     return null;
   }

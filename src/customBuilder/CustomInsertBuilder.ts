@@ -1,4 +1,4 @@
-import { CSN, cwdRequire, EntityDefinition } from "cds-internal-tool";
+import { CSN, cwdRequire, EntityDefinition, fuzzy } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
@@ -15,7 +15,6 @@ export class CustomInsertBuilder extends InsertBuilder {
   public build() {
     this._extOutputObj = { columns: [] };
     super.build();
-    this._transform();
     // for upsert
     if (this._obj?.INSERT?._upsert === true) {
       // replace insert keyword
@@ -33,27 +32,23 @@ export class CustomInsertBuilder extends InsertBuilder {
   }
 
   /**
-   * do datatype transform for mysql
-   * 
    * @mysql
+   * 
+   * @param column 
+   * @param options 
+   * @returns 
    */
-  private _transform() {
-    const entity = this._entity;
-    if (entity !== undefined) {
-      this._extOutputObj.columns.forEach((elementName: string, elementIndex: number) => {
-        const columnType = entity?.elements?.[elementName]?.type;
-        // if column type is needed for transformation
-        if (columnType !== undefined && PRE_CONVERSION_MAP.has(columnType)) {
-          const transformFunc = PRE_CONVERSION_MAP.get(columnType);
-          // guard against undefined
-          if (this._outputObj.values instanceof Array) {
-            for (const row of this._outputObj.values) {
-              row[elementIndex] = transformFunc(row[elementIndex]);
-            }
-          }
-        }
-      });
+  private _getValue(
+    column: string,
+    options: { entry: any, flattenColumn: Array<string>, insertAnnotatedColumns: Map<any, any> }
+  ) {
+    const val = super._getValue(column, options);
+    const columnType = this._entity?.elements?.[column]?.type;
+    if (columnType !== undefined && PRE_CONVERSION_MAP.has(columnType)) {
+      const transformFunc = PRE_CONVERSION_MAP.get(columnType);
+      return transformFunc(val);
     }
+    return val;
   }
 
   /**
@@ -63,17 +58,19 @@ export class CustomInsertBuilder extends InsertBuilder {
     if (typeof this._obj?.INSERT?.into === "string") {
       return this._obj?.INSERT?.into;
     }
-    if (typeof this._obj?.INSERT?.into?.ref === "object") {
+    if (this._obj?.INSERT?.into?.ref instanceof Array) {
       return this._obj?.INSERT?.into?.ref?.[0];
     }
     return this._obj?.INSERT?.into?.name;
   }
 
   /**
- * get current CQN entity definition
- */
+   * @mysql
+   * 
+   * get current CQN entity definition
+   */
   private get _entity(): EntityDefinition | undefined {
-    return this._csn?.definitions?.[this._entityName];
+    return fuzzy.findEntity(this._entityName, this._csn);
   }
 
   /**

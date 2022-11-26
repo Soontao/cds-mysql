@@ -8,6 +8,7 @@ import { QueryObject } from "cds-internal-tool/lib/types/ql";
 import { Connection, OkPacket } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
+import { adaptToMySQLDateTime } from "./conversion-pre";
 import CustomBuilder from "./customBuilder";
 import { sqlFactory } from "./sqlFactory";
 import { getIncrementalKey, mustBeArray } from "./utils";
@@ -107,7 +108,7 @@ function executeSelectCQN(
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "now()" }, // '2012-12-03T07:16:23.574Z'
+      now: getNow(txTimestamp),
       locale
     },
     model
@@ -135,7 +136,7 @@ function executeDeleteCQN(
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "now()" } // '2012-12-03T07:16:23.574Z'
+      now: getNow(txTimestamp), // '2012-12-03T07:16:23.574Z'
     },
     model
   );
@@ -225,7 +226,7 @@ async function executeInsertCQN(
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "now()" } // '2012-12-03T07:16:23.574Z'
+      now: getNow(txTimestamp), // '2012-12-03T07:16:23.574Z'
     },
     model
   );
@@ -259,7 +260,7 @@ async function executeUpdateCQN(
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "now()" }
+      now: getNow(txTimestamp),
     },
     model
   );
@@ -281,7 +282,7 @@ function executeGenericCQN(
     {
       user: user,
       customBuilder: CustomBuilder,
-      now: txTimestamp || { sql: "now()" } // '2012-12-03T07:16:23.574Z'
+      now: getNow(txTimestamp),
     },
     model
   );
@@ -309,6 +310,10 @@ async function executeSelectStreamCQN(model, dbc, query, user, locale, txTimesta
   stream_.push(null);
 
   return { value: stream_ };
+}
+
+function getNow(txTimestamp: string) {
+  return txTimestamp === undefined ? { sql: "now()" } : adaptToMySQLDateTime(txTimestamp);
 }
 
 export default {

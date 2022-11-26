@@ -17,7 +17,10 @@ export class CustomExpressionBuilder extends ExpressionBuilder {
 
   build() {
     // fix upper case DRAFTS table issue
-    if (this._obj?.xpr instanceof Array && this._obj?.xpr?.[2] === "drafts.DraftAdministrativeData_DraftUUID") {
+    if (
+      this._obj?.xpr instanceof Array &&
+      this._obj?.xpr?.[2] === "drafts.DraftAdministrativeData_DraftUUID"
+    ) {
       this._obj.xpr[2] = { ref: ["drafts", "DraftAdministrativeData_DraftUUID"] };
     }
     return super.build();

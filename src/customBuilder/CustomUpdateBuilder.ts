@@ -23,6 +23,12 @@ export class CustomUpdateBuilder extends UpdateBuilder {
     return CustomExpressionBuilder;
   }
 
+  /**
+   * @mysql
+   * 
+   * @param annotatedColumns 
+   * @param entity 
+   */
   _data(annotatedColumns, entity) {
     const sql = [];
     const data = this._obj.UPDATE.data || {};

@@ -125,8 +125,8 @@ export async function migrateData(
           if (csvFileHashExists instanceof Array && csvFileHashExists.length > 0) {
             if (csvFileHashExists[0].HASH === csvFileHash) {
               logger.info(
-                "file", csvFile,
-                "with hash", csvFileHash,
+                "file", csvFile.green,
+                "with hash", csvFileHash.substring(32).gray,
                 "has been provisioned before, skip processing"
               );
               continue;

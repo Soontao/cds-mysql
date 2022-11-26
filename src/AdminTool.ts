@@ -53,6 +53,7 @@ export class AdminTool {
   public getMySQLCredential(tenant: string): import("mysql2").ConnectionOptions {
     return {
       ...this._options.credentials,
+      dateStrings: true,
       database: this.getTenantDatabaseName(tenant),
     } as any;
   }
