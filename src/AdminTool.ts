@@ -2,7 +2,7 @@
 import { CSN, cwdRequireCDS, LinkedModel, Logger, memorized } from "cds-internal-tool";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { TENANT_DEFAULT } from "./constants";
-import { MysqlDatabaseOptions } from "./Service";
+import { MysqlDatabaseOptions } from "./types";
 import { formatTenantDatabaseName } from "./tenant";
 import { migrate, migrateData } from "./typeorm";
 import { csnToEntity } from "./typeorm/entity";
