@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.4-1](https://github.com/Soontao/cds-mysql/compare/v6.3.4-0...v6.3.4-1) (2022-11-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency luxon to v3.1.1 ([#157](https://github.com/Soontao/cds-mysql/issues/157)) ([fc2f96b](https://github.com/Soontao/cds-mysql/commit/fc2f96bf80a8e6cb0e6d717ca85189e77e2adf2a))
+* improve CSV migration ([571bfaa](https://github.com/Soontao/cds-mysql/commit/571bfaa463c4e468a3d0faff4ee52901d6eb81e6))
+* improvement ([e68b59a](https://github.com/Soontao/cds-mysql/commit/e68b59ae5a74720d4ffbaf88fff3d43f30a23b60))
+
 ### [6.3.4-0](https://github.com/Soontao/cds-mysql/compare/v6.3.3...v6.3.4-0) (2022-11-26)
 
 
