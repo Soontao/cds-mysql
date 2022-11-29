@@ -33,7 +33,6 @@ describe("SQL Factory Test Suite", () => {
 
 
   it("should support build a complex SELECT projection", () => {
-    // REVISIT: maybe select between datetime will have issue
     const r = toSQL(
       SELECT.from("test.int.People").columns("Name", "Age", "RegisterDate").where(
         {

@@ -107,7 +107,7 @@ function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
                 "column", indexColumnName,
                 "not existed on entity definition"
               );
-              // TODO: throw error
+              throw cwdRequireCDS().error("ENTITY_INDEX_COLUMN_NOT_EXIST");
             }
           }
         }

@@ -32,16 +32,24 @@ export class AdminTool {
 
   /**
    * get the database name of tenant
+   * 
    * @param tenant 
    * @returns 
    */
   public getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
-    // TODO: mysql have max length restriction for database
-    return formatTenantDatabaseName(
+
+    const tenantDatabaseName = formatTenantDatabaseName(
       this._options?.credentials,
       this._options?.tenant?.prefix,
       tenant,
     );
+
+    if (tenantDatabaseName.length > 64) {
+      this._logger.warn("database name", tenantDatabaseName, "which for tenant", tenant, "is too long");
+      throw cwdRequireCDS().error("TENANT_DATABASE_NAME_TOO_LONG");
+    }
+
+    return tenantDatabaseName;
   }
 
   /**

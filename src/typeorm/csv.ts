@@ -145,7 +145,6 @@ export async function migrateData(
             continue;
           }
           else {
-            // TODO: test CSV file change
             // existed but CSV hash different
             await connection.query(
               "UPDATE ?? SET HASH = ? WHERE ENTITY = ?",
@@ -378,7 +377,6 @@ function transform(rows: string[][], transformColumnsIndex: { index: number; typ
     for (const transformColumn of transformColumnsIndex) {
       if (entry[transformColumn.index]?.trim?.().length > 0) {
         switch (transformColumn.type) {
-          // REVISIT: if binary as where condition, here will have issue.
           case "cds.Binary": case "cds.LargeBinary":
             entry[transformColumn.index] = Buffer.from(entry[transformColumn.index], "base64");
             break;
