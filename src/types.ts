@@ -1,5 +1,6 @@
-import { Connection } from "mysql2/promise";
-import { INSERT } from "cds-internal-tool/lib/types/ql";
+import type { Connection } from "mysql2/promise";
+import type { INSERT } from "cds-internal-tool/lib/types/ql";
+import type { Options as PoolOptions } from "generic-pool";
 
 export declare class UPSERT<T = any> extends INSERT<T> {
 
@@ -43,4 +44,54 @@ export type ReleasableConnection = Connection & {
    * release connection to pool
    */
   _release: () => void;
+}
+
+export interface MysqlDatabaseOptions {
+  /**
+   * database credentials
+   */
+  credentials: MySQLCredential;
+  /**
+   * tenant configuration
+   */
+  tenant?: {
+    deploy?: {
+      /**
+       * auto migrate database schema when connect to it (create pool),
+       * 
+       * default `true`
+       */
+      auto?: boolean;
+      /**
+       * eager deploy tenant id list 
+       * 
+       * schema sync of these tenants will be performed when server startup
+       * 
+       * default value is ['default']
+       */
+      eager?: Array<string> | string;
+    };
+    /**
+     * tenant database name prefix
+     */
+    prefix?: string;
+  };
+  /**
+   * connection pool options for each tenant
+   */
+  pool?: PoolOptions;
+  csv?: {
+    /**
+     * migrate CSV on deployment
+     * 
+     * default value `true`
+     */
+    migrate?: boolean;
+    identity?: {
+      concurrency?: number
+    }
+    exist?: {
+      update?: boolean;
+    }
+  };
 }

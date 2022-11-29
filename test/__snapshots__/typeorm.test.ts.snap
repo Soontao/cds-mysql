@@ -722,6 +722,54 @@ FROM test_resources_csv_app_db_Person AS Person_0;",
     "@instanceof": Symbol(EntitySchema),
     "options": {
       "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "nvarchar",
+        },
+        "Name": {
+          "length": 255,
+          "name": "Name",
+          "nullable": true,
+          "type": "nvarchar",
+        },
+        "Size": {
+          "name": "Size",
+          "nullable": true,
+          "precision": 11,
+          "scale": 3,
+          "type": "decimal",
+        },
+      },
+      "name": "test_resources_csv_app_db_Area",
+      "synchronize": true,
+      "tableName": "test_resources_csv_app_db_Area",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_csv_app_db_Area",
+      ],
+      "expression": "SELECT
+  Area_0.ID,
+  Area_0.Name,
+  Area_0.Size
+FROM test_resources_csv_app_db_Area AS Area_0;",
+      "name": "test_resources_csv_app_srv_AppService_Areas",
+      "synchronize": true,
+      "tableName": "test_resources_csv_app_srv_AppService_Areas",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
         "Disabled": {
           "default": false,
           "name": "Disabled",

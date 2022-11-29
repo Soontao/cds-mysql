@@ -9,7 +9,10 @@
           }
         },
         "csv": {
-          "migrate": true
+          "migrate": true,
+          "exist": {
+            "update": true
+          }
         }
       },
       "kinds": {

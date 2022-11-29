@@ -102,6 +102,21 @@ exports[`CSV App Test Suite should match the second record by cds API 1`] = `
 }
 `;
 
+exports[`CSV App Test Suite should not be empty when migrated to v2 1`] = `
+[
+  {
+    "ID": "5e42cf9c-6fc1-11ed-a1eb-0242ac120002",
+    "Name": "Area 1",
+    "Size": 10000000.132,
+  },
+  {
+    "ID": "5e42d4ce-6fc1-11ed-a1eb-0242ac120002",
+    "Name": "Area 2",
+    "Size": 9999433,
+  },
+]
+`;
+
 exports[`CSV App Test Suite should support ISO format date string 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",
@@ -231,5 +246,20 @@ exports[`CSV App Test Suite should support simple sum aggregation 1`] = `
       "sum_price@odata.type": "#Decimal",
     },
   ],
+}
+`;
+
+exports[`CSV App Test Suite should update house after migrated to v2 1`] = `
+{
+  "data": {
+    "@odata.context": "$metadata#Houses/$entity",
+    "ID": "97dc9bc4-f61e-11ec-b939-0242ac120002",
+    "address_City": "Beijing Updated",
+    "address_Country": null,
+    "address_Province": null,
+    "address_Street": null,
+    "price": 204323,
+  },
+  "status": 200,
 }
 `;

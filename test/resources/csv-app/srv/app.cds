@@ -18,4 +18,6 @@ service AppService {
     PreDelivery,
     Disabled
   };
+
+  entity Areas      as projection on db.Area;
 }

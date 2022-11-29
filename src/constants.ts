@@ -24,3 +24,8 @@ export const MAX_QUEUE_SIZE = DEFAULT_TENANT_CONNECTION_POOL_SIZE * 1000;
  * the default connection idle timeout, after idle, it will be disconnected after next check
  */
 export const DEFAULT_CONNECTION_IDLE_TIMEOUT = 120 * 1000;
+
+/**
+ * default value to check csv record is existed or not
+ */
+export const DEFAULT_CSV_IDENTITY_CONCURRENCY = 10;

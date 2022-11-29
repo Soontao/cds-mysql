@@ -221,13 +221,23 @@ export class AdminTool {
   }
 
   /**
+   * deploy CSV for tenant
+   * 
+   * @param tenant 
+   */
+  public async deployCSV(tenant?: string, csvList?: Array<string>) {
+    // REVISIT: global model not suitable for extensibility
+    await migrateData(this.getMySQLCredential(tenant), cwdRequireCDS().model, csvList);
+  }
+
+  /**
    * deploy (migrate) schema to (tenant) database
    * 
    * @param model plain CSN object
    * @param tenant tenant id
    * @returns 
    */
-  async deploy(model: CSN, tenant: string = TENANT_DEFAULT) {
+  public async deploy(model: CSN, tenant: string = TENANT_DEFAULT) {
     try {
       const cds = cwdRequireCDS();
       this._logger.info("migrating schema for tenant", tenant.green);
@@ -236,8 +246,7 @@ export class AdminTool {
       const migrateOptions = await this.getDataSourceOption(tenant);
       await migrate({ ...migrateOptions, entities });
       if (cds.env?.get?.("requires.db.csv.migrate") !== false) {
-        // REVISIT: global model not suitable for extensibility
-        await migrateData(this.getMySQLCredential(tenant), cwdRequireCDS().model);
+        await this.deployCSV(tenant);
       }
       else {
         this._logger.info(

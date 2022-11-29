@@ -4,7 +4,7 @@
 
 ## Enablement
 
-> you need manually enable each service, because there are some conflicts in `mtxs` internal shortcuts
+> **MUST** manually enable each service, because there are some conflicts in `mtxs` internal shortcuts
 
 ```json
 {

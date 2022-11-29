@@ -26,6 +26,11 @@ entity House : cuid, preDelivery {
   address : Address;
 }
 
+entity Area : cuid {
+  Name : String(255);
+  Size : Decimal(11, 3);
+}
+
 entity Person : incrementID, preDelivery {
   Name : String(255);
 }

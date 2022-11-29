@@ -13,7 +13,7 @@ import {
   TENANT_DEFAULT
 } from "./constants";
 import execute from "./execute";
-import { MySQLCredential, ReleasableConnection } from "./types";
+import { MysqlDatabaseOptions, ReleasableConnection } from "./types";
 import { checkCdsVersion } from "./utils";
 
 const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
@@ -25,50 +25,6 @@ const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   testOnBorrow: true,
 };
 
-
-export interface MysqlDatabaseOptions {
-  /**
-   * database credentials
-   */
-  credentials: MySQLCredential;
-  /**
-   * tenant configuration
-   */
-  tenant?: {
-    deploy?: {
-      /**
-       * auto migrate database schema when connect to it (create pool),
-       * 
-       * default `true`
-       */
-      auto?: boolean;
-      /**
-       * eager deploy tenant id list 
-       * 
-       * schema sync of these tenants will be performed when server startup
-       * 
-       * default value is ['default']
-       */
-      eager?: Array<string> | string;
-    };
-    /**
-     * tenant database name prefix
-     */
-    prefix?: string;
-  };
-  /**
-   * connection pool options for each tenant
-   */
-  pool?: PoolOptions;
-  csv?: {
-    /**
-     * migrate CSV on deployment
-     * 
-     * default value `true`
-     */
-    migrate?: boolean;
-  };
-}
 
 /**
  * MySQL Database Adapter for SAP CAP Framework
@@ -148,6 +104,12 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     this._registerEagerDeploy();
   }
 
+  /**
+   * create upsert query
+   * 
+   * @param entity 
+   * @returns 
+   */
   public upsert(entity: string | EntityDefinition) {
     return MySQLDatabaseService.UPSERT().into(entity);
   }
@@ -322,6 +284,16 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       await pool.clear();
     }
 
+  }
+
+  /**
+   * deploy CSV only
+   * 
+   * @param tenant 
+   * @returns 
+   */
+  deployCSV(tenant?: string, csvList?: Array<string>) {
+    return this._tool.deployCSV(tenant, csvList);
   }
 
 

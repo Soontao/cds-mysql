@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
-import { Semaphore } from "@newdash/newdash/functional/Semaphore";
 import flattenDeep from "@newdash/newdash/flattenDeep";
+import { Semaphore } from "@newdash/newdash/functional/Semaphore";
 import uniq from "@newdash/newdash/uniq";
 import { cwdRequire, cwdRequireCDS, fuzzy, LinkedModel, memorized } from "cds-internal-tool";
 import "colors";
@@ -10,7 +10,7 @@ import { glob } from "glob";
 import { DateTime } from "luxon";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 import path from "path";
-import { MYSQL_DATE_TIME_FORMAT } from "../constants";
+import { DEFAULT_CSV_IDENTITY_CONCURRENCY, MYSQL_DATE_TIME_FORMAT } from "../constants";
 
 export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
   glob(pattern, (err, matches) => {
@@ -58,6 +58,9 @@ const TRANSPORT_CDS_TYPES = [
   "cds.Timestamp",
 ];
 
+/**
+ * ref ../../index.cds
+ */
 const TABLE_CSV_HISTORY = "community_mysql_csv_history";
 
 /**
@@ -90,6 +93,8 @@ export async function migrateData(
     return;
   }
 
+  logger.debug("csv migration list", csvList);
+
   const connection = await createConnection(credential as ConnectionOptions);
 
   try {
@@ -99,12 +104,12 @@ export async function migrateData(
     logger.info("start provisioning data with CSV files");
 
     const [csvHistory] = await connection
-      .query(`SHOW TABLES LIKE '${TABLE_CSV_HISTORY}'`) as any as Array<any>;
+      .query(`SHOW TABLES LIKE '${TABLE_CSV_HISTORY}'`) as Array<any>;
 
     const withHistoryTable = csvHistory?.length > 0;
 
     if (!withHistoryTable) {
-      logger.info("csv history table is not ready, skip duplicated migration check");
+      logger.info("csv history table is not ready, cannot check CSV content is migrated before");
     }
 
     for (const csvFile of csvList) {
@@ -216,30 +221,7 @@ export async function migrateData(
           "columns", transformColumnsIndex,
           "in entity", entityName.green, "need to be transformed"
         );
-        for (const entry of (rows as Array<Array<any>>)) {
-          for (const transformColumn of transformColumnsIndex) {
-            if (entry[transformColumn.index]?.trim?.().length > 0) {
-              switch (transformColumn.type) {
-                // REVISIT: if binary as where condition, here will have issue.
-                case "cds.Binary": case "cds.LargeBinary":
-                  entry[transformColumn.index] = Buffer.from(entry[transformColumn.index], "base64");
-                  break;
-                case "cds.Integer":
-                  entry[transformColumn.index] = parseInt(entry[transformColumn.index], 10);
-                  break;
-                case "cds.DateTime": case "cds.Timestamp":
-                  entry[transformColumn.index] = DateTime
-                    .fromISO(entry[transformColumn.index], { setZone: true })
-                    .toUTC()
-                    .toFormat(MYSQL_DATE_TIME_FORMAT);
-                  break;
-                default:
-                  break;
-              }
-
-            }
-          }
-        }
+        transform(rows, transformColumnsIndex);
       }
 
       if (entires.length > 1) {
@@ -258,43 +240,51 @@ export async function migrateData(
         continue;
       }
 
-      const entryToWhereExpr = (entry: Array<string>) => {
-        const keyValues = [];
-
-        for (const existedKeyIndex of existedKeysIndex) {
-          keyValues.push(`${headers[existedKeyIndex]} = '${entry[existedKeyIndex]}'`);
-        }
-
-        return keyValues.join(" AND ");
-      };
-
-
+      /**
+       * not existed records, insert with batch
+       */
       const batchInserts = [];
-      if (isPreDeliveryModel) {
-        headers.push("PreDelivery");
-      }
 
-      const sem = new Semaphore(10); // REVISIT: parameterized
+      if (isPreDeliveryModel) { headers.push("PreDelivery"); }
+
+      const sem = new Semaphore(
+        cds.env.get("requires.db.csv.identity.concurrency") ??
+        DEFAULT_CSV_IDENTITY_CONCURRENCY
+      ); // REVISIT: parameterized
 
       await Promise.all(
         rows.map(
           entry => sem.use(async () => {
-            const keyExpr = entryToWhereExpr(entry);
+            const { expr, values } = entryToWhereExpr(entry, headers, existedKeysIndex);
 
             const [[{ EXIST }]] = await connection
-              .query(`SELECT COUNT(1) as EXIST FROM ${tableName} WHERE ${keyExpr}`) as any;
+              .query(`SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`, [tableName, values]) as any;
 
             if (EXIST === 0) {
               if (isPreDeliveryModel) { entry.push(true as any); }
               batchInserts.push(entry);
             }
             else {
-              // REVISIT: parameter: UPDATE or SKIP
-              logger.debug(
-                "entity", entityName,
-                "with key", keyExpr,
-                "has existed, skip process"
-              );
+
+              if (cds.env.get("requires.db.csv.exist.update") === true) {
+                const { expr: updateExprs, values: updateValues } = entryToUpdateExpr(entry, headers, existedKeysIndex);
+                const updateExpr = updateExprs.join(", ");
+                await connection.query(
+                  `UPDATE ?? SET ${updateExpr} WHERE ${expr}`,
+                  [tableName, ...updateValues, ...values]
+                );
+              }
+              else {
+                // REVISIT: parameter: UPDATE or SKIP
+                logger.debug(
+                  "entity", entityName,
+                  "where", expr,
+                  "values", values,
+                  "has existed, skip process"
+                );
+              }
+
+
             }
           })
         )
@@ -309,7 +299,7 @@ export async function migrateData(
         logger.debug("batch inserts:", entityName, "with", batchInserts.length, "records");
 
         const [{ affectedRows }] = await connection
-          .query(`INSERT INTO ${tableName} (${headerList}) VALUES ?`, [batchInserts]) as any;
+          .query(`INSERT INTO ?? (${headerList}) VALUES ?`, [tableName, batchInserts]) as any;
 
         if (affectedRows !== batchInserts.length) {
           logger.warn(
@@ -339,3 +329,68 @@ export async function migrateData(
   logger.info("CSV provision data migration successful");
 
 }
+
+function entryToUpdateExpr(
+  entry: string[],
+  headers: string[],
+  existedKeysIndex: number[],
+): { expr: Array<string>; values: Array<any>; } {
+  return headers
+    .reduce((pre, cur, index) => {
+      if (!existedKeysIndex.includes(index)) {
+        // not keys
+        pre.expr.push(`${cur} = ?`);
+        pre.values.push(entry[index]);
+      }
+      return pre;
+    }, { expr: [], values: [] });
+}
+
+function entryToWhereExpr(entry: Array<string>, headers: Array<string>, existedKeysIndex: Array<number>) {
+  const expr = [];
+  const values = [];
+
+  for (const existedKeyIndex of existedKeysIndex) {
+    expr.push(`${headers[existedKeyIndex]} = ?`);
+    values.push(entry[existedKeyIndex]);
+  }
+
+  return {
+    expr: expr.join(" AND "),
+    values,
+  };
+};
+
+/**
+ * transport type
+ * @private
+ * @param rows 
+ * @param transformColumnsIndex 
+ */
+function transform(rows: string[][], transformColumnsIndex: { index: number; type: string; columnName: string; }[]) {
+  for (const entry of (rows as Array<Array<any>>)) {
+    for (const transformColumn of transformColumnsIndex) {
+      if (entry[transformColumn.index]?.trim?.().length > 0) {
+        switch (transformColumn.type) {
+          // REVISIT: if binary as where condition, here will have issue.
+          case "cds.Binary": case "cds.LargeBinary":
+            entry[transformColumn.index] = Buffer.from(entry[transformColumn.index], "base64");
+            break;
+          case "cds.Integer":
+            entry[transformColumn.index] = parseInt(entry[transformColumn.index], 10);
+            break;
+          case "cds.DateTime": case "cds.Timestamp":
+            entry[transformColumn.index] = DateTime
+              .fromISO(entry[transformColumn.index], { setZone: true })
+              .toUTC()
+              .toFormat(MYSQL_DATE_TIME_FORMAT);
+            break;
+          default:
+            break;
+        }
+
+      }
+    }
+  }
+}
+
