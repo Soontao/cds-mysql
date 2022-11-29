@@ -87,10 +87,22 @@ export interface MysqlDatabaseOptions {
      * default value `true`
      */
     migrate?: boolean;
+
     identity?: {
+      /**
+       * `cds-mysql` will parallel to query record by keys,
+       *  to check the record is existed or not
+       */
       concurrency?: number
     }
     exist?: {
+      /**
+       * when `cds-mysql` found the record is existed in database
+       * 
+       * update or skip that. 
+       * 
+       * default value `false`
+       */
       update?: boolean;
     }
   };

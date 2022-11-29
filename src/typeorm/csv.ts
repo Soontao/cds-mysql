@@ -63,6 +63,7 @@ const TRANSPORT_CDS_TYPES = [
  */
 const TABLE_CSV_HISTORY = "community_mysql_csv_history";
 
+const TABLE_COLUMN_PRE_DELIVERY = "PreDelivery";
 /**
  * migrate CSV data
  * 
@@ -101,7 +102,7 @@ export async function migrateData(
 
     await connection.beginTransaction();
 
-    logger.info("start provisioning data with CSV files");
+    logger.info("start provisioning data with ", csvList.length, " CSV files");
 
     const [csvHistory] = await connection
       .query(`SHOW TABLES LIKE '${TABLE_CSV_HISTORY}'`) as Array<any>;
@@ -109,7 +110,7 @@ export async function migrateData(
     const withHistoryTable = csvHistory?.length > 0;
 
     if (!withHistoryTable) {
-      logger.info("csv history table is not ready, cannot check CSV content is migrated before");
+      logger.warn("csv history table is not ready, cannot check CSV content is migrated before");
     }
 
     for (const csvFile of csvList) {
@@ -160,6 +161,9 @@ export async function migrateData(
         }
       }
 
+      /**
+       * the entity has `preDelivery` `aspect` or not
+       */
       const isPreDeliveryModel = (
         entityModel.includes?.includes?.("preDelivery") &&
         entityModel.elements?.["PreDelivery"]?.type === "cds.Boolean"
@@ -191,6 +195,15 @@ export async function migrateData(
         return element?.name;
       });
 
+      // if entity has preDelivery aspect but not provide PreDelivery column value 
+      if (
+        isPreDeliveryModel &&
+        !headers.includes(TABLE_COLUMN_PRE_DELIVERY)
+      ) {
+        headers.push(TABLE_COLUMN_PRE_DELIVERY);
+        rows = rows.map(row => [...row, true]) as any;
+      }
+
       const transformColumnsIndex = Object
         .values(entityModel.elements)
         .filter(ele => TRANSPORT_CDS_TYPES.includes(ele.type))
@@ -201,19 +214,18 @@ export async function migrateData(
           columnName: ele.name,
         }));
 
-
       const existedKeysIndex = headers
         .filter(header => keys.includes(header))
         .map(existedKey => headers.indexOf(existedKey));
 
       if (existedKeysIndex.length !== keys.length) {
-        logger.warn(
+        logger.error(
           "file", csvFile.yellow,
-          "do not provide enough primary keys",
+          "does not provide enough primary keys",
           keys,
           "could not provision CSV, skip process"
         );
-        continue;
+        throw cds.error("CSV file format wrong");
       }
 
       if (transformColumnsIndex.length > 0) {
@@ -245,8 +257,6 @@ export async function migrateData(
        */
       const batchInserts = [];
 
-      if (isPreDeliveryModel) { headers.push("PreDelivery"); }
-
       const sem = new Semaphore(
         cds.env.get("requires.db.csv.identity.concurrency") ??
         DEFAULT_CSV_IDENTITY_CONCURRENCY
@@ -261,11 +271,9 @@ export async function migrateData(
               .query(`SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`, [tableName, values]) as any;
 
             if (EXIST === 0) {
-              if (isPreDeliveryModel) { entry.push(true as any); }
               batchInserts.push(entry);
             }
             else {
-
               if (cds.env.get("requires.db.csv.exist.update") === true) {
                 const { expr: updateExprs, values: updateValues } = entryToUpdateExpr(entry, headers, existedKeysIndex);
                 const updateExpr = updateExprs.join(", ");
@@ -275,7 +283,6 @@ export async function migrateData(
                 );
               }
               else {
-                // REVISIT: parameter: UPDATE or SKIP
                 logger.debug(
                   "entity", entityName,
                   "where", expr,
@@ -283,7 +290,6 @@ export async function migrateData(
                   "has existed, skip process"
                 );
               }
-
 
             }
           })
@@ -388,7 +394,6 @@ function transform(rows: string[][], transformColumnsIndex: { index: number; typ
           default:
             break;
         }
-
       }
     }
   }
