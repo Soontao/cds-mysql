@@ -73,10 +73,10 @@ export async function doBeforeEach() {
 }
 
 export async function doAfterAll() {
-  await sleep(100);
+  await sleep(500);
   await cleanDB();
   await cds?.db?.disconnect?.();
-  await sleep(100);
+  await sleep(500);
 }
 
 export const cleanDB = async () => {
