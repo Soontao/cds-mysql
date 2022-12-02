@@ -3,7 +3,6 @@ import { sleep } from "@newdash/newdash";
 import { CSN, cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
 import { DataSource, DataSourceOptions } from "typeorm";
-import { v4 } from "uuid";
 import { MYSQL_CHARSET } from "../src/constants";
 import { formatTenantDatabaseName } from "../src/tenant";
 
@@ -29,7 +28,7 @@ export async function deploy(csn: CSN) {
   await cds.db.deploy(csn);
 }
 
-export const createRandomName = () => v4().split("-").pop();
+export const createRandomName = () => cwdRequireCDS().utils.uuid().split("-").pop();
 
 export const setupEnv = () => {
   const cds = cwdRequireCDS();
