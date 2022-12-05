@@ -1,5 +1,9 @@
 import { uniq } from "@newdash/newdash/uniq";
-import { CSN, cwdRequire, cwdRequireCDS, EntityDefinition, EventContext, LinkedModel, Logger } from "cds-internal-tool";
+import {
+  cds_xt_DeploymentService, CSN, cwdRequire,
+  cwdRequireCDS, EntityDefinition, EventContext,
+  LinkedModel, Logger
+} from "cds-internal-tool";
 import "colors";
 import { createPool, Options as PoolOptions, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
@@ -12,6 +16,7 @@ import {
   MYSQL_COLLATE,
   TENANT_DEFAULT
 } from "./constants";
+import { _impl_deployment_service } from "./deploy-service";
 import execute from "./execute";
 import { MysqlDatabaseOptions, ReleasableConnection } from "./types";
 import { checkCdsVersion } from "./utils";
@@ -292,8 +297,12 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @param tenant 
    * @returns 
    */
-  deployCSV(tenant?: string, csvList?: Array<string>) {
+  public deployCSV(tenant?: string, csvList?: Array<string>) {
     return this._tool.deployCSV(tenant, csvList);
+  }
+
+  public implDeploymentService(ds: cds_xt_DeploymentService) {
+    return _impl_deployment_service(ds);
   }
 
 
