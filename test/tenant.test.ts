@@ -1,4 +1,3 @@
-// @ts-nocheck
 
 import { doAfterAll } from "./utils";
 import { setupTest } from "cds-internal-tool";
@@ -28,7 +27,7 @@ describe("Tenant Test Suite", () => {
   it("should support subscribe tenant", async () => {
     await client.put("/-/cds/saas-provisioning/tenant/t192", {}, {
       auth: {
-        username: "yves"
+        username: "yves", password: ""
       }
     });
   });
@@ -41,7 +40,7 @@ describe("Tenant Test Suite", () => {
       },
       {
         auth: {
-          username: "yves"
+          username: "yves", password: ""
         }
       }
     );
@@ -50,7 +49,7 @@ describe("Tenant Test Suite", () => {
   it("should support unsubscribe tenant", async () => {
     await client.delete("/-/cds/saas-provisioning/tenant/t192", {
       auth: {
-        username: "yves"
+        username: "yves", password: ""
       }
     });
   });

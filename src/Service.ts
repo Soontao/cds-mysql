@@ -1,6 +1,6 @@
 import { uniq } from "@newdash/newdash/uniq";
 import {
-  cds_xt_DeploymentService, CSN, cwdRequire,
+  CSN, cwdRequire,
   cwdRequireCDS, EntityDefinition, EventContext,
   LinkedModel, Logger
 } from "cds-internal-tool";
@@ -301,7 +301,14 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     return this._tool.deployCSV(tenant, csvList);
   }
 
-  public implDeploymentService(ds: cds_xt_DeploymentService) {
+  /**
+   * implement deployment service
+   * 
+   * @internal
+   * @param ds 
+   * @returns 
+   */
+  public implDeploymentService(ds: any) {
     return _impl_deployment_service(ds);
   }
 

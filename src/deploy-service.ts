@@ -1,9 +1,9 @@
-import { cds_xt_DeploymentService, cwdRequireCDS, Request } from "cds-internal-tool";
+import { BuiltInServices, cwdRequireCDS, Request } from "cds-internal-tool";
 import "colors";
 import type { MySQLDatabaseService } from "./Service";
 
 
-export async function _impl_deployment_service(ds: cds_xt_DeploymentService) {
+export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.DeploymentService"]) {
   const cds = cwdRequireCDS();
   const logger = cds.log("mtx");
   const CDS_XT_TENANTS = "cds.xt.Tenants";
@@ -13,7 +13,7 @@ export async function _impl_deployment_service(ds: cds_xt_DeploymentService) {
 
   ds.on("subscribe", async (req) => {
     const { tenant: t, options, metadata } = req.data;
-    await (ds as any).deploy(t, options);
+    await ds.deploy(t, options);
     if (t === tool.getAdminTenantName()) { return; }
     await cds.tx({ tenant: tool.getAdminTenantName() }, tx => tx.run(
       db.upsert(CDS_XT_TENANTS).entries(
@@ -30,7 +30,7 @@ export async function _impl_deployment_service(ds: cds_xt_DeploymentService) {
     await db.disconnect(t);
     await cds.tx(
       { tenant: tool.getAdminTenantName() },
-      tx => tx.run(DELETE.from(CDS_XT_TENANTS).where({ ID: { "=": t } }))
+      tx => tx.delete(CDS_XT_TENANTS, { ID: { "=": t } })
     );
   });
 
@@ -44,10 +44,10 @@ export async function _impl_deployment_service(ds: cds_xt_DeploymentService) {
   ds.on(["upgrade", "extend"], async function (req) {
     const { tenant: t } = req.data;
     logger.info(req.event, "for tenant", t.green);
-    return (ds as any).deploy(t, { csn: await tool.csn4(t) });
+    return ds.deploy(t, { csn: await tool.csn4(t) });
   });
 
-  (ds as any).on("getTables", (req: Request) => tool.getTables(req.data.tenant));
+  ds.on("getTables", (req: Request) => tool.getTables(req.data.tenant));
 
   await tool.deployT0();
 
