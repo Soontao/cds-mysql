@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.4-2](https://github.com/Soontao/cds-mysql/compare/v6.3.4-1...v6.3.4-2) (2022-12-06)
+
+
+### Bug Fixes
+
+* better support for mtxs ([1ea5c67](https://github.com/Soontao/cds-mysql/commit/1ea5c672260b19a6cdfa3f24950afd7c602e01da))
+* csv migration ([8ccfdd6](https://github.com/Soontao/cds-mysql/commit/8ccfdd6b78a300bb6cd625208ff484b4ae7a6383))
+* **deps:** update dependency cds-internal-tool to v1.6.1 ([c598bca](https://github.com/Soontao/cds-mysql/commit/c598bcafb2d368d0cbeb000663cff9db926d251c))
+* **deps:** update dependency cds-internal-tool to v1.6.12 ([789acdb](https://github.com/Soontao/cds-mysql/commit/789acdbada2b4db8985c8b68c9acfec0a9e54344))
+* **deps:** update dependency typeorm to v0.3.11 ([b41d16f](https://github.com/Soontao/cds-mysql/commit/b41d16f937cfbdb3c555f049ac11a2bae39d3681))
+* type for logger ([cc27358](https://github.com/Soontao/cds-mysql/commit/cc27358c8f3b4ff63db4903477a820fe00c50bc7))
+* type update ([fc55c2c](https://github.com/Soontao/cds-mysql/commit/fc55c2cdb95ccaf0716d3e11a21eaddbeb79edd1))
+
 ### [6.3.4-1](https://github.com/Soontao/cds-mysql/compare/v6.3.4-0...v6.3.4-1) (2022-11-29)
 
 
