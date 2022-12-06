@@ -1,6 +1,6 @@
 import type { Connection } from "mysql2/promise";
 import type { INSERT } from "cds-internal-tool/lib/types/ql";
-import type { Options as PoolOptions } from "generic-pool";
+import type { Options as PoolOptions, Pool } from "generic-pool";
 
 export declare class UPSERT<T = any> extends INSERT<T> {
 
@@ -39,11 +39,8 @@ export interface MySQLCredential {
   }
 }
 
-export type ReleasableConnection = Connection & {
-  /**
-   * release connection to pool
-   */
-  _release: () => void;
+export type ConnectionWithPool = Connection & {
+  _pool: Pool<Connection>;
 }
 
 export interface MysqlDatabaseOptions {

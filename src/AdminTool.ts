@@ -345,7 +345,7 @@ export class AdminTool {
   }
 
   /**
-   * get tables of tenant
+   * get (lower case) tables of target tenant
    * 
    * @param tenant 
    * @returns 

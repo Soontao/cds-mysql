@@ -10,6 +10,7 @@ import { Connection, createConnection } from "mysql2/promise";
 import { AdminTool } from "./AdminTool";
 import {
   CONNECTION_IDLE_CHECK_INTERVAL,
+  DEFAULT_CONNECTION_ACQUIRE_TIMEOUT,
   DEFAULT_CONNECTION_IDLE_TIMEOUT,
   DEFAULT_TENANT_CONNECTION_POOL_SIZE,
   MAX_QUEUE_SIZE,
@@ -18,18 +19,18 @@ import {
 } from "./constants";
 import { _impl_deployment_service } from "./deploy-service";
 import execute from "./execute";
-import { MysqlDatabaseOptions, ReleasableConnection } from "./types";
+import { ConnectionWithPool, MysqlDatabaseOptions } from "./types";
 import { checkCdsVersion } from "./utils";
 
 const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   min: 1,
+  acquireTimeoutMillis: DEFAULT_CONNECTION_ACQUIRE_TIMEOUT,
   max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
   maxWaitingClients: MAX_QUEUE_SIZE,
   evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
   idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
   testOnBorrow: true,
 };
-
 
 /**
  * MySQL Database Adapter for SAP CAP Framework
@@ -104,6 +105,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     return i;
   };
 
+  /**
+   * initialize function
+   */
   async init() {
     await super.init();
     this._registerEagerDeploy();
@@ -139,33 +143,32 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
         eager.push(...tenantsFromUsers);
       }
 
-      eager = uniq(eager);
+      eager = uniq(eager) as Array<string>;
 
       this._logger.info("eager deploy tenants", eager);
 
-      if (eager.length > 0) {
-        cds.once("served", async () => {
-          const { "cds.xt.DeploymentService": ds } = cds.services;
-          for (const tenant of eager) {
-            if (ds !== undefined) {
-              await ds.tx((tx: any) => tx.subscribe(
-                tenant,
-                {
-                  subscribedTenantId: tenant,
-                  eventType: "CREATE"
-                }
-              ));
-            }
-            else {
-              await this._tool.syncTenant(tenant);
-            }
-
-          }
-        });
+      if (eager.length === 0) {
+        return;
       }
 
+      cds.once("served", async () => {
+        return Promise.all((eager as Array<string>).map(tenant => this._initializeTenant(tenant)));
+      });
 
     }
+  }
+
+  private async _initializeTenant(tenant: string = TENANT_DEFAULT) {
+    const { "cds.xt.DeploymentService": ds } = cwdRequireCDS().services;
+    if (ds === undefined) {
+      await this._tool.syncTenant(tenant);
+      return;
+    }
+    await ds.tx((tx) => tx.subscribe(
+      tenant,
+      { subscribedTenantId: tenant, eventType: "CREATE" }
+    ));
+    return;
   }
 
   /**
@@ -242,16 +245,17 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @override
    * @param tenant_id tenant id
    */
-  public async acquire(tenant_id: string): Promise<ReleasableConnection>;
+  public async acquire(tenant_id: string): Promise<ConnectionWithPool>;
 
-  public async acquire(context: EventContext): Promise<ReleasableConnection>;
+  public async acquire(context: EventContext): Promise<ConnectionWithPool>;
 
   public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg?.user?.tenant) ?? TENANT_DEFAULT;
     const pool = await this.getPool(tenant);
+    // REVISIT: priority maybe for http request
+    // REVISIT: retry connection
     const conn = await pool.acquire();
-    conn["_release"] = () => pool.release(conn);
-    return conn;
+    return Object.assign(conn, { _pool: pool });
   }
 
   /**
@@ -260,9 +264,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @param conn
    * @override
    */
-  public async release(conn: any) {
-    if (conn._release && typeof conn._release === "function") {
-      await conn._release();
+  public async release(conn: ConnectionWithPool) {
+    if (typeof conn?._pool?.release === "function") {
+      await conn._pool.release(conn);
     }
   }
 
@@ -270,24 +274,29 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   /**
    * disconnect from database, free all connections of all tenants
    * 
-   * @param tenant optional tenant id, if without that, close all pools 
+   * @param tenant optional tenant id, if with `*`, close all pools 
    */
-  public async disconnect(tenant?: string) {
-    if (tenant !== undefined) {
+  public async disconnect(tenant: "*" | string = TENANT_DEFAULT) {
+    if (tenant !== "*") {
       if (this._pools.has(tenant)) {
-        this._logger.info("disconnect mysql database for tenant", tenant);
+        this._logger.info("disconnect mysql database for tenant", tenant.green);
         const pool = await this._pools.get(tenant);
+        this._pools.delete(tenant);
         await pool.drain();
         await pool.clear();
       }
       return;
     }
+
     this._logger.info("disconnect mysql database for all tenants");
-    for (let pool of this._pools.values()) {
-      pool = await pool;
-      await pool.drain();
-      await pool.clear();
-    }
+    const pools = await Promise.all(Array.from(this._pools.values()).map(async pool => await pool));
+    this._pools.clear();
+    await Promise.all(
+      pools.map(async pool => {
+        await pool.drain();
+        await pool.clear();
+      })
+    );
 
   }
 
@@ -298,6 +307,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @returns 
    */
   public deployCSV(tenant?: string, csvList?: Array<string>) {
+    this._logger.debug("deploy csv for tenant", tenant, "with csv", csvList);
     return this._tool.deployCSV(tenant, csvList);
   }
 
