@@ -61,7 +61,7 @@ const TRANSPORT_CDS_TYPES = [
 /**
  * ref ../../index.cds
  */
-const TABLE_CSV_HISTORY = "community_mysql_csv_history";
+const TABLE_CSV_HISTORY = "cds_mysql_csv_history";
 
 const TABLE_COLUMN_PRE_DELIVERY = "PreDelivery";
 /**

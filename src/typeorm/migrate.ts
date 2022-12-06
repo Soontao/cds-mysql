@@ -26,7 +26,26 @@ const MigrationHistory = new EntitySchema({
   }
 });
 
-const CDSMysqlMetaTables = [MigrationHistory];
+const CSVMigrationHistory = new EntitySchema({
+  name: "cds_mysql_csv_history",
+  tableName: "cds_mysql_csv_history",
+  columns: {
+    entity: {
+      name: "ENTITY",
+      type: "varchar",
+      length: 64,
+      primary: true,
+    },
+    hash: {
+      name: "HASH",
+      type: "varchar",
+      length: 64,
+      nullable: false,
+    },
+  }
+});
+
+const CDSMysqlMetaTables = [MigrationHistory, CSVMigrationHistory];
 
 /**
  * sha256 for entities
@@ -81,7 +100,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
     if (dryRun === false && !isMetaMigration) {
       const [record] = await ds.query("SELECT HASH, MIGRATED_AT FROM cds_mysql_migration_history ORDER BY MIGRATED_AT DESC LIMIT 1 FOR UPDATE");
       if (record?.HASH === entityHash) {
-        logger.info("database with hash", entityHash.green, "already be migrated at", String(record.MIGRATED_AT).green, "skip processing");
+        logger.info("database with hash", entityHash.green, "was already migrated at", String(record.MIGRATED_AT).green, "skip processing");
         return;
       }
       await ds.createQueryBuilder().insert().into(MigrationHistory).values({ hash: entityHash }).execute();

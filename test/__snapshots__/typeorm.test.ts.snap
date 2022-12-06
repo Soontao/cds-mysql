@@ -527,29 +527,6 @@ exports[`TypeORM Test Suite should support extensions for csv app 1`] = `
     "@instanceof": Symbol(EntitySchema),
     "options": {
       "columns": {
-        "entity": {
-          "length": 64,
-          "name": "entity",
-          "nullable": false,
-          "primary": true,
-          "type": "nvarchar",
-        },
-        "hash": {
-          "length": 64,
-          "name": "hash",
-          "nullable": true,
-          "type": "nvarchar",
-        },
-      },
-      "name": "community_mysql_csv_history",
-      "synchronize": true,
-      "tableName": "community_mysql_csv_history",
-    },
-  },
-  EntitySchema {
-    "@instanceof": Symbol(EntitySchema),
-    "options": {
-      "columns": {
         "Active": {
           "name": "Active",
           "nullable": true,
