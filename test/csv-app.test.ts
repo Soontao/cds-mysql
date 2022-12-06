@@ -8,7 +8,12 @@ describe("CSV App Test Suite", () => {
 
   const client = setupTest(__dirname, "./resources/csv-app");
 
+  const cds = cwdRequireCDS();
+
+  const { SELECT } = cds.ql;
+
   afterAll(doAfterAll);
+
 
   it("should support deploy by API", async () => {
     const db: MySQLDatabaseService = cwdRequireCDS().db as any;
