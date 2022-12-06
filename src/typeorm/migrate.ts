@@ -12,11 +12,16 @@ const MigrationHistory = new EntitySchema({
   name: "cds_mysql_migration_history",
   tableName: "cds_mysql_migration_history",
   columns: {
+    id: {
+      primary: true,
+      type: "bigint",
+      generated: "increment",
+    },
     hash: {
       name: "HASH",
       type: "varchar",
       length: 64,
-      primary: true,
+      nullable: false,
     },
     migratedAt: {
       name: "MIGRATED_AT",

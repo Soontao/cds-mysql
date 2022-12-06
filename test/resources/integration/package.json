@@ -16,9 +16,26 @@
           }
         }
       },
+      "extensibility": true,
       "cds.xt.SaasProvisioningService": true,
       "cds.xt.ModelProviderService": true,
-      "cds.xt.ExtensibilityService": true,
+      "cds.xt.ExtensibilityService": {
+        "element-prefix": [
+          "x_",
+          "xx_",
+          "z_",
+          "zz_"
+        ],
+        "extension-allowlist": [
+          {
+            "for": [
+              "test.int"
+            ],
+            "kind": "entity",
+            "new-fields": 50
+          }
+        ]
+      },
       "cds.xt.DeploymentService": true,
       "kinds": {
         "cds.xt.DeploymentService": {
@@ -42,7 +59,10 @@
             ]
           },
           "theo-on-tenant-2": {
-            "tenant": "e5f878d5-7985-407b-a1cb-87a8716f1904"
+            "tenant": "e5f878d5-7985-407b-a1cb-87a8716f1904",
+            "roles": [
+              "cds.ExtensionDeveloper"
+            ]
           }
         }
       }
