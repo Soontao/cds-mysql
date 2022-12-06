@@ -52,7 +52,7 @@ const TYPE_POST_CONVERSION_MAP = new Map([
   ["cds.Date", convertToDateString],
   ["cds.Integer64", convertInt64ToString],
   ["cds.DateTime", convertToISONoMilliseconds],
-  ["cds.Timestamp", convertToISOTime]
+  ["cds.Timestamp", convertToISOTime],
 ]);
 
 if (cwdRequireCDS().env.features.bigjs) {
