@@ -49,3 +49,8 @@ entity ComplexTypeEntity : incrementID, preDelivery {
   GlobalUUID : UUID;
   BlobDoc    : Binary;
 }
+
+entity City : cuid {
+  key Name : String(25);
+      Size : Decimal(18, 3)
+}

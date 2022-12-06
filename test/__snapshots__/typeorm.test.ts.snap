@@ -527,6 +527,55 @@ exports[`TypeORM Test Suite should support extensions for csv app 1`] = `
     "@instanceof": Symbol(EntitySchema),
     "options": {
       "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "nvarchar",
+        },
+        "Name": {
+          "length": 25,
+          "name": "Name",
+          "nullable": false,
+          "primary": true,
+          "type": "nvarchar",
+        },
+        "Size": {
+          "name": "Size",
+          "nullable": true,
+          "precision": 18,
+          "scale": 3,
+          "type": "decimal",
+        },
+      },
+      "name": "test_resources_csv_app_db_City",
+      "synchronize": true,
+      "tableName": "test_resources_csv_app_db_City",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_csv_app_db_City",
+      ],
+      "expression": "SELECT
+  City_0.ID,
+  City_0.Name,
+  City_0.Size
+FROM test_resources_csv_app_db_City AS City_0;",
+      "name": "test_resources_csv_app_srv_AppService_Cities",
+      "synchronize": true,
+      "tableName": "test_resources_csv_app_srv_AppService_Cities",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
         "Active": {
           "name": "Active",
           "nullable": true,

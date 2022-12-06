@@ -267,7 +267,7 @@ export async function migrateData(
             const { expr, values } = entryToWhereExpr(entry, headers, existedKeysIndex);
 
             const [[{ EXIST }]] = await connection
-              .query(`SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`, [tableName, values]) as any;
+              .query(`SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`, [tableName, ...values]) as any;
 
             if (EXIST === 0) {
               batchInserts.push(entry);

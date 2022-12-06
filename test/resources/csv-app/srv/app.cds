@@ -20,4 +20,5 @@ service AppService {
   };
 
   entity Areas      as projection on db.Area;
+  entity Cities     as projection on db.City;
 }
