@@ -92,7 +92,7 @@ export class AdminTool {
 
   constructor() {
     this._logger = cwdRequireCDS().log("db|mysql");
-    this._options = cwdRequireCDS().requires.db;
+    this._options = cwdRequireCDS().requires.db as any;
   }
 
   /**
