@@ -1,8 +1,10 @@
 import { CSN, cwdRequire } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
+import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+
 const { UpdateBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 
 export class CustomUpdateBuilder extends UpdateBuilder {
@@ -21,6 +23,11 @@ export class CustomUpdateBuilder extends UpdateBuilder {
   get ExpressionBuilder() {
     Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
     return CustomExpressionBuilder;
+  }
+
+  get FunctionBuilder() {
+    Object.defineProperty(this, "FunctionBuilder", { value: CustomFunctionBuilder });
+    return CustomFunctionBuilder;
   }
 
   /**
