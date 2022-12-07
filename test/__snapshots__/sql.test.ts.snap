@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK query 1`] = `
+exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK query: default 1`] = `
 {
   "sql": "SELECT * FROM test_int_People WHERE Name = ? LOCK IN SHARE MODE",
   "values": [
@@ -9,7 +9,7 @@ exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK que
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query 1`] = `
+exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query: default 1`] = `
 {
   "sql": "SELECT * FROM test_int_People WHERE Name = ? FOR UPDATE",
   "values": [
@@ -18,7 +18,7 @@ exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query 1
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a complex SELECT projection 1`] = `
+exports[`SQL Factory Test Suite should support build a complex SELECT projection: default 1`] = `
 {
   "sql": "SELECT Name, Age, RegisterDate FROM test_int_People WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
   "values": [
@@ -29,9 +29,14 @@ exports[`SQL Factory Test Suite should support build a complex SELECT projection
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_int_People"`;
+exports[`SQL Factory Test Suite should support build a simple SELECT query: default 1`] = `
+{
+  "sql": "SELECT * FROM test_int_People",
+  "values": [],
+}
+`;
 
-exports[`SQL Factory Test Suite should support insert columns 1`] = `
+exports[`SQL Factory Test Suite should support insert columns: default 1`] = `
 {
   "sql": "INSERT INTO test_int_People ( ID, Name, Age, RegisterDate , createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
   "values": [
@@ -39,15 +44,15 @@ exports[`SQL Factory Test Suite should support insert columns 1`] = `
     "Theo",
     15,
     "2022-11-17",
-    "2022-11-22T14:54:59.340Z",
-    "ANONYMOUS",
-    "2022-11-22T14:54:59.340Z",
-    "ANONYMOUS",
+    "2022-11-22 14:54:59",
+    "theo.sun@not.existed.com",
+    "2022-11-22 14:54:59",
+    "theo.sun@not.existed.com",
   ],
 }
 `;
 
-exports[`SQL Factory Test Suite should support insert with select query 1`] = `
+exports[`SQL Factory Test Suite should support insert with select query: default 1`] = `
 {
   "sql": "INSERT INTO b SELECT * FROM a",
   "values": [],
@@ -64,6 +69,13 @@ exports[`SQL Factory Test Suite should support insert with select query: with co
 exports[`SQL Factory Test Suite should support insert with select query: with condition 1`] = `
 {
   "sql": "INSERT INTO b SELECT * FROM a WHERE b = 1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support query with aggregation: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "total" FROM t1",
   "values": [],
 }
 `;
@@ -89,9 +101,111 @@ exports[`SQL Factory Test Suite should support select for update: share lock 1`]
 }
 `;
 
-exports[`SQL Factory Test Suite should support select with join 1`] = `
+exports[`SQL Factory Test Suite should support select where exists: default 1`] = `
+{
+  "sql": "SELECT * FROM Authors a WHERE EXISTS ( SELECT * FROM Books WHERE author_ID = a.ID )",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with complex where: default 1`] = `
+{
+  "sql": "SELECT * FROM Foo WHERE name LIKE ? AND ( kind IN ( ? , ? ) OR ratio BETWEEN 0 AND 10 OR stock >= 25 )",
+  "values": [
+    "%foo%",
+    "k1",
+    "k2",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with groupBy: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "total", c1, c2 FROM foo GROUP BY c1, c2",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with join: default 1`] = `
 {
   "sql": "SELECT * FROM a INNER JOIN b ON a.a = b.a",
   "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with order by and limit: default 1`] = `
+{
+  "sql": "SELECT * FROM foo LIMIT 10 OFFSET 5",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with order by and limit: default 2`] = `
+{
+  "sql": "SELECT * FROM boo ORDER BY c1 ASC LIMIT 5 OFFSET 3",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with order by and limit: default 3`] = `
+{
+  "sql": "SELECT * FROM boo ORDER BY c2 DESC, c1 ASC LIMIT 5 OFFSET 3",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support update set: where set 1`] = `
+{
+  "sql": "UPDATE test_int_People SET Name = ?, modifiedAt = ?, modifiedBy = ? WHERE ID = ?",
+  "values": [
+    "Name Updated",
+    "2022-11-22 14:54:59",
+    "theo.sun@not.existed.com",
+    "0849d042-73d0-424e-9c6a-99efcb813104",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support update set: with 1`] = `
+{
+  "sql": "UPDATE test_int_People SET Name = ?, modifiedAt = ?, modifiedBy = ? WHERE ID = ?",
+  "values": [
+    "Name Updated",
+    "2022-11-22 14:54:59",
+    "theo.sun@not.existed.com",
+    "0849d042-73d0-424e-9c6a-99efcb813104",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support upsert sql: upsert entries 1`] = `
+{
+  "sql": "INSERT INTO t1 ( c1, c2 ) VALUES ? ON DUPLICATE KEY UPDATE c1 = VALUES(c1), c2 = VALUES(c2)",
+  "values": [
+    [
+      "r1_v1",
+      "r1_v2",
+    ],
+    [
+      "r2_v1",
+      "r2_v2",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support upsert sql: upsert rows 1`] = `
+{
+  "sql": "INSERT INTO t1 ( c1, c2 ) VALUES ? ON DUPLICATE KEY UPDATE c1 = VALUES(c1), c2 = VALUES(c2)",
+  "values": [
+    [
+      "v1",
+      "v2",
+    ],
+    [
+      "r2_v1",
+      "r2_v2",
+    ],
+  ],
 }
 `;

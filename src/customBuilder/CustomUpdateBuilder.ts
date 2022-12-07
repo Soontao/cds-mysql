@@ -1,11 +1,13 @@
-import { CSN, cwdRequire } from "cds-internal-tool";
+import { CSN, cwdRequire, LinkedEntityDefinition } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
 import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
 import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
+import { AnnotatedColumns } from "./types";
 
 const { UpdateBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
+
 
 export class CustomUpdateBuilder extends UpdateBuilder {
   constructor(obj: any, options: any, csn: CSN) {
@@ -35,7 +37,7 @@ export class CustomUpdateBuilder extends UpdateBuilder {
    * @param annotatedColumns 
    * @param entity 
    */
-  _data(annotatedColumns, entity) {
+  _data(annotatedColumns: AnnotatedColumns, entity: LinkedEntityDefinition) {
     const sql = [];
     const data = this._obj.UPDATE.data || {};
     const withObj = this._obj.UPDATE.with || {};
@@ -59,7 +61,7 @@ export class CustomUpdateBuilder extends UpdateBuilder {
         sql.push(`${this._quoteElement(key)} = ?`);
         const columnType = entity?.elements?.[key]?.type;
         // convert value for specific type
-        if (columnType && PRE_CONVERSION_MAP.has(columnType)) {
+        if (columnType && !annotatedColumns.updateAnnotatedColumns.has(key) && PRE_CONVERSION_MAP.has(columnType)) {
           value = PRE_CONVERSION_MAP.get(columnType)(value);
         }
         this._outputObj.values.push(value);

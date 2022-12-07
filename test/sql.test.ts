@@ -3,13 +3,17 @@ import path from "path";
 import { sqlFactory } from "../src/sqlFactory";
 import CustomBuilder from "../src/customBuilder";
 import { QueryObject } from "cds-internal-tool/lib/types/ql";
+import { MySQLDatabaseService } from "../src/Service";
 
 describe("SQL Factory Test Suite", () => {
+
+
+  const { UPSERT } = MySQLDatabaseService;
 
   const cds = cwdRequireCDS();
   let model: CSN;
 
-  const { SELECT, INSERT } = cds.ql;
+  const { SELECT, INSERT, UPDATE } = cds.ql;
 
   beforeAll(async () => {
     model = cds.reflect(cds.compile.for.nodejs(await cds.load(
@@ -21,22 +25,23 @@ describe("SQL Factory Test Suite", () => {
   function toSQL(query: any) {
     return sqlFactory(
       query,
-      { dialect: "sqlite", customBuilder: CustomBuilder, now: "2022-11-22T14:54:59.340Z" },
+      { dialect: "sqlite", customBuilder: CustomBuilder, now: "2022-11-22 14:54:59", user: "theo.sun@not.existed.com" },
       model
     );
   }
 
-  function expect_sql(query: QueryObject) {
-    return expect(toSQL(query));
+  function expect_sql(query: QueryObject, label: string = "default") {
+    return expect(toSQL(query)).toMatchSnapshot(label);
   }
 
   it("should support build a simple SELECT query", () => {
-    const r = toSQL(SELECT.from("test.int.People"));
-    expect(r.sql).toMatchSnapshot();
+    expect_sql(
+      SELECT.from("test.int.People")
+    );
   });
 
   it("should support build a complex SELECT projection", () => {
-    const r = toSQL(
+    expect_sql(
       SELECT.from("test.int.People").columns("Name", "Age", "RegisterDate").where(
         {
           Name: { "=": "Theo" },
@@ -48,52 +53,137 @@ describe("SQL Factory Test Suite", () => {
         }
       )
     );
-    expect(r).toMatchSnapshot();
+  });
+
+  it("should support select with complex where", () => {
+
+    expect_sql(
+      SELECT.from("Foo").where({
+        name: { like: "%foo%" }, and: {
+          kind: { in: ["k1", "k2"] },
+          or: {
+            ratio: { between: 0, and: 10 },
+            or: { stock: { ">=": 25 } }
+          }
+        }
+      })
+    );
+  });
+
+  it("should support select with groupBy", () => {
+    expect_sql(
+      SELECT.from("foo").columns("count(1) as total", "c1", "c2").groupBy("c1", "c2")
+    );
+  });
+
+  it("should support select with order by and limit", () => {
+
+    expect_sql(
+      SELECT.from("foo").limit(10, 5)
+    );
+
+    expect_sql(
+      SELECT.from("boo").orderBy("c1").limit(5, 3)
+    );
+
+    expect_sql(
+      SELECT.from("boo").orderBy("c2 desc", "c1 asc").limit(5, 3)
+    );
+
+  });
+
+  it("should support query with aggregation", () => {
+    expect_sql(
+      SELECT.from("t1").columns("count(1) as total")
+    );
   });
 
 
   it("should support insert columns", () => {
     const ID = "c83b5945-f7c2-48f0-ad6f-0e9b048ab2e3";
-    const r = toSQL(
+    expect_sql(
       INSERT.into("test.int.People").columns("ID", "Name", "Age", "RegisterDate").values(ID, "Theo", 15, "2022-11-17")
     );
-    expect(r).toMatchSnapshot();
   });
 
   it("should support build a SELECT FOR UPDATE query", () => {
-    const r = toSQL(SELECT.from("test.int.People").where({ Name: "Theo" }).forUpdate());
-    expect(r).toMatchSnapshot();
+    expect_sql(
+      SELECT.from("test.int.People").where({ Name: "Theo" }).forUpdate()
+    );
   });
 
   it("should support build a SELECT FOR SHARE LOCK query", () => {
-    const r = toSQL(SELECT.from("test.int.People").where({ Name: "Theo" }).forShareLock());
-    expect(r).toMatchSnapshot();
+    expect_sql(
+      SELECT.from("test.int.People").where({ Name: "Theo" }).forShareLock()
+    );
   });
 
   it("should support select for update", () => {
-    expect(toSQL(SELECT.from("A").where({ a: 1 }).forShareLock()))
-      .toMatchSnapshot("share lock");
-    expect(toSQL(SELECT.from("A").where({ b: 1 }).forUpdate()))
-      .toMatchSnapshot("for update lock");
-    expect(toSQL(SELECT.from("A").where({ c: 2 }).forUpdate({ wait: 10 })))
-      .toMatchSnapshot("for update lock not supported");
+    expect_sql(
+      SELECT.from("A").where({ a: 1 }).forShareLock(),
+      "share lock"
+    );
+
+    expect_sql(
+      SELECT.from("A").where({ b: 1 }).forUpdate(),
+      "for update lock"
+    );
+
+    expect_sql(
+      SELECT.from("A").where({ c: 2 }).forUpdate({ wait: 10 }),
+      "for update lock not supported"
+    );
+
+  });
+
+
+  it("should support select where exists", () => {
+    expect_sql(
+      SELECT.from("Authors as a")
+        .where({ exists: SELECT.from("Books").where("author_ID = a.ID") })
+    );
   });
 
 
   it("should support insert with select query", () => {
-    expect_sql(INSERT.into("b").as(SELECT.from("a"))).toMatchSnapshot();
-    expect_sql(INSERT.into("b").as(SELECT.from("a").where({ b: 1 }))).toMatchSnapshot("with condition");
+    expect_sql(INSERT.into("b").as(SELECT.from("a")));
+    expect_sql(INSERT.into("b").as(SELECT.from("a").where({ b: 1 })), "with condition");
     expect_sql(
       INSERT
         .into("b")
         .columns("c1", "c2")
-        .as(SELECT.from("a").columns("c1", "c2").where({ b: 1 })))
-      .toMatchSnapshot("with columns");
+        .as(SELECT.from("a").columns("c1", "c2").where({ b: 1 })),
+      "with columns"
+    );
 
   });
 
   it("should support select with join", () => {
-    expect_sql((SELECT as any).from("a").join("b").on({ ref: ["a", "a"] }, "=", { ref: ["b", "a"] })).toMatchSnapshot();
+    // @ts-ignore
+    expect_sql(SELECT.from("a").join("b").on({ ref: ["a", "a"] }, "=", { ref: ["b", "a"] }));
+  });
+
+  it("should support upsert sql", () => {
+
+    expect_sql(
+      UPSERT().into("t1").columns("c1", "c2").rows(["v1", "v2"], ["r2_v1", "r2_v2"]), "upsert rows"
+    );
+
+    expect_sql(
+      UPSERT().into("t1").entries({ c1: "r1_v1", c2: "r1_v2" }, { c1: "r2_v1", c2: "r2_v2" }), "upsert entries"
+    );
+
+  });
+
+  it("should support update set", () => {
+    const ID = "0849d042-73d0-424e-9c6a-99efcb813104";
+    expect_sql(
+      UPDATE.entity("test.int.People").where({ ID }).set({ Name: "Name Updated" }), "where set"
+    );
+
+    expect_sql(
+      UPDATE.entity("test.int.People").where({ ID }).with({ Name: "Name Updated" }), "with"
+    );
   });
 
 });

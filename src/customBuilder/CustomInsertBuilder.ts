@@ -45,7 +45,7 @@ export class CustomInsertBuilder extends InsertBuilder {
    * @param options 
    * @returns 
    */
-  private _getValue(
+  _getValue(
     column: string,
     options: { entry: any, flattenColumn: Array<string>, insertAnnotatedColumns: Map<any, any> }
   ) {
