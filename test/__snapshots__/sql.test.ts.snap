@@ -2,7 +2,7 @@
 
 exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK query 1`] = `
 {
-  "sql": "SELECT * FROM test_int_People tmp_table_4 WHERE Name = ? LOCK IN SHARE MODE",
+  "sql": "SELECT * FROM test_int_People WHERE Name = ? LOCK IN SHARE MODE",
   "values": [
     "Theo",
   ],
@@ -11,7 +11,7 @@ exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK que
 
 exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query 1`] = `
 {
-  "sql": "SELECT * FROM test_int_People tmp_table_3 WHERE Name = ? FOR UPDATE",
+  "sql": "SELECT * FROM test_int_People WHERE Name = ? FOR UPDATE",
   "values": [
     "Theo",
   ],
@@ -20,7 +20,7 @@ exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query 1
 
 exports[`SQL Factory Test Suite should support build a complex SELECT projection 1`] = `
 {
-  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People tmp_table_2 WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
+  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
   "values": [
     "Theo",
     "2022-11-17",
@@ -29,7 +29,7 @@ exports[`SQL Factory Test Suite should support build a complex SELECT projection
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_int_People tmp_table_1"`;
+exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_int_People"`;
 
 exports[`SQL Factory Test Suite should support insert columns 1`] = `
 {
@@ -44,5 +44,47 @@ exports[`SQL Factory Test Suite should support insert columns 1`] = `
     "2022-11-22T14:54:59.340Z",
     "ANONYMOUS",
   ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with select query 1`] = `
+{
+  "sql": "INSERT INTO b SELECT * FROM a",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with select query: with columns 1`] = `
+{
+  "sql": "INSERT INTO b ( c1, c2 ) SELECT c1, c2 FROM a WHERE b = 1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with select query: with condition 1`] = `
+{
+  "sql": "INSERT INTO b SELECT * FROM a WHERE b = 1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select for update: for update lock 1`] = `
+{
+  "sql": "SELECT * FROM A WHERE b = 1 FOR UPDATE",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select for update: for update lock not supported 1`] = `
+{
+  "sql": "SELECT * FROM A WHERE c = 2 FOR UPDATE",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select for update: share lock 1`] = `
+{
+  "sql": "SELECT * FROM A WHERE a = 1 LOCK IN SHARE MODE",
+  "values": [],
 }
 `;

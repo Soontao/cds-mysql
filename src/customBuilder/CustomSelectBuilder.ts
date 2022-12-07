@@ -27,8 +27,7 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
-    // @ts-ignore
-    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+    this._quoteElement = enhancedQuotingStyles.plain;
   }
 
   get ReferenceBuilder() {
@@ -71,13 +70,15 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   _fromElement(element: Definition, parent: any, i = 0) {
     // avoid: ER_DERIVED_MUST_HAVE_ALIAS of mysql database 
     // (double brackets without alias for inner table)
-    if (element.as === undefined && parent === undefined) {
-      return super._fromElement(
-        { ...element, as: `tmp_table_${nextTmpNumber()}` },
-        parent,
-        i
-      );
+
+    if (parent !== undefined && typeof parent.join === "string" && parent.args instanceof Array) {
+      for (const expr of parent.args) {
+        if (typeof expr.SELECT === "object" && expr.SELECT?.from?.as === undefined) {
+          expr.SELECT.from.as = `t_${nextTmpNumber()}`;
+        }
+      }
     }
+
     return super._fromElement(element, parent, i);
   }
 };

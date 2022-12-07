@@ -8,7 +8,8 @@ const { InsertBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 export class CustomInsertBuilder extends InsertBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
-    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+    // overwrite quote function
+    this._quoteElement = enhancedQuotingStyles.plain;
   }
 
   get SelectBuilder() {

@@ -27,7 +27,8 @@ export class CustomFunctionBuilder extends FunctionBuilder {
 
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
-    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+    // overwrite quote function
+    this._quoteElement = enhancedQuotingStyles.plain;
   }
 
   get ExpressionBuilder() {
