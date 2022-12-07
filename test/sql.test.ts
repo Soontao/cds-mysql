@@ -92,4 +92,8 @@ describe("SQL Factory Test Suite", () => {
 
   });
 
+  it("should support select with join", () => {
+    expect_sql((SELECT as any).from("a").join("b").on({ ref: ["a", "a"] }, "=", { ref: ["b", "a"] })).toMatchSnapshot();
+  });
+
 });
