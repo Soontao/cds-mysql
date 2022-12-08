@@ -60,6 +60,7 @@ if (cwdRequireCDS().env.features["bigjs"] === true) {
   const convertToBig = (value: any) => new Big(value);
 
   TYPE_POST_CONVERSION_MAP.set("cds.Integer64", convertToBig);
+  TYPE_POST_CONVERSION_MAP.set("cds.Int64", convertToBig);
   TYPE_POST_CONVERSION_MAP.set("cds.Decimal", convertToBig);
 }
 

@@ -34,6 +34,17 @@ describe("SQL Factory Test Suite", () => {
     return expect(toSQL(query)).toMatchSnapshot(label);
   }
 
+  it("should support access all builders", () => {
+
+    expect(CustomBuilder.DeleteBuilder).toBeDefined();
+    expect(CustomBuilder.UpdateBuilder).toBeDefined();
+    expect(CustomBuilder.ExpressionBuilder).toBeDefined();
+    expect(CustomBuilder.InsertBuilder).toBeDefined();
+    expect(CustomBuilder.ReferenceBuilder).toBeDefined();
+    expect(CustomBuilder.SelectBuilder).toBeDefined();
+
+  });
+
   it("should support build a simple SELECT query", () => {
     expect_sql(
       SELECT.from("test.int.People")
