@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CSV App Test Suite should get error when create duplicated record 1`] = `
+{
+  "data": {
+    "error": {
+      "@Common.numericSeverity": 4,
+      "code": "ER_DUP_ENTRY",
+      "message": "Duplicate entry '1' for key 'PRIMARY' in: 
+INSERT INTO test_resources_csv_app_db_Person ( ID, Name ) VALUES ?",
+    },
+  },
+  "status": 500,
+}
+`;
+
 exports[`CSV App Test Suite should match the first record by axios client 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",

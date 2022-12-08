@@ -9,15 +9,22 @@ describe("CSV App Test Suite", () => {
   const client = setupTest(__dirname, "./resources/csv-app");
 
   const cds = cwdRequireCDS();
+  cds.env.log.levels["db"] = "debug";
 
   const { SELECT } = cds.ql;
 
   afterAll(doAfterAll);
 
-
   it("should support deploy by API", async () => {
     const db: MySQLDatabaseService = cwdRequireCDS().db as any;
     await db.deployCSV();
+  });
+
+  it("should get error when create duplicated record", async () => {
+    const { status, data } = await client.post("/app/Peoples", {
+      ID: 1, Name: "1"
+    });
+    expect({ status, data }).toMatchSnapshot();
   });
 
   it("should support automatically migrate csv data", async () => {
