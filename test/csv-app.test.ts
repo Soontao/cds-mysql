@@ -24,7 +24,8 @@ describe("CSV App Test Suite", () => {
     const { status, data } = await client.post("/app/Peoples", {
       ID: 1, Name: "1"
     });
-    expect({ status, data }).toMatchSnapshot();
+    expect({ status }).toMatchSnapshot();
+    expect(data.error.message).toMatch(/Duplicate/);
   });
 
   it("should support automatically migrate csv data", async () => {
