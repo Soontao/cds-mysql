@@ -1,29 +1,7 @@
-import { CQN, CSN, cwdRequire } from "cds-internal-tool";
+import { capitalize } from "@newdash/newdash/capitalize";
+import { CQN, CSN, cwdRequire, cwdRequireCDS } from "cds-internal-tool";
+import { CQNKind } from "./types";
 
-const _getCustomBuilderIfExists = (options, type) => {
-  if (options && options.customBuilder) {
-    switch (type) {
-      case "SELECT": {
-        return options.customBuilder.SelectBuilder;
-      }
-      case "INSERT": {
-        return options.customBuilder.InsertBuilder;
-      }
-      case "UPDATE": {
-        return options.customBuilder.UpdateBuilder;
-      }
-      case "DELETE": {
-        return options.customBuilder.DeleteBuilder;
-      }
-      case "CREATE": {
-        return options.customBuilder.CreateBuilder;
-      }
-      case "DROP": {
-        return options.customBuilder.DropBuilder;
-      }
-    }
-  }
-};
 
 /**
  * Factory method to build a SQL string from a CQN object.
@@ -39,45 +17,29 @@ const build = (cqn: CQN, options?: any, csn?: CSN): { sql: string, values: Array
     throw new Error("Cannot build SQL. No CQN object provided.");
   }
 
-  const {
-    CreateBuilder,
-    DeleteBuilder,
-    DropBuilder,
-    InsertBuilder,
-    SelectBuilder,
-    UpdateBuilder
-  } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
-  const build = (Builder) => {
-    return new Builder(cqn, options, csn).build();
-  };
+  const defaultBuilders = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 
   if (options && options.definitions) {
     csn = options;
     options = {};
   }
 
-  if (cqn.SELECT) {
-    return build(_getCustomBuilderIfExists(options, "SELECT") ?? SelectBuilder);
-  }
+  const kind: CQNKind = Object.keys(cqn)[0] as any;
 
-  if (cqn.INSERT) {
-    return build(_getCustomBuilderIfExists(options, "INSERT") ?? InsertBuilder);
-  }
+  if (kind !== undefined) {
 
-  if (cqn.UPDATE) {
-    return build(_getCustomBuilderIfExists(options, "UPDATE") ?? UpdateBuilder);
-  }
+    if (kind === "CREATE" || kind === "DROP") {
+      throw cwdRequireCDS().error(`ERROR_NOT_SUPPORT_CQN_${kind}`);
+    }
 
-  if (cqn.DELETE) {
-    return build(_getCustomBuilderIfExists(options, "DELETE") ?? DeleteBuilder);
-  }
+    const builderName = `${capitalize(kind)}Builder`;
 
-  if (cqn.CREATE) {
-    return build(_getCustomBuilderIfExists(options, "CREATE") ?? CreateBuilder);
-  }
+    const Builder = options.customBuilder?.[builderName] ?? defaultBuilders?.[builderName];
 
-  if (cqn.DROP) {
-    return build(_getCustomBuilderIfExists(options, "DROP") ?? DropBuilder);
+    if (Builder !== undefined) {
+      return new Builder(cqn, options, csn).build();
+    }
+
   }
 
   throw new Error(`Cannot build SQL. Invalid CQN object provided: ${JSON.stringify(cqn)}`);

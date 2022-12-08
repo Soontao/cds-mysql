@@ -104,3 +104,5 @@ export interface MysqlDatabaseOptions {
     }
   };
 }
+
+export type CQNKind = "SELECT" | "UPDATE" | "DELETE" | "INSERT" | "CREATE" | "DROP";

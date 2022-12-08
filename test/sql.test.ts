@@ -1,4 +1,4 @@
-import { cwdRequireCDS, CSN } from "cds-internal-tool";
+import { cwdRequireCDS, CSN, CQN } from "cds-internal-tool";
 import path from "path";
 import { sqlFactory } from "../src/sqlFactory";
 import CustomBuilder from "../src/customBuilder";
@@ -13,13 +13,13 @@ describe("SQL Factory Test Suite", () => {
   const cds = cwdRequireCDS();
   let model: CSN;
 
-  const { SELECT, INSERT, UPDATE } = cds.ql;
+  const { SELECT, INSERT, UPDATE, DELETE, CREATE, DROP } = cds.ql;
 
   beforeAll(async () => {
-    model = cds.reflect(cds.compile.for.nodejs(await cds.load(
+    model = cds.compile.for.nodejs(await cds.load(
       "*",
       { root: path.join(__dirname, "./resources/integration") }
-    )));
+    ));
   });
 
   function toSQL(query: any) {
@@ -242,6 +242,21 @@ describe("SQL Factory Test Suite", () => {
         { func: "concat", args: [{ ref: ["v", "a"] }, { ref: ["v", "b"] }] }
       )
     );
+  });
+
+  it("should support delete", () => {
+    expect_sql(DELETE.from("a"), "delete all");
+    expect_sql(DELETE.from("a").where({ v: 1 }), "delete where");
+    expect_sql(DELETE.from("a").where(
+      { func: "concat", args: [{ ref: ["a", "a"] }, { ref: ["a", "c"] }] }, "=", { val: "long string" }
+    ), "delete where func");
+  });
+
+  it("should raise error when use create/drop entity", () => {
+
+    expect(() => toSQL(CREATE.entity(model.definitions["test.int.Card"]))).toThrowError("ERROR_NOT_SUPPORT_CQN_CREATE");
+    expect(() => toSQL(DROP.entity(model.definitions["test.int.Card"]))).toThrowError("ERROR_NOT_SUPPORT_CQN_DROP");
+
   });
 
 });

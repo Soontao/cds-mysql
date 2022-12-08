@@ -2,7 +2,7 @@
 
 ### UPSERT
 
-> use `upsert` by a internal indicator
+> support `UPSERT` with mysql `INSERT ... ON DUPLICATE KEY UPDATE` feature
 
 ```js
 const { UPSERT } = require("cds-mysql");
@@ -14,6 +14,16 @@ module.exports = class DemoService extends cds.ApplicationService {
     return this.run(UPSERT().into(Products).entries(data));
   }
 };
+```
+
+### `CREATE` and `DROP`
+
+`CREATE` and `DROP` ql are disabled by cds-mysql.
+
+it means
+
+```js
+cds.run(CREATE.entity(def)); // with throw error 'ERROR_NOT_SUPPORT_CQN_CREATE'
 ```
 
 ### Configuration credential by environments

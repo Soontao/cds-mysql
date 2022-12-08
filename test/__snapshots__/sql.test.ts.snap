@@ -64,6 +64,29 @@ exports[`SQL Factory Test Suite should support count distinct: default 2`] = `
 }
 `;
 
+exports[`SQL Factory Test Suite should support delete: delete all 1`] = `
+{
+  "sql": "DELETE FROM a",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support delete: delete where 1`] = `
+{
+  "sql": "DELETE FROM a WHERE v = 1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support delete: delete where func 1`] = `
+{
+  "sql": "DELETE FROM a WHERE CONCAT(a.a, a.c) = ?",
+  "values": [
+    "long string",
+  ],
+}
+`;
+
 exports[`SQL Factory Test Suite should support insert columns: default 1`] = `
 {
   "sql": "INSERT INTO test_int_People ( ID, Name, Age, RegisterDate , createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
