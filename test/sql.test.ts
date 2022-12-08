@@ -1,9 +1,9 @@
-import { cwdRequireCDS, CSN, CQN } from "cds-internal-tool";
-import path from "path";
-import { sqlFactory } from "../src/sqlFactory";
-import CustomBuilder from "../src/customBuilder";
+import { CSN, cwdRequireCDS } from "cds-internal-tool";
 import { QueryObject } from "cds-internal-tool/lib/types/ql";
+import path from "path";
+import CustomBuilder from "../src/customBuilder";
 import { MySQLDatabaseService } from "../src/Service";
+import { sqlFactory } from "../src/sqlFactory";
 
 describe("SQL Factory Test Suite", () => {
 
