@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`SQL Factory Test Suite should support apply function to query: default 1`] = `
+{
+  "sql": "SELECT max(SELECT v FROM a) AS "v" FROM DUMMY",
+  "values": [],
+}
+`;
+
 exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK query: default 1`] = `
 {
   "sql": "SELECT * FROM test_int_People WHERE Name = ? LOCK IN SHARE MODE",
@@ -32,6 +39,27 @@ exports[`SQL Factory Test Suite should support build a complex SELECT projection
 exports[`SQL Factory Test Suite should support build a simple SELECT query: default 1`] = `
 {
   "sql": "SELECT * FROM test_int_People",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support build ref with function: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "$count" FROM v WHERE v.d = CONCAT(v.a, v.b)",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support count distinct: default 1`] = `
+{
+  "sql": "SELECT count(DISTINCT v) FROM v",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support count distinct: default 2`] = `
+{
+  "sql": "SELECT count(DISTINCT v.a) FROM v",
   "values": [],
 }
 `;

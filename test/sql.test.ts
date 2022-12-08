@@ -186,4 +186,51 @@ describe("SQL Factory Test Suite", () => {
     );
   });
 
+  it("should support apply function to query", () => {
+
+    expect_sql(
+      // @ts-ignore
+      SELECT.from("DUMMY").columns({
+        func: "max", args: [SELECT.from("a").columns("v")], as: "v"
+      })
+    );
+  });
+
+  it("should support count distinct", () => {
+
+    expect_sql(
+      // @ts-ignore
+      SELECT.from("v").columns(
+        { func: "countdistinct", args: "v" }
+      )
+    );
+
+    expect_sql(
+      // @ts-ignore
+      SELECT.from("v").columns(
+        { func: "countdistinct", args: [{ ref: ["v", "a"] }] }
+      )
+    );
+
+  });
+
+  it("should support build ref with function", () => {
+    expect_sql(
+      // @ts-ignore
+      SELECT.from("v").columns(
+        {
+          func: "count",
+          args: [
+            { val: 1 },
+          ],
+          as: "$count"
+        }
+      ).where(
+        { ref: ["v", "d"] },
+        "=",
+        { func: "concat", args: [{ ref: ["v", "a"] }, { ref: ["v", "b"] }] }
+      )
+    );
+  });
+
 });
