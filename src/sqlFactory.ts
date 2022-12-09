@@ -1,7 +1,9 @@
 import { capitalize } from "@newdash/newdash/capitalize";
 import { CQN, CSN, cwdRequire, cwdRequireCDS } from "cds-internal-tool";
+import { QueryObject } from "cds-internal-tool/lib/types/ql";
 import { CQNKind } from "./types";
 
+type BuildResult = { sql: string, values: Array<any> }
 
 /**
  * Factory method to build a SQL string from a CQN object.
@@ -12,7 +14,9 @@ import { CQNKind } from "./types";
  * @returns 
  * @throws Error if no valid CQN object provided
  */
-const build = (cqn: CQN, options?: any, csn?: CSN): { sql: string, values: Array<any> } => {
+function build(cqn: CQN | QueryObject, csn?: CSN): BuildResult
+function build(cqn: CQN | QueryObject, options?: any, csn?: CSN): BuildResult
+function build(cqn: any, options?: any, csn?: any) {
   if (!cqn) {
     throw new Error("Cannot build SQL. No CQN object provided.");
   }

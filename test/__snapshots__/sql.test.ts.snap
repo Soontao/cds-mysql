@@ -50,6 +50,13 @@ exports[`SQL Factory Test Suite should support build ref with function: default 
 }
 `;
 
+exports[`SQL Factory Test Suite should support build sql with 2 parameter 1`] = `
+{
+  "sql": "SELECT * FROM a",
+  "values": [],
+}
+`;
+
 exports[`SQL Factory Test Suite should support count distinct: default 1`] = `
 {
   "sql": "SELECT count(DISTINCT v) FROM v",

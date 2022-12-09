@@ -34,6 +34,18 @@ describe("SQL Factory Test Suite", () => {
     return expect(toSQL(query)).toMatchSnapshot(label);
   }
 
+  it("should raise error when cqn lost", () => {
+    expect(() => sqlFactory(undefined)).toThrowError("Cannot build SQL. No CQN object provided.");
+  });
+
+  it("should raise error when cqn wrong", () => {
+    expect(() => toSQL({})).toThrowError("Cannot build SQL. Invalid CQN object provided");
+  });
+
+  it("should support build sql with 2 parameter", () => {
+    expect(sqlFactory(SELECT.from("a"), model)).toMatchSnapshot();
+  });
+
   it("should support access all builders", () => {
 
     expect(CustomBuilder.DeleteBuilder).toBeDefined();
