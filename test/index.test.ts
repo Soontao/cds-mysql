@@ -7,6 +7,8 @@ describe("CDS MySQL Basic Test Suite", () => {
 
   const cds = cwdRequireCDS();
 
+  const { INSERT, UPDATE, DELETE, SELECT } = cds.ql;
+
   setupEnv();
 
   beforeEach(doBeforeEach);
@@ -14,7 +16,6 @@ describe("CDS MySQL Basic Test Suite", () => {
   afterEach(async () => { await cds.db.disconnect(TENANT_DEFAULT); });
 
   afterAll(doAfterAll);
-
 
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 
