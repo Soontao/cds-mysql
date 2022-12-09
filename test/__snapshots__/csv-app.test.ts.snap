@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CSV App Test Suite should get error when create duplicated record 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should get error when create duplicated record 1`] = `
 {
   "status": 500,
 }
 `;
 
-exports[`CSV App Test Suite should match the first record by axios client 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should match the first record by axios client 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": true,
@@ -25,7 +25,7 @@ exports[`CSV App Test Suite should match the first record by axios client 1`] = 
 }
 `;
 
-exports[`CSV App Test Suite should match the first record by cds API 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should match the first record by cds API 1`] = `
 {
   "Active": true,
   "Age": 19,
@@ -63,7 +63,7 @@ exports[`CSV App Test Suite should match the first record by cds API 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should match the second record by axios client 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should match the second record by axios client 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": false,
@@ -82,7 +82,7 @@ exports[`CSV App Test Suite should match the second record by axios client 1`] =
 }
 `;
 
-exports[`CSV App Test Suite should match the second record by cds API 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should match the second record by cds API 1`] = `
 {
   "Active": false,
   "Age": 23,
@@ -108,7 +108,7 @@ exports[`CSV App Test Suite should match the second record by cds API 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should not be empty when migrated to v2 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should not be empty when migrated to v2 1`] = `
 [
   {
     "ID": "5e42cf9c-6fc1-11ed-a1eb-0242ac120002",
@@ -123,7 +123,7 @@ exports[`CSV App Test Suite should not be empty when migrated to v2 1`] = `
 ]
 `;
 
-exports[`CSV App Test Suite should support ISO format date string 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support ISO format date string 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": false,
@@ -142,7 +142,7 @@ exports[`CSV App Test Suite should support ISO format date string 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support automatically migrate csv data 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support automatically migrate csv data 1`] = `
 {
   "@odata.context": "$metadata#Peoples",
   "value": [
@@ -158,7 +158,7 @@ exports[`CSV App Test Suite should support automatically migrate csv data 1`] = 
 }
 `;
 
-exports[`CSV App Test Suite should support search 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support search 1`] = `
 {
   "@odata.context": "$metadata#Houses",
   "value": [
@@ -174,7 +174,7 @@ exports[`CSV App Test Suite should support search 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support search 2`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support search 2`] = `
 {
   "@odata.context": "$metadata#Houses",
   "value": [
@@ -190,7 +190,7 @@ exports[`CSV App Test Suite should support search 2`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple average aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support simple average aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(average_price)",
   "value": [
@@ -203,7 +203,7 @@ exports[`CSV App Test Suite should support simple average aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple countdistinct aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support simple countdistinct aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(countdistinct_price)",
   "value": [
@@ -216,7 +216,7 @@ exports[`CSV App Test Suite should support simple countdistinct aggregation 1`] 
 }
 `;
 
-exports[`CSV App Test Suite should support simple max aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support simple max aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(max_price)",
   "value": [
@@ -229,7 +229,7 @@ exports[`CSV App Test Suite should support simple max aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple min aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support simple min aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(min_price)",
   "value": [
@@ -242,7 +242,7 @@ exports[`CSV App Test Suite should support simple min aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple sum aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should support simple sum aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(sum_price)",
   "value": [
@@ -255,7 +255,277 @@ exports[`CSV App Test Suite should support simple sum aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should update house after migrated to v2 1`] = `
+exports[`CSV App Test Suite - Feature (big js disabled) should update house after migrated to v2 1`] = `
+{
+  "data": {
+    "@odata.context": "$metadata#Houses/$entity",
+    "ID": "97dc9bc4-f61e-11ec-b939-0242ac120002",
+    "address_City": "Beijing Updated",
+    "address_Country": null,
+    "address_Province": null,
+    "address_Street": null,
+    "price": 204323,
+  },
+  "status": 200,
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should get error when create duplicated record 1`] = `
+{
+  "status": 500,
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should match the first record by axios client 1`] = `
+{
+  "@odata.context": "$metadata#TypeEntity/$entity",
+  "Active": true,
+  "Age": 19,
+  "BirthDay": "1995-11-11",
+  "BlobDoc": "SGVsbG8gQ0RTIEJpbmFyeQ==",
+  "GlobalUUID": "0da69f3e-3e49-46c6-9eee-3e7e62ddb15d",
+  "Height": 177.22,
+  "ID": 1,
+  "IDCard": 99132132,
+  "Name": "Theo 1",
+  "Sign": "2022-06-10T12:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
+  "Weight": 123,
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should match the first record by cds API 1`] = `
+{
+  "Active": true,
+  "Age": 19,
+  "BirthDay": "1995-11-11",
+  "BlobDoc": {
+    "data": [
+      72,
+      101,
+      108,
+      108,
+      111,
+      32,
+      67,
+      68,
+      83,
+      32,
+      66,
+      105,
+      110,
+      97,
+      114,
+      121,
+    ],
+    "type": "Buffer",
+  },
+  "GlobalUUID": "0da69f3e-3e49-46c6-9eee-3e7e62ddb15d",
+  "Height": 177.22,
+  "ID": "1",
+  "IDCard": "99132132",
+  "Name": "Theo 1",
+  "Sign": "2022-06-10T12:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
+  "Weight": "123",
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should match the second record by axios client 1`] = `
+{
+  "@odata.context": "$metadata#TypeEntity/$entity",
+  "Active": false,
+  "Age": 23,
+  "BirthDay": "1981-05-07",
+  "BlobDoc": "d3d3dw==",
+  "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7e",
+  "Height": 15435.43,
+  "ID": 2,
+  "IDCard": 3213214312412341,
+  "Name": "Theo 2",
+  "Sign": "2022-06-10T12:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
+  "Weight": 322,
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should match the second record by cds API 1`] = `
+{
+  "Active": false,
+  "Age": 23,
+  "BirthDay": "1981-05-07",
+  "BlobDoc": {
+    "data": [
+      119,
+      119,
+      119,
+      119,
+    ],
+    "type": "Buffer",
+  },
+  "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7e",
+  "Height": 15435.43,
+  "ID": "2",
+  "IDCard": "3213214312412341",
+  "Name": "Theo 2",
+  "Sign": "2022-06-10T12:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-10T12:35:10.000Z",
+  "Weight": "322",
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should not be empty when migrated to v2 1`] = `
+[
+  {
+    "ID": "5e42cf9c-6fc1-11ed-a1eb-0242ac120002",
+    "Name": "Area 1",
+    "Size": 10000000.132,
+  },
+  {
+    "ID": "5e42d4ce-6fc1-11ed-a1eb-0242ac120002",
+    "Name": "Area 2",
+    "Size": 9999433,
+  },
+]
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support ISO format date string 1`] = `
+{
+  "@odata.context": "$metadata#TypeEntity/$entity",
+  "Active": false,
+  "Age": 23,
+  "BirthDay": "1981-05-07",
+  "BlobDoc": null,
+  "GlobalUUID": "df1b059a-403d-4dd9-b066-2c9fbd03af7f",
+  "Height": 15435.43,
+  "ID": 3,
+  "IDCard": 581493248932,
+  "Name": "Theo 3",
+  "Sign": "2022-06-13T12:35:10Z",
+  "SignTime": "20:35:10",
+  "SignTmp": "2022-06-12T12:35:10.000Z",
+  "Weight": 322,
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support automatically migrate csv data 1`] = `
+{
+  "@odata.context": "$metadata#Peoples",
+  "value": [
+    {
+      "ID": 1,
+      "Name": "Theo 1",
+    },
+    {
+      "ID": 2,
+      "Name": "Theo 2",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support search 1`] = `
+{
+  "@odata.context": "$metadata#Houses",
+  "value": [
+    {
+      "ID": "97dc99ee-f61e-11ec-b939-0242ac120002",
+      "address_City": "Chengdu",
+      "address_Country": null,
+      "address_Province": null,
+      "address_Street": null,
+      "price": 100000,
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support search 2`] = `
+{
+  "@odata.context": "$metadata#Houses",
+  "value": [
+    {
+      "ID": "97dc9cb4-f61e-11ec-b939-0242ac120002",
+      "address_City": "Shanghai",
+      "address_Country": null,
+      "address_Province": null,
+      "address_Street": null,
+      "price": 2357853,
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple average aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(average_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "average_price": 671400,
+      "average_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple countdistinct aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(countdistinct_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "countdistinct_price": 4,
+      "countdistinct_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple max aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(max_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "max_price": 2357853,
+      "max_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple min aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(min_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "min_price": 23423,
+      "min_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple sum aggregation 1`] = `
+{
+  "@odata.context": "$metadata#Houses(sum_price)",
+  "value": [
+    {
+      "@odata.id": null,
+      "sum_price": 2685600,
+      "sum_price@odata.type": "#Decimal",
+    },
+  ],
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should update house after migrated to v2 1`] = `
 {
   "data": {
     "@odata.context": "$metadata#Houses/$entity",
