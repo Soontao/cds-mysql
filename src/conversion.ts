@@ -78,6 +78,7 @@ const TYPE_POST_CONVERSION_MAP = new Map([
   ["cds.Boolean", convertToBoolean],
   ["cds.Date", convertToDateString],
   ["cds.Integer64", convertInt64ToString],
+  ["cds.Int64", convertInt64ToString],
   ["cds.DateTime", convertToISONoMilliseconds],
   ["cds.Timestamp", convertToISOTime],
 ]);
