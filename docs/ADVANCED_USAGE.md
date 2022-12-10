@@ -9,6 +9,7 @@
     - [UPSERT](#upsert)
     - [CREATE and DROP CQN are disabled](#create-and-drop-cqn-are-disabled)
     - [Large Blob Storage](#large-blob-storage)
+    - [Database Connection Pool](#database-connection-pool)
     - [Schema Migration](#schema-migration)
     - [Multi Tenancy](#multi-tenancy)
     - [Auto Incremental Key Aspect](#auto-incremental-key-aspect)
@@ -170,7 +171,31 @@ if you have the `blob` column and try to upload large file/binary, maybe will en
       "db": {
         "kind": "mysql",
         "connection": {
-          "maxallowedpacket": "104857600" // 100 MB
+          "maxallowedpacket": 104857600 // 100 MB
+        }
+      },
+      "kinds": {
+        "mysql": {
+          "impl": "cds-mysql"
+        }
+      }
+    }
+  }
+}
+```
+
+### Database Connection Pool
+
+> `cds-mysql` setup pool for **EACH** tenant, for more options of pool, please ref [opt section of generic-pool](https://www.npmjs.com/package/generic-pool)
+> 
+```json
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "pool": {
+          "max": 50
         }
       },
       "kinds": {

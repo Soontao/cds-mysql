@@ -9,7 +9,7 @@
           }
         },
         "connection": {
-          "maxallowedpacket": "10485760"
+          "maxallowedpacket": 10485760
         },
         "csv": {
           "migrate": true
