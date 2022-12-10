@@ -19,23 +19,15 @@ interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
 }
 
 const buildInTypes = {
-  "cds.String": "NVARCHAR",
-  "cds.hana.NCHAR": "NCHAR",
-  "cds.hana.VARCHAR": "VARCHAR",
-  "cds.hana.CHAR": "CHAR",
-  "cds.hana.CLOB": "CLOB",
   "cds.Decimal": "DECIMAL",
   "cds.DecimalFloat": "DECIMAL",
   "cds.Integer64": "BIGINT",
-  "cds.Integer": "INTEGER",
   "cds.Int64": "BIGINT",
+  "cds.Integer": "INTEGER",
   "cds.Int32": "INTEGER",
   "cds.Int16": "SMALLINT",
   "cds.UInt8": "TINYINT",
-  "cds.hana.SMALLINT": "SMALLINT",
-  "cds.hana.TINYINT": "TINYINT",
   "cds.Double": "DOUBLE",
-  "cds.hana.REAL": "REAL",
   "cds.Date": "DATE",
   "cds.Time": "TIME",
   "cds.DateTime": "TIMESTAMP",
@@ -43,12 +35,21 @@ const buildInTypes = {
   "cds.Boolean": "BOOLEAN",
   "cds.UUID": "NVARCHAR",
 
+  "cds.String": "NVARCHAR",
   "cds.Binary": "VARBINARY",
   "cds.LargeBinary": "LONGBLOB",
+  "cds.LargeString": "LONGTEXT",
+
+  "cds.hana.SMALLINT": "SMALLINT",
+  "cds.hana.TINYINT": "TINYINT",
+  "cds.hana.REAL": "REAL",
+  "cds.hana.NCHAR": "NCHAR",
+  "cds.hana.VARCHAR": "VARCHAR",
+  "cds.hana.CHAR": "CHAR",
+  "cds.hana.CLOB": "CLOB",
+  "cds.hana.LargeString": "LONGTEXT",
   "cds.hana.BINARY": "VARBINARY",
   "cds.hana.SMALLDECIMAL": "DECIMAL",
-  "cds.LargeString": "LONGTEXT",
-  "cds.hana.LargeString": "LONGTEXT"
 };
 
 class CDSListener implements MySQLParserListener {
