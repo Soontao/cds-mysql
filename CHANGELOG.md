@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.6-0](https://github.com/Soontao/cds-mysql/compare/v6.3.5...v6.3.6-0) (2022-12-10)
+
+
+### Bug Fixes
+
+* conversion type ([7854994](https://github.com/Soontao/cds-mysql/commit/785499498d1efa8e734132f9afcf47e359d0bd7f))
+* date time fractions ([9722686](https://github.com/Soontao/cds-mysql/commit/97226869c42c92a47e38ed0bc102368bd5f8977d))
+* datetime type ([29622ba](https://github.com/Soontao/cds-mysql/commit/29622bacddc4c84a156887887cbb507e2f3efb9a))
+* readme ([4b0de5c](https://github.com/Soontao/cds-mysql/commit/4b0de5c037788f8be2127e0aec7ba46079db4a9c))
+* readme doc ([f142370](https://github.com/Soontao/cds-mysql/commit/f1423708bfa25e2ea43f9418296e2392061cd089))
+* refactor csv ([24ce039](https://github.com/Soontao/cds-mysql/commit/24ce039c548ab5b3a3db8e7992e37dce03076398))
+* refactor migrate ([0719ae6](https://github.com/Soontao/cds-mysql/commit/0719ae6ffa7e62112982e77909a7a48950b7a030))
+* sql test ([68503c8](https://github.com/Soontao/cds-mysql/commit/68503c8bd9f7a707c4512fbe11b671327db346e1))
+* time zone date time ([788c2ac](https://github.com/Soontao/cds-mysql/commit/788c2ac75f515f77faa664dab443d1f3a4d305a6))
+* ut for insert/update ([f2540a9](https://github.com/Soontao/cds-mysql/commit/f2540a97969061565bb4506cd511acdc1052cc95))
+
 ### [6.3.5](https://github.com/Soontao/cds-mysql/compare/v6.3.4...v6.3.5) (2022-12-10)
 
 
