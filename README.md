@@ -43,7 +43,8 @@ then setup the `mysql` database driver for cds -> edit the `package.json` > `cds
 }
 ```
 
-now, the cds server (`cds run`) should could be connected to the mysql server correctly. The database schema will be automatically migrated when **the firstly time received CRUD request**.
+now, the cds server (`cds run`) should could be connected to the mysql server correctly. 
+depends on the configuration, tenant will be migrated at server startup or first time received CRUD request from client.
 
 ---
 
@@ -93,7 +94,7 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
 - the maximum length of a table name is 64 characters - so the `length of entity name with namespace` cannot exceed 64 chars
 - mysql `5.6` does not support key length exceed `767` bytes
 - mysql does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
-- TiDB does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so users have to choose between `modifying the PK` and `enabling the clustered index`
+- TiDB does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so users cannot `modify the primary keys` when `clustered index is enabled`
 - `date` column not support default value `$now`
 - upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html).
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
