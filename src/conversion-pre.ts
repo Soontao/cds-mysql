@@ -1,5 +1,5 @@
 // pre conversion for INSERT/UPDATE (JSON -> DB)
-import { DateTime } from "luxon";
+import { DateTime, FixedOffsetZone } from "luxon";
 import { MYSQL_DATE_TIME_FORMAT } from "./constants";
 
 /**
@@ -20,7 +20,7 @@ export function adaptToMySQLDateTime(value: string | Date) {
     const dateTime = DateTime.fromISO(value, { setZone: true });
 
     if (dateTime.isValid) {
-      return dateTime.toFormat(MYSQL_DATE_TIME_FORMAT);
+      return dateTime.setZone(FixedOffsetZone.utcInstance).toFormat(MYSQL_DATE_TIME_FORMAT);
     }
 
   }

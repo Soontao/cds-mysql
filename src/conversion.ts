@@ -32,7 +32,7 @@ const convertToISOTime = (value: string) => {
     return value;
   }
   const dateTime = DateTime.fromFormat(value, MYSQL_DATE_TIME_FORMAT, {
-    zone: FixedOffsetZone.instance(0)
+    zone: FixedOffsetZone.utcInstance
   });
   return dateTime.toISO();
 };
@@ -40,7 +40,7 @@ const convertToISOTime = (value: string) => {
 const convertToISONoMilliseconds = (element: string) => {
   if (element) {
     const dateTime = DateTime.fromFormat(element, MYSQL_DATE_TIME_FORMAT, {
-      zone: FixedOffsetZone.instance(0)
+      zone: FixedOffsetZone.utcInstance
     });
     return dateTime.toISO({ suppressMilliseconds: true });
   }

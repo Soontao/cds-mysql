@@ -81,7 +81,7 @@ describe("SQL Factory Test Suite", () => {
 
   it("should support insert data into existed entity", async () => {
     expect_sql(
-      INSERT.into("test.int.People").entries({ Name: "Theo Sun" })
+      INSERT.into("test.int.People").entries({ ID: "test-id", Name: "Theo Sun" })
     );
   });
 
@@ -89,6 +89,45 @@ describe("SQL Factory Test Suite", () => {
     expect_sql(
       UPDATE.entity("test.int.People").where({ ID: "test-id" }).set({ Name: "New Name" })
     );
+  });
+
+  it("should support insert data with given value", () => {
+    expect_sql(
+      INSERT.into("test.int.People").entries({
+        ID: "test-id",
+        Name: "Theo Sun",
+        createdAt: "2022-12-10T12:05:34.000Z",
+        createdBy: "usr0",
+      })
+    );
+    expect_sql(
+      INSERT.into("test.int.People").entries({
+        ID: "test-id",
+        Name: "Theo Sun",
+        createdAt: "2022-12-10T20:05:34.000+08:00",
+        createdBy: "usr0",
+      }),
+      "with time zone"
+    );
+    expect_sql(
+      INSERT.into("test.int.People").entries({
+        ID: "test-id-2",
+        Name: "Theo Sun", createdAt: "2022-12-10 12:05:34", createdBy: "usr0"
+      }),
+      "with mysql date time"
+    );
+
+  });
+
+  it("should support insert with given datetime", () => {
+    const d = "2022-12-10T12:05:34.000Z";
+    expect_sql(
+      INSERT.into("test.int.Card").entries({
+        ID: "test-id-2",
+        ExampleTS2: d, createdBy: "usr0"
+      })
+    );
+
   });
 
   it("should support select with complex where", () => {

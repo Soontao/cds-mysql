@@ -115,10 +115,74 @@ exports[`SQL Factory Test Suite should support insert data into existed entity: 
   "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
   "values": [
     [
-      "acab92dd-b63d-43f6-b657-76c4b4956d7b",
+      "test-id",
       "Theo Sun",
       "2022-11-22 14:54:59",
       "theo.sun@not.existed.com",
+      "2022-11-22 14:54:59",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert data with given value: default 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id",
+      "Theo Sun",
+      "2022-12-10 12:05:34",
+      "usr0",
+      "2022-11-22 14:54:59",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert data with given value: with mysql date time 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id-2",
+      "Theo Sun",
+      "2022-12-10 12:05:34",
+      "usr0",
+      "2022-11-22 14:54:59",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert data with given value: with time zone 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id",
+      "Theo Sun",
+      "2022-12-10 12:05:34",
+      "usr0",
+      "2022-11-22 14:54:59",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with given datetime: default 1`] = `
+{
+  "sql": "INSERT INTO test_int_Card ( ID, ExampleTS2, createdBy, createdAt, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id-2",
+      "2022-12-10 12:05:34",
+      "usr0",
+      "2022-11-22 14:54:59",
       "2022-11-22 14:54:59",
       "theo.sun@not.existed.com",
     ],
