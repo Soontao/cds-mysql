@@ -72,11 +72,13 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun?: fal
 export async function migrate(connectionOptions: DataSourceOptions, dryRun = false): Promise<any> {
 
   const isMetaMigration = connectionOptions.entities === CDSMysqlMetaTables;
+  const isTenantMigration = dryRun === false && !isMetaMigration;
+
   const logger = cwdRequireCDS().log("mysql|db|migrate|typeorm");
 
   const entityHash = sha256(connectionOptions.entities as any as Array<any>);
 
-  if (dryRun === false && !isMetaMigration) {
+  if (isTenantMigration) {
     logger.debug("start migrate meta tables for cds-mysql");
     await migrate({ ...connectionOptions, entities: CDSMysqlMetaTables }, false);
     logger.debug("migrate meta tables for cds-mysql successful");
@@ -94,7 +96,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
   });
 
   try {
-    (isMetaMigration ? logger.debug : logger.info)(
+    (isTenantMigration ? logger.info : logger.debug)(
       "migrate database", String(connectionOptions.database).green,
       "with hash", entityHash.green
     );
@@ -102,20 +104,25 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
     await ds.initialize();
 
     // not dry run and not meta table migration
-    if (dryRun === false && !isMetaMigration) {
+    if (isTenantMigration) {
       const [record] = await ds.query("SELECT HASH, MIGRATED_AT FROM cds_mysql_migration_history ORDER BY MIGRATED_AT DESC LIMIT 1 FOR UPDATE");
       if (record?.HASH === entityHash) {
         logger.info("database with hash", entityHash.green, "was already migrated at", String(record.MIGRATED_AT).green, "skip processing");
         return;
       }
-      await ds.createQueryBuilder().insert().into(MigrationHistory).values({ hash: entityHash }).execute();
+      await ds.createQueryBuilder()
+        .insert()
+        .into(MigrationHistory)
+        .values({ hash: entityHash })
+        .execute();
     }
 
     const builder = ds.driver.createSchemaBuilder();
 
     // dry run and return the DDL SQL
     if (dryRun) { return await builder.log(); }
-    await builder.build(); // execute build
+    // perform DDL
+    await builder.build();
   }
   catch (error) {
     logger.error("migrate database failed:", error);
