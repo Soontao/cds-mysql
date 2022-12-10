@@ -110,6 +110,22 @@ exports[`SQL Factory Test Suite should support insert columns: default 1`] = `
 }
 `;
 
+exports[`SQL Factory Test Suite should support insert data into existed entity: default 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "acab92dd-b63d-43f6-b657-76c4b4956d7b",
+      "Theo Sun",
+      "2022-11-22 14:54:59",
+      "theo.sun@not.existed.com",
+      "2022-11-22 14:54:59",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
 exports[`SQL Factory Test Suite should support insert with select query: default 1`] = `
 {
   "sql": "INSERT INTO b SELECT * FROM a",
@@ -223,6 +239,18 @@ exports[`SQL Factory Test Suite should support select with order by and limit: d
 {
   "sql": "SELECT * FROM boo ORDER BY c2 DESC, c1 ASC LIMIT 5 OFFSET 3",
   "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support update date into existed entity: default 1`] = `
+{
+  "sql": "UPDATE test_int_People SET Name = ?, modifiedAt = ?, modifiedBy = ? WHERE ID = ?",
+  "values": [
+    "New Name",
+    "2022-11-22 14:54:59",
+    "theo.sun@not.existed.com",
+    "test-id",
+  ],
 }
 `;
 

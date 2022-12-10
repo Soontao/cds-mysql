@@ -79,6 +79,18 @@ describe("SQL Factory Test Suite", () => {
     );
   });
 
+  it("should support insert data into existed entity", async () => {
+    expect_sql(
+      INSERT.into("test.int.People").entries({ Name: "Theo Sun" })
+    );
+  });
+
+  it("should support update date into existed entity", () => {
+    expect_sql(
+      UPDATE.entity("test.int.People").where({ ID: "test-id" }).set({ Name: "New Name" })
+    );
+  });
+
   it("should support select with complex where", () => {
 
     expect_sql(
