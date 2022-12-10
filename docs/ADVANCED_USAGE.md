@@ -144,8 +144,8 @@ interface MysqlDatabaseOptions {
 | Double         | DOUBLE           |
 | Date           | DATE             |
 | Time           | TIME             |
-| DateTime       | TIMESTAMP        |
-| Timestamp      | TIMESTAMP        |
+| DateTime       | DATETIME         |
+| Timestamp      | DATETIME         |
 | String(LENGTH) | NVARCHAR(LENGTH) |
 | String         | TEXT             |
 | Binary         | VARBINARY        |

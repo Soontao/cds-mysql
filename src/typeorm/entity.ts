@@ -30,8 +30,8 @@ const buildInTypes = {
   "cds.Double": "DOUBLE",
   "cds.Date": "DATE",
   "cds.Time": "TIME",
-  "cds.DateTime": "TIMESTAMP",
-  "cds.Timestamp": "TIMESTAMP",
+  "cds.DateTime": "DATETIME",
+  "cds.Timestamp": "DATETIME",
   "cds.Boolean": "BOOLEAN",
   "cds.UUID": "NVARCHAR",
 
