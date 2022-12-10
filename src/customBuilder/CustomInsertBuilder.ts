@@ -51,7 +51,7 @@ export class CustomInsertBuilder extends InsertBuilder {
   ) {
     const val = super._getValue(column, options);
     const columnType = this._entity?.elements?.[column]?.type;
-    if (columnType !== undefined && !options.insertAnnotatedColumns.has(column) && PRE_CONVERSION_MAP.has(columnType)) {
+    if (columnType !== undefined && PRE_CONVERSION_MAP.has(columnType)) {
       const transformFunc = PRE_CONVERSION_MAP.get(columnType);
       return transformFunc(val);
     }

@@ -61,7 +61,7 @@ export class CustomUpdateBuilder extends UpdateBuilder {
         sql.push(`${this._quoteElement(key)} = ?`);
         const columnType = entity?.elements?.[key]?.type;
         // convert value for specific type
-        if (columnType && !annotatedColumns.updateAnnotatedColumns.has(key) && PRE_CONVERSION_MAP.has(columnType)) {
+        if (columnType !== undefined && PRE_CONVERSION_MAP.has(columnType)) {
           value = PRE_CONVERSION_MAP.get(columnType)(value);
         }
         this._outputObj.values.push(value);
