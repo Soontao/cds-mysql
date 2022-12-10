@@ -14,14 +14,16 @@
 
 ## Setup
 
-create `.env` file and put that into the CAP project, then fill the database credential (more db user setup information is at [here](./docs/ADVANCED_USAGE.md#database-user)). 
+create `.env` file and put that into the CAP project, then fill the database credential 
+
+please find more database user setup information at [here](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables). 
 
 ```environment
-CDS_REQUIRES_DB_CREDENTIALS_USER=cds_admin
-CDS_REQUIRES_DB_CREDENTIALS_PASSWORD=cds_admin
-CDS_REQUIRES_DB_CREDENTIALS_DATABASE=cds_admin
 CDS_REQUIRES_DB_CREDENTIALS_HOST=127.0.0.1
 CDS_REQUIRES_DB_CREDENTIALS_PORT=3306
+CDS_REQUIRES_DB_CREDENTIALS_DATABASE=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_USER=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_PASSWORD=cds_admin
 ```
 
 then setup the `mysql` database driver for cds -> edit the `package.json` > `cds` node
@@ -67,13 +69,12 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
 - [x] schema migration optimization (ignore drop in some case)
   - [ ] ignore column length reduce and with warning
   - [ ] model version, only incremental migration
-  - [x] using `LinkedModel` element information for database migration
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/media-data)
 - [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
 - [x] multi tenancy
   - [x] deploy model on-fly
   - [x] create database on-demand
-    - [ ] permission check
+    - [ ] user permission check
   - [x] _experimental_ [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
     - [ ] extensibility
 - [x] `$expand` navigation
