@@ -5,19 +5,21 @@
     - [Compatibility Table](#compatibility-table)
     - [Configurations Overview](#configurations-overview)
     - [Built-In Data Type](#built-in-data-type)
+    - [Schema Migration](#schema-migration)
+    - [Multi Tenancy](#multi-tenancy)
+    - [CSV Migration](#csv-migration)
   - [Tips and FAQ](#tips-and-faq)
     - [UPSERT](#upsert)
     - [CREATE and DROP CQN are disabled](#create-and-drop-cqn-are-disabled)
     - [Large Blob Storage](#large-blob-storage)
     - [Database Connection Pool](#database-connection-pool)
-    - [Schema Migration](#schema-migration)
-    - [Multi Tenancy](#multi-tenancy)
+    - [Eager Tenant Deployment](#eager-tenant-deployment)
     - [Auto Incremental Key Aspect](#auto-incremental-key-aspect)
-    - [CSV Migration](#csv-migration)
+    - [PreDelivery Aspect for CSV migration](#predelivery-aspect-for-csv-migration)
     - [Add Column Index](#add-column-index)
   - [Configuration](#configuration)
-    - [config database credential by environments variables](#config-database-credential-by-environments-variables)
-    - [config database credential by file](#config-database-credential-by-file)
+    - [Configure database credential by environments variables](#configure-database-credential-by-environments-variables)
+    - [Configure database credential by file](#configure-database-credential-by-file)
     - [Setup Database Credential for Cloud Foundry](#setup-database-credential-for-cloud-foundry)
   - [Database](#database)
     - [Database User](#database-user)
@@ -104,6 +106,24 @@ interface MysqlDatabaseOptions {
      * migrate CSV on deployment
      */
     migrate?: boolean;
+    
+    identity?: {
+      /**
+       * `cds-mysql` will parallel to query record by keys,
+       *  to check the record is existed or not
+       */
+      concurrency?: number
+    }
+    exist?: {
+      /**
+       * when `cds-mysql` found the record is existed in database
+       * 
+       * update or skip that. 
+       * 
+       * default value `false`
+       */
+      update?: boolean;
+    }
   };
 }
 ```
@@ -131,6 +151,39 @@ interface MysqlDatabaseOptions {
 | Binary         | VARBINARY        |
 | LargeBinary    | LONGBLOB         |
 | LargeString    | LONGTEXT         |
+
+### Schema Migration
+
+`cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, then parse the `DDL` statements, and convert them into `typeorm`-`EntitySchema` objects, then do the migration with `typeorm` existed migration functionality.
+
+```mermaid
+graph LR
+    CDS[CDS Definition] --> |compile CDS to DDL| DDL[Compiled DDL]
+    DDL --> |ast parser| te[TypeORM Entity Metadata]
+    te --> |use typeorm migrate schema|Schema[Database Schema]
+```
+
+It will be fully automatically, sync changed `columns`, `views`.
+
+It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
+
+### Multi Tenancy
+
+> Out-of-Box multi-tenancy support
+
+- develop the single tenant application, use the `default` as tenant id
+- develop the multi-tenancy application, fill the `User.tenant` information for each `request`/`event`, and `cds-mysql` will automatically sync schema/CSV and provision connection pool for that tenant
+  - data isolation in mysql database level, each tenant will own its own `database`
+  - better to create a `admin` user to `cds-mysql` so that `cds-mysql` could help you to create `database`
+- multi-tenancy could work without `@sap/mtxs`, but if enable the `@sap/mtxs` features, please find more details at [MTXS documentation](./MTXS.md)
+
+
+### CSV Migration
+
+`cds-mysql` has a built-in csv migrator, it will migrate data with key validation.
+
+- if key of entity is existed, depends on the `cds.requires.db.csv.exist.update`, if the value is `true`, try to update, otherwise will skip the record
+- if key of entity not existed, insert (if the records has been deleted, its also will be inserted)
 
 ## Tips and FAQ
 
@@ -208,20 +261,7 @@ if you have the `blob` column and try to upload large file/binary, maybe will en
 }
 ```
 
-### Schema Migration
-
-`cds-mysql` will use the `cds compiler` to generate `DDL` SQL statements, then parse the `DDL` statements, and convert them into `typeorm`-`EntitySchema` objects, then do the migration with `typeorm` existed migration functionality.
-
-```mermaid
-graph LR
-    CDS[CDS Definition] --> |compile CDS to DDL| DDL[Compiled DDL]
-    DDL --> |ast parser| te[TypeORM Entity Metadata]
-    te --> |use typeorm migrate schema|Schema[Database Schema]
-```
-
-It will be fully automatically, sync changed `columns`, `views`.
-
-It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases.
+### Eager Tenant Deployment
 
 > `cds-mysql` will automatically migrate schema and pre-defined CSV data into database when connecting to database (generally it means server received the first request which need database operation).
 
@@ -243,15 +283,6 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 }
 ```
 
-### Multi Tenancy
-
-> Out-of-Box multi-tenancy support
-
-- develop the single tenant application, use the `default` as tenant id
-- develop the multi-tenancy application, fill the `User.tenant` information for each `request`/`event`, and `cds-mysql` will automatically sync schema/CSV and provision connection pool for that tenant
-  - data isolation in mysql database level, each tenant will own its own `database`
-  - better to create a `admin` user to `cds-mysql` so that `cds-mysql` could help you to create `database`
-
 ### Auto Incremental Key Aspect
 
 > define entity with `incrementalID` aspect to support the `AUTO_INCREMENT` syntax in `mysql` db
@@ -268,12 +299,7 @@ entity Animal : incrementID {
 }
 ```
 
-### CSV Migration
-
-`cds-mysql` has a built-in csv migrator, it will migrate data with key validation.
-
-- if key of entity is existed, skip
-- if key of entity not existed, insert (if the records has been deleted, its also will be inserted)
+### PreDelivery Aspect for CSV migration
 
 > csv migrator will automatically fill the `PreDelivery` field as `true`
 > for business, if user want to delete some data, just set the `Disabled` field as `true`
@@ -304,7 +330,7 @@ entity Product : cuid {
 
 ## Configuration
 
-### config database credential by environments variables
+### Configure database credential by environments variables
 
 > as CAP supported, developer could also use `environments` to configure the database credential
 
@@ -316,7 +342,7 @@ CDS_REQUIRES_DB_CREDENTIALS_HOST=127.0.0.1
 CDS_REQUIRES_DB_CREDENTIALS_PORT=3306
 ```
 
-### config database credential by file
+### Configure database credential by file
 
 create a `default-env.json` file into the root directory of your CAP project, it will be useful if you want to put some details information of mysql driver
 
