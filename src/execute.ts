@@ -1,8 +1,6 @@
 // @ts-nocheck
 import { filter } from "@newdash/newdash/filter";
 import { isEmpty } from "@newdash/newdash/isEmpty";
-import { getPostProcessMapper, postProcess } from "@sap/cds/libx/_runtime/db/data-conversion/post-processing";
-import { createJoinCQNFromExpanded, expandV2, hasExpand, rawToExpanded } from "@sap/cds/libx/_runtime/db/expand";
 import { CQN, cwdRequire, cwdRequireCDS, LinkedModel, User } from "cds-internal-tool";
 import { QueryObject } from "cds-internal-tool/lib/types/ql";
 import { Connection, OkPacket } from "mysql2/promise";
@@ -17,6 +15,12 @@ const cds = cwdRequireCDS();
 const LOG = cds.log("db|mysql|sql");
 const DEBUG = cds.debug("db|mysql");
 const coloredTxCommands = cwdRequire("@sap/cds/libx/_runtime/db/utils/coloredTxCommands");
+
+const { getPostProcessMapper, postProcess } = cwdRequire("@sap/cds/libx/_runtime/db/data-conversion/post-processing");
+const {
+  createJoinCQNFromExpanded, expandV2,
+  hasExpand, rawToExpanded
+} = cwdRequire("@sap/cds/libx/_runtime/db/expand");
 const SANITIZE_VALUES = process.env.NODE_ENV === "production" && cds.env.log.sanitize_values !== false;
 
 const _captureStack = DEBUG
