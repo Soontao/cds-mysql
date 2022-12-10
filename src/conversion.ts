@@ -1,10 +1,19 @@
 // conversion for OUTPUT (DB -> JSON)
 import { cwdRequire, cwdRequireCDS } from "cds-internal-tool";
-import { DateTime, FixedOffsetZone } from "luxon";
+import { DateTime, FixedOffsetZone, ToISOTimeOptions } from "luxon";
 import { MYSQL_DATE_TIME_FORMAT, MYSQL_DATE_TIME_FORMAT_WO_FRACTIONS } from "./constants";
 
 
-function _parseDateString(value: string) {
+/**
+ * parse mysql date string
+ * 
+ * @param value valid mysql date string, with fractions or not
+ * 
+ * @returns 
+ */
+function parseMysqlDate(value: string): DateTime;
+function parseMysqlDate(value: any): null;
+function parseMysqlDate(value: string) {
   if (typeof value !== "string") {
     return null;
   }
@@ -50,27 +59,20 @@ const convertInt64ToString = int64 => {
   return String(int64);
 };
 
-const convertToISOTime = (value: string) => {
+const createConvertToISOTime = (options?: ToISOTimeOptions) => (value: string) => {
   if (value === null || value === undefined) {
     return null;
   }
-  const dateTime = _parseDateString(value);
+  const dateTime = parseMysqlDate(value);
   if (dateTime.isValid) {
-    return dateTime.toISO();
+    return dateTime.toISO(options);
   }
   return null;
 };
 
-const convertToISONoMilliseconds = (value: string) => {
-  if (value === null || value === undefined) {
-    return null;
-  }
-  const dateTime = _parseDateString(value);
-  if (dateTime.isValid) {
-    return dateTime.toISO({ suppressMilliseconds: true });
-  }
-  return null;
-};
+const convertToISOTime = createConvertToISOTime();
+
+const convertToISONoMilliseconds = createConvertToISOTime({ suppressMilliseconds: true });
 
 const TYPE_POST_CONVERSION_MAP = new Map([
   ["cds.Boolean", convertToBoolean],
