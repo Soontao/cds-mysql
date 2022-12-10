@@ -51,7 +51,7 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   }
 
   /**
-   * @see [Locking Reads](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
+   * @see https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html
    */
   _forUpdate() {
     this._outputObj.sql.push("FOR UPDATE");
@@ -61,7 +61,7 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   }
 
   /**
-   * @see [Locking Reads](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
+   * @see https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html
    */
   _forShareLock() {
     this._outputObj.sql.push("LOCK IN SHARE MODE");
