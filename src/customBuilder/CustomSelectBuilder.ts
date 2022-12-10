@@ -83,9 +83,14 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
     }
 
     // only the element is sub query, add the alias
-    if (typeof element.SELECT === "object" && element.SELECT?.from?.as === undefined) {
+    if (typeof element.SELECT === "object") {
       super._fromElement(element, parent, i);
-      this._outputObj.sql.push("AS", this._quoteElement(`t_${nextTmpNumber()}`));
+      if (element.SELECT?.from?.as === undefined) {
+        this._outputObj.sql.push("AS", this._quoteElement(`t_${nextTmpNumber()}`));
+      }
+      else {
+        this._outputObj.sql.push("AS", this._quoteElement(element.SELECT?.from?.as));
+      }
       return;
     }
 

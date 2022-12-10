@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { CSN, cwdRequireCDS } from "cds-internal-tool";
 import { QueryObject } from "cds-internal-tool/lib/types/ql";
 import path from "path";
@@ -102,6 +103,8 @@ describe("SQL Factory Test Suite", () => {
   it("should support select sub query with alias", () => {
     // @ts-ignore
     expect_sql(SELECT.from("bar").columns("count(1) as cc").from(SELECT.from("foo").limit(1000, 0)).limit(1000, 0));
+    // @ts-ignore
+    expect_sql(SELECT.from("bar").columns("count(1) as cc").from(SELECT.from("foo").limit(1000, 0).alias("not_important_t_1")).limit(1000, 0), "with alias");
   });
 
   it("should support select with order by and limit", () => {
@@ -163,7 +166,6 @@ describe("SQL Factory Test Suite", () => {
     );
 
   });
-
 
   it("should support select where exists", () => {
     expect_sql(
