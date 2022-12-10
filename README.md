@@ -12,31 +12,24 @@
 
 > `MySQL`/`MariaDB`/`TiDB` adapter for [CAP Framework](https://cap.cloud.sap/docs/about/), this module is heavily inspired by the [cds-pg](https://github.com/sapmentors/cds-pg) module.
 
+- [cds mysql](#cds-mysql)
+  - [Setup](#setup)
+  - [Advanced Documentation](#advanced-documentation)
+  - [Feature and RoadMap](#feature-and-roadmap)
+  - [Limitation and Known Issues](#limitation-and-known-issues)
+  - [CHANGELOG](#changelog)
+  - [LICENSE](#license)
+
 ## Setup
 
-for local development, firstly developer need to create a `default-env.json` file into the root directory of your CAP project, and put the development `mysql` credential into that. (remember **don't** commit this file into your git repository). (or [use system environments](./docs/ADVANCED_USAGE.md#configuration-credential-by-environments) to configure)
+create `.env` file and put that into the CAP project, then fill the database credential (more db user setup information is at [here](./docs/ADVANCED_USAGE.md#database-user)). 
 
-for the supported options in `credentials` node, just ref the [mysql official connection options document](https://www.npmjs.com/package/mysql#connection-options)
-
-```json
-{
-  "VCAP_SERVICES": {
-    "user-provided": [
-      {
-        "label": "user-provided",
-        "name": "remote-mysql-service",
-        "tags": ["mysql"],
-        "credentials": {
-          "host": "mysql.host.name.com",
-          "user": "user",
-          "password": "cdsPas$w0rd",
-          "database": "test",
-          "port": 3306
-        }
-      }
-    ]
-  }
-}
+```environment
+CDS_REQUIRES_DB_CREDENTIALS_USER=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_PASSWORD=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_DATABASE=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_HOST=127.0.0.1
+CDS_REQUIRES_DB_CREDENTIALS_PORT=3306
 ```
 
 then setup the `mysql` database driver for cds -> edit the `package.json` > `cds` node
@@ -62,20 +55,9 @@ now, the cds server (`cds run`) should could be connected to the mysql server co
 
 in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight) to get the `mysql` version of official `cap-sflight` example, and it works well.
 
-## [Advanced Usage Guide](./docs/ADVANCED_USAGE.md)
+## [Advanced Documentation](./docs/ADVANCED_USAGE.md)
 
-## Compatibility Table
-
-| @sap/cds version | cds-mysql version |
-| ---------------- | ----------------- |
-| 5.8.x            | 5.9.x             |
-| 5.9.x            | 5.9.x             |
-| 6.0.x            | 6.0.x             |
-| 6.1.x            | 6.1.x             |
-| 6.2.x            | 6.2.x             |
-| 6.3.x            | 6.3.x             |
-
-## Features
+## Feature and RoadMap
 
 - [x] fundamental `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
   - [x] _experimental_ support [`UPSERT`](./docs/ADVANCED_USAGE.md#upsert) by `INSERT ... ON DUPLICATE KEY UPDATE` statement
@@ -100,8 +82,6 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
   - [x] deploy model on-fly
   - [x] create database on-demand
     - [ ] permission check
-  - [ ] admin database concept
-    - [ ] `@admin` tenant entity & services
   - [x] _experimental_ [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
     - [ ] extensibility
 - [x] `$expand` navigation
@@ -115,14 +95,14 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
 - [x] better E2E document/sample - [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight)
 
-## Limitation
+## Limitation and Known Issues
 
 - the maximum length of a table name is 64 characters - so the `length of entity name with namespace` cannot exceed 64 chars
 - mysql `5.6` does not support key length exceed `767` bytes
 - mysql does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
 - TiDB does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so users have to choose between `modifying the PK` and `enabling the clustered index`
 - `date` column not support default value `$now`
-- upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html). (default is `1MB`)
+- upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html).
 - The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
 - The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
 - The `Boolean` type is represented as `TINYINT(1)` in mysql server, as a result, `boolean default true/false` will be converted to `TINYINT DEFAULT 1/0`.

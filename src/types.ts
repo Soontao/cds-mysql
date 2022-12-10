@@ -74,6 +74,17 @@ export interface MysqlDatabaseOptions {
     prefix?: string;
   };
   /**
+   * mysql connection configurations
+   */
+  connection?: {
+    /**
+     * `max_allowed_packet` size of mysql database, when create the pool of tenant, `cds-mysql` will try to set the global `max_allowed_packet` variable
+     * 
+     * The value should be a multiple of 1024; non-multiples are rounded down to the nearest multiple.
+     */
+    maxallowedpacket?: number | boolean;
+  };
+  /**
    * connection pool options for each tenant
    */
   pool?: PoolOptions;

@@ -2,6 +2,15 @@
 
 > support multitenancy/extensibility and feature toggles with `@sap/cds-mtxs` module
 
+- [MTXS support](#mtxs-support)
+  - [Enablement](#enablement)
+  - [Database User](#database-user)
+  - [Tenant Users](#tenant-users)
+  - [Extensibility](#extensibility)
+    - [Commands](#commands)
+    - [Extensibility project - package json is required](#extensibility-project---package-json-is-required)
+  - [Known Issues](#known-issues)
+
 ## Enablement
 
 > **MUST** manually enable each service, because there are some conflicts in `mtxs` internal shortcuts
@@ -100,7 +109,7 @@ cds build # build local extensions to TAR
 cds push # push & activate extension
 ```
 
-### package json for extensibility project
+### Extensibility project - package json is required 
 
 > the `name` is very important to determine the extension is existed one or not
 

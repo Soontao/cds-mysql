@@ -7,11 +7,13 @@ import {
 import "colors";
 import { createPool, Options as PoolOptions, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
+import { ConnectionOptions } from "mysql2/typings/mysql";
 import { AdminTool } from "./AdminTool";
 import {
   CONNECTION_IDLE_CHECK_INTERVAL,
   DEFAULT_CONNECTION_ACQUIRE_TIMEOUT,
   DEFAULT_CONNECTION_IDLE_TIMEOUT,
+  DEFAULT_MAX_ALLOWED_PACKED_MB,
   DEFAULT_TENANT_CONNECTION_POOL_SIZE,
   MAX_QUEUE_SIZE,
   MYSQL_COLLATE,
@@ -220,9 +222,11 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       poolOptions
     );
 
+    await this._setupPacketSize(tenantCredential, tenant);
+
     const newPool = createPool(
       {
-        create: () => createConnection(tenantCredential as any),
+        create: () => createConnection(tenantCredential),
         validate: (conn) => conn
           .query("SELECT 1")
           .then(() => true)
@@ -237,6 +241,39 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       poolOptions,
     );
     return newPool;
+  }
+
+  /**
+   * @private
+   * @internal
+   * @ignore
+   * @param tenantCredential 
+   * @param tenant 
+   */
+  private async _setupPacketSize(tenantCredential: ConnectionOptions, tenant: string) {
+    const cds = cwdRequireCDS();
+    const maxAllowedPacket = cds.env.get("requires.db.connection.maxallowedpacket");
+
+    if (maxAllowedPacket !== undefined && maxAllowedPacket !== false) {
+      const realPacketSize = typeof maxAllowedPacket === "number"
+        ? maxAllowedPacket
+        : (DEFAULT_MAX_ALLOWED_PACKED_MB * 1024 * 1024);
+
+      const conn = await createConnection(tenantCredential);
+
+      this._logger.info("setup global max_allowed_packet", realPacketSize, "for tenant", tenant);
+
+      try {
+        await conn.query(`SET GLOBAL max_allowed_packet=${realPacketSize}`);
+      }
+      catch (error) {
+        this._logger.warn("set max_allowed_packet failed", error);
+      }
+      finally {
+        await conn.end();
+      }
+
+    }
   }
 
   /**
@@ -255,6 +292,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     // REVISIT: priority maybe for http request
     // REVISIT: retry connection
     const conn = await pool.acquire();
+
     return Object.assign(conn, { _pool: pool });
   }
 

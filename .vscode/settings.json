@@ -27,6 +27,7 @@
     "LONGTEXT",
     "luxon",
     "mariadb",
+    "maxallowedpacket",
     "Millis",
     "mtxs",
     "nvarchar",
