@@ -12,14 +12,6 @@
 
 > `MySQL`/`MariaDB`/`TiDB` adapter for [CAP Framework](https://cap.cloud.sap/docs/about/), this module is heavily inspired by the [cds-pg](https://github.com/sapmentors/cds-pg) module.
 
-- [cds mysql](#cds-mysql)
-  - [Setup](#setup)
-  - [Advanced Documentation](#advanced-documentation)
-  - [Feature and RoadMap](#feature-and-roadmap)
-  - [Limitation and Known Issues](#limitation-and-known-issues)
-  - [CHANGELOG](#changelog)
-  - [LICENSE](#license)
-
 ## Setup
 
 create `.env` file and put that into the CAP project, then fill the database credential (more db user setup information is at [here](./docs/ADVANCED_USAGE.md#database-user)). 
