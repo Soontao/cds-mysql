@@ -184,6 +184,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 - if key of entity is existed, depends on the `cds.requires.db.csv.exist.update`, if the value is `true`, try to update, otherwise will skip the record
 - if key of entity not existed, insert (if the records has been deleted, its also will be inserted)
+- for `clob` columns (like `cds.Binary`/`cds.LargeBinary`), please fill csv with `base64` encoded value
 
 ## Tips and FAQ
 

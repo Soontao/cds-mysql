@@ -47,7 +47,7 @@ export const sha256 = memorized(
 );
 
 
-const TRANSPORT_CDS_TYPES = [
+const TRANSFORM_CDS_TYPES = [
   "cds.Binary",
   "cds.LargeBinary",
   "cds.UInt8",
@@ -64,6 +64,7 @@ const TRANSPORT_CDS_TYPES = [
 const TABLE_CSV_HISTORY = "cds_mysql_csv_history";
 
 const TABLE_COLUMN_PRE_DELIVERY = "PreDelivery";
+
 /**
  * migrate CSV data
  * 
@@ -205,7 +206,7 @@ export async function migrateData(
 
       const transformColumnsIndex = Object
         .values(entityModel.elements)
-        .filter(ele => TRANSPORT_CDS_TYPES.includes(ele.type))
+        .filter(ele => TRANSFORM_CDS_TYPES.includes(ele.type))
         .filter(ele => headers.includes(ele.name)) // only process columns in CSV files
         .map(ele => ({
           index: headers.indexOf(ele.name),
@@ -259,7 +260,7 @@ export async function migrateData(
       const sem = new Semaphore(
         cds.env.get("requires.db.csv.identity.concurrency") ??
         DEFAULT_CSV_IDENTITY_CONCURRENCY
-      ); // REVISIT: parameterized
+      );
 
       await Promise.all(
         rows.map(
