@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.4](https://github.com/Soontao/cds-mysql/compare/v6.3.4-3...v6.3.4) (2022-12-10)
+
+
+### Bug Fixes
+
+* add threshold of coverage ([ce359b5](https://github.com/Soontao/cds-mysql/commit/ce359b554fd2cd7250afb2f89639f53393d306d8))
+* better typeorm test ([a6bdaca](https://github.com/Soontao/cds-mysql/commit/a6bdacab57989ac2772fe270ef709456347e7ed1))
+* bigjs test ([63a48fd](https://github.com/Soontao/cds-mysql/commit/63a48fd42f948bff3b56793b95ab2a5bb053663d))
+* **deps:** update dependency cds-internal-tool to v1.6.14 ([d221835](https://github.com/Soontao/cds-mysql/commit/d2218355405b6ad0439ac32e952872c9b656db51))
+* **deps:** update dependency cds-internal-tool to v1.6.15 ([f054090](https://github.com/Soontao/cds-mysql/commit/f054090f46a8f72f80052c36263265b43ebb8de6))
+* **deps:** update dependency cds-internal-tool to v1.6.18 ([#172](https://github.com/Soontao/cds-mysql/issues/172)) ([845a26d](https://github.com/Soontao/cds-mysql/commit/845a26da0c8bad2e8a0c019fbf936cca647e8bee))
+* doc ([05e1a77](https://github.com/Soontao/cds-mysql/commit/05e1a77a724424b885c2949c956bf3933ec98cee))
+* doc ([c686695](https://github.com/Soontao/cds-mysql/commit/c6866952f9a6534e9f573c2cb7f8eaa05f790ed0))
+* index ut ([5067027](https://github.com/Soontao/cds-mysql/commit/5067027c4f571e078999fecd394d80674370c136))
+* new sql ut ([e83d9a5](https://github.com/Soontao/cds-mysql/commit/e83d9a541b19352aee8907a7ce1785121a0a62e7))
+* ut ([134f80a](https://github.com/Soontao/cds-mysql/commit/134f80a0ee48ab993ec09df00c609263cb365517))
+* ut and update builder ([c85aae4](https://github.com/Soontao/cds-mysql/commit/c85aae42aeb7914e819fceff58af9d56e2562a3b))
+* ut for execute.js ([f0577a3](https://github.com/Soontao/cds-mysql/commit/f0577a37d3f1374c80af96b42cbb1265f2e410d6))
+* ut for sql ([36f68b0](https://github.com/Soontao/cds-mysql/commit/36f68b09ef10ce6fb9ab32c2adce5923e4527d46))
+* ut for utils ([bc2df14](https://github.com/Soontao/cds-mysql/commit/bc2df14d2080e564bab7ba0fed2e3c6c4c863b96))
+* ut test for tenant ([89bdd9f](https://github.com/Soontao/cds-mysql/commit/89bdd9f2d1ff0214627f962439eb8364e8ad9794))
+
 ### [6.3.4-3](https://github.com/Soontao/cds-mysql/compare/v6.3.4-2...v6.3.4-3) (2022-12-06)
 
 
