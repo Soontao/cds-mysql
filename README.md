@@ -43,8 +43,9 @@ then setup the `mysql` database driver for cds -> edit the `package.json` > `cds
 }
 ```
 
-now, the cds server (`cds run`) should could be connected to the mysql server correctly. 
-depends on the configuration, tenant will be migrated at server startup or first time received CRUD request from client.
+now, start the cds server (`cds run`), everything is ready! 
+
+depends on the configuration, the database schema will be migrated at server startup, or first time the cds server received CRUD request from client.
 
 ---
 
