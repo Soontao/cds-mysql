@@ -71,14 +71,25 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
     // avoid: ER_DERIVED_MUST_HAVE_ALIAS of mysql database 
     // (double brackets without alias for inner table)
 
+    // inner sub query without alias
     if (parent !== undefined && typeof parent.join === "string" && parent.args instanceof Array) {
       for (const expr of parent.args) {
         if (typeof expr.SELECT === "object" && expr.SELECT?.from?.as === undefined) {
-          expr.SELECT.from.as = `t_${nextTmpNumber()}`;
+          expr.SELECT.from.as = this._quoteElement(`t_${nextTmpNumber()}`);
         }
       }
+      super._fromElement(element, parent, i);
+      return;
+    }
+
+    // only the element is sub query, add the alias
+    if (typeof element.SELECT === "object" && element.SELECT?.from?.as === undefined) {
+      super._fromElement(element, parent, i);
+      this._outputObj.sql.push("AS", this._quoteElement(`t_${nextTmpNumber()}`));
+      return;
     }
 
     return super._fromElement(element, parent, i);
+
   }
 };

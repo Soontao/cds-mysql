@@ -159,6 +159,13 @@ exports[`SQL Factory Test Suite should support select for update: share lock 1`]
 }
 `;
 
+exports[`SQL Factory Test Suite should support select sub query with alias: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "cc" FROM (SELECT * FROM foo LIMIT 1000 OFFSET 0) AS t_1 LIMIT 1000 OFFSET 0",
+  "values": [],
+}
+`;
+
 exports[`SQL Factory Test Suite should support select where exists: default 1`] = `
 {
   "sql": "SELECT * FROM Authors a WHERE EXISTS ( SELECT * FROM Books WHERE author_ID = a.ID )",

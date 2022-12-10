@@ -99,6 +99,11 @@ describe("SQL Factory Test Suite", () => {
     );
   });
 
+  it("should support select sub query with alias", () => {
+    // @ts-ignore
+    expect_sql(SELECT.from("bar").columns("count(1) as cc").from(SELECT.from("foo").limit(1000, 0)).limit(1000, 0));
+  });
+
   it("should support select with order by and limit", () => {
 
     expect_sql(
