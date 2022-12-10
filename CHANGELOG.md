@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.5](https://github.com/Soontao/cds-mysql/compare/v6.3.4...v6.3.5) (2022-12-10)
+
+
+### Bug Fixes
+
+* alias for sub query ([9229473](https://github.com/Soontao/cds-mysql/commit/9229473e28b806d2441f8e495c2d0aab14e6ca92))
+* datetime formation ([89ce233](https://github.com/Soontao/cds-mysql/commit/89ce233c2aa4da2c1289147e876f05954be1bda4))
+* doc ([66b7417](https://github.com/Soontao/cds-mysql/commit/66b74174fd091671920b4cbd191aa897e3d116fb))
+* sub query ([d171009](https://github.com/Soontao/cds-mysql/commit/d171009ffbd700ec2cb3cec3fa1df7967a7e69a4))
+* sub query for fiori element ([c3f10ce](https://github.com/Soontao/cds-mysql/commit/c3f10ce9ba30344615c3801df62d492a9d475383))
+
 ### [6.3.4](https://github.com/Soontao/cds-mysql/compare/v6.3.4-3...v6.3.4) (2022-12-10)
 
 
