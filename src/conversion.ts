@@ -1,7 +1,30 @@
 // conversion for OUTPUT (DB -> JSON)
 import { cwdRequire, cwdRequireCDS } from "cds-internal-tool";
 import { DateTime, FixedOffsetZone } from "luxon";
-import { MYSQL_DATE_TIME_FORMAT } from "./constants";
+import { MYSQL_DATE_TIME_FORMAT, MYSQL_DATE_TIME_FORMAT_WO_FRACTIONS } from "./constants";
+
+
+function _parseDateString(value: string) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  switch (value.length) {
+    case MYSQL_DATE_TIME_FORMAT_WO_FRACTIONS.length:
+      return DateTime.fromFormat(
+        value,
+        MYSQL_DATE_TIME_FORMAT_WO_FRACTIONS,
+        { zone: FixedOffsetZone.utcInstance }
+      );
+    default:
+      return DateTime.fromFormat(
+        value,
+        MYSQL_DATE_TIME_FORMAT,
+        { zone: FixedOffsetZone.utcInstance }
+      );
+  }
+}
+
 
 const convertToBoolean = (boolean: any) => {
   if (boolean === null) {
@@ -29,19 +52,21 @@ const convertInt64ToString = int64 => {
 
 const convertToISOTime = (value: string) => {
   if (value === null || value === undefined) {
-    return value;
+    return null;
   }
-  const dateTime = DateTime.fromFormat(value, MYSQL_DATE_TIME_FORMAT, {
-    zone: FixedOffsetZone.utcInstance
-  });
-  return dateTime.toISO();
+  const dateTime = _parseDateString(value);
+  if (dateTime.isValid) {
+    return dateTime.toISO();
+  }
+  return null;
 };
 
-const convertToISONoMilliseconds = (element: string) => {
-  if (element) {
-    const dateTime = DateTime.fromFormat(element, MYSQL_DATE_TIME_FORMAT, {
-      zone: FixedOffsetZone.utcInstance
-    });
+const convertToISONoMilliseconds = (value: string) => {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  const dateTime = _parseDateString(value);
+  if (dateTime.isValid) {
     return dateTime.toISO({ suppressMilliseconds: true });
   }
   return null;

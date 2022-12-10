@@ -26,7 +26,7 @@ describe("SQL Factory Test Suite", () => {
   function toSQL(query: any) {
     return sqlFactory(
       query,
-      { dialect: "sqlite", customBuilder: CustomBuilder, now: "2022-11-22 14:54:59", user: "theo.sun@not.existed.com" },
+      { dialect: "sqlite", customBuilder: CustomBuilder, now: "2022-11-22 14:54:59.00", user: "theo.sun@not.existed.com" },
       model
     );
   }
