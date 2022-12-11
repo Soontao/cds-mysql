@@ -1,6 +1,6 @@
 export const ANNOTATION_CDS_TYPEORM_CONFIG = "@cds.typeorm.config";
 
-export const MYSQL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.S";
+export const MYSQL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.u";
 export const MYSQL_DATE_TIME_FORMAT_WO_FRACTIONS = "yyyy-MM-dd HH:mm:ss";
 export const MYSQL_CHARSET = "utf8mb4";
 export const MYSQL_COLLATE = "utf8mb4_unicode_ci";

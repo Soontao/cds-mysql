@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Test Suite should support wide datetime max 1`] = `
+{
+  "ExampleDT1": "9999-12-31T23:59:59Z",
+  "ExampleDT2": "9999-12-31T23:59:59Z",
+  "ExampleTS1": "9999-12-31T23:59:59.000Z",
+  "ExampleTS2": "9999-12-31T23:59:59.000Z",
+}
+`;
+
+exports[`Integration Test Suite should support wide datetime zero 1`] = `
+{
+  "ExampleDT1": "0000-01-01T00:00:00Z",
+  "ExampleDT2": "0000-01-01T00:00:00Z",
+  "ExampleTS1": "0000-01-01T00:00:00.000Z",
+  "ExampleTS2": "0000-01-01T00:00:00.000Z",
+}
+`;

@@ -238,6 +238,32 @@ describe("Integration Test Suite", () => {
 
   });
 
+  it("should support wide datetime zero", async () => {
+
+    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/bank/Cards", {
+      ExampleDT1: "0000-01-01T00:00:00Z",
+      ExampleDT2: "0000-01-01T00:00:00Z",
+      ExampleTS1: "0000-01-01T00:00:00Z",
+      ExampleTS2: "0000-01-01T00:00:00Z",
+    });
+
+    expect({ ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 }).toMatchSnapshot();
+
+  });
+  it("should support wide datetime max", async () => {
+
+    // REVISIT: fraction seconds
+    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/bank/Cards", {
+      ExampleDT1: "9999-12-31T23:59:59Z",
+      ExampleDT2: "9999-12-31T23:59:59Z",
+      ExampleTS1: "9999-12-31T23:59:59Z",
+      ExampleTS2: "9999-12-31T23:59:59Z",
+    });
+
+    expect({ ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 }).toMatchSnapshot();
+
+  });
+
   it("should support select forUpdate", async () => {
 
     const { data: createdCard } = await client.post("/bank/Cards", {
