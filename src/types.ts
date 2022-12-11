@@ -1,6 +1,6 @@
 import type { Connection } from "mysql2/promise";
 import type { INSERT } from "cds-internal-tool/lib/types/ql";
-import type { Options as PoolOptions } from "generic-pool";
+import type { Options as PoolOptions, Pool } from "generic-pool";
 
 export declare class UPSERT<T = any> extends INSERT<T> {
 
@@ -39,11 +39,8 @@ export interface MySQLCredential {
   }
 }
 
-export type ReleasableConnection = Connection & {
-  /**
-   * release connection to pool
-   */
-  _release: () => void;
+export type ConnectionWithPool = Connection & {
+  _pool: Pool<Connection>;
 }
 
 export interface MysqlDatabaseOptions {
@@ -77,6 +74,17 @@ export interface MysqlDatabaseOptions {
     prefix?: string;
   };
   /**
+   * mysql connection configurations
+   */
+  connection?: {
+    /**
+     * `max_allowed_packet` size of mysql database, when create the pool of tenant, `cds-mysql` will try to set the global `max_allowed_packet` variable
+     * 
+     * The value should be a multiple of 1024; non-multiples are rounded down to the nearest multiple.
+     */
+    maxallowedpacket?: number | boolean;
+  };
+  /**
    * connection pool options for each tenant
    */
   pool?: PoolOptions;
@@ -107,3 +115,5 @@ export interface MysqlDatabaseOptions {
     }
   };
 }
+
+export type CQNKind = "SELECT" | "UPDATE" | "DELETE" | "INSERT" | "CREATE" | "DROP";

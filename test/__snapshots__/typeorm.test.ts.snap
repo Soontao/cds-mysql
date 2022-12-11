@@ -13,7 +13,8 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 {
   "name": "CreationDateTime",
   "nullable": true,
-  "type": "timestamp",
+  "precision": 3,
+  "type": "datetime",
 }
 `;
 
@@ -56,7 +57,8 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 {
   "name": "LastChangeDateTime",
   "nullable": true,
-  "type": "timestamp",
+  "precision": 3,
+  "type": "datetime",
 }
 `;
 
@@ -336,7 +338,7 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 {
   "name": "BirthDateTime",
   "nullable": true,
-  "type": "timestamp",
+  "type": "datetime",
 }
 `;
 
@@ -389,7 +391,7 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
   "default": [Function],
   "name": "DateTime1",
   "nullable": true,
-  "type": "timestamp",
+  "type": "datetime",
 }
 `;
 
@@ -398,7 +400,7 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
   "default": [Function],
   "name": "DateTime2",
   "nullable": true,
-  "type": "timestamp",
+  "type": "datetime",
 }
 `;
 
@@ -527,23 +529,49 @@ exports[`TypeORM Test Suite should support extensions for csv app 1`] = `
     "@instanceof": Symbol(EntitySchema),
     "options": {
       "columns": {
-        "entity": {
-          "length": 64,
-          "name": "entity",
+        "ID": {
+          "length": 36,
+          "name": "ID",
           "nullable": false,
           "primary": true,
           "type": "nvarchar",
         },
-        "hash": {
-          "length": 64,
-          "name": "hash",
-          "nullable": true,
+        "Name": {
+          "length": 25,
+          "name": "Name",
+          "nullable": false,
+          "primary": true,
           "type": "nvarchar",
         },
+        "Size": {
+          "name": "Size",
+          "nullable": true,
+          "precision": 18,
+          "scale": 3,
+          "type": "decimal",
+        },
       },
-      "name": "community_mysql_csv_history",
+      "name": "test_resources_csv_app_db_City",
       "synchronize": true,
-      "tableName": "community_mysql_csv_history",
+      "tableName": "test_resources_csv_app_db_City",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_csv_app_db_City",
+      ],
+      "expression": "SELECT
+  City_0.ID,
+  City_0.Name,
+  City_0.Size
+FROM test_resources_csv_app_db_City AS City_0;",
+      "name": "test_resources_csv_app_srv_AppService_Cities",
+      "synchronize": true,
+      "tableName": "test_resources_csv_app_srv_AppService_Cities",
+      "type": "view",
     },
   },
   EntitySchema {
@@ -615,7 +643,7 @@ exports[`TypeORM Test Suite should support extensions for csv app 1`] = `
         "Sign": {
           "name": "Sign",
           "nullable": true,
-          "type": "timestamp",
+          "type": "datetime",
         },
         "SignTime": {
           "name": "SignTime",
@@ -625,7 +653,8 @@ exports[`TypeORM Test Suite should support extensions for csv app 1`] = `
         "SignTmp": {
           "name": "SignTmp",
           "nullable": true,
-          "type": "timestamp",
+          "precision": 3,
+          "type": "datetime",
         },
         "Weight": {
           "name": "Weight",
@@ -852,7 +881,7 @@ exports[`TypeORM Test Suite should support migrate different prop type to mysql 
 [
   {
     "parameters": undefined,
-    "query": "CREATE TABLE \`test_property_type_People\` (\`Name\` varchar(20) NOT NULL DEFAULT 'Unknown', \`Age\` int NULL DEFAULT '10', \`Credit\` decimal(10,2) NULL DEFAULT '1.00', \`FullEmployee\` tinyint NULL DEFAULT 0, \`Active\` tinyint NULL DEFAULT 1, \`BirthDay\` date NOT NULL, \`BirthDateTime\` timestamp NULL, \`Type\` varchar(10) NOT NULL, \`Avatar\` varbinary(255) NULL, \`Picture\` longtext NULL, \`rank\` longtext NULL, \`UInt8Property\` tinyint NULL, \`Int16Property\` smallint NULL, \`Int32Property\` int NULL, \`Int64Property\` bigint NULL, \`Integer64Property\` bigint NULL, \`Create\` tinyint NULL DEFAULT 0, \`Key\` int NOT NULL, \`DoubleProperty\` double NULL, \`StringWithoutLength\` text NULL, \`LargeBinaryValue\` longblob NULL, \`Date1\` date NULL, \`Date2\` date NULL, \`DateTime1\` timestamp NULL DEFAULT NOW(), \`DateTime2\` timestamp NULL DEFAULT CURRENT_TIMESTAMP(), PRIMARY KEY (\`Name\`, \`Type\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+    "query": "CREATE TABLE \`test_property_type_People\` (\`Name\` varchar(20) NOT NULL DEFAULT 'Unknown', \`Age\` int NULL DEFAULT '10', \`Credit\` decimal(10,2) NULL DEFAULT '1.00', \`FullEmployee\` tinyint NULL DEFAULT 0, \`Active\` tinyint NULL DEFAULT 1, \`BirthDay\` date NOT NULL, \`BirthDateTime\` datetime NULL, \`Type\` varchar(10) NOT NULL, \`Avatar\` varbinary(255) NULL, \`Picture\` longtext NULL, \`rank\` longtext NULL, \`UInt8Property\` tinyint NULL, \`Int16Property\` smallint NULL, \`Int32Property\` int NULL, \`Int64Property\` bigint NULL, \`Integer64Property\` bigint NULL, \`Create\` tinyint NULL DEFAULT 0, \`Key\` int NOT NULL, \`DoubleProperty\` double NULL, \`StringWithoutLength\` text NULL, \`LargeBinaryValue\` longblob NULL, \`Date1\` date NULL, \`Date2\` date NULL, \`DateTime1\` datetime NULL DEFAULT NOW(), \`DateTime2\` datetime NULL DEFAULT CURRENT_TIMESTAMP(), PRIMARY KEY (\`Name\`, \`Type\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
   },
 ]
 `;

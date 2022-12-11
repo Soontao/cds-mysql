@@ -1,32 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-nocheck
-import cds from "@sap/cds";
-import { Logger, QueryRunner } from "typeorm";
+import { cwdRequireCDS } from "cds-internal-tool";
+import type { QueryRunner } from "typeorm";
 
-const logger = cds.log("typeorm");
 
-export const TypeORMLogger: Logger = {
+export const TypeORMLogger = {
+  get logger() {
+    const cds = cwdRequireCDS();
+    return cds.log("typeorm");
+  },
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {
-    logger?.debug?.({ type: "query", query, parameters });
+    TypeORMLogger.logger?.debug?.({ type: "query", query, parameters });
   },
 
   logQueryError(error: string | Error, query: string, parameters?: any[], queryRunner?: QueryRunner) {
-    logger?.error?.({ type: "query_failed", error, query, parameters });
+    TypeORMLogger.logger?.error?.({ type: "query_failed", error, query, parameters });
   },
 
   logQuerySlow(time: number, query: string, parameters?: any[], queryRunner?: QueryRunner) {
-    logger?.warn?.({ type: "slow_query", time, query, parameters });
+    TypeORMLogger.logger?.warn?.({ type: "slow_query", time, query, parameters });
   },
 
   logSchemaBuild(message: string, queryRunner?: QueryRunner) {
-    logger?.debug?.({ type: "schema_build", message });
+    TypeORMLogger.logger?.debug?.({ type: "schema_build", message });
   },
 
   logMigration(message: string, queryRunner?: QueryRunner) {
-    logger?.debug?.({ type: "migration", message });
+    TypeORMLogger.logger?.debug?.({ type: "migration", message });
   },
 
   log(level: "log" | "info" | "warn", message: any, queryRunner?: QueryRunner) {
-    logger?.[level]?.({ message });
+    TypeORMLogger.logger?.[level]?.({ message });
   },
 };

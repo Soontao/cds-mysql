@@ -1,5 +1,4 @@
 import { smartId } from "@sap/cds-compiler/lib/sql-identifier";
-import * as quotingStyles from "@sap/cds/libx/_runtime/common/utils/quotingStyles";
 import { MYSQL_KEYWORDS } from "./keywords";
 
 
@@ -15,7 +14,6 @@ const _slugify = (s: string) => s.replace(/\./g, "_");
 const _smartId = (s: string) => smartId(_slugify(s), _dialect);
 
 export const enhancedQuotingStyles = {
-  ...quotingStyles,
   plain: (s: string) => {
     // * or already quoted?
     if (s === "*" || _isQuoted(s)) return s;

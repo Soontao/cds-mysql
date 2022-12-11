@@ -1,0 +1,75 @@
+name: link-cap-mysql-sflight
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+  schedule:
+    - cron: "45 15 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mariadb:10.9
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=30s --health-timeout=5s --health-retries=10
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+
+      - run: npm i -g npm
+
+      - run: npm ci
+
+      - name: setup mysql user
+        run: node ./docker/create_user.js
+
+      - run: npm run build
+      - run: npm link
+
+      - uses: actions/checkout@v3
+        with:
+          repository: Soontao/cap-mysql-sflight
+          path: ./sflight
+        
+      - run: npm ci
+        working-directory: ./sflight
+
+      - run: npm link cds-mysql
+        working-directory: ./sflight
+
+      - run: npm test -- --forceExit
+        working-directory: ./sflight
+        env:
+          CI: true
+          CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
+          CDS_REQUIRES_DB_CREDENTIALS_PORT: 3306
+          CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
+          CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
+          CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cds_admin

@@ -1,5 +1,6 @@
 import { CSN, cwdRequire, EntityDefinition, fuzzy } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
+import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const { InsertBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
@@ -7,7 +8,13 @@ const { InsertBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
 export class CustomInsertBuilder extends InsertBuilder {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
-    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+    // overwrite quote function
+    this._quoteElement = enhancedQuotingStyles.plain;
+  }
+
+  get SelectBuilder() {
+    Object.defineProperty(this, "SelectBuilder", { value: CustomSelectBuilder });
+    return CustomSelectBuilder;
   }
 
   private _extOutputObj = { columns: [] };
@@ -38,7 +45,7 @@ export class CustomInsertBuilder extends InsertBuilder {
    * @param options 
    * @returns 
    */
-  private _getValue(
+  _getValue(
     column: string,
     options: { entry: any, flattenColumn: Array<string>, insertAnnotatedColumns: Map<any, any> }
   ) {
@@ -114,6 +121,17 @@ export class CustomInsertBuilder extends InsertBuilder {
     }
 
     this._outputObj.sql.push(")");
+  }
+
+
+  /**
+   * @mysql overwrite force to use customized select builder
+   * @param element 
+   */
+  _as(element: any) {
+    const { sql, values } = new this.SelectBuilder(element, this._options, this._csn).build();
+    this._outputObj.sql.push(sql);
+    this._outputObj.values.push(...values);
   }
 
   /**

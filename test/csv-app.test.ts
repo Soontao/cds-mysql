@@ -1,18 +1,33 @@
+/* eslint-disable max-len */
 import { doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 import path from "path";
 import MySQLDatabaseService from "../src";
 
 
-describe("CSV App Test Suite", () => {
+describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
 
   const client = setupTest(__dirname, "./resources/csv-app");
+
+  const cds = cwdRequireCDS();
+  cds.env.log.levels.db = "debug";
+  cds.env.features.bigjs = true;
+
+  const { SELECT } = cds.ql;
 
   afterAll(doAfterAll);
 
   it("should support deploy by API", async () => {
     const db: MySQLDatabaseService = cwdRequireCDS().db as any;
     await db.deployCSV();
+  });
+
+  it("should get error when create duplicated record", async () => {
+    const { status, data } = await client.post("/app/Peoples", {
+      ID: 1, Name: "1"
+    });
+    expect({ status }).toMatchSnapshot();
+    expect(data.error.message).toMatch(/Duplicate/);
   });
 
   it("should support automatically migrate csv data", async () => {
@@ -89,7 +104,7 @@ describe("CSV App Test Suite", () => {
 
 
   it("should support migrate again", async () => {
-    cwdRequireCDS().db?.["deploy"]?.(
+    await cwdRequireCDS().db?.["deploy"]?.(
       await cwdRequireCDS().load("*", { root: path.join(__dirname, "./resources/csv-app") })
     );
   });

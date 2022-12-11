@@ -4,6 +4,7 @@ import path from "path";
 import { DataSourceOptions } from "typeorm";
 import { csnToEntity, migrate } from "../src/typeorm";
 import { sha256 } from "../src/typeorm/csv";
+import { TypeORMLogger } from "../src/typeorm/logger";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
 import { cleanDB, doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
 
@@ -144,6 +145,13 @@ describe("TypeORM Test Suite", () => {
     const hashOfBigSizeTableContent = await sha256(path.join(__dirname, "./resources/big-size-table.cds"));
     expect(hashOfBigSizeTableContent.length).toMatchSnapshot("hash length");
     expect(hashOfBigSizeTableContent).toMatchSnapshot("hash value");
+  });
+
+  it("should support logger for typeorm", () => {
+    TypeORMLogger.logQueryError(new Error("any"), "select 1 from dummy");
+    TypeORMLogger.logQuerySlow(9999, "select 1 from dummy");
+    TypeORMLogger.logMigration("dummy message");
+    TypeORMLogger.log("info", "dummy message");
   });
 
 });

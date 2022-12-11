@@ -26,18 +26,3 @@ define aspect preDelivery {
    */
   Disabled    : Boolean default false;
 }
-
-/**
- * csv migrate history
- */
-entity community.mysql.csv.history {
-     /**
-      * entity name, for mysql, the maximum length of table name is
-      * 64 chars
-      */
-  key![entity] : String(64);
-     /**
-      * csv hash
-      */
-     hash      : String(64);
-}

@@ -2,6 +2,107 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.6](https://github.com/Soontao/cds-mysql/compare/v6.3.6-3...v6.3.6) (2022-12-11)
+
+
+### Bug Fixes
+
+* datetime definition ([54bbc28](https://github.com/Soontao/cds-mysql/commit/54bbc281619b8e0eaa4e5dbb95796fa2b3de80a8))
+
+### [6.3.6-3](https://github.com/Soontao/cds-mysql/compare/v6.3.6-2...v6.3.6-3) (2022-12-11)
+
+
+### Bug Fixes
+
+* add more ut for timestamp ([1a57343](https://github.com/Soontao/cds-mysql/commit/1a5734301b405b99730c0847c8472d3ca4cd7896))
+* ci ([858436e](https://github.com/Soontao/cds-mysql/commit/858436e9f884e02a1889aee54ba69b0895b65450))
+* datetime ([94b962f](https://github.com/Soontao/cds-mysql/commit/94b962f08c7131f57a01cbcef684144590dddf98))
+* datetime again ([71bb3e8](https://github.com/Soontao/cds-mysql/commit/71bb3e88d7c641d1397592ee4f483bc0e9e5adf5))
+* ut ([6124787](https://github.com/Soontao/cds-mysql/commit/6124787ed6ea646ddd9648c6fb6f3e4e50a44b3a))
+
+### [6.3.6-2](https://github.com/Soontao/cds-mysql/compare/v6.3.6-1...v6.3.6-2) (2022-12-10)
+
+
+### Bug Fixes
+
+* optional dep ([133a4c6](https://github.com/Soontao/cds-mysql/commit/133a4c6aafa7a457666a952d97b0a79e2db21ca7))
+
+### [6.3.6-1](https://github.com/Soontao/cds-mysql/compare/v6.3.6-0...v6.3.6-1) (2022-12-10)
+
+
+### Bug Fixes
+
+* datetime 12 hour issue ([3c2e7cf](https://github.com/Soontao/cds-mysql/commit/3c2e7cf07ff750cb7bc1fa4c870c36f30ed5f14b))
+
+### [6.3.6-0](https://github.com/Soontao/cds-mysql/compare/v6.3.5...v6.3.6-0) (2022-12-10)
+
+
+### Bug Fixes
+
+* conversion type ([7854994](https://github.com/Soontao/cds-mysql/commit/785499498d1efa8e734132f9afcf47e359d0bd7f))
+* date time fractions ([9722686](https://github.com/Soontao/cds-mysql/commit/97226869c42c92a47e38ed0bc102368bd5f8977d))
+* datetime type ([29622ba](https://github.com/Soontao/cds-mysql/commit/29622bacddc4c84a156887887cbb507e2f3efb9a))
+* readme ([4b0de5c](https://github.com/Soontao/cds-mysql/commit/4b0de5c037788f8be2127e0aec7ba46079db4a9c))
+* readme doc ([f142370](https://github.com/Soontao/cds-mysql/commit/f1423708bfa25e2ea43f9418296e2392061cd089))
+* refactor csv ([24ce039](https://github.com/Soontao/cds-mysql/commit/24ce039c548ab5b3a3db8e7992e37dce03076398))
+* refactor migrate ([0719ae6](https://github.com/Soontao/cds-mysql/commit/0719ae6ffa7e62112982e77909a7a48950b7a030))
+* sql test ([68503c8](https://github.com/Soontao/cds-mysql/commit/68503c8bd9f7a707c4512fbe11b671327db346e1))
+* time zone date time ([788c2ac](https://github.com/Soontao/cds-mysql/commit/788c2ac75f515f77faa664dab443d1f3a4d305a6))
+* ut for insert/update ([f2540a9](https://github.com/Soontao/cds-mysql/commit/f2540a97969061565bb4506cd511acdc1052cc95))
+
+### [6.3.5](https://github.com/Soontao/cds-mysql/compare/v6.3.4...v6.3.5) (2022-12-10)
+
+
+### Bug Fixes
+
+* alias for sub query ([9229473](https://github.com/Soontao/cds-mysql/commit/9229473e28b806d2441f8e495c2d0aab14e6ca92))
+* datetime formation ([89ce233](https://github.com/Soontao/cds-mysql/commit/89ce233c2aa4da2c1289147e876f05954be1bda4))
+* doc ([66b7417](https://github.com/Soontao/cds-mysql/commit/66b74174fd091671920b4cbd191aa897e3d116fb))
+* sub query ([d171009](https://github.com/Soontao/cds-mysql/commit/d171009ffbd700ec2cb3cec3fa1df7967a7e69a4))
+* sub query for fiori element ([c3f10ce](https://github.com/Soontao/cds-mysql/commit/c3f10ce9ba30344615c3801df62d492a9d475383))
+
+### [6.3.4](https://github.com/Soontao/cds-mysql/compare/v6.3.4-3...v6.3.4) (2022-12-10)
+
+
+### Bug Fixes
+
+* add threshold of coverage ([ce359b5](https://github.com/Soontao/cds-mysql/commit/ce359b554fd2cd7250afb2f89639f53393d306d8))
+* better typeorm test ([a6bdaca](https://github.com/Soontao/cds-mysql/commit/a6bdacab57989ac2772fe270ef709456347e7ed1))
+* bigjs test ([63a48fd](https://github.com/Soontao/cds-mysql/commit/63a48fd42f948bff3b56793b95ab2a5bb053663d))
+* **deps:** update dependency cds-internal-tool to v1.6.14 ([d221835](https://github.com/Soontao/cds-mysql/commit/d2218355405b6ad0439ac32e952872c9b656db51))
+* **deps:** update dependency cds-internal-tool to v1.6.15 ([f054090](https://github.com/Soontao/cds-mysql/commit/f054090f46a8f72f80052c36263265b43ebb8de6))
+* **deps:** update dependency cds-internal-tool to v1.6.18 ([#172](https://github.com/Soontao/cds-mysql/issues/172)) ([845a26d](https://github.com/Soontao/cds-mysql/commit/845a26da0c8bad2e8a0c019fbf936cca647e8bee))
+* doc ([05e1a77](https://github.com/Soontao/cds-mysql/commit/05e1a77a724424b885c2949c956bf3933ec98cee))
+* doc ([c686695](https://github.com/Soontao/cds-mysql/commit/c6866952f9a6534e9f573c2cb7f8eaa05f790ed0))
+* index ut ([5067027](https://github.com/Soontao/cds-mysql/commit/5067027c4f571e078999fecd394d80674370c136))
+* new sql ut ([e83d9a5](https://github.com/Soontao/cds-mysql/commit/e83d9a541b19352aee8907a7ce1785121a0a62e7))
+* ut ([134f80a](https://github.com/Soontao/cds-mysql/commit/134f80a0ee48ab993ec09df00c609263cb365517))
+* ut and update builder ([c85aae4](https://github.com/Soontao/cds-mysql/commit/c85aae42aeb7914e819fceff58af9d56e2562a3b))
+* ut for execute.js ([f0577a3](https://github.com/Soontao/cds-mysql/commit/f0577a37d3f1374c80af96b42cbb1265f2e410d6))
+* ut for sql ([36f68b0](https://github.com/Soontao/cds-mysql/commit/36f68b09ef10ce6fb9ab32c2adce5923e4527d46))
+* ut for utils ([bc2df14](https://github.com/Soontao/cds-mysql/commit/bc2df14d2080e564bab7ba0fed2e3c6c4c863b96))
+* ut test for tenant ([89bdd9f](https://github.com/Soontao/cds-mysql/commit/89bdd9f2d1ff0214627f962439eb8364e8ad9794))
+
+### [6.3.4-3](https://github.com/Soontao/cds-mysql/compare/v6.3.4-2...v6.3.4-3) (2022-12-06)
+
+
+### Bug Fixes
+
+* builders ([ab2d837](https://github.com/Soontao/cds-mysql/commit/ab2d837df889481acd13c0d3d255c08c5497d63a))
+
+### [6.3.4-2](https://github.com/Soontao/cds-mysql/compare/v6.3.4-1...v6.3.4-2) (2022-12-06)
+
+
+### Bug Fixes
+
+* better support for mtxs ([1ea5c67](https://github.com/Soontao/cds-mysql/commit/1ea5c672260b19a6cdfa3f24950afd7c602e01da))
+* csv migration ([8ccfdd6](https://github.com/Soontao/cds-mysql/commit/8ccfdd6b78a300bb6cd625208ff484b4ae7a6383))
+* **deps:** update dependency cds-internal-tool to v1.6.1 ([c598bca](https://github.com/Soontao/cds-mysql/commit/c598bcafb2d368d0cbeb000663cff9db926d251c))
+* **deps:** update dependency cds-internal-tool to v1.6.12 ([789acdb](https://github.com/Soontao/cds-mysql/commit/789acdbada2b4db8985c8b68c9acfec0a9e54344))
+* **deps:** update dependency typeorm to v0.3.11 ([b41d16f](https://github.com/Soontao/cds-mysql/commit/b41d16f937cfbdb3c555f049ac11a2bae39d3681))
+* type for logger ([cc27358](https://github.com/Soontao/cds-mysql/commit/cc27358c8f3b4ff63db4903477a820fe00c50bc7))
+* type update ([fc55c2c](https://github.com/Soontao/cds-mysql/commit/fc55c2cdb95ccaf0716d3e11a21eaddbeb79edd1))
+
 ### [6.3.4-1](https://github.com/Soontao/cds-mysql/compare/v6.3.4-0...v6.3.4-1) (2022-11-29)
 
 

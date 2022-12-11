@@ -1,7 +1,7 @@
-// @ts-nocheck
 
 import { doAfterAll } from "./utils";
-import { setupTest } from "cds-internal-tool";
+import { cwdRequireCDS, setupTest } from "cds-internal-tool";
+import MySQLDatabaseService from "../src";
 
 
 describe("Tenant Test Suite", () => {
@@ -9,6 +9,7 @@ describe("Tenant Test Suite", () => {
   const client = setupTest(__dirname, "./resources/integration");
   client.defaults.auth = { username: "alice", password: "admin" };
 
+  const cds = cwdRequireCDS();
   afterAll(doAfterAll);
 
   it("should support multi-tenancy", async () => {
@@ -28,7 +29,7 @@ describe("Tenant Test Suite", () => {
   it("should support subscribe tenant", async () => {
     await client.put("/-/cds/saas-provisioning/tenant/t192", {}, {
       auth: {
-        username: "yves"
+        username: "yves", password: ""
       }
     });
   });
@@ -41,16 +42,34 @@ describe("Tenant Test Suite", () => {
       },
       {
         auth: {
-          username: "yves"
+          username: "yves", password: ""
         }
       }
     );
   });
 
+  it("should support get tenant tables", async () => {
+
+    const db: MySQLDatabaseService = cds.db as any;
+    const tool = db.getAdminTool();
+    const tables = await tool.getTables("t192");
+    expect(tables.length > 0).toBeTruthy();
+
+  });
+
+  it("should raise error when tenant-id too long", () => {
+
+    const db: MySQLDatabaseService = cds.db as any;
+    const tool = db.getAdminTool();
+    expect(() => tool.getTenantDatabaseName(cds.utils.uuid() + cds.utils.uuid()))
+      .toThrowError("TENANT_DATABASE_NAME_TOO_LONG");
+
+  });
+
   it("should support unsubscribe tenant", async () => {
     await client.delete("/-/cds/saas-provisioning/tenant/t192", {
       auth: {
-        username: "yves"
+        username: "yves", password: ""
       }
     });
   });

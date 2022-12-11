@@ -7,8 +7,7 @@ export class CustomReferenceBuilder extends (ReferenceBuilder as any) {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
-    // @ts-ignore
-    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+    this._quoteElement = enhancedQuotingStyles.plain;
   }
 
   get FunctionBuilder() {

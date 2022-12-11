@@ -1,26 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK query 1`] = `
+exports[`SQL Factory Test Suite should support apply function to query: default 1`] = `
 {
-  "sql": "SELECT * FROM test_int_People tmp_table_4 WHERE Name = ? LOCK IN SHARE MODE",
+  "sql": "SELECT max(SELECT v FROM a) AS "v" FROM DUMMY",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support build a SELECT FOR SHARE LOCK query: default 1`] = `
+{
+  "sql": "SELECT * FROM test_int_People WHERE Name = ? LOCK IN SHARE MODE",
   "values": [
     "Theo",
   ],
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query 1`] = `
+exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query: default 1`] = `
 {
-  "sql": "SELECT * FROM test_int_People tmp_table_3 WHERE Name = ? FOR UPDATE",
+  "sql": "SELECT * FROM test_int_People WHERE Name = ? FOR UPDATE",
   "values": [
     "Theo",
   ],
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a complex SELECT projection 1`] = `
+exports[`SQL Factory Test Suite should support build a complex SELECT projection: default 1`] = `
 {
-  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People tmp_table_2 WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
+  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
   "values": [
     "Theo",
     "2022-11-17",
@@ -29,9 +36,65 @@ exports[`SQL Factory Test Suite should support build a complex SELECT projection
 }
 `;
 
-exports[`SQL Factory Test Suite should support build a simple SELECT query 1`] = `"SELECT * FROM test_int_People tmp_table_1"`;
+exports[`SQL Factory Test Suite should support build a simple SELECT query: default 1`] = `
+{
+  "sql": "SELECT * FROM test_int_People",
+  "values": [],
+}
+`;
 
-exports[`SQL Factory Test Suite should support insert columns 1`] = `
+exports[`SQL Factory Test Suite should support build ref with function: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "$count" FROM v WHERE v.d = CONCAT(v.a, v.b)",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support build sql with 2 parameter 1`] = `
+{
+  "sql": "SELECT * FROM a",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support count distinct: default 1`] = `
+{
+  "sql": "SELECT count(DISTINCT v) FROM v",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support count distinct: default 2`] = `
+{
+  "sql": "SELECT count(DISTINCT v.a) FROM v",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support delete: delete all 1`] = `
+{
+  "sql": "DELETE FROM a",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support delete: delete where 1`] = `
+{
+  "sql": "DELETE FROM a WHERE v = 1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support delete: delete where func 1`] = `
+{
+  "sql": "DELETE FROM a WHERE CONCAT(a.a, a.c) = ?",
+  "values": [
+    "long string",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert columns: default 1`] = `
 {
   "sql": "INSERT INTO test_int_People ( ID, Name, Age, RegisterDate , createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
   "values": [
@@ -39,10 +102,274 @@ exports[`SQL Factory Test Suite should support insert columns 1`] = `
     "Theo",
     15,
     "2022-11-17",
-    "2022-11-22T14:54:59.340Z",
-    "ANONYMOUS",
-    "2022-11-22T14:54:59.340Z",
-    "ANONYMOUS",
+    "2022-11-22 14:54:59.000",
+    "theo.sun@not.existed.com",
+    "2022-11-22 14:54:59.000",
+    "theo.sun@not.existed.com",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert data into existed entity: default 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id",
+      "Theo Sun",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert data with given value: default 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id",
+      "Theo Sun",
+      "2022-12-10 12:05:34.000",
+      "usr0",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert data with given value: with mysql date time 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id-2",
+      "Theo Sun",
+      "2022-12-10 12:05:34.000",
+      "usr0",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert data with given value: with time zone 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id",
+      "Theo Sun",
+      "2022-12-10 12:05:34.000",
+      "usr0",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with given datetime: default 1`] = `
+{
+  "sql": "INSERT INTO test_int_Card ( ID, ExampleTS2, createdBy, createdAt, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id-2",
+      "2022-12-10 12:05:34.000",
+      "usr0",
+      "2022-11-22 14:54:59.000",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with select query: default 1`] = `
+{
+  "sql": "INSERT INTO b SELECT * FROM a",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with select query: with columns 1`] = `
+{
+  "sql": "INSERT INTO b ( c1, c2 ) SELECT c1, c2 FROM a WHERE b = 1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support insert with select query: with condition 1`] = `
+{
+  "sql": "INSERT INTO b SELECT * FROM a WHERE b = 1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support query with aggregation: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "total" FROM t1",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select for update: for update lock 1`] = `
+{
+  "sql": "SELECT * FROM A WHERE b = 1 FOR UPDATE",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select for update: for update lock not supported 1`] = `
+{
+  "sql": "SELECT * FROM A WHERE c = 2 FOR UPDATE",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select for update: share lock 1`] = `
+{
+  "sql": "SELECT * FROM A WHERE a = 1 LOCK IN SHARE MODE",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select sub query with alias: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "cc" FROM (SELECT * FROM foo LIMIT 1000 OFFSET 0) AS t_1 LIMIT 1000 OFFSET 0",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select sub query with alias: with alias 1`] = `
+{
+  "sql": "SELECT count(1) AS "cc" FROM (SELECT * FROM foo not_important_t_1 LIMIT 1000 OFFSET 0) AS not_important_t_1 LIMIT 1000 OFFSET 0",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select where exists: default 1`] = `
+{
+  "sql": "SELECT * FROM Authors a WHERE EXISTS ( SELECT * FROM Books WHERE author_ID = a.ID )",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with complex where: default 1`] = `
+{
+  "sql": "SELECT * FROM Foo WHERE name LIKE ? AND ( kind IN ( ? , ? ) OR ratio BETWEEN 0 AND 10 OR stock >= 25 )",
+  "values": [
+    "%foo%",
+    "k1",
+    "k2",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with groupBy: default 1`] = `
+{
+  "sql": "SELECT count(1) AS "total", c1, c2 FROM foo GROUP BY c1, c2",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with join: default 1`] = `
+{
+  "sql": "SELECT * FROM a INNER JOIN b ON a.a = b.a",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with order by and limit: default 1`] = `
+{
+  "sql": "SELECT * FROM foo LIMIT 10 OFFSET 5",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with order by and limit: default 2`] = `
+{
+  "sql": "SELECT * FROM boo ORDER BY c1 ASC LIMIT 5 OFFSET 3",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support select with order by and limit: default 3`] = `
+{
+  "sql": "SELECT * FROM boo ORDER BY c2 DESC, c1 ASC LIMIT 5 OFFSET 3",
+  "values": [],
+}
+`;
+
+exports[`SQL Factory Test Suite should support update date into existed entity: default 1`] = `
+{
+  "sql": "UPDATE test_int_People SET Name = ?, modifiedAt = ?, modifiedBy = ? WHERE ID = ?",
+  "values": [
+    "New Name",
+    "2022-11-22 14:54:59.000",
+    "theo.sun@not.existed.com",
+    "test-id",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support update set: where set 1`] = `
+{
+  "sql": "UPDATE test_int_People SET Name = ?, modifiedAt = ?, modifiedBy = ? WHERE ID = ?",
+  "values": [
+    "Name Updated",
+    "2022-11-22 14:54:59.000",
+    "theo.sun@not.existed.com",
+    "0849d042-73d0-424e-9c6a-99efcb813104",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support update set: with 1`] = `
+{
+  "sql": "UPDATE test_int_People SET Name = ?, modifiedAt = ?, modifiedBy = ? WHERE ID = ?",
+  "values": [
+    "Name Updated",
+    "2022-11-22 14:54:59.000",
+    "theo.sun@not.existed.com",
+    "0849d042-73d0-424e-9c6a-99efcb813104",
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support upsert sql: upsert entries 1`] = `
+{
+  "sql": "INSERT INTO t1 ( c1, c2 ) VALUES ? ON DUPLICATE KEY UPDATE c1 = VALUES(c1), c2 = VALUES(c2)",
+  "values": [
+    [
+      "r1_v1",
+      "r1_v2",
+    ],
+    [
+      "r2_v1",
+      "r2_v2",
+    ],
+  ],
+}
+`;
+
+exports[`SQL Factory Test Suite should support upsert sql: upsert rows 1`] = `
+{
+  "sql": "INSERT INTO t1 ( c1, c2 ) VALUES ? ON DUPLICATE KEY UPDATE c1 = VALUES(c1), c2 = VALUES(c2)",
+  "values": [
+    [
+      "v1",
+      "v2",
+    ],
+    [
+      "r2_v1",
+      "r2_v2",
+    ],
   ],
 }
 `;

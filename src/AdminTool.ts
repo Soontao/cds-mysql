@@ -10,6 +10,71 @@ import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
 
 /**
+ * inline t0 model
+ */
+const _t0_csn: CSN = {
+  meta: {
+    creator: "CDS Compiler v3.4.4",
+    flavor: "inferred"
+  },
+  $version: "2.0",
+  definitions: {
+    "cds.xt.TenantID": {
+      name: "cds.xt.TenantID",
+      kind: "type",
+      type: "cds.String",
+      length: 80
+    },
+    "cds.xt.Jobs": {
+      name: "cds.xt.Jobs",
+      kind: "entity",
+      elements: {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "tenant": {
+          "key": true,
+          "type": "cds.xt.TenantID",
+          "length": 80
+        },
+        "status": {
+          "type": "cds.String",
+          "length": 20,
+          "default": {
+            "val": "queued"
+          }
+        },
+        "result": {
+          "type": "cds.LargeString"
+        },
+        "timestamp": {
+          "@cds.on.insert": {
+            "=": "$now"
+          },
+          "type": "cds.Timestamp"
+        }
+      }
+    },
+    "cds.xt.Tenants": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.xt.TenantID",
+          "length": 80
+        },
+        "metadata": {
+          "type": "cds.LargeString"
+        }
+      }
+    }
+  }
+};
+
+
+
+/**
  * get raw CSN from linked model
  */
 export const _rawCSN = memorized(async (m: LinkedModel) => {
@@ -27,7 +92,7 @@ export class AdminTool {
 
   constructor() {
     this._logger = cwdRequireCDS().log("db|mysql");
-    this._options = cwdRequireCDS().requires.db;
+    this._options = cwdRequireCDS().requires.db as any;
   }
 
   /**
@@ -280,7 +345,7 @@ export class AdminTool {
   }
 
   /**
-   * get tables of tenant
+   * get (lower case) tables of target tenant
    * 
    * @param tenant 
    * @returns 
@@ -302,10 +367,8 @@ export class AdminTool {
    */
   async deployT0() {
     const t0 = this.getAdminTenantName();
-    // TODO: additional CSN configuration
-    const csn = await cwdRequireCDS().load(`${__dirname}/../mtxs/t0.cds`);
     this._logger.info("deploy admin tenant", t0.green);
-    await this.deploy(csn, t0);
+    await this.deploy(_t0_csn, t0);
   }
 
 }

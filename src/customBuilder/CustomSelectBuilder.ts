@@ -27,8 +27,7 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   constructor(obj: any, options: any, csn: CSN) {
     super(obj, options, csn);
     // overwrite quote function
-    // @ts-ignore
-    this._quoteElement = enhancedQuotingStyles[this._quotingStyle];
+    this._quoteElement = enhancedQuotingStyles.plain;
   }
 
   get ReferenceBuilder() {
@@ -52,7 +51,7 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   }
 
   /**
-   * @see [Locking Reads](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
+   * @see https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html
    */
   _forUpdate() {
     this._outputObj.sql.push("FOR UPDATE");
@@ -62,7 +61,7 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   }
 
   /**
-   * @see [Locking Reads](https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html)
+   * @see https://dev.mysql.com/doc/refman/5.6/en/innodb-locking-reads.html
    */
   _forShareLock() {
     this._outputObj.sql.push("LOCK IN SHARE MODE");
@@ -71,13 +70,20 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
   _fromElement(element: Definition, parent: any, i = 0) {
     // avoid: ER_DERIVED_MUST_HAVE_ALIAS of mysql database 
     // (double brackets without alias for inner table)
-    if (element.as === undefined && parent === undefined) {
-      return super._fromElement(
-        { ...element, as: `tmp_table_${nextTmpNumber()}` },
-        parent,
-        i
-      );
+
+    // only the element is sub query, add the alias
+    if (parent === undefined && typeof element.SELECT === "object") {
+      super._fromElement(element, parent, i);
+      if (element.SELECT?.from?.as === undefined) {
+        this._outputObj.sql.push("AS", this._quoteElement(`t_${nextTmpNumber()}`));
+      }
+      else {
+        this._outputObj.sql.push("AS", this._quoteElement(element.SELECT?.from?.as));
+      }
+      return;
     }
+
     return super._fromElement(element, parent, i);
+
   }
 };

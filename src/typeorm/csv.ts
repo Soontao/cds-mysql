@@ -7,10 +7,10 @@ import "colors";
 import { createHash } from "crypto";
 import fs from "fs";
 import { glob } from "glob";
-import { DateTime } from "luxon";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 import path from "path";
-import { DEFAULT_CSV_IDENTITY_CONCURRENCY, MYSQL_DATE_TIME_FORMAT } from "../constants";
+import { DEFAULT_CSV_IDENTITY_CONCURRENCY } from "../constants";
+import { adaptToMySQLDateTime } from "../conversion-pre";
 
 export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
   glob(pattern, (err, matches) => {
@@ -47,7 +47,7 @@ export const sha256 = memorized(
 );
 
 
-const TRANSPORT_CDS_TYPES = [
+const TRANSFORM_CDS_TYPES = [
   "cds.Binary",
   "cds.LargeBinary",
   "cds.UInt8",
@@ -61,9 +61,10 @@ const TRANSPORT_CDS_TYPES = [
 /**
  * ref ../../index.cds
  */
-const TABLE_CSV_HISTORY = "community_mysql_csv_history";
+const TABLE_CSV_HISTORY = "cds_mysql_csv_history";
 
 const TABLE_COLUMN_PRE_DELIVERY = "PreDelivery";
+
 /**
  * migrate CSV data
  * 
@@ -205,7 +206,7 @@ export async function migrateData(
 
       const transformColumnsIndex = Object
         .values(entityModel.elements)
-        .filter(ele => TRANSPORT_CDS_TYPES.includes(ele.type))
+        .filter(ele => TRANSFORM_CDS_TYPES.includes(ele.type))
         .filter(ele => headers.includes(ele.name)) // only process columns in CSV files
         .map(ele => ({
           index: headers.indexOf(ele.name),
@@ -259,7 +260,7 @@ export async function migrateData(
       const sem = new Semaphore(
         cds.env.get("requires.db.csv.identity.concurrency") ??
         DEFAULT_CSV_IDENTITY_CONCURRENCY
-      ); // REVISIT: parameterized
+      );
 
       await Promise.all(
         rows.map(
@@ -267,7 +268,7 @@ export async function migrateData(
             const { expr, values } = entryToWhereExpr(entry, headers, existedKeysIndex);
 
             const [[{ EXIST }]] = await connection
-              .query(`SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`, [tableName, values]) as any;
+              .query(`SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`, [tableName, ...values]) as any;
 
             if (EXIST === 0) {
               batchInserts.push(entry);
@@ -384,10 +385,7 @@ function transform(rows: string[][], transformColumnsIndex: { index: number; typ
             entry[transformColumn.index] = parseInt(entry[transformColumn.index], 10);
             break;
           case "cds.DateTime": case "cds.Timestamp":
-            entry[transformColumn.index] = DateTime
-              .fromISO(entry[transformColumn.index], { setZone: true })
-              .toUTC()
-              .toFormat(MYSQL_DATE_TIME_FORMAT);
+            entry[transformColumn.index] = adaptToMySQLDateTime(entry[transformColumn.index]);
             break;
           default:
             break;

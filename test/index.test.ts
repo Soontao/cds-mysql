@@ -1,15 +1,21 @@
 // @ts-nocheck
-import cds from "@sap/cds";
+import { cwdRequireCDS } from "cds-internal-tool";
+import { TENANT_DEFAULT } from "../src/constants";
 import { createRandomName, deploy, doAfterAll, doBeforeEach, loadCSN, setupEnv } from "./utils";
 
 describe("CDS MySQL Basic Test Suite", () => {
+
+  const cds = cwdRequireCDS();
+
+  const { INSERT, UPDATE, DELETE, SELECT } = cds.ql;
 
   setupEnv();
 
   beforeEach(doBeforeEach);
 
-  afterAll(doAfterAll);
+  afterEach(async () => { await cds.db.disconnect(TENANT_DEFAULT); });
 
+  afterAll(doAfterAll);
 
   it("should support deploy simple entity (with e2e CRUD)", async () => {
 

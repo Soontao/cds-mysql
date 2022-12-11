@@ -19,36 +19,37 @@ interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
 }
 
 const buildInTypes = {
+  "cds.Decimal": "DECIMAL",
+  "cds.DecimalFloat": "DECIMAL",
+  "cds.Integer64": "BIGINT",
+  "cds.Int64": "BIGINT",
+  "cds.Integer": "INTEGER",
+  "cds.Int32": "INTEGER",
+  "cds.Int16": "SMALLINT",
+  "cds.UInt8": "TINYINT",
+  "cds.Double": "DOUBLE",
+  "cds.Date": "DATE",
+  "cds.Time": "TIME",
+  "cds.DateTime": "DATETIME",
+  "cds.Timestamp": "DATETIME",
+  "cds.Boolean": "BOOLEAN",
+  "cds.UUID": "NVARCHAR",
+
   "cds.String": "NVARCHAR",
+  "cds.Binary": "VARBINARY",
+  "cds.LargeBinary": "LONGBLOB",
+  "cds.LargeString": "LONGTEXT",
+
+  "cds.hana.SMALLINT": "SMALLINT",
+  "cds.hana.TINYINT": "TINYINT",
+  "cds.hana.REAL": "REAL",
   "cds.hana.NCHAR": "NCHAR",
   "cds.hana.VARCHAR": "VARCHAR",
   "cds.hana.CHAR": "CHAR",
   "cds.hana.CLOB": "CLOB",
-  "cds.Decimal": "DECIMAL",
-  "cds.DecimalFloat": "DECIMAL",
-  "cds.Integer64": "BIGINT",
-  "cds.Integer": "INTEGER",
-  "cds.Int64": "BIGINT",
-  "cds.Int32": "INTEGER",
-  "cds.Int16": "SMALLINT",
-  "cds.UInt8": "TINYINT",
-  "cds.hana.SMALLINT": "SMALLINT",
-  "cds.hana.TINYINT": "TINYINT",
-  "cds.Double": "DOUBLE",
-  "cds.hana.REAL": "REAL",
-  "cds.Date": "DATE",
-  "cds.Time": "TIME",
-  "cds.DateTime": "TIMESTAMP",
-  "cds.Timestamp": "TIMESTAMP",
-  "cds.Boolean": "BOOLEAN",
-  "cds.UUID": "NVARCHAR",
-
-  "cds.Binary": "VARBINARY",
-  "cds.LargeBinary": "LONGBLOB",
+  "cds.hana.LargeString": "LONGTEXT",
   "cds.hana.BINARY": "VARBINARY",
   "cds.hana.SMALLDECIMAL": "DECIMAL",
-  "cds.LargeString": "LONGTEXT",
-  "cds.hana.LargeString": "LONGTEXT"
 };
 
 class CDSListener implements MySQLParserListener {
@@ -196,13 +197,19 @@ function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
   }
 
   // force overwrite blob column
-  if (eleDef.type === "cds.Binary") {
+  if (eleDef.type === "cds.Binary" || eleDef.type === "cds.hana.BINARY") {
     column.length = eleDef.length;
   }
 
   if (eleDef.type === "cds.String" && eleDef.length === undefined) {
     column.type = "text";
     column.length = undefined;
+  }
+
+  // ref: https://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html
+  // add fractional-seconds
+  if (column.type === "datetime" && eleDef.type === "cds.Timestamp") {
+    column.precision = 3;
   }
 
   // primary key

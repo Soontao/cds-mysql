@@ -8,6 +8,9 @@
             "eager": "default"
           }
         },
+        "connection": {
+          "maxallowedpacket": 10485760
+        },
         "csv": {
           "migrate": true
         }

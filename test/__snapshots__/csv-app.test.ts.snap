@@ -1,6 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CSV App Test Suite should match the first record by axios client 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should get error when create duplicated record 1`] = `
+{
+  "status": 500,
+}
+`;
+
+exports[`CSV App Test Suite - Feature (big js enabled) should match the first record by axios client 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": true,
@@ -12,14 +18,14 @@ exports[`CSV App Test Suite should match the first record by axios client 1`] = 
   "ID": 1,
   "IDCard": 99132132,
   "Name": "Theo 1",
-  "Sign": "2022-06-10T12:35:10Z",
+  "Sign": "2022-06-10T03:35:10Z",
   "SignTime": "20:35:10",
-  "SignTmp": "2022-06-10T12:35:10.000Z",
+  "SignTmp": "2022-06-10T18:35:10.000Z",
   "Weight": 123,
 }
 `;
 
-exports[`CSV App Test Suite should match the first record by cds API 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should match the first record by cds API 1`] = `
 {
   "Active": true,
   "Age": 19,
@@ -50,14 +56,14 @@ exports[`CSV App Test Suite should match the first record by cds API 1`] = `
   "ID": "1",
   "IDCard": "99132132",
   "Name": "Theo 1",
-  "Sign": "2022-06-10T12:35:10Z",
+  "Sign": "2022-06-10T03:35:10Z",
   "SignTime": "20:35:10",
-  "SignTmp": "2022-06-10T12:35:10.000Z",
+  "SignTmp": "2022-06-10T18:35:10.000Z",
   "Weight": "123",
 }
 `;
 
-exports[`CSV App Test Suite should match the second record by axios client 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should match the second record by axios client 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": false,
@@ -76,7 +82,7 @@ exports[`CSV App Test Suite should match the second record by axios client 1`] =
 }
 `;
 
-exports[`CSV App Test Suite should match the second record by cds API 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should match the second record by cds API 1`] = `
 {
   "Active": false,
   "Age": 23,
@@ -102,7 +108,7 @@ exports[`CSV App Test Suite should match the second record by cds API 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should not be empty when migrated to v2 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should not be empty when migrated to v2 1`] = `
 [
   {
     "ID": "5e42cf9c-6fc1-11ed-a1eb-0242ac120002",
@@ -117,7 +123,7 @@ exports[`CSV App Test Suite should not be empty when migrated to v2 1`] = `
 ]
 `;
 
-exports[`CSV App Test Suite should support ISO format date string 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support ISO format date string 1`] = `
 {
   "@odata.context": "$metadata#TypeEntity/$entity",
   "Active": false,
@@ -136,7 +142,7 @@ exports[`CSV App Test Suite should support ISO format date string 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support automatically migrate csv data 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support automatically migrate csv data 1`] = `
 {
   "@odata.context": "$metadata#Peoples",
   "value": [
@@ -152,7 +158,7 @@ exports[`CSV App Test Suite should support automatically migrate csv data 1`] = 
 }
 `;
 
-exports[`CSV App Test Suite should support search 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support search 1`] = `
 {
   "@odata.context": "$metadata#Houses",
   "value": [
@@ -168,7 +174,7 @@ exports[`CSV App Test Suite should support search 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support search 2`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support search 2`] = `
 {
   "@odata.context": "$metadata#Houses",
   "value": [
@@ -184,7 +190,7 @@ exports[`CSV App Test Suite should support search 2`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple average aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple average aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(average_price)",
   "value": [
@@ -197,7 +203,7 @@ exports[`CSV App Test Suite should support simple average aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple countdistinct aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple countdistinct aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(countdistinct_price)",
   "value": [
@@ -210,7 +216,7 @@ exports[`CSV App Test Suite should support simple countdistinct aggregation 1`] 
 }
 `;
 
-exports[`CSV App Test Suite should support simple max aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple max aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(max_price)",
   "value": [
@@ -223,7 +229,7 @@ exports[`CSV App Test Suite should support simple max aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple min aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple min aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(min_price)",
   "value": [
@@ -236,7 +242,7 @@ exports[`CSV App Test Suite should support simple min aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should support simple sum aggregation 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should support simple sum aggregation 1`] = `
 {
   "@odata.context": "$metadata#Houses(sum_price)",
   "value": [
@@ -249,7 +255,7 @@ exports[`CSV App Test Suite should support simple sum aggregation 1`] = `
 }
 `;
 
-exports[`CSV App Test Suite should update house after migrated to v2 1`] = `
+exports[`CSV App Test Suite - Feature (big js enabled) should update house after migrated to v2 1`] = `
 {
   "data": {
     "@odata.context": "$metadata#Houses/$entity",
