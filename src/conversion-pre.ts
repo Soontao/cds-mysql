@@ -1,6 +1,7 @@
 // pre conversion for INSERT/UPDATE (JSON -> DB)
-import { DateTime, FixedOffsetZone } from "luxon";
+import { DateTime } from "luxon";
 import { MYSQL_DATE_TIME_FORMAT } from "./constants";
+import { parseMysqlDate } from "./conversion";
 
 /**
  * MySQL required wired formatted date time 'yyyy-MM-dd hh:mm:ss'
@@ -13,18 +14,23 @@ export function adaptToMySQLDateTime(value: string | Date) {
   }
   if (typeof value === "string") {
 
-    if (DateTime.fromFormat(value, MYSQL_DATE_TIME_FORMAT).isValid) {
-      return value;
+    // if is ISO datetime format
+    if (value[10] === "T") {
+      const datetime = DateTime.fromISO(value, { setZone: true });
+      if (datetime.isValid) {
+        return datetime.toUTC().toFormat(MYSQL_DATE_TIME_FORMAT);
+      }
     }
 
-    const dateTime = DateTime.fromISO(value, { setZone: true });
-
-    if (dateTime.isValid) {
-      return dateTime.setZone(FixedOffsetZone.utcInstance).toFormat(MYSQL_DATE_TIME_FORMAT);
+    // if is valid mysql datetime value
+    const datetime = parseMysqlDate(value);
+    if (datetime.isValid) {
+      return datetime.toFormat(MYSQL_DATE_TIME_FORMAT);
     }
 
   }
 
+  // if is date object
   if (value instanceof Date) {
     return DateTime.fromJSDate(value).toFormat(MYSQL_DATE_TIME_FORMAT);
   }

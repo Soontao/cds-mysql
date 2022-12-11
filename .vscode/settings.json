@@ -30,6 +30,8 @@
     "maxallowedpacket",
     "Millis",
     "mtxs",
+    "newdash",
+    "nocheck",
     "nvarchar",
     "Rdbms",
     "sflight",

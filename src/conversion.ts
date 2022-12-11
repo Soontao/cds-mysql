@@ -11,9 +11,9 @@ import { MYSQL_DATE_TIME_FORMAT, MYSQL_DATE_TIME_FORMAT_WO_FRACTIONS } from "./c
  * 
  * @returns 
  */
-function parseMysqlDate(value: string): DateTime;
-function parseMysqlDate(value: any): null;
-function parseMysqlDate(value: string) {
+export function parseMysqlDate(value: string): DateTime;
+export function parseMysqlDate(value: any): null;
+export function parseMysqlDate(value: string) {
   if (typeof value !== "string") {
     return null;
   }

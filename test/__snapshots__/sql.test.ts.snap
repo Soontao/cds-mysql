@@ -149,7 +149,7 @@ exports[`SQL Factory Test Suite should support insert data with given value: wit
     [
       "test-id-2",
       "Theo Sun",
-      null,
+      "2022-12-10 12:05:34.0",
       "usr0",
       "2022-11-22 14:54:59.0",
       "theo.sun@not.existed.com",
