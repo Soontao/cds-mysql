@@ -252,12 +252,25 @@ describe("Integration Test Suite", () => {
   });
   it("should support wide datetime max", async () => {
 
-    // REVISIT: fraction seconds
     const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/bank/Cards", {
       ExampleDT1: "9999-12-31T23:59:59Z",
       ExampleDT2: "9999-12-31T23:59:59Z",
-      ExampleTS1: "9999-12-31T23:59:59Z",
-      ExampleTS2: "9999-12-31T23:59:59Z",
+      ExampleTS1: "9999-12-31T23:59:59.999Z",
+      ExampleTS2: "9999-12-31T23:59:59.999Z",
+    });
+
+    expect({ ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 }).toMatchSnapshot();
+
+  });
+
+
+  it("should support datetime with fraction seconds", async () => {
+
+    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/bank/Cards", {
+      ExampleDT1: "1234-11-31T12:59:59Z",
+      ExampleDT2: "2345-05-31T23:13:59Z",
+      ExampleTS1: "3455-03-31T23:13:43.032Z",
+      ExampleTS2: "4353-08-01T08:59:59.323Z",
     });
 
     expect({ ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 }).toMatchSnapshot();

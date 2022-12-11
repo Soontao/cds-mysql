@@ -13,6 +13,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 {
   "name": "CreationDateTime",
   "nullable": true,
+  "precision": 3,
   "type": "datetime",
 }
 `;
@@ -56,6 +57,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
 {
   "name": "LastChangeDateTime",
   "nullable": true,
+  "precision": 3,
   "type": "datetime",
 }
 `;
@@ -651,6 +653,7 @@ FROM test_resources_csv_app_db_City AS City_0;",
         "SignTmp": {
           "name": "SignTmp",
           "nullable": true,
+          "precision": 3,
           "type": "datetime",
         },
         "Weight": {

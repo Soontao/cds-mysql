@@ -197,13 +197,19 @@ function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
   }
 
   // force overwrite blob column
-  if (eleDef.type === "cds.Binary") {
+  if (eleDef.type === "cds.Binary" || eleDef.type === "cds.hana.BINARY") {
     column.length = eleDef.length;
   }
 
   if (eleDef.type === "cds.String" && eleDef.length === undefined) {
     column.type = "text";
     column.length = undefined;
+  }
+
+  // ref: https://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html
+  // add fractional-seconds
+  if (column.type === "datetime" && eleDef.type === "cds.Timestamp") {
+    column.precision = 3;
   }
 
   // primary key

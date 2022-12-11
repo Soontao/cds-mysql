@@ -1,11 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Integration Test Suite should support datetime with fraction seconds 1`] = `
+{
+  "ExampleDT1": "1234-12-01T12:59:59Z",
+  "ExampleDT2": "2345-05-31T23:13:59Z",
+  "ExampleTS1": "3455-03-31T23:13:43.032Z",
+  "ExampleTS2": "4353-08-01T08:59:59.323Z",
+}
+`;
+
 exports[`Integration Test Suite should support wide datetime max 1`] = `
 {
   "ExampleDT1": "9999-12-31T23:59:59Z",
   "ExampleDT2": "9999-12-31T23:59:59Z",
-  "ExampleTS1": "9999-12-31T23:59:59.000Z",
-  "ExampleTS2": "9999-12-31T23:59:59.000Z",
+  "ExampleTS1": "9999-12-31T23:59:59.999Z",
+  "ExampleTS2": "9999-12-31T23:59:59.999Z",
 }
 `;
 
