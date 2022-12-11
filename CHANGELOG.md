@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.6-3](https://github.com/Soontao/cds-mysql/compare/v6.3.6-2...v6.3.6-3) (2022-12-11)
+
+
+### Bug Fixes
+
+* add more ut for timestamp ([1a57343](https://github.com/Soontao/cds-mysql/commit/1a5734301b405b99730c0847c8472d3ca4cd7896))
+* ci ([858436e](https://github.com/Soontao/cds-mysql/commit/858436e9f884e02a1889aee54ba69b0895b65450))
+* datetime ([94b962f](https://github.com/Soontao/cds-mysql/commit/94b962f08c7131f57a01cbcef684144590dddf98))
+* datetime again ([71bb3e8](https://github.com/Soontao/cds-mysql/commit/71bb3e88d7c641d1397592ee4f483bc0e9e5adf5))
+* ut ([6124787](https://github.com/Soontao/cds-mysql/commit/6124787ed6ea646ddd9648c6fb6f3e4e50a44b3a))
+
 ### [6.3.6-2](https://github.com/Soontao/cds-mysql/compare/v6.3.6-1...v6.3.6-2) (2022-12-10)
 
 
