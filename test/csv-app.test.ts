@@ -104,7 +104,7 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
 
 
   it("should support migrate again", async () => {
-    cwdRequireCDS().db?.["deploy"]?.(
+    await cwdRequireCDS().db?.["deploy"]?.(
       await cwdRequireCDS().load("*", { root: path.join(__dirname, "./resources/csv-app") })
     );
   });

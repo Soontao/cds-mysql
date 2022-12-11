@@ -20,6 +20,7 @@
     "CURDATE",
     "datetime",
     "dayofmonth",
+    "fiori",
     "hana",
     "havings",
     "libx",
