@@ -27,6 +27,7 @@
     "mariadb",
     "Millis",
     "mtxs",
+    "NOWAIT",
     "nvarchar",
     "Rdbms",
     "sflight",

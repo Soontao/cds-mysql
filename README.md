@@ -113,6 +113,8 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
   - [ ] better error for not supported elements
 - [x] automatically schema sync (when connection pool provision)
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
+  - [ ] `NOWAIT` support
+  - [ ] `SKIP LOCKED` support
 - [x] better E2E document/sample - [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight)
 
 ## Limitation
