@@ -4,7 +4,7 @@ import { MYSQL_DATE_TIME_FORMAT } from "./constants";
 import { parseMysqlDate } from "./conversion";
 
 /**
- * MySQL required wired formatted date time 'yyyy-MM-dd hh:mm:ss'
+ * convert possible datetime value to MySQL required format 'yyyy-MM-dd hh:mm:ss[.S]'
  * 
  * @param value 
  */

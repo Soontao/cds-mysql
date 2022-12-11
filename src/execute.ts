@@ -6,6 +6,7 @@ import { QueryObject } from "cds-internal-tool/lib/types/ql";
 import { Connection, OkPacket } from "mysql2/promise";
 import { Readable } from "stream";
 import { TYPE_POST_CONVERSION_MAP } from "./conversion";
+import { adaptToMySQLDateTime } from "./conversion-pre";
 import CustomBuilder from "./customBuilder";
 import { sqlFactory } from "./sqlFactory";
 import { getIncrementalKey, mustBeArray } from "./utils";
@@ -316,7 +317,7 @@ async function executeSelectStreamCQN(model, dbc, query, user, locale, txTimesta
 }
 
 function getNow(txTimestamp: string) {
-  return txTimestamp === undefined ? { sql: "now()" } : txTimestamp;
+  return txTimestamp === undefined ? { sql: "now()" } : adaptToMySQLDateTime(txTimestamp);
 }
 
 export default {

@@ -7,10 +7,10 @@ import "colors";
 import { createHash } from "crypto";
 import fs from "fs";
 import { glob } from "glob";
-import { DateTime } from "luxon";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 import path from "path";
-import { DEFAULT_CSV_IDENTITY_CONCURRENCY, MYSQL_DATE_TIME_FORMAT } from "../constants";
+import { DEFAULT_CSV_IDENTITY_CONCURRENCY } from "../constants";
+import { adaptToMySQLDateTime } from "../conversion-pre";
 
 export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
   glob(pattern, (err, matches) => {
@@ -385,10 +385,7 @@ function transform(rows: string[][], transformColumnsIndex: { index: number; typ
             entry[transformColumn.index] = parseInt(entry[transformColumn.index], 10);
             break;
           case "cds.DateTime": case "cds.Timestamp":
-            entry[transformColumn.index] = DateTime
-              .fromISO(entry[transformColumn.index], { setZone: true })
-              .toUTC()
-              .toFormat(MYSQL_DATE_TIME_FORMAT);
+            entry[transformColumn.index] = adaptToMySQLDateTime(entry[transformColumn.index]);
             break;
           default:
             break;
