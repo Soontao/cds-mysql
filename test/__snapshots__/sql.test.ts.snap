@@ -110,6 +110,22 @@ exports[`SQL Factory Test Suite should support insert columns: default 1`] = `
 }
 `;
 
+exports[`SQL Factory Test Suite should support insert data by rows: default 1`] = `
+{
+  "sql": "INSERT INTO test_int_People ( ID, Name , createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",
+  "values": [
+    [
+      "test-id",
+      "theo-name",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+      "2022-11-22 14:54:59.000",
+      "theo.sun@not.existed.com",
+    ],
+  ],
+}
+`;
+
 exports[`SQL Factory Test Suite should support insert data into existed entity: default 1`] = `
 {
   "sql": "INSERT INTO test_int_People ( ID, Name, createdAt, createdBy, modifiedAt, modifiedBy ) VALUES ?",

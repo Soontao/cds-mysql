@@ -55,6 +55,7 @@ describe("SQL Factory Test Suite", () => {
     expect(CustomBuilder.InsertBuilder).toBeDefined();
     expect(CustomBuilder.ReferenceBuilder).toBeDefined();
     expect(CustomBuilder.SelectBuilder).toBeDefined();
+    expect(CustomBuilder.UpsertBuilder).toBeDefined();
 
   });
 
@@ -84,6 +85,15 @@ describe("SQL Factory Test Suite", () => {
       INSERT.into("test.int.People").entries({ ID: "test-id", Name: "Theo Sun" })
     );
   });
+
+
+  it("should support insert data by rows", async () => {
+    // REVISIT: more test for insert by rows
+    expect_sql(
+      INSERT.into("test.int.People").columns("ID", "Name").rows(["test-id", "theo-name"])
+    );
+  });
+
 
   it("should support update date into existed entity", () => {
     expect_sql(
