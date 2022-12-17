@@ -10,10 +10,11 @@ module.exports = class DemoService extends cds.ApplicationService {
   }
 
   async _upsert(req) {
-    const { Products } = this.entities;
+    // revisit view
+    const Product = "test.upsert.Product";
     const { data } = req;
-    await cds.run(cds.ql.UPSERT.into(Products).entries(data));
-    return cds.run(cds.ql.SELECT.one.from(Products).where({ ID: data.ID }));
+    await cds.run(cds.ql.UPSERT.into(Product).entries(data));
+    return cds.run(cds.ql.SELECT.one.from(Product).where({ ID: data.ID }));
   }
 
 };
