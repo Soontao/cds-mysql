@@ -56,7 +56,7 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
 ## Feature and RoadMap
 
 - [x] fundamental `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
-  - [x] _experimental_ support [`UPSERT`](./docs/ADVANCED_USAGE.md#upsert) by `INSERT ... ON DUPLICATE KEY UPDATE` statement
+  - [x] support [`UPSERT`](./docs/ADVANCED_USAGE.md#upsert) by `INSERT ... ON DUPLICATE KEY UPDATE` statement
 - [x] deep insert for association/composition
   - [x] deep create/update/query/delete test case
 - [x] `fiori` draft support

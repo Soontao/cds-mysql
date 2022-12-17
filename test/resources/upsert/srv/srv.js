@@ -1,5 +1,4 @@
 const { cwdRequireCDS } = require("cds-internal-tool");
-const { UPSERT } = require("../../../../src");
 
 const cds = cwdRequireCDS();
 
@@ -13,7 +12,8 @@ module.exports = class DemoService extends cds.ApplicationService {
   async _upsert(req) {
     const { Products } = this.entities;
     const { data } = req;
-    return this.run(UPSERT().into(Products).entries(data));
+    await cds.run(cds.ql.UPSERT.into(Products).entries(data));
+    return cds.run(cds.ql.SELECT.one.from(Products).where({ ID: data.ID }));
   }
 
 };

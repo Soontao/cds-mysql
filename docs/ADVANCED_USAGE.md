@@ -192,14 +192,17 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 > support `UPSERT` with mysql `INSERT ... ON DUPLICATE KEY UPDATE` feature
 
+- only support by `DatabaseService`, there is no handler in `cds.ApplicationService`
+- `UPSERT` will not return the updated object
+
 ```js
-const { UPSERT } = require("cds-mysql");
+const { UPSERT } = cds.ql
 
 module.exports = class DemoService extends cds.ApplicationService {
   async _upsert(req) {
     const { Products } = this.entities;
     const { data } = req;
-    return this.run(UPSERT().into(Products).entries(data));
+    return cds.run(UPSERT.into(Products).entries(data));
   }
 };
 ```

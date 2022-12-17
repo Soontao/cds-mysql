@@ -168,7 +168,7 @@ function executePlainSQL(
     return executeSelectSQL(dbc, sql, values, isOne, postMapper);
   }
 
-  if (/^\s*insert/i.test(sql)) {
+  if (/^\s*insert/i.test(sql) || /^\s*upsert/i.test(sql)) {
     return executeInsertSQL(dbc, sql, values);
   }
 

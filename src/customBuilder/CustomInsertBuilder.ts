@@ -19,11 +19,26 @@ export class CustomInsertBuilder extends InsertBuilder {
 
   private _extOutputObj = { columns: [] };
 
+
   public build() {
-    this._extOutputObj = { columns: [] };
-    super.build();
-    // for upsert
+
+    let isUpsert = false;
+
+    if (typeof this._obj.UPSERT === "object") {
+      this._obj = { INSERT: this._obj.UPSERT, _target: this._obj._target };
+      isUpsert = true;
+    }
+
     if (this._obj?.INSERT?._upsert === true) {
+      isUpsert = true;
+    }
+
+    this._extOutputObj = { columns: [] };
+
+    super.build();
+
+    // for upsert
+    if (isUpsert) {
       // replace insert keyword
       this._outputObj.sql = [
         this._outputObj.sql,
@@ -35,6 +50,7 @@ export class CustomInsertBuilder extends InsertBuilder {
         ).join(", ")
       ].join("");
     }
+
     return this._outputObj;
   }
 

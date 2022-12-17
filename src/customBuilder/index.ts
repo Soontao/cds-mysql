@@ -4,6 +4,7 @@ import { CustomInsertBuilder } from "./CustomInsertBuilder";
 import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { CustomUpdateBuilder } from "./CustomUpdateBuilder";
+import { CustomUpsertBuilder } from "./CustomUpsertBuilder";
 
 const dependencies = {
   get InsertBuilder() {
@@ -29,6 +30,10 @@ const dependencies = {
   get UpdateBuilder() {
     Object.defineProperty(dependencies, "UpdateBuilder", { value: CustomUpdateBuilder });
     return CustomUpdateBuilder;
+  },
+  get UpsertBuilder() {
+    Object.defineProperty(dependencies, "UpsertBuilder", { value: CustomUpsertBuilder });
+    return CustomUpsertBuilder;
   },
 };
 
