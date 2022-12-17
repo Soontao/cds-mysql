@@ -61,6 +61,9 @@ jobs:
       - run: npm ci
         working-directory: ./sflight
 
+      - run: npm i @sap/cds@$(node -e "console.log(require('../src/cds.version').VERSION)")
+        working-directory: ./sflight
+
       - run: npm link cds-mysql
         working-directory: ./sflight
 
@@ -124,7 +127,7 @@ jobs:
       - run: npm ci
         working-directory: ./sflight
 
-      - run: npm i @sap/cds@$(node -e "console.log(require('./src/cds.version').VERSION)")
+      - run: npm i @sap/cds@$(node -e "console.log(require('../src/cds.version').VERSION)")
         working-directory: ./sflight
 
       - run: npm link cds-mysql

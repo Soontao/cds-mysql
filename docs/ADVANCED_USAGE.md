@@ -194,6 +194,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 
 - only support by `DatabaseService`, there is no handler in `cds.ApplicationService`
 - `UPSERT` will not return the updated object
+- till now, there are some features not well-implemented by cds team, for example, not able to automatically rewrite `upsert` for `view`
 
 ```js
 const { UPSERT } = cds.ql
