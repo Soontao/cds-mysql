@@ -3,12 +3,12 @@ name: link-cap-mysql-sflight
 on:
   push:
     branches:
-      - "*"
+      - '*'
   pull_request:
     branches:
-      - "*"
+      - '*'
   schedule:
-    - cron: "45 15 * * *"
+    - cron: '45 15 * * *'
 
 jobs:
   cds-test:
@@ -57,7 +57,7 @@ jobs:
         with:
           repository: Soontao/cap-mysql-sflight
           path: ./sflight
-        
+
       - run: npm ci
         working-directory: ./sflight
 
@@ -68,7 +68,7 @@ jobs:
         working-directory: ./sflight
         env:
           CI: true
-          CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
+          CDS_REQUIRES_DB_CREDENTIALS_HOST: '127.0.0.1'
           CDS_REQUIRES_DB_CREDENTIALS_PORT: 3306
           CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
@@ -120,8 +120,11 @@ jobs:
         with:
           repository: Soontao/cap-mysql-sflight
           path: ./sflight
-        
+
       - run: npm ci
+        working-directory: ./sflight
+
+      - run: npm i @sap/cds@$(node -e "console.log(require('./src/cds.version').VERSION)")
         working-directory: ./sflight
 
       - run: npm link cds-mysql
@@ -134,7 +137,7 @@ jobs:
         working-directory: ./sflight/app/travel_processor
         env:
           CI: true
-          CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
+          CDS_REQUIRES_DB_CREDENTIALS_HOST: '127.0.0.1'
           CDS_REQUIRES_DB_CREDENTIALS_PORT: 3306
           CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
