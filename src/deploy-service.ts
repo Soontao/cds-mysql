@@ -12,6 +12,7 @@ export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.Deplo
   const cds = cwdRequireCDS();
   const logger = cds.log("mtx");
   const CDS_XT_TENANTS = "cds.xt.Tenants";
+  const { DELETE } = cds.ql;
 
   const db = cds.db as any as MySQLDatabaseService;
   const tool = db.getAdminTool();
@@ -21,7 +22,7 @@ export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.Deplo
     await ds.deploy(t, options);
     if (t === tool.getAdminTenantName()) { return; }
     await cds.tx({ tenant: tool.getAdminTenantName() }, tx => tx.run(
-      db.upsert(CDS_XT_TENANTS).entries(
+      (cds.ql as any).UPSERT.into(CDS_XT_TENANTS).entries(
         { ID: t, metadata: JSON.stringify(metadata) }
       )
     ));
@@ -35,7 +36,7 @@ export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.Deplo
     await db.disconnect(t);
     await cds.tx(
       { tenant: tool.getAdminTenantName() },
-      tx => tx.delete(CDS_XT_TENANTS, { ID: { "=": t } })
+      tx => tx.run(DELETE.from(CDS_XT_TENANTS).where({ ID: { "=": t } }))
     );
   });
 

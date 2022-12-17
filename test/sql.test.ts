@@ -3,13 +3,10 @@ import { CSN, cwdRequireCDS } from "cds-internal-tool";
 import { QueryObject } from "cds-internal-tool/lib/types/ql";
 import path from "path";
 import CustomBuilder from "../src/customBuilder";
-import { MySQLDatabaseService } from "../src/Service";
 import { sqlFactory } from "../src/sqlFactory";
 
 describe("SQL Factory Test Suite", () => {
 
-
-  const { UPSERT } = MySQLDatabaseService;
 
   const cds = cwdRequireCDS();
   let model: CSN;
@@ -255,13 +252,14 @@ describe("SQL Factory Test Suite", () => {
   });
 
   it("should support upsert sql", () => {
+    const UPSERT = (cds.ql as any).UPSERT;
 
     expect_sql(
-      UPSERT().into("t1").columns("c1", "c2").rows(["v1", "v2"], ["r2_v1", "r2_v2"]), "upsert rows"
+      UPSERT.into("t1").columns("c1", "c2").rows(["v1", "v2"], ["r2_v1", "r2_v2"]), "upsert rows"
     );
 
     expect_sql(
-      UPSERT().into("t1").entries({ c1: "r1_v1", c2: "r1_v2" }, { c1: "r2_v1", c2: "r2_v2" }), "upsert entries"
+      UPSERT.into("t1").entries({ c1: "r1_v1", c2: "r1_v2" }, { c1: "r2_v1", c2: "r2_v2" }), "upsert entries"
     );
 
   });

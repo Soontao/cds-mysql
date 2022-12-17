@@ -1,7 +1,7 @@
 import { uniq } from "@newdash/newdash/uniq";
 import {
   CSN, cwdRequire,
-  cwdRequireCDS, EntityDefinition, EventContext,
+  cwdRequireCDS, EventContext,
   LinkedModel, Logger
 } from "cds-internal-tool";
 import "colors";
@@ -103,16 +103,6 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   async init() {
     await super.init();
     this._registerEagerDeploy();
-  }
-
-  /**
-   * create upsert query
-   * 
-   * @param entity 
-   * @returns 
-   */
-  public upsert(entity: string | EntityDefinition) {
-    return MySQLDatabaseService.UPSERT().into(entity);
   }
 
   private _registerEagerDeploy() {
