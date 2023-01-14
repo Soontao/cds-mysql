@@ -55,6 +55,9 @@ export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.Deplo
 
   ds.on("getTables", (req: Request) => tool.getTables(req.data.tenant));
 
+  // since mtxs@1.4.0
+  ds.on("getColumns" as any, req => tool.getColumns(req.data.table, req.data.tenant));
+
   await tool.deployT0();
 
   // workaround for MySQL:

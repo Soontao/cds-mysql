@@ -361,6 +361,23 @@ export class AdminTool {
   }
 
   /**
+   * get (lower case) columns of tables in target tenant
+   * 
+   * @param table table name
+   * @param tenant tenant id
+   * @returns 
+   */
+  async getColumns(table: string, tenant?: string) {
+    return this.runWithAdminConnection(async ds => {
+      const tables = await ds.query(
+        `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?`,
+        [table, this.getTenantDatabaseName(tenant)],
+      );
+      return tables.map(({ COLUMN_NAME }) => String(COLUMN_NAME).toLowerCase());
+    });
+  }
+
+  /**
    * deploy admin tenant if required
    * 
    * @returns 
