@@ -2,6 +2,7 @@
 import { doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 import type MySQLDatabaseService from "../src";
+import { TENANT_DEFAULT } from "../src/constants";
 
 const NEW_TENANT_ID = "t192";
 
@@ -45,14 +46,6 @@ describe("Tenant Test Suite", () => {
 
   });
 
-  it("should support get tables/columns", async () => {
-    const db: MySQLDatabaseService = cds.db as any;
-    const tool = db.getAdminTool();
-    const tables = await tool.getTables();
-    expect(tables.length).toBeGreaterThan(0);
-    const columns = await tool.getColumns(tables[0]);
-    expect(columns.length).toBeGreaterThan(0);
-  });
 
   it("should support upgrade all tenant", async () => {
     const { status } = await client.post(
@@ -64,7 +57,14 @@ describe("Tenant Test Suite", () => {
     expect(status).toMatchInlineSnapshot(`204`);
   });
 
-
+  it("should support get tables/columns", async () => {
+    const db: MySQLDatabaseService = cds.db as any;
+    const tool = db.getAdminTool();
+    const tables = await tool.getTables(TENANT_DEFAULT);
+    expect(tables.length).toBeGreaterThan(0);
+    const columns = await tool.getColumns(tables[0], TENANT_DEFAULT);
+    expect(columns.length).toBeGreaterThan(0);
+  });
 
   it("should raise error when tenant-id too long", () => {
 
