@@ -39,22 +39,19 @@ describe("Tenant Test Suite", () => {
       {
         tenant: NEW_TENANT_ID,
         metadata: {}
-      },
-      {
-        auth: {
-          username: "yves", password: ""
-        }
       }
     );
     expect(status).toMatchInlineSnapshot(`204`);
 
+  });
+
+  it("should support get tables/columns", async () => {
     const db: MySQLDatabaseService = cds.db as any;
     const tool = db.getAdminTool();
-    const tables = await tool.getTables(NEW_TENANT_ID);
+    const tables = await tool.getTables();
     expect(tables.length).toBeGreaterThan(0);
-    const columns = await tool.getColumns(tables[0], NEW_TENANT_ID);
+    const columns = await tool.getColumns(tables[0]);
     expect(columns.length).toBeGreaterThan(0);
-
   });
 
   it("should support upgrade all tenant", async () => {
@@ -62,11 +59,6 @@ describe("Tenant Test Suite", () => {
       "/-/cds/deployment/upgrade",
       {
         "tenant": NEW_TENANT_ID
-      },
-      {
-        auth: {
-          username: "yves", password: ""
-        }
       }
     );
     expect(status).toMatchInlineSnapshot(`204`);
@@ -89,11 +81,6 @@ describe("Tenant Test Suite", () => {
       {
         tenant: NEW_TENANT_ID,
         metadata: {}
-      },
-      {
-        auth: {
-          username: "yves", password: ""
-        }
       }
     );
     expect(status).toMatchInlineSnapshot(`204`);
