@@ -306,11 +306,11 @@ export class AdminTool {
    */
   async getColumns(table: string, tenant?: string): Promise<Array<string>> {
     return this.runWithAdminConnection(async ds => {
-      const tables = await ds.query(
+      const records = await ds.query(
         `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?`,
         [table, this.getTenantDatabaseName(tenant)],
       );
-      return tables.map(({ COLUMN_NAME }) => String(COLUMN_NAME).toLowerCase());
+      return records.map(({ COLUMN_NAME }) => String(COLUMN_NAME).toLowerCase());
     });
   }
 
