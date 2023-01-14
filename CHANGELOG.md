@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.4.0-alpha.0](https://github.com/Soontao/cds-mysql/compare/v6.3.6...v6.4.0-alpha.0) (2023-01-14)
+
+
+### Features
+
+* cds@6.4.0 ([b644a62](https://github.com/Soontao/cds-mysql/commit/b644a621045d6c5b0ffd98acc9f11c995b2623b8))
+* support mtxs@1.4.x ([b0fec1b](https://github.com/Soontao/cds-mysql/commit/b0fec1b7915664ce1d1804f1cae2530ce64fbda0))
+
+
+### Bug Fixes
+
+* ci for karma of sflight ([b05d0af](https://github.com/Soontao/cds-mysql/commit/b05d0afc9e3d24283eae68f467aab272b9f1e08a))
+* **deps:** update dependency cds-internal-tool to v1.7.0 ([#198](https://github.com/Soontao/cds-mysql/issues/198)) ([1986394](https://github.com/Soontao/cds-mysql/commit/19863944c9a004a06d2b9b412270689b397c5fe8))
+* **deps:** update dependency luxon to v3.2.0 ([3449187](https://github.com/Soontao/cds-mysql/commit/3449187173ba7d561a8b6a21c3516882f8f2d3ec))
+* **deps:** update dependency luxon to v3.2.1 ([#191](https://github.com/Soontao/cds-mysql/issues/191)) ([8bff679](https://github.com/Soontao/cds-mysql/commit/8bff679e03147b0927fce03e66bb184ba3856d0a))
+* link ([760a8de](https://github.com/Soontao/cds-mysql/commit/760a8ded3a0f07032f7b77a710f571539cab5511))
+* link ci for sflight ([c2e3069](https://github.com/Soontao/cds-mysql/commit/c2e3069df5e757f0f011171c6955bb4673c25ba8))
+* mtxs version ([ec269e8](https://github.com/Soontao/cds-mysql/commit/ec269e872ce8854c3f72573b8e33ef065daccb1c))
+* upsert ([abe0976](https://github.com/Soontao/cds-mysql/commit/abe0976eb130e750252521851b2dba5e5c32c782))
+* upsert ([c413287](https://github.com/Soontao/cds-mysql/commit/c4132877cfd665b546ab7263d2a8ce2b2550d687))
+* ut ([5466471](https://github.com/Soontao/cds-mysql/commit/5466471eb12cdb52d66e5dcaf8fe48df815be0de))
+* ut 3 ([292c31c](https://github.com/Soontao/cds-mysql/commit/292c31c3185f6b2a9f037ed323b0286d66ee614f))
+* ut again ([4db263c](https://github.com/Soontao/cds-mysql/commit/4db263c363a1ceefc30783df4bbb85eb2da98005))
+
 ### [6.3.6](https://github.com/Soontao/cds-mysql/compare/v6.3.6-3...v6.3.6) (2022-12-11)
 
 
