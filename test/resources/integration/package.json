@@ -17,7 +17,6 @@
         }
       },
       "extensibility": true,
-      "cds.xt.SaasProvisioningService": true,
       "cds.xt.ModelProviderService": true,
       "cds.xt.ExtensibilityService": {
         "element-prefix": [

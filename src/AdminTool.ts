@@ -8,70 +8,7 @@ import { migrate, migrateData } from "./typeorm";
 import { csnToEntity } from "./typeorm/entity";
 import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
-
-/**
- * inline t0 model
- */
-const _t0_csn: CSN = {
-  meta: {
-    creator: "CDS Compiler v3.4.4",
-    flavor: "inferred"
-  },
-  $version: "2.0",
-  definitions: {
-    "cds.xt.TenantID": {
-      name: "cds.xt.TenantID",
-      kind: "type",
-      type: "cds.String",
-      length: 80
-    },
-    "cds.xt.Jobs": {
-      name: "cds.xt.Jobs",
-      kind: "entity",
-      elements: {
-        "ID": {
-          "key": true,
-          "type": "cds.UUID"
-        },
-        "tenant": {
-          "key": true,
-          "type": "cds.xt.TenantID",
-          "length": 80
-        },
-        "status": {
-          "type": "cds.String",
-          "length": 20,
-          "default": {
-            "val": "queued"
-          }
-        },
-        "result": {
-          "type": "cds.LargeString"
-        },
-        "timestamp": {
-          "@cds.on.insert": {
-            "=": "$now"
-          },
-          "type": "cds.Timestamp"
-        }
-      }
-    },
-    "cds.xt.Tenants": {
-      "kind": "entity",
-      "elements": {
-        "ID": {
-          "key": true,
-          "type": "cds.xt.TenantID",
-          "length": 80
-        },
-        "metadata": {
-          "type": "cds.LargeString"
-        }
-      }
-    }
-  }
-};
-
+import path from "path";
 
 
 /**
@@ -367,7 +304,7 @@ export class AdminTool {
    * @param tenant tenant id
    * @returns 
    */
-  async getColumns(table: string, tenant?: string) {
+  async getColumns(table: string, tenant?: string): Promise<Array<string>> {
     return this.runWithAdminConnection(async ds => {
       const tables = await ds.query(
         `SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?`,
@@ -383,9 +320,12 @@ export class AdminTool {
    * @returns 
    */
   async deployT0() {
+    const cds = cwdRequireCDS();
     const t0 = this.getAdminTenantName();
     this._logger.info("deploy admin tenant", t0.green);
-    await this.deploy(_t0_csn, t0);
+    const t0_csn = await cds.load(path.join(__dirname, "../mtxs/t0.cds"));
+    this._logger.debug("t0 entities", Object.keys(t0_csn.definitions));
+    await this.deploy(t0_csn, t0);
   }
 
 }

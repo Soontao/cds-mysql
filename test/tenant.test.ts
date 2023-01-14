@@ -27,18 +27,11 @@ describe("Tenant Test Suite", () => {
   });
 
   it("should support subscribe tenant", async () => {
-    await client.put("/-/cds/saas-provisioning/tenant/t192", {}, {
-      auth: {
-        username: "yves", password: ""
-      }
-    });
-  });
-
-  it("should support upgrade all tenant", async () => {
-    await client.post(
-      "/-/cds/saas-provisioning/upgrade",
+    const { status } = await client.post(
+      "/-/cds/deployment/subscribe",
       {
-        "tenants": ["*"]
+        tenant: "t192",
+        metadata: {}
       },
       {
         auth: {
@@ -46,15 +39,31 @@ describe("Tenant Test Suite", () => {
         }
       }
     );
+    expect(status).toMatchInlineSnapshot(`204`);
   });
 
-  it("should support get tenant tables", async () => {
+  it("should support upgrade all tenant", async () => {
+    const { status } = await client.post(
+      "/-/cds/deployment/upgrade",
+      {
+        "tenant": "t192"
+      },
+      {
+        auth: {
+          username: "yves", password: ""
+        }
+      }
+    );
+    expect(status).toMatchInlineSnapshot(`204`);
+  });
 
+  it("should support get tenant tables/columns", async () => {
     const db: MySQLDatabaseService = cds.db as any;
     const tool = db.getAdminTool();
     const tables = await tool.getTables("t192");
-    expect(tables.length > 0).toBeTruthy();
-
+    expect(tables.length).toBeGreaterThan(0);
+    const columns = await tool.getColumns(tables[0], "t192");
+    expect(columns.length).toBeGreaterThan(0);
   });
 
   it("should raise error when tenant-id too long", () => {
@@ -67,11 +76,20 @@ describe("Tenant Test Suite", () => {
   });
 
   it("should support unsubscribe tenant", async () => {
-    await client.delete("/-/cds/saas-provisioning/tenant/t192", {
-      auth: {
-        username: "yves", password: ""
+    const { status } = await client.post(
+      "/-/cds/deployment/unsubscribe",
+      {
+        tenant: "t192",
+        metadata: {}
+      },
+      {
+        auth: {
+          username: "yves", password: ""
+        }
       }
-    });
+    );
+    expect(status).toMatchInlineSnapshot(`204`);
+
   });
 
 });

@@ -97,8 +97,10 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
 
   try {
     (isTenantMigration ? logger.info : logger.debug)(
-      "migrate database", String(connectionOptions.database).green,
-      "with hash", entityHash.green
+      "migrate database",
+      String(connectionOptions.database).green,
+      "with hash",
+      entityHash.slice(entityHash.length - 6).green
     );
 
     await ds.initialize();
@@ -107,7 +109,11 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
     if (isTenantMigration) {
       const [record] = await ds.query("SELECT HASH, MIGRATED_AT FROM cds_mysql_migration_history ORDER BY MIGRATED_AT DESC LIMIT 1 FOR UPDATE");
       if (record?.HASH === entityHash) {
-        logger.info("database with hash", entityHash.green, "was already migrated at", String(record.MIGRATED_AT).green, "skip processing");
+        logger.info(
+          "database with hash",
+          entityHash.slice(entityHash.length - 6).green,
+          "was ALREADY migrated at", String(record.MIGRATED_AT).green,
+        );
         return;
       }
       await ds.createQueryBuilder()

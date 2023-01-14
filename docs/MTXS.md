@@ -14,13 +14,13 @@
 ## Enablement
 
 > **MUST** manually enable each service, because there are some conflicts in `mtxs` internal shortcuts
+> `cds.xt.SaasProvisioningService` MUST NOT be included into your application
 
 ```json
 {
   "cds": {
     "requires": {
       "extensibility": true,
-      "cds.xt.SaasProvisioningService": true,
       "cds.xt.ModelProviderService": true,
       "cds.xt.ExtensibilityService": true,
       "cds.xt.DeploymentService": true,
