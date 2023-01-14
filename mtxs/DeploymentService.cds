@@ -1,12 +1,12 @@
 // using from '@sap/cds-mtxs/srv/model-provider'; //> IMPORTANT: don't add this as it will cause services loaded twice
 
-@protocol : 'rest'
-@(requires : [
+@protocol: 'rest'
+@(requires: [
   'cds.Subscriber',
   'internal-user'
 ])
-@(path : '/-/cds/deployment')
-@(impl : './DeploymentService')
+@(path: '/-/cds/deployment')
+@(impl: './DeploymentService')
 service cds.xt.DeploymentService {
 
   /**
@@ -40,5 +40,6 @@ service cds.xt.DeploymentService {
   // REVISIT: Do we need this for job orchstration via CLI use?
   //action updateAll(options:{});
 
-  function getTables( @mandatory tenant : String) returns array of String;
+  function getTables( @mandatory tenant : String)                                 returns array of String;
+  function getColumns(  @mandatory  tenant : String,  @mandatory  table : String) returns array of String;
 }
