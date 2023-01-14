@@ -1,19 +1,26 @@
 
 import { doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
-import MySQLDatabaseService from "../src";
+import type MySQLDatabaseService from "../src";
 
+const NEW_TENANT_ID = "t192";
 
 describe("Tenant Test Suite", () => {
 
   const client = setupTest(__dirname, "./resources/integration");
-  client.defaults.auth = { username: "alice", password: "admin" };
+  client.defaults.auth = { username: "yves", password: "" };
 
   const cds = cwdRequireCDS();
   afterAll(doAfterAll);
 
   it("should support multi-tenancy", async () => {
-    let response = await client.post("/bank/Peoples", { Name: "Theo in Defualt Tenant" });
+    let response = await client.post(
+      "/bank/Peoples",
+      { Name: "Theo in Defualt Tenant" },
+      {
+        auth: { username: "alice", password: "admin" }
+      }
+    );
     expect(response.status).toBe(201);
     response = await client.get("/bank/Peoples/$count");
     expect(response.data).toBe(1);
@@ -30,7 +37,7 @@ describe("Tenant Test Suite", () => {
     const { status } = await client.post(
       "/-/cds/deployment/subscribe",
       {
-        tenant: "t192",
+        tenant: NEW_TENANT_ID,
         metadata: {}
       },
       {
@@ -40,13 +47,21 @@ describe("Tenant Test Suite", () => {
       }
     );
     expect(status).toMatchInlineSnapshot(`204`);
+
+    const db: MySQLDatabaseService = cds.db as any;
+    const tool = db.getAdminTool();
+    const tables = await tool.getTables(NEW_TENANT_ID);
+    expect(tables.length).toBeGreaterThan(0);
+    const columns = await tool.getColumns(tables[0], NEW_TENANT_ID);
+    expect(columns.length).toBeGreaterThan(0);
+
   });
 
   it("should support upgrade all tenant", async () => {
     const { status } = await client.post(
       "/-/cds/deployment/upgrade",
       {
-        "tenant": "t192"
+        "tenant": NEW_TENANT_ID
       },
       {
         auth: {
@@ -57,14 +72,7 @@ describe("Tenant Test Suite", () => {
     expect(status).toMatchInlineSnapshot(`204`);
   });
 
-  it("should support get tenant tables/columns", async () => {
-    const db: MySQLDatabaseService = cds.db as any;
-    const tool = db.getAdminTool();
-    const tables = await tool.getTables("t192");
-    expect(tables.length).toBeGreaterThan(0);
-    const columns = await tool.getColumns(tables[0], "t192");
-    expect(columns.length).toBeGreaterThan(0);
-  });
+
 
   it("should raise error when tenant-id too long", () => {
 
@@ -79,7 +87,7 @@ describe("Tenant Test Suite", () => {
     const { status } = await client.post(
       "/-/cds/deployment/unsubscribe",
       {
-        tenant: "t192",
+        tenant: NEW_TENANT_ID,
         metadata: {}
       },
       {
