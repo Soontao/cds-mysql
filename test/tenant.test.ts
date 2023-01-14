@@ -2,7 +2,6 @@
 import { doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 import type MySQLDatabaseService from "../src";
-import { TENANT_DEFAULT } from "../src/constants";
 
 const NEW_TENANT_ID = "t192";
 
@@ -60,9 +59,9 @@ describe("Tenant Test Suite", () => {
   it("should support get tables/columns", async () => {
     const db: MySQLDatabaseService = cds.db as any;
     const tool = db.getAdminTool();
-    const tables = await tool.getTables(TENANT_DEFAULT);
+    const tables = await tool.getTables(NEW_TENANT_ID);
     expect(tables.length).toBeGreaterThan(0);
-    const columns = await tool.getColumns(tables[0], TENANT_DEFAULT);
+    const columns = await tool.getColumns(tables[0], NEW_TENANT_ID);
     expect(columns.length).toBeGreaterThan(0);
   });
 
