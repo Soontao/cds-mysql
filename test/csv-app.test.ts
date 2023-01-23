@@ -19,7 +19,7 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
 
   it("should support deploy by API", async () => {
     const db: MySQLDatabaseService = cwdRequireCDS().db as any;
-    await db.deployCSV();
+    await db.getAdminTool().deployCSV();
   });
 
   it("should get error when create duplicated record", async () => {
@@ -120,7 +120,7 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
 
   it("should support migrate to v2 data", async () => {
     const db: MySQLDatabaseService = cwdRequireCDS().db as any;
-    await db.deployCSV(
+    await db.getAdminTool().deployCSV(
       undefined,
       [
         "./resources/csv-app/db/__data_v2__/test_resources_csv_app_db-Area.csv",

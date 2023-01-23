@@ -70,7 +70,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
       throw cds.error("mysql credentials not found");
     }
 
-    this._tool = new AdminTool();
+    this._tool = new AdminTool(this.options);
   }
 
   private _tool: AdminTool;
@@ -319,17 +319,6 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   /**
-   * deploy CSV only
-   * 
-   * @param tenant 
-   * @returns 
-   */
-  public deployCSV(tenant?: string, csvList?: Array<string>) {
-    this._logger.debug("deploy csv for tenant", tenant, "with csv", csvList);
-    return this._tool.deployCSV(tenant, csvList);
-  }
-
-  /**
    * implement deployment service
    * 
    * @internal
@@ -339,7 +328,6 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   public implDeploymentService(ds: any) {
     return _impl_deployment_service(ds);
   }
-
 
   /**
    * deploy (migrate) schema to (tenant) database
@@ -353,7 +341,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   /**
-   * get db admin tool
+   * get database admin tool
    * 
    * @returns 
    */

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { CSN, cwdRequireCDS, LinkedModel, Logger, memorized } from "cds-internal-tool";
+import { CDS, CSN, cwdRequireCDS, LinkedModel, Logger, memorized } from "cds-internal-tool";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { TENANT_DEFAULT } from "./constants";
 import { MysqlDatabaseOptions } from "./types";
@@ -27,9 +27,17 @@ export class AdminTool {
 
   private _options: MysqlDatabaseOptions;
 
-  constructor() {
-    this._logger = cwdRequireCDS().log("db|mysql");
-    this._options = cwdRequireCDS().requires.db as any;
+  private _cds: CDS;
+
+  /**
+   * Admin Tool for Database
+   * 
+   * @param options service options
+   */
+  constructor(options?: any) {
+    this._cds = cwdRequireCDS();
+    this._logger = this._cds.log("db|mysql");
+    this._options = options;
   }
 
   /**
@@ -48,7 +56,7 @@ export class AdminTool {
 
     if (tenantDatabaseName.length > 64) {
       this._logger.warn("database name", tenantDatabaseName, "which for tenant", tenant, "is too long");
-      throw cwdRequireCDS().error("TENANT_DATABASE_NAME_TOO_LONG");
+      throw this._cds.error("TENANT_DATABASE_NAME_TOO_LONG");
     }
 
     return tenantDatabaseName;
@@ -126,7 +134,7 @@ export class AdminTool {
    * @returns 
    */
   public async csn4(tenant?: string) {
-    const { "cds.xt.ModelProviderService": mp } = cwdRequireCDS().services;
+    const { "cds.xt.ModelProviderService": mp } = this._cds.services;
     return mp.getCsn({ tenant, toggles: ["*"], activated: true });
   }
 
@@ -137,7 +145,7 @@ export class AdminTool {
    * @returns 
    */
   public async getDataSourceOption(tenant: string = TENANT_DEFAULT): Promise<DataSourceOptions> {
-    const credentials = await this.getMySQLCredential(tenant);
+    const credentials = this.getMySQLCredential(tenant);
     return Object.assign(
       {},
       {
@@ -167,7 +175,7 @@ export class AdminTool {
     const credential = await this.getDataSourceOption();
     const ds = new CDSMySQLDataSource({
       ...credential,
-      name: `admin-conn-${cwdRequireCDS().utils.uuid()}`,
+      name: `admin-conn-${this._cds.utils.uuid()}`,
       entities: [],
       type: "mysql",
       logger: TypeORMLogger,
@@ -222,26 +230,26 @@ export class AdminTool {
     }
 
     // if has tenant database & mtxs is enabled
-    if (await this.hasTenantDatabase(tenant) && ("cds.xt.ModelProviderService" in cwdRequireCDS().services)) {
+    if (await this.hasTenantDatabase(tenant) && ("cds.xt.ModelProviderService" in this._cds.services)) {
       await this.deploy(await this.csn4(tenant), tenant);
       return;
     }
 
-    await this.deploy(await _rawCSN(cwdRequireCDS().db.model), tenant);
+    await this.deploy(await _rawCSN(this._cds.db.model), tenant);
   }
 
   /**
-   * deploy CSV for tenant
+   * deploy CSV (only) for tenant
    * 
    * @param tenant 
    */
   public async deployCSV(tenant?: string, csvList?: Array<string>) {
     // REVISIT: global model not suitable for extensibility
-    await migrateData(this.getMySQLCredential(tenant), cwdRequireCDS().model, csvList);
+    await migrateData(this.getMySQLCredential(tenant), this._cds.model, csvList);
   }
 
   /**
-   * deploy (migrate) schema to (tenant) database
+   * deploy (migrate) database model into target tenant database
    * 
    * @param model plain CSN object
    * @param tenant tenant id
@@ -249,13 +257,12 @@ export class AdminTool {
    */
   public async deploy(model: CSN, tenant: string = TENANT_DEFAULT) {
     try {
-      const cds = cwdRequireCDS();
       this._logger.info("migrating schema for tenant", tenant.green);
       if (tenant !== TENANT_DEFAULT) { await this.createDatabase(tenant); }
       const entities = csnToEntity(model);
       const migrateOptions = await this.getDataSourceOption(tenant);
       await migrate({ ...migrateOptions, entities });
-      if (cds.env?.get?.("requires.db.csv.migrate") !== false) {
+      if (this._cds.env?.get?.("requires.db.csv.migrate") !== false) {
         await this.deployCSV(tenant);
       }
       else {
@@ -320,10 +327,9 @@ export class AdminTool {
    * @returns 
    */
   async deployT0() {
-    const cds = cwdRequireCDS();
     const t0 = this.getAdminTenantName();
     this._logger.info("deploy admin tenant", t0.green);
-    const t0_csn = await cds.load(path.join(__dirname, "../mtxs/t0.cds"));
+    const t0_csn = await this._cds.load(path.join(__dirname, "../mtxs/t0.cds"));
     this._logger.debug("t0 entities", Object.keys(t0_csn.definitions));
     await this.deploy(t0_csn, t0);
   }
