@@ -173,15 +173,26 @@ export async function migrateData(
       const entires: Array<Array<string>> = CSV.read(csvFile);
       const tableName = entityName.replace(/\./g, "_");
 
-      /**
-       * key names of entity
-       */
-      const keys = Object.values(entityModel.elements)
-        .filter((e: any) => e.key === true)
-        .map((e: any) => e.name);
+      // >> check csv
+      if (entires.length > 1) {
+        logger.info(
+          "filling entity", entityName.green,
+          "with file", path.relative(process.cwd(), csvFile).green,
+          "with", entires.length, "records"
+        );
+      }
+      else {
+        logger.warn(
+          "file",
+          path.relative(process.cwd(), csvFile).yellow,
+          "is empty, skip processing"
+        );
+        continue;
+      }
 
       let [headers, ...rows] = entires;
 
+      // >> headers
       // fuzzy mapping element
       headers = headers.map(header => {
         const element = fuzzy.findElement(entityModel, header);
@@ -204,6 +215,28 @@ export async function migrateData(
         rows = rows.map(row => [...row, true]) as any;
       }
 
+      // >> keys
+      /**
+       * key names of entity
+       */
+      const keys = Object.values(entityModel.elements)
+        .filter((e: any) => e.key === true)
+        .map((e: any) => e.name);
+
+      const existedKeysIndex = headers
+        .filter(header => keys.includes(header))
+        .map(existedKey => headers.indexOf(existedKey));
+
+      if (existedKeysIndex.length !== keys.length) {
+        logger.error(
+          "file", csvFile.yellow,
+          "does not provide enough primary keys", keys,
+          "could not provision CSV, skip process"
+        );
+        throw cds.error("CSV file format error");
+      }
+
+      // >> transform rows
       const transformColumnsIndex = Object
         .values(entityModel.elements)
         .filter(ele => TRANSFORM_CDS_TYPES.includes(ele.type))
@@ -214,46 +247,17 @@ export async function migrateData(
           columnName: ele.name,
         }));
 
-      const existedKeysIndex = headers
-        .filter(header => keys.includes(header))
-        .map(existedKey => headers.indexOf(existedKey));
-
-      if (existedKeysIndex.length !== keys.length) {
-        logger.error(
-          "file", csvFile.yellow,
-          "does not provide enough primary keys",
-          keys,
-          "could not provision CSV, skip process"
-        );
-        throw cds.error("CSV file format wrong");
-      }
-
       if (transformColumnsIndex.length > 0) {
         logger.debug(
           "columns", transformColumnsIndex,
           "in entity", entityName.green, "need to be transformed"
         );
-        transform(rows, transformColumnsIndex);
+        transform(rows, transformColumnsIndex); // TODO: cache transoformed data for each csv file.
       }
 
-      if (entires.length > 1) {
-        logger.info(
-          "filling entity", entityName.green,
-          "with file", path.relative(process.cwd(), csvFile).green,
-          "with", entires.length, "records"
-        );
-      }
-      else {
-        logger.warn(
-          "file",
-          path.relative(process.cwd(), csvFile).yellow,
-          "is empty, skip processing"
-        );
-        continue;
-      }
-
+      // >> database operation
       /**
-       * not existed records, insert with batch
+       * full fresh new records, insert with batch
        */
       const batchInserts = [];
 
@@ -264,46 +268,54 @@ export async function migrateData(
 
       await Promise.all(
         rows.map(
-          entry => sem.use(async () => {
-            const { expr, values } = entryToWhereExpr(entry, headers, existedKeysIndex);
+          entry => sem.use(
+            async function _csvRowProcessor() {
+              const { expr, values } = entryToWhereExpr(entry, headers, existedKeysIndex);
 
-            const [[{ EXIST }]] = await connection
-              .query(`SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`, [tableName, ...values]) as any;
+              const [[{ EXIST }]] = await connection.query(
+                `SELECT COUNT(1) AS EXIST FROM ?? WHERE ${expr}`,
+                [tableName, ...values]
+              ) as any;
 
-            if (EXIST === 0) {
-              batchInserts.push(entry);
-            }
-            else {
+              if (EXIST === 0) {
+                batchInserts.push(entry); // fresh record, insert by batch
+                return;
+              }
+
               if (cds.env.get("requires.db.csv.exist.update") === true) {
-                const { expr: updateExprs, values: updateValues } = entryToUpdateExpr(entry, headers, existedKeysIndex);
+                const {
+                  expr: updateExprs,
+                  values: updateValues
+                } = entryToUpdateExpr(entry, headers, existedKeysIndex);
                 const updateExpr = updateExprs.join(", ");
                 await connection.query(
                   `UPDATE ?? SET ${updateExpr} WHERE ${expr}`,
                   [tableName, ...updateValues, ...values]
                 );
-              }
-              else {
-                logger.debug(
-                  "entity", entityName,
-                  "where", expr,
-                  "values", values,
-                  "has existed, skip process"
-                );
+                return;
               }
 
+              logger.debug(
+                "entity", entityName,
+                "where", expr,
+                "values", values,
+                "is already existed, skip process"
+              );
+
             }
-          })
+          )
         )
       );
 
 
-      // batch insert
+      // >> batch insert
       if (batchInserts.length > 0) {
 
         const headerList = headers.join(", ");
 
         logger.debug("batch inserts:", entityName, "with", batchInserts.length, "records");
 
+        // REVISIT: column name
         const [{ affectedRows }] = await connection
           .query(`INSERT INTO ?? (${headerList}) VALUES ?`, [tableName, batchInserts]) as any;
 
@@ -332,7 +344,7 @@ export async function migrateData(
     await connection.end();
   }
 
-  logger.info("CSV provision data migration successful");
+  logger.info("CSV data provisioning successfully");
 
 }
 
