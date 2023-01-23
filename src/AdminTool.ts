@@ -127,7 +127,7 @@ export class AdminTool {
    */
   public async csn4(tenant?: string) {
     const { "cds.xt.ModelProviderService": mp } = cwdRequireCDS().services;
-    return (mp as any).getCsn({ tenant, toggles: ["*"], activated: true });
+    return mp.getCsn({ tenant, toggles: ["*"], activated: true });
   }
 
   /**
