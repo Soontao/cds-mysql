@@ -77,7 +77,7 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
   - [x] deploy model on-fly
   - [x] create database on-demand
     - [ ] user permission check
-  - [x] _experimental_ [`@sap/cds-mtxs` support](https://pages.github.tools.sap/cap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
+  - [x] _experimental_ [`@sap/cds-mtxs` support](https://cap.cloud.sap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
     - [ ] extensibility
 - [x] `$expand` navigation
 - [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
