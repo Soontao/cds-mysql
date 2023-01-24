@@ -1,22 +1,24 @@
 /* eslint-disable max-len */
-import { CDS, CSN, cwdRequireCDS, LinkedModel, Logger, memorized } from "cds-internal-tool";
+import { CDS, CSN, cwdRequireCDS, LinkedModel, Logger } from "cds-internal-tool";
+import path from "path";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { TENANT_DEFAULT } from "./constants";
-import { MysqlDatabaseOptions } from "./types";
 import { formatTenantDatabaseName } from "./tenant";
 import { migrate, migrateData } from "./typeorm";
 import { csnToEntity } from "./typeorm/entity";
 import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
-import path from "path";
+import { MysqlDatabaseOptions } from "./types";
 
 
 /**
  * get raw CSN from linked model
+ * 
+ * cannot be cached will cause stack overflow
  */
-export const _rawCSN = memorized(async (m: LinkedModel) => {
-  return await cwdRequireCDS().load(m["$sources"]);
-});
+export const _rawCSN = async (m: LinkedModel) => {
+  return cwdRequireCDS().load(m["$sources"]);
+};
 
 /**
  * Admin Tool for Database
