@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.4.0](https://github.com/Soontao/cds-mysql/compare/v6.4.0-alpha.0...v6.4.0) (2023-01-24)
+
+
+### Bug Fixes
+
+* cached CSN ([0e39d58](https://github.com/Soontao/cds-mysql/commit/0e39d58800c36cd20c00e341f9b4304a668ab904))
+* **deps:** update dependency glob to v8.1.0 ([#199](https://github.com/Soontao/cds-mysql/issues/199)) ([87beefa](https://github.com/Soontao/cds-mysql/commit/87beefa1df3700b268c9a305fab2e598e7cf04de))
+
 ## [6.4.0-alpha.0](https://github.com/Soontao/cds-mysql/compare/v6.3.6...v6.4.0-alpha.0) (2023-01-14)
 
 
