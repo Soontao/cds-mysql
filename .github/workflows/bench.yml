@@ -47,10 +47,10 @@ jobs:
           name: Benchmark.js Benchmark
           tool: 'benchmarkjs'
           output-file-path: bench_output.txt
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.BENCHMARK_ACTION_BOT_TOKEN }}
           alert-threshold: '200%'
           comment-always: true
           comment-on-alert: true
           fail-on-alert: true
           alert-comment-cc-users: '@Soontao'
-
+          gh-repository: 'github.com/Soontao/cds-mysql-bench-result'
