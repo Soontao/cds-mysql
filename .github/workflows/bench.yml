@@ -29,8 +29,14 @@ jobs:
       - run: npm i --no-save express @sap/cds --registry=https://registry.npmmirror.com
       - run: npx tsc
 
-      - name: Run benchmark
+      - name: benchmark
         run: node bench/benchmark.js | tee bench_output.txt
+        
+      - name: cache benchmark data
+        uses: actions/cache@v3
+        with:
+          path: ./cache
+          key: ${{ runner.os }}-benchmark
 
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
@@ -38,11 +44,9 @@ jobs:
           name: cds-mysql benchmark
           tool: 'benchmarkjs'
           output-file-path: bench_output.txt
-          github-token: ${{ secrets.BENCHMARK_ACTION_BOT_TOKEN }}
           alert-threshold: '200%'
-          auto-push: ${{ github.event_name != 'pull_request' }}
           comment-always: true
           comment-on-alert: true
           fail-on-alert: true
           alert-comment-cc-users: '@Soontao'
-          gh-repository: 'github.com/Soontao/cds-mysql-bench-result'
+          external-data-json-path: ./cache/benchmark-data.json
