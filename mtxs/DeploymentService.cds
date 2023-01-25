@@ -6,7 +6,6 @@
   'internal-user'
 ])
 @(path: '/-/cds/deployment')
-@(impl: './DeploymentService')
 service cds.xt.DeploymentService {
 
   /**

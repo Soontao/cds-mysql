@@ -1,5 +1,6 @@
 import { uniq } from "@newdash/newdash/uniq";
 import {
+  CDS,
   CSN, cwdRequire,
   cwdRequireCDS, EventContext,
   LinkedModel, Logger
@@ -44,7 +45,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
     checkCdsVersion();
 
-    const cds = cwdRequireCDS();
+    const cds = this._cds = cwdRequireCDS();
 
     // REVISIT: official db api
     this._execute = execute;
@@ -72,6 +73,8 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
     this._tool = new AdminTool(this.options);
   }
+
+  private _cds: CDS;
 
   private _tool: AdminTool;
 
@@ -102,12 +105,13 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    */
   async init() {
     await super.init();
+    this._implDeploymentService();
     this._registerEagerDeploy();
   }
 
   private _registerEagerDeploy() {
     if (this.options?.tenant?.deploy?.auto !== false) {
-      const cds = cwdRequireCDS();
+      const cds = this._cds;
       let eager = this.options.tenant?.deploy?.eager ?? [TENANT_DEFAULT];
 
       if (typeof eager === "string") { eager = [eager]; }
@@ -119,7 +123,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
           .filter((u: any) => typeof u?.tenant === "string").map((u: any) => u.tenant)
       );
 
-      this._logger.info("tenants from users", tenantsFromUsers);
+      this._logger.debug("tenants from users", tenantsFromUsers);
 
       if (tenantsFromUsers.length > 0) {
         eager.push(...tenantsFromUsers);
@@ -127,7 +131,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
       eager = uniq(eager) as Array<string>;
 
-      this._logger.info("eager deploy tenants", eager);
+      this._logger.info("deploy tenants", eager);
 
       if (eager.length === 0) {
         return;
@@ -325,8 +329,13 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * @param ds 
    * @returns 
    */
-  public implDeploymentService(ds: any) {
-    return _impl_deployment_service(ds);
+  private _implDeploymentService() {
+    this._cds.once("served", () => {
+      const { "cds.xt.DeploymentService": ds } = this._cds.services;
+      if (ds !== undefined) {
+        return _impl_deployment_service(ds);
+      }
+    });
   }
 
   /**
