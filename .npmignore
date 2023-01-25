@@ -1,10 +1,13 @@
 .vscode
 .github
-coverage
-test
 *.tgz
 .eslint*
 commitlint.config.js
 jest.config.js
 .env
+output.txt
+coverage
+test
 docker
+bench
+docs
