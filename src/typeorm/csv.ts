@@ -114,6 +114,7 @@ export async function migrateData(
       logger.warn("csv history table is not ready, cannot check CSV content is migrated before");
     }
 
+    // REVISIT: sort csv import order
     for (const csvFile of csvList) {
       const filename = path.basename(csvFile, ".csv");
       const entityName = filename.replace(/[_-]/g, "."); // name_space_entity.csv -> name.space.entity
