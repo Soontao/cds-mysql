@@ -67,6 +67,7 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
   - [x] migrate CSV on-demand (with option)
   - [x] CSV migration with hash check
   - [ ] database handlers for `SELECT` and `DELETE`
+  - [ ] care entity dependenceis while importing CSV file
 - [x] full text search
 - [x] schema migration optimization (ignore drop in some case)
   - [ ] ignore column length reduce and with warning
@@ -90,6 +91,7 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
   - [ ] `NOWAIT` support
   - [ ] `SKIP LOCKED` support
+- [ ] Schema Evoluation by typeorm migration
 - [x] better E2E document/sample - [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight)
 
 ## Limitation and Known Issues
