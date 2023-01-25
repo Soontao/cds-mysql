@@ -20,10 +20,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 18.x
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
+          
+      - name: Cache node modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
       - run: npm ci
       - run: npm i --no-save express @sap/cds
@@ -41,7 +49,6 @@ jobs:
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
-          name: cds-mysql benchmark
           tool: 'benchmarkjs'
           output-file-path: bench_output.txt
           # GitHub API token to make a commit comment
