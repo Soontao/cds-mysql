@@ -49,6 +49,7 @@ jobs:
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
+          name: 'cds-mysql benchmark'
           tool: 'benchmarkjs'
           output-file-path: bench_output.txt
           # GitHub API token to make a commit comment
