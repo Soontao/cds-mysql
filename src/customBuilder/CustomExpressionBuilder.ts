@@ -15,6 +15,7 @@ export class CustomExpressionBuilder extends ExpressionBuilder {
   }
 
   build() {
+    // REVISIT: try to remove this later, maybe has already been fixed by cds runtime
     // fix upper case DRAFTS table issue
     if (
       this._obj?.xpr instanceof Array &&

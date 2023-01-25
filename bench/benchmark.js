@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 
 (async function () {
 
@@ -27,6 +28,11 @@
       model
     );
   }
+
+  suite.add("query#select_only", function () {
+    sql(SELECT.from("test.int.People"));
+  });
+
   suite.add("query#select_limit", function () {
     sql(SELECT.from("test.int.People").limit(10, 10));
   });
@@ -39,15 +45,31 @@
           Age: { "<=": 15 },
           RegisterDate: {
             between: "2022-11-17",
-            and: "2022-11-17"
+            and: "2022-11-18"
           }
         }
       )
     );
   });
 
+  suite.add("query#select_where_expr", function () {
+    sql(
+      SELECT
+        .from("test.int.People")
+        .where`Name = ${"Theo"} and Age <= ${15} and RegisterDate between ${"2022-11-17"} and ${"2022-11-18"}`
+    );
+  });
+
+  suite.add("query#select_for_update", function () {
+    sql(SELECT.from("test.int.People").forUpdate());
+  });
+
+  suite.add("query#select_for_update_wait", function () {
+    sql(SELECT.from("test.int.People").forUpdate({ wait: 1000 }));
+  });
+
   suite.add("query#select_from_inner_table", function () {
-    sql(SELECT.from(SELECT.from("B").where("A =", "cc")).where({ c: 1 }));
+    sql(SELECT.from(SELECT.from("B")).where({ c: 1 }));
   });
 
   suite.add("query#insert_into_entries", function () {
