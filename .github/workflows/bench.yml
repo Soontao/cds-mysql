@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   benchmark:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 18.x
@@ -25,8 +25,8 @@ jobs:
         with:
           node-version: 18.x
 
-      - run: npm ci --registry=https://registry.npmmirror.com
-      - run: npm i --no-save express @sap/cds --registry=https://registry.npmmirror.com
+      - run: npm ci
+      - run: npm i --no-save express @sap/cds
       - run: npx tsc
 
       - name: benchmark
