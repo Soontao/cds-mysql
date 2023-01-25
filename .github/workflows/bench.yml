@@ -35,7 +35,8 @@ jobs:
 
 
       - run: npm ci
-      - run: npm run build
+      - run: npm i --no-save express @sap/cds sqlite3;
+      - run: npx tsc
 
       - name: Run benchmark
         run: node bench/benchmark.js | tee bench_output.txt
