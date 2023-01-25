@@ -2,6 +2,7 @@
 import { sleep } from "@newdash/newdash";
 import { CSN, cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
+import { spawn, SpawnOptionsWithoutStdio } from "child_process";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { MYSQL_CHARSET } from "../src/constants";
 import { formatTenantDatabaseName } from "../src/tenant";
@@ -110,3 +111,17 @@ export const cleanDB = async () => {
     if (ds.isInitialized) { await ds.destroy(); }
   }
 };
+
+export function createSh(options: SpawnOptionsWithoutStdio) {
+  return function sh(...command: Array<string>) {
+    const p = spawn(command[0], command.slice(1), options);
+    p.stdout.pipe(process.stdout);
+    p.stderr.pipe(process.stderr);
+    return new Promise((resolve, reject) => {
+      p.on("error", reject);
+      p.on("exit", resolve);
+    });
+  };
+
+}
+

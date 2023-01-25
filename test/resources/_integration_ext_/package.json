@@ -1,0 +1,6 @@
+{
+  "name": "ext-1",
+  "dependencies": {
+    "@sap/cds-dk": "^6.4.1"
+  }
+}

@@ -1,7 +1,9 @@
 
-import { doAfterAll } from "./utils";
+import { createSh, doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 import type MySQLDatabaseService from "../src";
+import path from "node:path";
+import { sleep } from "@newdash/newdash";
 
 const NEW_TENANT_ID = "t192";
 
@@ -9,6 +11,10 @@ describe("Tenant Test Suite", () => {
 
   const client = setupTest(__dirname, "./resources/integration");
   client.defaults.auth = { username: "yves", password: "" };
+  const t2User = {
+    username: "theo-on-tenant-2",
+    password: "any"
+  };
 
   const cds = cwdRequireCDS();
   afterAll(doAfterAll);
@@ -25,10 +31,7 @@ describe("Tenant Test Suite", () => {
     response = await client.get("/bank/Peoples/$count");
     expect(response.data).toBe(1);
     response = await client.get("/bank/Peoples", {
-      auth: {
-        username: "theo-on-tenant-2",
-        password: "any"
-      }
+      auth: t2User
     });
     expect(response.data.value.length).toBe(0);
   });
@@ -63,6 +66,23 @@ describe("Tenant Test Suite", () => {
     expect(tables.length).toBeGreaterThan(0);
     const columns = await tool.getColumns(tables[0], NEW_TENANT_ID);
     expect(columns.length).toBeGreaterThan(0);
+  });
+
+  it("should support add extension fields", async () => {
+    const sh = createSh({
+      cwd: path.join(__dirname, "./resources/_integration_ext_"),
+      env: process.env,
+      shell: true
+    });
+    await sh("npx", "cds", "pull", "-u", "theo-on-tenant-2:pass", "--from", client.defaults.baseURL);
+    await sh("npx", "cds", "build", "--for", "mtx-extension");
+    await sh("npx", "cds", "push", "-u", "theo-on-tenant-2:pass", "--to", client.defaults.baseURL);
+
+    await sleep(3000);
+    const { status, data } = await client.get("/bank/$metadata", { auth: t2User });
+    expect(status).toMatchInlineSnapshot(`200`);
+    expect(data).toMatch(/zz_ExtValue/);
+    expect(data).toMatch(/zz_ChineseName/);
   });
 
   it("should raise error when tenant-id too long", () => {
