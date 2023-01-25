@@ -5,16 +5,15 @@ import type MySQLDatabaseService from "../src";
 import path from "node:path";
 import { sleep } from "@newdash/newdash";
 
+jest.setTimeout(60 * 1000); // 1 minutes
+
 const NEW_TENANT_ID = "t192";
 
 describe("Tenant Test Suite", () => {
 
   const client = setupTest(__dirname, "./resources/integration");
   client.defaults.auth = { username: "yves", password: "" };
-  const t2User = {
-    username: "theo-on-tenant-2",
-    password: "any"
-  };
+  const t2User = { username: "theo-on-tenant-2", password: "any" };
 
   const cds = cwdRequireCDS();
   afterAll(doAfterAll);
@@ -30,9 +29,7 @@ describe("Tenant Test Suite", () => {
     expect(response.status).toBe(201);
     response = await client.get("/bank/Peoples/$count");
     expect(response.data).toBe(1);
-    response = await client.get("/bank/Peoples", {
-      auth: t2User
-    });
+    response = await client.get("/bank/Peoples", { auth: t2User });
     expect(response.data.value.length).toBe(0);
   });
 
@@ -69,6 +66,10 @@ describe("Tenant Test Suite", () => {
   });
 
   it("should support add extension fields", async () => {
+    const { data: m1 } = await client.get("/bank/$metadata", { auth: t2User });
+    expect(m1).not.toMatch(/zz_ExtValue/);
+    expect(m1).not.toMatch(/zz_ChineseName/);
+
     const sh = createSh({
       cwd: path.join(__dirname, "./resources/_integration_ext_"),
       env: process.env,
@@ -78,7 +79,8 @@ describe("Tenant Test Suite", () => {
     await sh("npx", "cds", "build", "--for", "mtx-extension");
     await sh("npx", "cds", "push", "-u", "theo-on-tenant-2:pass", "--to", client.defaults.baseURL);
 
-    await sleep(3000);
+    await sleep(10000); // wait cache expired
+
     const { status, data } = await client.get("/bank/$metadata", { auth: t2User });
     expect(status).toMatchInlineSnapshot(`200`);
     expect(data).toMatch(/zz_ExtValue/);
