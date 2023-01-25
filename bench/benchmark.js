@@ -133,5 +133,5 @@
     console.log(String(event.target));
   });
 
-  suite.run({ async: true });
+  suite.run({ async: true, minTime: 30, minSamples: 150 });
 })().catch(console.error);

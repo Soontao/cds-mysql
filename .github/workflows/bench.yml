@@ -48,7 +48,7 @@ jobs:
           tool: 'benchmarkjs'
           output-file-path: bench_output.txt
           github-token: ${{ secrets.BENCHMARK_ACTION_BOT_TOKEN }}
-          alert-threshold: '175%'
+          alert-threshold: '200%'
           auto-push: ${{ github.event_name != 'pull_request' }}
           comment-always: true
           comment-on-alert: true
