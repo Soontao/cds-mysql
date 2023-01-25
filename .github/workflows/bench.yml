@@ -49,7 +49,7 @@ jobs:
           output-file-path: bench_output.txt
           github-token: ${{ secrets.BENCHMARK_ACTION_BOT_TOKEN }}
           alert-threshold: '150%'
-          auto-push: ture
+          auto-push: true
           comment-always: true
           comment-on-alert: true
           fail-on-alert: true
