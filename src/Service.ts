@@ -110,23 +110,26 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   private _registerEagerDeploy() {
-    if (this.options?.tenant?.deploy?.auto !== false) {
+    const tenant = this.options?.tenant;
+    if (tenant !== undefined && tenant?.deploy?.auto !== false) {
+
       const cds = this._cds;
       let eager = this.options.tenant?.deploy?.eager ?? [TENANT_DEFAULT];
 
       if (typeof eager === "string") { eager = [eager]; }
 
-      // auth users tenants (when use basic/dummy auth)
-      const tenantsFromUsers = uniq(
-        Object
-          .values(cds.env.get("requires.auth.users") ?? {})
-          .filter((u: any) => typeof u?.tenant === "string").map((u: any) => u.tenant)
-      );
+      if (tenant?.deploy?.withMockUserTenants === true) {
+        // auth users tenants (when use basic/dummy auth)
+        const tenantsFromUsers = uniq(
+          Object
+            .values(cds.env.get("requires.auth.users") ?? {})
+            .filter((u: any) => typeof u?.tenant === "string").map((u: any) => u.tenant)
+        );
 
-      this._logger.debug("tenants from users", tenantsFromUsers);
-
-      if (tenantsFromUsers.length > 0) {
-        eager.push(...tenantsFromUsers);
+        if (tenantsFromUsers.length > 0) {
+          this._logger.debug("tenants from users", tenantsFromUsers);
+          eager.push(...tenantsFromUsers);
+        }
       }
 
       eager = uniq(eager) as Array<string>;

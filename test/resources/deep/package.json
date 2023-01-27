@@ -4,6 +4,13 @@
     "requires": {
       "db": {
         "kind": "mysql",
+        "tenant": {
+          "deploy": {
+            "eager": [
+              "t1"
+            ]
+          }
+        },
         "csv": {
           "migrate": false
         }

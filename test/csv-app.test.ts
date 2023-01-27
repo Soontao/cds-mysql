@@ -10,7 +10,6 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
   const client = setupTest(__dirname, "./resources/csv-app");
 
   const cds = cwdRequireCDS();
-  cds.env.log.levels.db = "debug";
   cds.env.features.bigjs = true;
 
   const { SELECT } = cds.ql;

@@ -67,6 +67,13 @@ export interface MysqlDatabaseOptions {
        * default value is ['default']
        */
       eager?: Array<string> | string;
+
+      /**
+       * eager deploy will also include tenants from cds.env.requires.auth.users
+       * 
+       * default value is `false`
+       */
+      withMockUserTenants?: boolean;
     };
     /**
      * tenant database name prefix

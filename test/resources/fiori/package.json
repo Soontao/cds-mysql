@@ -5,7 +5,10 @@
         "kind": "mysql",
         "tenant": {
           "deploy": {
-            "eager": "default"
+            "eager": [
+              "default",
+              "t1"
+            ]
           }
         },
         "connection": {
