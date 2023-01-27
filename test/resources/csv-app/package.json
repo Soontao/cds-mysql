@@ -3,11 +3,6 @@
     "requires": {
       "db": {
         "kind": "mysql",
-        "tenant": {
-          "deploy": {
-            "eager": "default"
-          }
-        },
         "csv": {
           "migrate": true,
           "exist": {

@@ -111,10 +111,11 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _registerEagerDeploy() {
     const tenant = this.options?.tenant;
-    if (tenant !== undefined && tenant?.deploy?.auto !== false) {
+
+    if (tenant?.deploy?.auto !== false) {
 
       const cds = this._cds;
-      let eager = this.options.tenant?.deploy?.eager ?? [TENANT_DEFAULT];
+      let eager = tenant?.deploy?.eager ?? [TENANT_DEFAULT];
 
       if (typeof eager === "string") { eager = [eager]; }
 
@@ -148,7 +149,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
   }
 
   private async _initializeTenant(tenant: string = TENANT_DEFAULT) {
-    const { "cds.xt.DeploymentService": ds } = cwdRequireCDS().services;
+    const { "cds.xt.DeploymentService": ds } = this._cds.services;
     if (ds === undefined) {
       await this._tool.syncTenant(tenant);
       return;
@@ -167,7 +168,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    *
    * @param tenant
    */
-  private async getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
+  private async _getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
     if (!(await this._tool.hasTenantDatabase(tenant))) {
       this._logger.error(
         "tenant", tenant,
@@ -275,7 +276,7 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   public async acquire(arg: any) {
     const tenant = (typeof arg === "string" ? arg : arg?.user?.tenant) ?? TENANT_DEFAULT;
-    const pool = await this.getPool(tenant);
+    const pool = await this._getPool(tenant);
     // REVISIT: priority maybe for http request
     // REVISIT: retry connection
     const conn = await pool.acquire();
