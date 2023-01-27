@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.2](https://github.com/Soontao/cds-mysql/compare/v6.4.1...v6.4.2) (2023-01-27)
+
+
+### Bug Fixes
+
+* default tenant deployment ([886ee6f](https://github.com/Soontao/cds-mysql/commit/886ee6f35a65310a33765f33cd14d562fb5fa7e6))
+
 ### [6.4.1](https://github.com/Soontao/cds-mysql/compare/v6.4.0...v6.4.1) (2023-01-27)
 
 
