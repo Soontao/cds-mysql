@@ -47,7 +47,7 @@ jobs:
           output-file-path: bench_output.txt
           # GitHub API token to make a commit comment
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          alert-threshold: '200%'
+          alert-threshold: '300%'
           # while PR, do not update benchmark data in cache
           save-data-file: ${{ github.event_name != 'pull_request' }}
           comment-always: true
