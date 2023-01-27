@@ -203,6 +203,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 - if key of entity is existed, depends on the `cds.requires.db.csv.exist.update`, if the value is `true`, try to update, otherwise will skip the record
 - if key of entity not existed, insert (if the records has been deleted, its also will be inserted)
 - for `clob` columns (like `cds.Binary`/`cds.LargeBinary`), please fill csv with `base64` encoded value
+- for `array of` columns, please fill with JSON string with correct CSV encoding, for example, use `""` two double quotes to represent `"` double quotes.
 
 ## Tips and FAQ
 
@@ -455,6 +456,6 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 
 ### Database User
 
-for the database user which configured in credential, at least it should have the permission to perform SQL and DML.
+for the database user which configured in credential, at least, it should have the permission to perform SQL and DML.
 
 if the `multi-tenancy` or `mtxs` is enabled, the user need the permission to `CREATE/DROP DATABASE` and other DDL permission.
