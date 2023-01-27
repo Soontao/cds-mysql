@@ -24,7 +24,6 @@
   - [Database](#database)
     - [Database User](#database-user)
 
-
 ## Concepts
 
 ### Compatibility Table
@@ -67,20 +66,37 @@ must use proper version of `cds-mysql` with `@sap/cds` sdk
 > interface
 
 ```ts
-interface MysqlDatabaseOptions {
+export interface MysqlDatabaseOptions {
+  /**
+   * database credentials
+   */
+  credentials: MySQLCredential;
+  /**
+   * tenant configuration
+   */
   tenant?: {
     deploy?: {
       /**
-       * auto migrate database schema when connect to it
-       * default value is `true`
-       * specify `false` to disable the migration on startup/connection pool setup
+       * auto migrate database schema when connect to it (create pool),
+       *
+       * default `true`
        */
       auto?: boolean;
       /**
        * eager deploy tenant id list
-       * the migration of those tenants will be performed when server startup
+       *
+       * schema sync of these tenants will be performed when server startup
+       *
+       * default value is ['default']
        */
       eager?: Array<string> | string;
+
+      /**
+       * eager deploy will also include tenants from cds.env.requires.auth.users
+       *
+       * default value is `false`
+       */
+      withMockUserTenants?: boolean;
     };
     /**
      * tenant database name prefix
@@ -99,32 +115,34 @@ interface MysqlDatabaseOptions {
     maxallowedpacket?: number | boolean;
   };
   /**
-   * connection pool options
+   * connection pool options for each tenant
    */
   pool?: PoolOptions;
   csv?: {
     /**
      * migrate CSV on deployment
+     *
+     * default value `true`
      */
     migrate?: boolean;
-    
+
     identity?: {
       /**
        * `cds-mysql` will parallel to query record by keys,
        *  to check the record is existed or not
        */
-      concurrency?: number
-    }
+      concurrency?: number;
+    };
     exist?: {
       /**
        * when `cds-mysql` found the record is existed in database
-       * 
-       * update or skip that. 
-       * 
+       *
+       * update or skip that.
+       *
        * default value `false`
        */
       update?: boolean;
-    }
+    };
   };
 }
 ```
@@ -178,7 +196,6 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
   - better to create a `admin` user to `cds-mysql` so that `cds-mysql` could help you to create `database`
 - multi-tenancy could work without `@sap/mtxs`, but if enable the `@sap/mtxs` features, please find more details at [MTXS documentation](./MTXS.md)
 
-
 ### CSV Migration
 
 `cds-mysql` has a built-in csv migrator, it will migrate data with key validation.
@@ -198,7 +215,7 @@ It will **NEVER** drop old `tables`/`columns`, it will be **SAFE** in most cases
 - till now, there are some features not well-implemented by cds team, for example, not able to automatically rewrite `upsert` for `view`
 
 ```js
-const { UPSERT } = cds.ql
+const { UPSERT } = cds.ql;
 
 module.exports = class DemoService extends cds.ApplicationService {
   async _upsert(req) {
@@ -246,7 +263,7 @@ if you have the `blob` column and try to upload large file/binary, maybe will en
 ### Database Connection Pool
 
 > `cds-mysql` setup pool for **EACH** tenant, for more options of pool, please ref [opt section of generic-pool](https://www.npmjs.com/package/generic-pool)
-> 
+
 ```json
 {
   "cds": {
@@ -354,7 +371,6 @@ create a `default-env.json` file into the root directory of your CAP project, it
 
 for more supported options in `credentials` node, please ref the [mysql official connection options document](https://www.npmjs.com/package/mysql#connection-options)
 
-
 ```json
 {
   "VCAP_SERVICES": {
@@ -392,7 +408,7 @@ you can convert PEM cert to json format with [this document](https://docs.vmware
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 ```
 
-## Database 
+## Database
 
 ### Database User
 
