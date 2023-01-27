@@ -14,19 +14,14 @@
 
 ## Setup
 
-create `.env` file and put that into the CAP project, then fill the database credential 
+firstly, install npm packages
 
-please find more database user setup information at [here](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables). 
-
-```environment
-CDS_REQUIRES_DB_CREDENTIALS_HOST=127.0.0.1
-CDS_REQUIRES_DB_CREDENTIALS_PORT=3306
-CDS_REQUIRES_DB_CREDENTIALS_DATABASE=cds_admin
-CDS_REQUIRES_DB_CREDENTIALS_USER=cds_admin
-CDS_REQUIRES_DB_CREDENTIALS_PASSWORD=cds_admin
+```bash
+npm i cds-mysql mysql2@2
 ```
 
-then setup the `mysql` database driver for cds -> edit the `package.json` > `cds` node
+setup the `mysql` database driver for cds -> edit the `package.json` > `cds` node (or `.cdsrc.json`)
+
 
 ```json
 {
@@ -43,9 +38,21 @@ then setup the `mysql` database driver for cds -> edit the `package.json` > `cds
 }
 ```
 
-now, start the cds server (`cds run`), everything is ready! 
+create an `.env` file and put that into your local CDS project, then fill the database credential
 
-depends on the configuration, the database schema will be migrated at server startup, or first time the cds server received CRUD request from client.
+```environment
+CDS_REQUIRES_DB_CREDENTIALS_HOST=127.0.0.1
+CDS_REQUIRES_DB_CREDENTIALS_PORT=3306
+CDS_REQUIRES_DB_CREDENTIALS_DATABASE=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_USER=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_PASSWORD=cds_admin
+```
+
+now, start the cds server (`npx cds run`), everything is ready! 
+
+read more about [database configuration](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables). 
+
+read more about [database user](./docs/ADVANCED_USAGE.md#database). 
 
 ---
 
@@ -79,7 +86,7 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
   - [x] create database on-demand
     - [ ] user permission check
   - [x] _experimental_ [`@sap/cds-mtxs` support](https://cap.cloud.sap/docs/guides/multitenancy/mtxs) -> [document](./docs/MTXS.md) - behavior maybe changed later.
-    - [ ] extensibility
+    - [x] extensibility (`pull`/`push`)
 - [x] `$expand` navigation
 - [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
 - [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`, `TiDB`
