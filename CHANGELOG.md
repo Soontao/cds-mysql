@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.1](https://github.com/Soontao/cds-mysql/compare/v6.4.0...v6.4.1) (2023-01-27)
+
+
+### Features
+
+* add perf test for sql builder ([94bd782](https://github.com/Soontao/cds-mysql/commit/94bd78240406a9d816ad315aae8af62d6464deda))
+* benchmark ([eac955a](https://github.com/Soontao/cds-mysql/commit/eac955ae97ac722c92edf94a31997061c8d2f679))
+* new benchmark for csn to entity ([4b678f4](https://github.com/Soontao/cds-mysql/commit/4b678f4e7fa4720058ed125f67e690730c68d505))
+* partial of [#206](https://github.com/Soontao/cds-mysql/issues/206) test ([45fa636](https://github.com/Soontao/cds-mysql/commit/45fa63642878263a1d63081094599c2d8976f501))
+* refactor deployment service ([cb8fb33](https://github.com/Soontao/cds-mysql/commit/cb8fb33df6194a37bb8a2d787c1fc033de969d1b))
+* withMockUserTenants option ([289b681](https://github.com/Soontao/cds-mysql/commit/289b681d6c14d2974b3ab3e4877a318c1064ecf6))
+
+
+### Bug Fixes
+
+* bench ci ([6e5014a](https://github.com/Soontao/cds-mysql/commit/6e5014aa163fad08cf42b991791ffe5683c29b7f))
+* bench ci ([7d7aa01](https://github.com/Soontao/cds-mysql/commit/7d7aa01be03f5c02a9e824a1400670f86c7cfa2b))
+* benchmark ci ([aef2641](https://github.com/Soontao/cds-mysql/commit/aef2641881103a53714c0c0e4f329c6427113c6e))
+* ci ([d38b252](https://github.com/Soontao/cds-mysql/commit/d38b2529122885fefcb6724aadad7c52e7802f0a))
+* ci ([f4c9223](https://github.com/Soontao/cds-mysql/commit/f4c922339055be54424a048cb0f9091bd8b80345))
+* **deps:** update dependency @newdash/graphlib to v3.1.4 ([#212](https://github.com/Soontao/cds-mysql/issues/212)) ([c618983](https://github.com/Soontao/cds-mysql/commit/c618983ec2d740a0bdcc60f73119a69882d34956))
+* extensibility ([d535490](https://github.com/Soontao/cds-mysql/commit/d535490e3cb0487257a3b0979d6c6ee20d80e776))
+
 ## [6.4.0](https://github.com/Soontao/cds-mysql/compare/v6.4.0-alpha.0...v6.4.0) (2023-01-24)
 
 
