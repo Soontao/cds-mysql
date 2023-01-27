@@ -628,6 +628,11 @@ FROM test_resources_csv_app_db_City AS City_0;",
           "nullable": true,
           "type": "bigint",
         },
+        "Label": {
+          "name": "Label",
+          "nullable": true,
+          "type": "longtext",
+        },
         "Name": {
           "length": 125,
           "name": "Name",
@@ -687,7 +692,8 @@ FROM test_resources_csv_app_db_City AS City_0;",
   ComplexTypeEntity_0.SignTime,
   ComplexTypeEntity_0.SignTmp,
   ComplexTypeEntity_0.GlobalUUID,
-  ComplexTypeEntity_0.BlobDoc
+  ComplexTypeEntity_0.BlobDoc,
+  ComplexTypeEntity_0.Label
 FROM test_resources_csv_app_db_ComplexTypeEntity AS ComplexTypeEntity_0
 WHERE ComplexTypeEntity_0.Disabled = FALSE;",
       "name": "test_resources_csv_app_srv_AppService_TypeEntity",

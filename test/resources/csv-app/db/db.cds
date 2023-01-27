@@ -14,7 +14,7 @@ type Address {
   Street   : String(255);
 }
 
-@cds.search : {
+@cds.search: {
   address_Country,
   address_Province,
   address_City,
@@ -48,6 +48,10 @@ entity ComplexTypeEntity : incrementID, preDelivery {
   SignTmp    : Timestamp;
   GlobalUUID : UUID;
   BlobDoc    : Binary;
+  Label      : array of {
+    Category : String(10);
+    Value    : String(50);
+  };
 }
 
 entity City : cuid {
