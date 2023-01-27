@@ -74,7 +74,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
   const isMetaMigration = connectionOptions.entities === CDSMysqlMetaTables;
   const isTenantMigration = dryRun === false && !isMetaMigration;
 
-  const logger = cwdRequireCDS().log("mysql|db|migrate|typeorm");
+  const logger = cwdRequireCDS().log("db|deploy|mysql|migrate|typeorm");
 
   const entityHash = sha256(connectionOptions.entities as any as Array<any>);
 
