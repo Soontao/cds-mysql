@@ -11,7 +11,7 @@ import { ConnectionOptions, createConnection } from "mysql2/promise";
 import path from "path";
 import { DEFAULT_CSV_IDENTITY_CONCURRENCY } from "../constants";
 import { adaptToMySQLDateTime } from "../conversion-pre";
-import { last6Chars } from "../utils";
+import { isPreDeliveryModel, last6Chars } from "../utils";
 
 export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
   glob(pattern, (err, matches) => {
@@ -171,11 +171,7 @@ export async function migrateData(
       /**
        * the entity has `preDelivery` `aspect` or not
        */
-      const isPreDeliveryModel = (
-        entityModel.includes?.includes?.("preDelivery") &&
-        entityModel.elements?.["PreDelivery"]?.type === "cds.Boolean"
-      );
-
+      const withPrelivery = isPreDeliveryModel(entityModel);
       const CSV = cwdRequire("@sap/cds/lib/compile/etc/csv");
       const entires: Array<Array<string>> = CSV.read(csvFile);
       const tableName = entityName.replace(/\./g, "_");
@@ -215,7 +211,7 @@ export async function migrateData(
 
       // if entity has preDelivery aspect but not provide PreDelivery column value 
       if (
-        isPreDeliveryModel &&
+        withPrelivery &&
         !headers.includes(TABLE_COLUMN_PRE_DELIVERY)
       ) {
         headers.push(TABLE_COLUMN_PRE_DELIVERY);

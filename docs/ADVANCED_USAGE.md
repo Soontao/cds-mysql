@@ -336,6 +336,49 @@ entity Person : incrementID, preDelivery {
 }
 ```
 
+then use the database model with filter
+
+```groovy
+  // where Disabled = false
+  entity Peoples    as projection on db.Person excluding {
+    PreDelivery,
+    Disabled
+  } where Disabled = false;
+```
+
+if enable the `enhancedProcessing` options
+
+```diff
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "csv": {
+          "migrate": true,
+          "exist": {
+            "update": true
+          },
++          "enhancedProcessing": true
+        }
+      }
+    }
+  }
+}
+```
+
+NOTE: `cds-mysql` will reject db `DELETE` operations for `pre-delivery = true` records
+
+```json
+{
+  "error": {
+    "@Common.numericSeverity": 4,
+    "code": "400",
+    "message": "ERR_DELETE_PRE_DELIVERED_DATA"
+  }
+}
+```
+
 ### Add Column Index
 
 > define entity with mysql built-in index

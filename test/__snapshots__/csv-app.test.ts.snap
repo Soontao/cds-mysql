@@ -158,6 +158,19 @@ exports[`CSV App Test Suite - Feature (big js enabled) should support automatica
 }
 `;
 
+exports[`CSV App Test Suite - Feature (big js enabled) should support delete pre-deliver data 1`] = `
+{
+  "data": {
+    "error": {
+      "@Common.numericSeverity": 4,
+      "code": "400",
+      "message": "ERR_DELETE_PRE_DELIVERED_DATA",
+    },
+  },
+  "status": 400,
+}
+`;
+
 exports[`CSV App Test Suite - Feature (big js enabled) should support search 1`] = `
 {
   "@odata.context": "$metadata#Houses",

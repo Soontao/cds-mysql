@@ -119,7 +119,13 @@ export interface MysqlDatabaseOptions {
        * default value `false`
        */
       update?: boolean;
-    }
+    };
+    /**
+     * enhanced csv processing for `preDelivery` aspect
+     * 
+     * default value is `false`
+     */
+    enhancedProcessing: boolean;
   };
 }
 

@@ -688,7 +688,8 @@ FROM test_resources_csv_app_db_City AS City_0;",
   ComplexTypeEntity_0.SignTmp,
   ComplexTypeEntity_0.GlobalUUID,
   ComplexTypeEntity_0.BlobDoc
-FROM test_resources_csv_app_db_ComplexTypeEntity AS ComplexTypeEntity_0;",
+FROM test_resources_csv_app_db_ComplexTypeEntity AS ComplexTypeEntity_0
+WHERE ComplexTypeEntity_0.Disabled = FALSE;",
       "name": "test_resources_csv_app_srv_AppService_TypeEntity",
       "synchronize": true,
       "tableName": "test_resources_csv_app_srv_AppService_TypeEntity",
@@ -740,7 +741,8 @@ FROM test_resources_csv_app_db_ComplexTypeEntity AS ComplexTypeEntity_0;",
       "expression": "SELECT
   Person_0.ID,
   Person_0.Name
-FROM test_resources_csv_app_db_Person AS Person_0;",
+FROM test_resources_csv_app_db_Person AS Person_0
+WHERE Person_0.Disabled = FALSE;",
       "name": "test_resources_csv_app_srv_AppService_Peoples",
       "synchronize": true,
       "tableName": "test_resources_csv_app_srv_AppService_Peoples",
@@ -867,7 +869,8 @@ FROM test_resources_csv_app_db_Area AS Area_0;",
   House_0.address_Province,
   House_0.address_City,
   House_0.address_Street
-FROM test_resources_csv_app_db_House AS House_0;",
+FROM test_resources_csv_app_db_House AS House_0
+WHERE House_0.Disabled = FALSE;",
       "name": "test_resources_csv_app_srv_AppService_Houses",
       "synchronize": true,
       "tableName": "test_resources_csv_app_srv_AppService_Houses",

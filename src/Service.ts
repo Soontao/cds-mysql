@@ -1,9 +1,10 @@
+/* eslint-disable max-len */
 import { uniq } from "@newdash/newdash/uniq";
 import {
   CDS,
   CSN, cwdRequire,
   cwdRequireCDS, EventContext,
-  LinkedModel, Logger
+  EventNames, LinkedModel, Logger, Service
 } from "cds-internal-tool";
 import "colors";
 import { createPool, Options as PoolOptions, Pool } from "generic-pool";
@@ -22,6 +23,7 @@ import {
 } from "./constants";
 import { _impl_deployment_service } from "./deploy-service";
 import execute from "./execute";
+import { _disable_deletion_for_predelivery } from "./handlers";
 import { ConnectionWithPool, MysqlDatabaseOptions } from "./types";
 import { checkCdsVersion } from "./utils";
 
@@ -35,10 +37,13 @@ const DEFAULT_POOL_OPTIONS: Partial<PoolOptions> = {
   testOnBorrow: true,
 };
 
+const BaseService: typeof Service<EventNames, MysqlDatabaseOptions> = cwdRequire("@sap/cds/libx/_runtime/sqlite/Service");
+
 /**
  * MySQL Database Adapter for SAP CAP Framework
+ * 
  */
-export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sqlite/Service") {
+export class MySQLDatabaseService extends BaseService {
 
   constructor(...args: any[]) {
     super(...args);
@@ -78,9 +83,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
   private _tool: AdminTool;
 
-  private options: MysqlDatabaseOptions;
+  options: MysqlDatabaseOptions;
 
-  private model: LinkedModel;
+  model: LinkedModel;
 
   private _queries: any;
 
@@ -104,9 +109,17 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
    * initialize function
    */
   async init() {
+    this._registerCSVHandlers();
     await super.init();
     this._implDeploymentService();
     this._registerEagerDeploy();
+  }
+
+  private _registerCSVHandlers() {
+    if (this.options?.csv?.enhancedProcessing === true) {
+      this._logger.info("enhanced csv processing enabled");
+      this.on("DELETE", _disable_deletion_for_predelivery);
+    }
   }
 
   private _registerEagerDeploy() {
@@ -115,9 +128,9 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
     if (tenant?.deploy?.auto !== false) {
 
       const cds = this._cds;
-      let eager = tenant?.deploy?.eager ?? [TENANT_DEFAULT];
+      let tenantsToBeDeployed = tenant?.deploy?.eager ?? [TENANT_DEFAULT];
 
-      if (typeof eager === "string") { eager = [eager]; }
+      if (typeof tenantsToBeDeployed === "string") { tenantsToBeDeployed = [tenantsToBeDeployed]; }
 
       if (tenant?.deploy?.withMockUserTenants === true) {
         // auth users tenants (when use basic/dummy auth)
@@ -129,20 +142,19 @@ export class MySQLDatabaseService extends cwdRequire("@sap/cds/libx/_runtime/sql
 
         if (tenantsFromUsers.length > 0) {
           this._logger.debug("tenants from users", tenantsFromUsers);
-          eager.push(...tenantsFromUsers);
+          tenantsToBeDeployed.push(...tenantsFromUsers);
         }
       }
 
-      eager = uniq(eager) as Array<string>;
+      tenantsToBeDeployed = uniq(tenantsToBeDeployed) as Array<string>;
 
-      this._logger.info("deploy tenants", eager);
-
-      if (eager.length === 0) {
+      if (tenantsToBeDeployed.length === 0) {
         return;
       }
 
       cds.once("served", async () => {
-        return Promise.all((eager as Array<string>).map(tenant => this._initializeTenant(tenant)));
+        this._logger.info("deploy tenants", tenantsToBeDeployed);
+        return Promise.all((tenantsToBeDeployed as Array<string>).map(tenant => this._initializeTenant(tenant)));
       });
 
     }

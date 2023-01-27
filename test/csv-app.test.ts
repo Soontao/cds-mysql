@@ -139,4 +139,9 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
     expect({ data, status }).toMatchSnapshot();
   });
 
+  it("should support delete pre-deliver data", async () => {
+    const { data, status } = await client.delete(`/app/Houses(97dc9da4-f61e-11ec-b939-0242ac120002)`);
+    expect({ data, status }).toMatchSnapshot();
+  });
+
 });

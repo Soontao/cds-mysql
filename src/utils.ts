@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { cwdRequireCDS, groupByKeyPrefix, memorized, mustBeArray } from "cds-internal-tool";
+import { cwdRequireCDS, groupByKeyPrefix, LinkedEntityDefinition, memorized, mustBeArray } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG } from "./constants";
 
 
@@ -36,4 +36,14 @@ export const getIncrementalKey = memorized((entityDef: any): any | undefined => 
   const [key] = Object.values(entityDef?.keys)
     .filter(keyEle => groupByKeyPrefix(keyEle, ANNOTATION_CDS_TYPEORM_CONFIG)?.generated === "increment");
   return key;
+});
+
+/**
+ * check the given entity has `preDelivery` aspect or not
+ */
+export const isPreDeliveryModel = memorized((entifyDef: LinkedEntityDefinition) => {
+  return (
+    entifyDef?.includes?.includes?.("preDelivery") &&
+    entifyDef?.elements?.["PreDelivery"]?.type === "cds.Boolean"
+  );
 });
