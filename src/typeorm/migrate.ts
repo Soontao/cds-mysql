@@ -6,6 +6,7 @@ import { SqlInMemory } from "typeorm/driver/SqlInMemory";
 import { TypeORMLogger } from "./logger";
 import { createHash } from "crypto";
 import { CDSMySQLDataSource } from "./mysql";
+import { last6Chars } from "../utils";
 
 
 const MigrationHistory = new EntitySchema({
@@ -100,7 +101,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
       "migrate database",
       String(connectionOptions.database).green,
       "with hash",
-      entityHash.slice(entityHash.length - 6).green
+      last6Chars(entityHash).green,
     );
 
     await ds.initialize();
@@ -109,9 +110,9 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
     if (isTenantMigration) {
       const [record] = await ds.query("SELECT HASH, MIGRATED_AT FROM cds_mysql_migration_history ORDER BY MIGRATED_AT DESC LIMIT 1 FOR UPDATE");
       if (record?.HASH === entityHash) {
-        logger.info(
-          "database with hash",
-          entityHash.slice(entityHash.length - 6).green,
+        logger.debug(
+          "database model with hash",
+          last6Chars(entityHash).green,
           "was ALREADY migrated at", String(record.MIGRATED_AT).green,
         );
         return;

@@ -17,6 +17,19 @@ export function checkCdsVersion() {
   }
 }
 
+/**
+ * return last 6 characters of target string
+ * 
+ * @param s 
+ * @returns 
+ */
+export function last6Chars(s: string) {
+  if (s.length < 6) {
+    return s;
+  }
+  return s.slice(s.length - 6);
+}
+
 export { memorized, mustBeArray };
 
 export const getIncrementalKey = memorized((entityDef: any): any | undefined => {

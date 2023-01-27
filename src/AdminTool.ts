@@ -264,7 +264,7 @@ export class AdminTool {
       const entities = csnToEntity(model);
       const migrateOptions = await this.getDataSourceOption(tenant);
       await migrate({ ...migrateOptions, entities });
-      if (this._cds.env?.get?.("requires.db.csv.migrate") !== false) {
+      if (this._options?.csv?.migrate !== false) {
         await this.deployCSV(tenant);
       }
       else {

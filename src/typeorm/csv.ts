@@ -11,6 +11,7 @@ import { ConnectionOptions, createConnection } from "mysql2/promise";
 import path from "path";
 import { DEFAULT_CSV_IDENTITY_CONCURRENCY } from "../constants";
 import { adaptToMySQLDateTime } from "../conversion-pre";
+import { last6Chars } from "../utils";
 
 export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
   glob(pattern, (err, matches) => {
@@ -116,6 +117,10 @@ export async function migrateData(
 
     // REVISIT: sort csv import order
     for (const csvFile of csvList) {
+      /**
+       * relative csv file path, use to display
+       */
+      const relativeCSVFile = path.relative(process.cwd(), csvFile);
       const filename = path.basename(csvFile, ".csv");
       const entityName = filename.replace(/[_-]/g, "."); // name_space_entity.csv -> name.space.entity
 
@@ -139,11 +144,12 @@ export async function migrateData(
 
         if (csvFileHashExists instanceof Array && csvFileHashExists.length > 0) {
           if (csvFileHashExists[0].HASH === csvFileHash) {
-            logger.info(
-              "file", csvFile.green,
-              "with hash", csvFileHash.substring(32).gray,
-              "has been provisioned before, skip processing"
+            logger.debug(
+              "file", relativeCSVFile.green,
+              "with hash", last6Chars(csvFileHash).green,
+              "has been provisioned"
             );
+            logger.debug("skip process", csvFile.green);
             continue;
           }
           else {
@@ -178,14 +184,14 @@ export async function migrateData(
       if (entires.length > 1) {
         logger.info(
           "filling entity", entityName.green,
-          "with file", path.relative(process.cwd(), csvFile).green,
+          "with file", relativeCSVFile.green,
           "with", entires.length, "records"
         );
       }
       else {
         logger.warn(
           "file",
-          path.relative(process.cwd(), csvFile).yellow,
+          relativeCSVFile.yellow,
           "is empty, skip processing"
         );
         continue;
@@ -325,7 +331,7 @@ export async function migrateData(
             "batch insert records for entity", entityName,
             "with", batchInserts.length, "records",
             "but db affectRows is", affectedRows,
-            "please CARE and CHECK the reason"
+            "please CARE and CHECK the reason".red
           );
         }
 
