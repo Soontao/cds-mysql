@@ -77,7 +77,10 @@ describe("Tenant Test Suite", () => {
     });
     await sh("npx", "cds", "pull", "-u", "theo-on-tenant-2:pass", "--from", client.defaults.baseURL);
     await sh("npx", "cds", "build", "--for", "mtx-extension");
-    await sh("npx", "cds", "push", "-u", "theo-on-tenant-2:pass", "--to", client.defaults.baseURL);
+    await sh(
+      "npx", "cds", "push", "./gen/extension.tgz", "-u", "theo-on-tenant-2:pass", "--to",
+      client.defaults.baseURL
+    );
 
     await sleep(10000); // wait cache expired
 

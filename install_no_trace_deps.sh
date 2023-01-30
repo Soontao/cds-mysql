@@ -3,5 +3,6 @@
 if [ ! -d "node_modules/@sap/cds" ]; then
   echo "Installing no trace dependencies ...";
   CDS_VERSION=$(node -e "console.log(require('./src/cds.version').VERSION)");
-  npm i --no-save express @sap/cds@$CDS_VERSION @sap/cds-dk@$CDS_VERSION @sap/cds-mtxs@1.4.3 sqlite3;
+  MTXS_VERSION=$(node -e "console.log(require('./src/cds.version').MTXS_VERSION)");
+  npm i --no-save express @sap/cds@$CDS_VERSION @sap/cds-dk@$CDS_VERSION @sap/cds-mtxs@$MTXS_VERSION sqlite3;
 fi
