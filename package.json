@@ -4,6 +4,9 @@
   "main": "lib/index.js",
   "cds.main": "./index.cds",
   "description": "mysql database adapter for cds",
+  "bin": {
+    "cds-mysql-build": "./bin/build"
+  },
   "scripts": {
     "install:dev": "bash install_no_trace_deps.sh",
     "pretest": "npm run install:dev",

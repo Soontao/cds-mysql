@@ -286,7 +286,6 @@ function extractInfo(ddl: string): { type: "table" | "view" | "unknown", name: s
   return { type: "unknown", name: "unknown" };
 }
 
-
 /**
  * convert csn to typeorm entities
  *

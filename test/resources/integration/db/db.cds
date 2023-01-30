@@ -15,6 +15,9 @@ entity People : cuid, managed {
   Age             : Integer default 18;
   virtual RealAge : Integer;
   RegisterDate    : Date;
+  Name2           : String(222);
+  Name3           : String(432);
+  Name4           : String(432);
   Cards           : Association to many Card
                       on Cards.People = $self;
   Detail          : Composition of Detail;
@@ -24,7 +27,7 @@ entity Detail : cuid, managed {
   BirthDay            : Date;
   Address             : String(255);
   AttachmentMediaType : String(100);
-  Attachment          : LargeBinary @Core.MediaType : AttachmentMediaType;
+  Attachment          : LargeBinary @Core.MediaType: AttachmentMediaType;
 }
 
 entity Card : cuid, managed {
@@ -47,9 +50,9 @@ entity Card : cuid, managed {
 type TranslatedText : localized String(255);
 
 
-@cds.typeorm.config : {indices : [{
-  name    : 'ProductName',
-  columns : ['Name']
+@cds.typeorm.config: {indices: [{
+  name   : 'ProductName',
+  columns: ['Name']
 }]}
 entity Product : cuid {
   Name  : TranslatedText;

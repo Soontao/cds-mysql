@@ -18,6 +18,23 @@
     },
     {
       "type": "node",
+      "request": "launch",
+      "name": "run build",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "ts-node",
+        "-e",
+        "import {build} from \"${workspaceFolder}/src/scripts/build\"; build().catch(console.error);",
+      ],
+      "cwd": "${workspaceFolder}/test/resources/integration",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "sourceMaps": true,
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node",
       "name": "vscode-jest-tests",
       "request": "launch",
       "args": [

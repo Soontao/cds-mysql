@@ -116,3 +116,6 @@ test_ca.pem
 
 # tmp
 tmp
+
+# dev json
+**/db/last-dev/mysql.json

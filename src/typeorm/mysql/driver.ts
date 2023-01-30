@@ -27,6 +27,20 @@ export class CDSMySQLDriver extends MysqlDriver {
     return new CDSMySQLQueryRunner(this, mode);
   }
 
+  normalizeType(column: ColumnMetadata) {
+    if (column instanceof String) {
+      return "nvarchar";
+    }
+    if (column.type === "uuid") {
+      return "nvarchar";
+    }
+    if (column.type === "nvarchar" ||
+      column.type === "national varchar") {
+      return "nvarchar";
+    }
+    return super.normalizeType(column);
+  }
+
   /**
    * Differentiate columns of this table and columns from the given column metadatas columns
    * and returns only changed.
@@ -51,13 +65,13 @@ export class CDSMySQLDriver extends MysqlDriver {
       if (this.withLengthColumnTypes.includes(tableColumn.type as any)) {
         // for the empty length, it means its maybe a default length
         if (
-          !isEmpty(tableColumn.length) 
-            && !isEmpty(columnMetadataLength) 
-            && tableColumn.length !== columnMetadataLength) {
+          !isEmpty(tableColumn.length)
+          && !isEmpty(columnMetadataLength)
+          && tableColumn.length !== columnMetadataLength) {
           return true;
         }
       }
-      
+
       if (this.withWidthColumnTypes.includes(tableColumn.type as any)) {
         if (tableColumn.width !== columnMetadata.width) {
           return true;
@@ -69,13 +83,13 @@ export class CDSMySQLDriver extends MysqlDriver {
           return true;
         }
       }
-    
-      if  (this.withScaleColumnTypes.includes(tableColumn.type as any)) {
+
+      if (this.withScaleColumnTypes.includes(tableColumn.type as any)) {
         if (columnMetadata.scale !== undefined && tableColumn.scale !== columnMetadata.scale) {
           return true;
         }
       }
-     
+
       if (tableColumn.zerofill !== columnMetadata.zerofill) {
         return true;
       }
