@@ -13,6 +13,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     "node_modules/",
     "src/typeorm/mysql",
+    "src/scripts", // REVISIT: add unit test later
     "src/mtxs",
   ],
   testEnvironment: "node",

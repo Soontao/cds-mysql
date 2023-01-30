@@ -15,9 +15,6 @@ entity People : cuid, managed {
   Age             : Integer default 18;
   virtual RealAge : Integer;
   RegisterDate    : Date;
-  Name2           : String(222);
-  Name3           : String(432);
-  Name4           : String(432);
   Cards           : Association to many Card
                       on Cards.People = $self;
   Detail          : Composition of Detail;
