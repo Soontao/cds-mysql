@@ -5,7 +5,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
   "length": 256,
   "name": "CreatedByUser",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -40,7 +40,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
   "name": "DraftUUID",
   "nullable": false,
   "primary": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -49,7 +49,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
   "length": 256,
   "name": "InProcessByUser",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -67,7 +67,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: DRAFT_DraftAdmin
   "length": 256,
   "name": "LastChangedByUser",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -76,7 +76,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_For
   "length": 36,
   "name": "DraftAdministrativeData_DraftUUID",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -104,7 +104,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_For
   "name": "ID",
   "nullable": false,
   "primary": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -123,7 +123,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_For
   "length": 255,
   "name": "f1",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -132,7 +132,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_For
   "length": 255,
   "name": "f2",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -157,7 +157,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
   "length": 255,
   "name": "Address",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -175,7 +175,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
   "length": 36,
   "name": "DraftAdministrativeData_DraftUUID",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -203,7 +203,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
   "name": "ID",
   "nullable": false,
   "primary": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -222,7 +222,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
   "length": 255,
   "name": "Name",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -232,7 +232,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_f
   "name": "ID",
   "nullable": false,
   "primary": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -241,7 +241,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_f
   "length": 255,
   "name": "f1",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -250,7 +250,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_f
   "length": 255,
   "name": "f2",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -275,7 +275,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_f
   "length": 255,
   "name": "Address",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -294,7 +294,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_f
   "name": "ID",
   "nullable": false,
   "primary": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -303,7 +303,7 @@ exports[`TypeORM Test Suite should support convert cuid aspect: test_resources_f
   "length": 255,
   "name": "Name",
   "nullable": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -476,7 +476,7 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
   "name": "Name",
   "nullable": false,
   "primary": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -503,7 +503,7 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
   "name": "Type",
   "nullable": false,
   "primary": true,
-  "type": "nvarchar",
+  "type": "varchar",
 }
 `;
 
@@ -534,14 +534,14 @@ exports[`TypeORM Test Suite should support extensions for csv app 1`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 25,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Size": {
           "name": "Size",
@@ -609,7 +609,7 @@ FROM test_resources_csv_app_db_City AS City_0;",
           "length": 36,
           "name": "GlobalUUID",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Height": {
           "name": "Height",
@@ -637,7 +637,7 @@ FROM test_resources_csv_app_db_City AS City_0;",
           "length": 125,
           "name": "Name",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "PreDelivery": {
           "default": false,
@@ -723,7 +723,7 @@ WHERE ComplexTypeEntity_0.Disabled = FALSE;",
           "length": 255,
           "name": "Name",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "PreDelivery": {
           "default": false,
@@ -764,13 +764,13 @@ WHERE Person_0.Disabled = FALSE;",
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 255,
           "name": "Name",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Size": {
           "name": "Size",
@@ -818,7 +818,7 @@ FROM test_resources_csv_app_db_Area AS Area_0;",
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "PreDelivery": {
           "default": false,
@@ -830,25 +830,25 @@ FROM test_resources_csv_app_db_Area AS Area_0;",
           "length": 255,
           "name": "address_City",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "address_Country": {
           "length": 255,
           "name": "address_Country",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "address_Province": {
           "length": 255,
           "name": "address_Province",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "address_Street": {
           "length": 255,
           "name": "address_Street",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "price": {
           "name": "price",
@@ -906,13 +906,13 @@ exports[`TypeORM Test Suite should support migrate tables 1`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -939,14 +939,14 @@ exports[`TypeORM Test Suite should support migrate tables 2`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -979,14 +979,14 @@ exports[`TypeORM Test Suite should support migrate tables 3`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -1039,14 +1039,14 @@ exports[`TypeORM Test Suite should support migrate tables 4`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -1128,7 +1128,7 @@ exports[`TypeORM Test Suite should support migrate tables 5`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Level": {
           "name": "Level",
@@ -1139,7 +1139,7 @@ exports[`TypeORM Test Suite should support migrate tables 5`] = `
           "length": 255,
           "name": "Title",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_Job",
@@ -1182,14 +1182,14 @@ WHERE Job_0.Active = TRUE;",
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -1271,7 +1271,7 @@ exports[`TypeORM Test Suite should support migrate tables 6`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Level": {
           "name": "Level",
@@ -1282,7 +1282,7 @@ exports[`TypeORM Test Suite should support migrate tables 6`] = `
           "length": 255,
           "name": "Title",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_Job",
@@ -1325,14 +1325,14 @@ WHERE Job_0.Active = TRUE;",
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -1410,7 +1410,7 @@ exports[`TypeORM Test Suite should support migrate tables 7`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Level": {
           "name": "Level",
@@ -1421,19 +1421,19 @@ exports[`TypeORM Test Suite should support migrate tables 7`] = `
           "length": 36,
           "name": "People_ID",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "People_Name": {
           "length": 100,
           "name": "People_Name",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Title": {
           "length": 255,
           "name": "Title",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_Job",
@@ -1478,14 +1478,14 @@ WHERE Job_0.Active = TRUE;",
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -1578,20 +1578,20 @@ exports[`TypeORM Test Suite should support migrate tables 8`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Title": {
           "length": 255,
           "name": "Title",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "locale": {
           "length": 14,
           "name": "locale",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_Job_texts",
@@ -1614,7 +1614,7 @@ exports[`TypeORM Test Suite should support migrate tables 8`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Level": {
           "name": "Level",
@@ -1625,19 +1625,19 @@ exports[`TypeORM Test Suite should support migrate tables 8`] = `
           "length": 36,
           "name": "People_ID",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "People_Name": {
           "length": 100,
           "name": "People_Name",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Title": {
           "length": 255,
           "name": "Title",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_Job",
@@ -1814,14 +1814,14 @@ WHERE Job_0.Active = TRUE;",
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",
@@ -2031,20 +2031,20 @@ exports[`TypeORM Test Suite should support migrate tables 9`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Title": {
           "length": 255,
           "name": "Title",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "locale": {
           "length": 14,
           "name": "locale",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_Job_texts",
@@ -2067,7 +2067,7 @@ exports[`TypeORM Test Suite should support migrate tables 9`] = `
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Level": {
           "name": "Level",
@@ -2078,19 +2078,19 @@ exports[`TypeORM Test Suite should support migrate tables 9`] = `
           "length": 36,
           "name": "People_ID",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "People_Name": {
           "length": 100,
           "name": "People_Name",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Title": {
           "length": 255,
           "name": "Title",
           "nullable": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_Job",
@@ -2267,14 +2267,14 @@ WHERE Job_0.Active = TRUE;",
           "name": "ID",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
         "Name": {
           "length": 100,
           "name": "Name",
           "nullable": false,
           "primary": true,
-          "type": "nvarchar",
+          "type": "varchar",
         },
       },
       "name": "test_resources_migrate_People",

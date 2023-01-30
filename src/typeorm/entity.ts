@@ -33,9 +33,9 @@ const buildInTypes = {
   "cds.DateTime": "DATETIME",
   "cds.Timestamp": "DATETIME",
   "cds.Boolean": "BOOLEAN",
-  "cds.UUID": "NVARCHAR",
+  "cds.UUID": "VARCHAR",
 
-  "cds.String": "NVARCHAR",
+  "cds.String": "VARCHAR",
   "cds.Binary": "VARBINARY",
   "cds.LargeBinary": "LONGBLOB",
   "cds.LargeString": "LONGTEXT",

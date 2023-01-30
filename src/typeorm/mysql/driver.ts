@@ -27,20 +27,6 @@ export class CDSMySQLDriver extends MysqlDriver {
     return new CDSMySQLQueryRunner(this, mode);
   }
 
-  normalizeType(column: ColumnMetadata) {
-    if (column instanceof String) {
-      return "nvarchar";
-    }
-    if (column.type === "uuid") {
-      return "nvarchar";
-    }
-    if (column.type === "nvarchar" ||
-      column.type === "national varchar") {
-      return "nvarchar";
-    }
-    return super.normalizeType(column);
-  }
-
   /**
    * Differentiate columns of this table and columns from the given column metadatas columns
    * and returns only changed.
