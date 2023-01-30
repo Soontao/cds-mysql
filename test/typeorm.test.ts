@@ -2,7 +2,7 @@ import { pick, range } from "@newdash/newdash";
 import { cwdRequireCDS } from "cds-internal-tool";
 import path from "path";
 import { DataSourceOptions } from "typeorm";
-import { csnToEntity, migrate } from "../src/typeorm";
+import { csnToEntity, entitySchemaToTable, migrate } from "../src/typeorm";
 import { sha256 } from "../src/typeorm/csv";
 import { TypeORMLogger } from "../src/typeorm/logger";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
@@ -26,6 +26,11 @@ describe("TypeORM Test Suite", () => {
     const csn = await loadCSN("./resources/complex-type.cds");
     const entities = csnToEntity(csn);
     expect(entities).toHaveLength(1);
+  });
+
+  it("should support convert csn to table meta", async () => {
+    const csn = await loadCSN("./resources/complex-type.cds");
+    expect(csnToEntity(csn).map(entitySchemaToTable)).toMatchSnapshot();
   });
 
   it("should support extensions for csv app", async () => {

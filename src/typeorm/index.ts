@@ -1,4 +1,5 @@
 import { csnToEntity } from "./entity";
 import { migrate, migrateData } from "./migrate";
 
-export { csnToEntity, migrate, migrateData };
+export { entitySchemaToTable } from "./database";
+export { csnToEntity, migrate, migrateData, };
