@@ -58,8 +58,11 @@ export async function build() {
     const last: Array<Migration> = migrationScript.parse(
       await readFile(mysql_migration_file_path, { encoding: "utf-8" })
     );
-    migrations.push(...last);
-    if (last.length > 0) { nextVersion = last[last.length - 1].version; }
+
+    if (last.length > 0) {
+      migrations.push(...last);
+      nextVersion = last[last.length - 1].version + 1;
+    }
   }
 
   // >> typeorm internal hack
