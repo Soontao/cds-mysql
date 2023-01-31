@@ -8,6 +8,7 @@ module.exports = {
   },
   collectCoverageFrom: [
     "src/**/*.ts",
+    "!test/resources/**",
     "!**/node_modules/**"
   ],
   coveragePathIgnorePatterns: [
