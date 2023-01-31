@@ -80,7 +80,6 @@ export const migration = {
       if (line.trim().startsWith("--")) {
         if (line.startsWith(MIGRATION_VERSION_PREFIX)) {
           if (current_migration !== undefined) {
-            current_migration.version = current_migration.version;
             migrations.push(current_migration);
           }
           // create a new context
