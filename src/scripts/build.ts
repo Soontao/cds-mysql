@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { cwdRequireCDS } from "cds-internal-tool";
 import { readFile, mkdir, writeFile } from "fs/promises";
-import { EntitySchema, Table } from "typeorm";
+import { Table } from "typeorm";
 import { existsSync } from "fs";
 import path from "path";
 import { csnToEntity } from "../typeorm/entity";
@@ -10,19 +10,8 @@ import { entitySchemaToTable } from "../typeorm/database";
 import { View } from "typeorm/schema-builder/view/View";
 import { CDSMySQLDataSource } from "../typeorm/mysql";
 import { Query } from "typeorm/driver/Query";
+import { MigrationHistory, Query, Migration } from "../types";
 
-
-interface Migration {
-  version: number;
-  up_queries: Array<Query>;
-}
-
-interface MigrationHistory {
-  version: number;
-  entities: Array<EntitySchema>;
-  hash: string;
-  migrations: Array<Migration>;
-}
 
 export async function build() {
   const cds = cwdRequireCDS();
@@ -32,7 +21,7 @@ export async function build() {
   const mysql_last_file_path = path.join(base, "mysql.json");
   const current_entities = csnToEntity(await cds.load("*", { root: cds.root }));
   const current_hash = sha256(current_entities);
-  const up_queries: Array<Query> = [];
+  const statements: Array<Query> = [];
   const migrations: Array<Migration> = [];
   let nextVersion = 100;
 
@@ -79,15 +68,17 @@ export async function build() {
   queryRunner.enableSqlMemory();
   queryRunner.getCurrentDatabase = function () { return ds.options.database; };
   queryRunner.getCurrentSchema = function () { return ds.options.database; };
+  queryRunner.insertViewDefinitionSql = function () { return undefined; };
+  queryRunner.deleteViewDefinitionSql = function () { return undefined; };
 
   const builder = ds.driver.createSchemaBuilder();
   builder.queryRunner = queryRunner;
   await builder.executeSchemaSyncOperationsInProperOrder();
-  up_queries.push(...queryRunner.getMemorySql().upQueries);
+  statements.push(...queryRunner.getMemorySql().upQueries.filter(query => query !== undefined));
 
   migrations.push({
     version: nextVersion,
-    up_queries
+    statements: statements
   });
 
   await writeFile(

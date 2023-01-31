@@ -35,9 +35,10 @@ export function entitySchemaToTable(entity: EntitySchema) {
           isGenerated: Boolean(column.generated),
           comment: column.comment,
         })),
-        indices: Object.entries(options?.indices ?? {}).map(([name, indice]) => ({
-          name,
-          columnNames: indice.columns as Array<string>,
+        indices: Object.values(options?.indices ?? {}).map((index) => ({
+          name: index.name,
+          columnNames: index.columns as Array<string>,
+          // REVISIT: other options
         }))
       });
   }

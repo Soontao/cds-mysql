@@ -1,6 +1,7 @@
 import type { Connection } from "mysql2/promise";
 import type { INSERT } from "cds-internal-tool/lib/types/ql";
 import type { Options as PoolOptions, Pool } from "generic-pool";
+import type { EntitySchema } from "typeorm";
 
 export declare class UPSERT<T = any> extends INSERT<T> {
 
@@ -130,3 +131,21 @@ export interface MysqlDatabaseOptions {
 }
 
 export type CQNKind = "SELECT" | "UPDATE" | "DELETE" | "INSERT" | "CREATE" | "DROP";
+
+
+
+export interface Query {
+  query: string
+}
+
+export interface Migration {
+  version: number;
+  statements: Array<Query>;
+}
+
+export interface MigrationHistory {
+  version: number;
+  entities: Array<EntitySchema>;
+  hash: string;
+  migrations: Array<Migration>;
+}
