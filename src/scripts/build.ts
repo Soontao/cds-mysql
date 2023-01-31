@@ -11,14 +11,16 @@ import { View } from "typeorm/schema-builder/view/View";
 import { CDSMySQLDataSource } from "../typeorm/mysql";
 import { Query } from "typeorm/driver/Query";
 import { MigrationHistory, Query, Migration } from "../types";
-
+import { migration as migrationScript } from "../utils";
 
 export async function build() {
   const cds = cwdRequireCDS();
   const logger = cds.log("build|cds|deploy");
-  const base = path.join(cds.root, "db/last-dev");
-  await mkdir(base, { recursive: true });
-  const mysql_last_file_path = path.join(base, "mysql.json");
+  const base = path.join(cds.root, "db");
+  const mysql_last_file_path = path.join(base, "last-dev", "mysql.json");
+  const mysql_migration_file_path = path.join(base, "migrations.sql");
+  await mkdir(path.dirname(mysql_last_file_path), { recursive: true });
+
   const current_entities = csnToEntity(await cds.load("*", { root: cds.root }));
   const current_hash = sha256(current_entities);
   const statements: Array<Query> = [];
@@ -50,17 +52,24 @@ export async function build() {
         .map(entitySchemaToTable) as any
     );
 
-    migrations.push(
-      ...last.migrations
-    );
-
   }
+
+  if (existsSync(mysql_migration_file_path)) {
+    const last: Array<Migration> = migrationScript.parse(
+      await readFile(mysql_migration_file_path, { encoding: "utf-8" })
+    );
+    migrations.push(...last);
+    if (last.length > 0) { nextVersion = last[last.length - 1].version; }
+  }
+
+  // >> typeorm internal hack
 
   const ds = new CDSMySQLDataSource({
     type: "mysql",
-    database: "__database_placeholder__",
+    database: "__database_placeholder__", // dummy, it should never use
     entities: current_entities,
   });
+
   await ds.buildMetadatas();
   const queryRunner = ds.createQueryRunner();
   queryRunner.loadedTables = last_version_tables;
@@ -74,6 +83,9 @@ export async function build() {
   const builder = ds.driver.createSchemaBuilder();
   builder.queryRunner = queryRunner;
   await builder.executeSchemaSyncOperationsInProperOrder();
+
+  // << typeorm internal hack
+
   statements.push(...queryRunner.getMemorySql().upQueries.filter(query => query !== undefined));
 
   migrations.push({
@@ -82,13 +94,20 @@ export async function build() {
   });
 
   await writeFile(
+    mysql_migration_file_path,
+    migrationScript.stringify(migrations),
+    { encoding: "utf-8" }
+  );
+
+  logger.info("Written migrations.sql", mysql_migration_file_path);
+
+  await writeFile(
     mysql_last_file_path,
     JSON.stringify(
       {
         version: nextVersion,
         entities: current_entities,
         hash: current_hash,
-        migrations,
       },
       null,
       2
@@ -96,5 +115,5 @@ export async function build() {
     { encoding: "utf-8" }
   );
 
-  logger.info("Write last dev json for cds-mysql to", mysql_last_file_path);
+  logger.info("Written last dev json", mysql_last_file_path);
 }

@@ -119,4 +119,4 @@ tmp
 
 # dev json
 **/db/last-dev/mysql.json
-**/db/migration.sql
+**/db/migrations.sql
