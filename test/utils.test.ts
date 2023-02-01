@@ -9,6 +9,8 @@ jest.mock("cds-internal-tool", () => ({
   cwdRequireCDS: () => mockCds,
 }));
 
+jest.useFakeTimers().setSystemTime(new Date("2023-01-01"));
+
 describe("Utils Test Suite", () => {
 
   it("should do nothing if version is correct", () => {
@@ -25,6 +27,7 @@ describe("Utils Test Suite", () => {
       [
         {
           version: 100,
+          at: new Date(),
           statements: [
             {
               "query": "CREATE TABLE `sap_common_Currencies_texts` (`locale` varchar(14) NOT NULL, `name` varchar(255) NULL, `descr` varchar(1000) NULL, `code` varchar(3) NOT NULL, PRIMARY KEY (`locale`, `code`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"
@@ -36,6 +39,7 @@ describe("Utils Test Suite", () => {
         },
         {
           version: 102,
+          at: new Date(),
           statements: [
             {
               "query": "DROP VIEW `test_int_BankService_Peoples`"

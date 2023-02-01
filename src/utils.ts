@@ -63,7 +63,7 @@ export const migration = {
     parts.push(""); // empty line
 
     for (const migration of migrations) {
-      parts.push(`${MIGRATION_VERSION_PREFIX}${migration.version}`);
+      parts.push(`${MIGRATION_VERSION_PREFIX}${migration.version} at ${migration.at.toISOString()}`);
       parts.push(
         ...migration.statements.map(statement => statement.query + "\n")
       );
@@ -79,12 +79,18 @@ export const migration = {
     for (const line of content.split("\n")) {
       if (line.trim().startsWith("--")) {
         if (line.startsWith(MIGRATION_VERSION_PREFIX)) {
+          const r = /-- version number: (\d+) at (.*)/.exec(line);
+          if (r === null) {
+            throw new TypeError(`line '${line}' is not a valid comment for migration`);
+          }
+          const [, version, at] = r;
           if (current_migration !== undefined) {
             migrations.push(current_migration);
           }
           // create a new context
           current_migration = {
-            version: parseInt(line.slice(MIGRATION_VERSION_PREFIX.length)),
+            version: parseInt(version),
+            at: new Date(at),
             statements: []
           };
         }

@@ -140,6 +140,7 @@ export interface Query {
 
 export interface Migration {
   version: number;
+  at: Date;
   statements: Array<Query>;
 }
 
