@@ -53,7 +53,7 @@ export const isPreDeliveryModel = memorized((entifyDef: LinkedEntityDefinition) 
 /**
  * migration file generation tool
  */
-export const migration = {
+export const migration_tool = {
 
   stringify(migrations: Array<Migration>): string {
     const parts = [];
@@ -63,7 +63,7 @@ export const migration = {
     parts.push(""); // empty line
 
     for (const migration of migrations) {
-      parts.push(`${MIGRATION_VERSION_PREFIX}${migration.version} at ${migration.at.toISOString()}`);
+      parts.push(`${MIGRATION_VERSION_PREFIX}${migration.version} hash: ${migration.hash} at: ${migration.at.toISOString()}`);
       parts.push(
         ...migration.statements.map(statement => statement.query + "\n")
       );
@@ -79,11 +79,11 @@ export const migration = {
     for (const line of content.split("\n")) {
       if (line.trim().startsWith("--")) {
         if (line.startsWith(MIGRATION_VERSION_PREFIX)) {
-          const r = /-- version number: (\d+) at (.*)/.exec(line);
+          const r = /-- version: (\d+) hash: ([a-z0-9]{64}) at: (.*)/.exec(line);
           if (r === null) {
             throw new TypeError(`line '${line}' is not a valid comment for migration`);
           }
-          const [, version, at] = r;
+          const [, version, hash, at] = r;
           if (current_migration !== undefined) {
             migrations.push(current_migration);
           }
@@ -91,6 +91,7 @@ export const migration = {
           current_migration = {
             version: parseInt(version),
             at: new Date(at),
+            hash,
             statements: []
           };
         }

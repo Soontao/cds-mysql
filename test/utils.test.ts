@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 // @ts-nocheck
-import { checkCdsVersion, migration } from "../src/utils";
+import { checkCdsVersion, migration_tool } from "../src/utils";
 import { VERSION } from "../src/cds.version";
 
 const mockCds = { version: VERSION.substring(1) };
@@ -23,11 +23,12 @@ describe("Utils Test Suite", () => {
   });
 
   it("should support generate/parse migration script", () => {
-    const script = migration.stringify(
+    const script = migration_tool.stringify(
       [
         {
           version: 100,
           at: new Date(),
+          hash: "1b8700e97f93691ca852b6c5ed29b247448a265356f4c6d8650e50e4f62652c7",
           statements: [
             {
               "query": "CREATE TABLE `sap_common_Currencies_texts` (`locale` varchar(14) NOT NULL, `name` varchar(255) NULL, `descr` varchar(1000) NULL, `code` varchar(3) NOT NULL, PRIMARY KEY (`locale`, `code`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"
@@ -40,6 +41,7 @@ describe("Utils Test Suite", () => {
         {
           version: 102,
           at: new Date(),
+          hash: "1b8700e97f93691ca852b6c5ed29b247448a265356f4c6d8650e50e4f62652c7",
           statements: [
             {
               "query": "DROP VIEW `test_int_BankService_Peoples`"
@@ -55,8 +57,8 @@ describe("Utils Test Suite", () => {
       ]
     );
     expect(script).toMatchSnapshot();
-    expect(migration.parse(script)).toMatchSnapshot("parsed object");
-    expect(migration.stringify(migration.parse(script))).toBe(script);
+    expect(migration_tool.parse(script)).toMatchSnapshot("parsed object");
+    expect(migration_tool.stringify(migration_tool.parse(script))).toBe(script);
   });
 
 });

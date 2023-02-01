@@ -12,6 +12,7 @@ using {
 
 entity People : cuid, managed {
   Name            : String(30);
+  Name2           : String(30);
   Age             : Integer default 18;
   virtual RealAge : Integer;
   RegisterDate    : Date;

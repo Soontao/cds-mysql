@@ -57,7 +57,7 @@ export interface MysqlDatabaseOptions {
       /**
        * auto migrate database schema when connect to it (create pool),
        * 
-       * default `true`
+       * @default true
        */
       auto?: boolean;
       /**
@@ -65,16 +65,22 @@ export interface MysqlDatabaseOptions {
        * 
        * schema sync of these tenants will be performed when server startup
        * 
-       * default value is ['default']
+       * @default ['default']
        */
       eager?: Array<string> | string;
 
       /**
        * eager deploy will also include tenants from cds.env.requires.auth.users
        * 
-       * default value is `false`
+       * @default false
        */
       withMockUserTenants?: boolean;
+      /**
+       * transparent migrate, require to use `cds-mysql-build` to generate migrations.sql
+       * 
+       * @default false
+       */
+      transparent: boolean;
     };
     /**
      * tenant database name prefix
@@ -96,11 +102,14 @@ export interface MysqlDatabaseOptions {
    * connection pool options for each tenant
    */
   pool?: PoolOptions;
+  /**
+   * csv configurations
+   */
   csv?: {
     /**
      * migrate CSV on deployment
      * 
-     * default value `true`
+     * @default false
      */
     migrate?: boolean;
 
@@ -117,21 +126,20 @@ export interface MysqlDatabaseOptions {
        * 
        * update or skip that. 
        * 
-       * default value `false`
+       * @default false
        */
       update?: boolean;
     };
     /**
      * enhanced csv processing for `preDelivery` aspect
      * 
-     * default value is `false`
+     * @default false
      */
     enhancedProcessing: boolean;
   };
 }
 
 export type CQNKind = "SELECT" | "UPDATE" | "DELETE" | "INSERT" | "CREATE" | "DROP";
-
 
 
 export interface Query {
@@ -141,6 +149,7 @@ export interface Query {
 export interface Migration {
   version: number;
   at: Date;
+  hash: string;
   statements: Array<Query>;
 }
 

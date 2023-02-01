@@ -9,6 +9,8 @@ import { csnToEntity } from "./typeorm/entity";
 import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
 import { MysqlDatabaseOptions } from "./types";
+import fs from "fs/promises";
+import { migration_tool } from "./utils";
 
 
 /**
@@ -260,10 +262,25 @@ export class AdminTool {
   public async deploy(model: CSN, tenant: string = TENANT_DEFAULT) {
     try {
       this._logger.info("migrating schema for tenant", tenant.green);
+
       if (tenant !== TENANT_DEFAULT) { await this.createDatabase(tenant); }
-      const entities = csnToEntity(model);
       const migrateOptions = await this.getDataSourceOption(tenant);
-      await migrate({ ...migrateOptions, entities });
+
+      if (this._options?.tenant?.deploy?.transparent === true) {
+        this._logger.info("migrate with transparent approach");
+        const migrations = migration_tool.parse(
+          await fs.readFile(
+            path.join(this._cds.root, "db/migrations.sql"),
+            { encoding: "utf-8" }
+          )
+        );
+        await migrate({ ...migrateOptions }, false, migrations);
+      }
+      else {
+        const entities = csnToEntity(model);
+        await migrate({ ...migrateOptions, entities });
+      }
+
       if (this._options?.csv?.migrate !== false) {
         await this.deployCSV(tenant);
       }

@@ -43,4 +43,4 @@ export const DEFAULT_CSV_IDENTITY_CONCURRENCY = 10;
  */
 export const DEFAULT_MAX_ALLOWED_PACKED_MB = 512;
 
-export const MIGRATION_VERSION_PREFIX = "-- version number: ";
+export const MIGRATION_VERSION_PREFIX = "-- version: ";

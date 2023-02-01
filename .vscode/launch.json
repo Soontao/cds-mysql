@@ -4,7 +4,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "run integration",
+      "name": "run test app integration",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "cds-ts",
@@ -19,18 +19,33 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "run build",
+      "name": "run build - transparent",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "ts-node",
         "-e",
         "import {build} from \"${workspaceFolder}/src/scripts/build\"; build().catch(console.error);",
       ],
-      "cwd": "${workspaceFolder}/test/resources/integration",
+      "cwd": "${workspaceFolder}/test/resources/transparent",
       "skipFiles": [
         "<node_internals>/**"
       ],
       "sourceMaps": true,
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "run test app transparent",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "cds-ts",
+        "run"
+      ],
+      "cwd": "${workspaceFolder}/test/resources/transparent",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "envFile": "${workspaceFolder}/.env"
     },
     {

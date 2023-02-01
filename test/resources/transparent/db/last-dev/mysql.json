@@ -1,0 +1,309 @@
+{
+  "version": 101,
+  "entities": [
+    {
+      "options": {
+        "name": "FioriService_Forms_drafts",
+        "tableName": "FioriService_Forms_drafts",
+        "synchronize": true,
+        "columns": {
+          "ID": {
+            "name": "ID",
+            "nullable": false,
+            "type": "varchar",
+            "primary": true,
+            "length": 36
+          },
+          "f1": {
+            "name": "f1",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "f2": {
+            "name": "f2",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "f3": {
+            "name": "f3",
+            "nullable": true,
+            "type": "integer"
+          },
+          "f4": {
+            "name": "f4",
+            "nullable": true,
+            "type": "decimal"
+          },
+          "IsActiveEntity": {
+            "name": "IsActiveEntity",
+            "nullable": false,
+            "type": "boolean",
+            "primary": true,
+            "default": true
+          },
+          "HasActiveEntity": {
+            "name": "HasActiveEntity",
+            "nullable": false,
+            "type": "boolean",
+            "default": false
+          },
+          "HasDraftEntity": {
+            "name": "HasDraftEntity",
+            "nullable": false,
+            "type": "boolean",
+            "default": false
+          },
+          "DraftAdministrativeData_DraftUUID": {
+            "name": "DraftAdministrativeData_DraftUUID",
+            "nullable": true,
+            "type": "varchar",
+            "length": 36
+          }
+        }
+      }
+    },
+    {
+      "options": {
+        "name": "FioriService_Persons_drafts",
+        "tableName": "FioriService_Persons_drafts",
+        "synchronize": true,
+        "columns": {
+          "ID": {
+            "name": "ID",
+            "nullable": false,
+            "type": "varchar",
+            "primary": true,
+            "length": 36
+          },
+          "Name": {
+            "name": "Name",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "Age": {
+            "name": "Age",
+            "nullable": true,
+            "type": "integer",
+            "default": 25
+          },
+          "Address": {
+            "name": "Address",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "Country": {
+            "name": "Country",
+            "nullable": true,
+            "type": "varchar",
+            "length": 40,
+            "default": "CN"
+          },
+          "IsActiveEntity": {
+            "name": "IsActiveEntity",
+            "nullable": false,
+            "type": "boolean",
+            "primary": true,
+            "default": true
+          },
+          "HasActiveEntity": {
+            "name": "HasActiveEntity",
+            "nullable": false,
+            "type": "boolean",
+            "default": false
+          },
+          "HasDraftEntity": {
+            "name": "HasDraftEntity",
+            "nullable": false,
+            "type": "boolean",
+            "default": false
+          },
+          "DraftAdministrativeData_DraftUUID": {
+            "name": "DraftAdministrativeData_DraftUUID",
+            "nullable": true,
+            "type": "varchar",
+            "length": 36
+          }
+        }
+      }
+    },
+    {
+      "options": {
+        "name": "DRAFT_DraftAdministrativeData",
+        "tableName": "DRAFT_DraftAdministrativeData",
+        "synchronize": true,
+        "columns": {
+          "DraftUUID": {
+            "name": "DraftUUID",
+            "nullable": false,
+            "type": "varchar",
+            "primary": true,
+            "length": 36
+          },
+          "CreationDateTime": {
+            "name": "CreationDateTime",
+            "nullable": true,
+            "type": "datetime",
+            "precision": 3
+          },
+          "CreatedByUser": {
+            "name": "CreatedByUser",
+            "nullable": true,
+            "type": "varchar",
+            "length": 256
+          },
+          "DraftIsCreatedByMe": {
+            "name": "DraftIsCreatedByMe",
+            "nullable": true,
+            "type": "boolean"
+          },
+          "LastChangeDateTime": {
+            "name": "LastChangeDateTime",
+            "nullable": true,
+            "type": "datetime",
+            "precision": 3
+          },
+          "LastChangedByUser": {
+            "name": "LastChangedByUser",
+            "nullable": true,
+            "type": "varchar",
+            "length": 256
+          },
+          "InProcessByUser": {
+            "name": "InProcessByUser",
+            "nullable": true,
+            "type": "varchar",
+            "length": 256
+          },
+          "DraftIsProcessedByMe": {
+            "name": "DraftIsProcessedByMe",
+            "nullable": true,
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "options": {
+        "type": "view",
+        "name": "FioriService_DraftAdministrativeData",
+        "columns": {},
+        "tableName": "FioriService_DraftAdministrativeData",
+        "synchronize": true,
+        "deps": [
+          "DRAFT_DraftAdministrativeData"
+        ],
+        "expression": "SELECT\n  DraftAdministrativeData.DraftUUID,\n  DraftAdministrativeData.CreationDateTime,\n  DraftAdministrativeData.CreatedByUser,\n  DraftAdministrativeData.DraftIsCreatedByMe,\n  DraftAdministrativeData.LastChangeDateTime,\n  DraftAdministrativeData.LastChangedByUser,\n  DraftAdministrativeData.InProcessByUser,\n  DraftAdministrativeData.DraftIsProcessedByMe\nFROM DRAFT_DraftAdministrativeData AS DraftAdministrativeData;"
+      }
+    },
+    {
+      "options": {
+        "name": "test_resources_fiori_db_Form",
+        "tableName": "test_resources_fiori_db_Form",
+        "synchronize": true,
+        "columns": {
+          "ID": {
+            "name": "ID",
+            "nullable": false,
+            "type": "varchar",
+            "primary": true,
+            "length": 36
+          },
+          "f1": {
+            "name": "f1",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "f2": {
+            "name": "f2",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "f3": {
+            "name": "f3",
+            "nullable": true,
+            "type": "integer"
+          },
+          "f4": {
+            "name": "f4",
+            "nullable": true,
+            "type": "decimal"
+          }
+        }
+      }
+    },
+    {
+      "options": {
+        "type": "view",
+        "name": "FioriService_Forms",
+        "columns": {},
+        "tableName": "FioriService_Forms",
+        "synchronize": true,
+        "deps": [
+          "test_resources_fiori_db_Form"
+        ],
+        "expression": "SELECT\n  Form_0.ID,\n  Form_0.f1,\n  Form_0.f2,\n  Form_0.f3,\n  Form_0.f4\nFROM test_resources_fiori_db_Form AS Form_0;"
+      }
+    },
+    {
+      "options": {
+        "name": "test_resources_fiori_db_Person",
+        "tableName": "test_resources_fiori_db_Person",
+        "synchronize": true,
+        "columns": {
+          "ID": {
+            "name": "ID",
+            "nullable": false,
+            "type": "varchar",
+            "primary": true,
+            "length": 36
+          },
+          "Name": {
+            "name": "Name",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "Age": {
+            "name": "Age",
+            "nullable": true,
+            "type": "integer",
+            "default": 25
+          },
+          "Address": {
+            "name": "Address",
+            "nullable": true,
+            "type": "varchar",
+            "length": 255
+          },
+          "Country": {
+            "name": "Country",
+            "nullable": true,
+            "type": "varchar",
+            "length": 40,
+            "default": "CN"
+          }
+        }
+      }
+    },
+    {
+      "options": {
+        "type": "view",
+        "name": "FioriService_Persons",
+        "columns": {},
+        "tableName": "FioriService_Persons",
+        "synchronize": true,
+        "deps": [
+          "test_resources_fiori_db_Person"
+        ],
+        "expression": "SELECT\n  Person_0.ID,\n  Person_0.Name,\n  Person_0.Age,\n  Person_0.Address,\n  Person_0.Country\nFROM test_resources_fiori_db_Person AS Person_0;"
+      }
+    }
+  ],
+  "hash": "06962d18b51963e273375acc512ea8e96b69325620662a78d57b4cf9c2bc1877"
+}

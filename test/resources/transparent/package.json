@@ -1,0 +1,31 @@
+{
+  "name": "transparent-migration",
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "mysql",
+        "tenant": {
+          "deploy": {
+            "transparent": true
+          }
+        },
+        "csv": {
+          "migrate": true
+        }
+      },
+      "auth": {
+        "kind": "mocked",
+        "users": {
+          "alice": {
+            "tenant": "default"
+          }
+        }
+      },
+      "kinds": {
+        "mysql": {
+          "impl": "../../../src/index"
+        }
+      }
+    }
+  }
+}

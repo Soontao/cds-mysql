@@ -5,12 +5,12 @@ exports[`Utils Test Suite should support generate/parse migration script 1`] = `
 -- database migration scripts
 -- do not manually change this file
 
--- version number: 100 at 2023-01-01T00:00:00.000Z
+-- version: 100 hash: 1b8700e97f93691ca852b6c5ed29b247448a265356f4c6d8650e50e4f62652c7 at: 2023-01-01T00:00:00.000Z
 CREATE TABLE \`sap_common_Currencies_texts\` (\`locale\` varchar(14) NOT NULL, \`name\` varchar(255) NULL, \`descr\` varchar(1000) NULL, \`code\` varchar(3) NOT NULL, PRIMARY KEY (\`locale\`, \`code\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'
 
 CREATE TABLE \`test_int_Product_texts\` (\`locale\` varchar(14) NOT NULL, \`ID\` varchar(36) NOT NULL, \`Name\` varchar(255) NULL, PRIMARY KEY (\`locale\`, \`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'
 
--- version number: 102 at 2023-01-01T00:00:00.000Z
+-- version: 102 hash: 1b8700e97f93691ca852b6c5ed29b247448a265356f4c6d8650e50e4f62652c7 at: 2023-01-01T00:00:00.000Z
 DROP VIEW \`test_int_BankService_Peoples\`
 
 ALTER TABLE \`test_int_People\` ADD \`Name3\` varchar(30) NULL DEFAULT 'dummy'
@@ -35,6 +35,7 @@ exports[`Utils Test Suite should support generate/parse migration script: parsed
 [
   {
     "at": 2023-01-01T00:00:00.000Z,
+    "hash": "1b8700e97f93691ca852b6c5ed29b247448a265356f4c6d8650e50e4f62652c7",
     "statements": [
       {
         "query": "CREATE TABLE \`sap_common_Currencies_texts\` (\`locale\` varchar(14) NOT NULL, \`name\` varchar(255) NULL, \`descr\` varchar(1000) NULL, \`code\` varchar(3) NOT NULL, PRIMARY KEY (\`locale\`, \`code\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
@@ -47,6 +48,7 @@ exports[`Utils Test Suite should support generate/parse migration script: parsed
   },
   {
     "at": 2023-01-01T00:00:00.000Z,
+    "hash": "1b8700e97f93691ca852b6c5ed29b247448a265356f4c6d8650e50e4f62652c7",
     "statements": [
       {
         "query": "DROP VIEW \`test_int_BankService_Peoples\`",
