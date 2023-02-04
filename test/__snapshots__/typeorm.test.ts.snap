@@ -1578,6 +1578,1988 @@ WHERE People_0.Active = TRUE;",
 ]
 `;
 
+exports[`TypeORM Test Suite should assert all migrate cds files generated entities: entities of file step-10.cds 1`] = `
+[
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "locale": {
+          "length": 14,
+          "name": "locale",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job_texts",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job_texts",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 255,
+          "name": "Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Price": {
+          "name": "Price",
+          "nullable": true,
+          "precision": 13,
+          "scale": 2,
+          "type": "decimal",
+        },
+      },
+      "indices": [
+        {
+          "columns": [
+            "Name",
+          ],
+          "name": "ProductName",
+        },
+      ],
+      "name": "test_resources_migrate_Product",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Product",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Level": {
+          "name": "Level",
+          "nullable": true,
+          "type": "integer",
+        },
+        "People_ID": {
+          "length": 36,
+          "name": "People_ID",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "People_Name": {
+          "length": 100,
+          "name": "People_Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_fr_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');",
+      "name": "localized_fr_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_fr_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_fr_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_de_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');",
+      "name": "localized_de_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_de_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_de_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');",
+      "name": "localized_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 100,
+          "name": "Name",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_People",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_fr_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_People",
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_de_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_People",
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_de_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_People",
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0;",
+      "name": "test_resources_migrate_AllPeoples",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_AllPeoples",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = FALSE;",
+      "name": "test_resources_migrate_InActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_InActivePeople",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActivePeople",
+      "type": "view",
+    },
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should assert all migrate cds files generated entities: entities of file step-11.cds 1`] = `
+[
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "locale": {
+          "length": 14,
+          "name": "locale",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job_texts",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job_texts",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 255,
+          "name": "Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Price": {
+          "name": "Price",
+          "nullable": true,
+          "precision": 13,
+          "scale": 2,
+          "type": "decimal",
+        },
+      },
+      "indices": [
+        {
+          "columns": [
+            "Name",
+          ],
+          "name": "ProductName",
+        },
+      ],
+      "name": "test_resources_migrate_Product",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Product",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Level": {
+          "name": "Level",
+          "nullable": true,
+          "type": "integer",
+        },
+        "People_ID": {
+          "length": 36,
+          "name": "People_ID",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "People_Name": {
+          "length": 100,
+          "name": "People_Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_fr_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');",
+      "name": "localized_fr_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_fr_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_fr_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_de_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');",
+      "name": "localized_de_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_de_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_de_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');",
+      "name": "localized_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 100,
+          "name": "Name",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_People",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_fr_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_People",
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_de_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_People",
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_de_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_People",
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0;",
+      "name": "test_resources_migrate_AllPeoples",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_AllPeoples",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = FALSE;",
+      "name": "test_resources_migrate_InActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_InActivePeople",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActivePeople",
+      "type": "view",
+    },
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should assert all migrate cds files generated entities: entities of file step-12.cds 1`] = `
+[
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "locale": {
+          "length": 14,
+          "name": "locale",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job_texts",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job_texts",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Description": {
+          "length": 500,
+          "name": "Description",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 255,
+          "name": "Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Price": {
+          "name": "Price",
+          "nullable": true,
+          "precision": 13,
+          "scale": 2,
+          "type": "decimal",
+        },
+      },
+      "indices": [
+        {
+          "columns": [
+            "Name",
+          ],
+          "name": "ProductName",
+        },
+      ],
+      "name": "test_resources_migrate_Product",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Product",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Level": {
+          "name": "Level",
+          "nullable": true,
+          "type": "integer",
+        },
+        "People_ID": {
+          "length": 36,
+          "name": "People_ID",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "People_Name": {
+          "length": 100,
+          "name": "People_Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_fr_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');",
+      "name": "localized_fr_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_fr_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_fr_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_de_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');",
+      "name": "localized_de_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_de_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_de_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');",
+      "name": "localized_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 100,
+          "name": "Name",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_People",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_fr_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_People",
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_de_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_People",
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_de_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_People",
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0;",
+      "name": "test_resources_migrate_AllPeoples",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_AllPeoples",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = FALSE;",
+      "name": "test_resources_migrate_InActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_InActivePeople",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActivePeople",
+      "type": "view",
+    },
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should assert all migrate cds files generated entities: entities of file step-13.cds 1`] = `
+[
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "locale": {
+          "length": 14,
+          "name": "locale",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job_texts",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job_texts",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Description": {
+          "length": 500,
+          "name": "Description",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 255,
+          "name": "Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Price": {
+          "name": "Price",
+          "nullable": true,
+          "precision": 13,
+          "scale": 2,
+          "type": "decimal",
+        },
+      },
+      "indices": [
+        {
+          "columns": [
+            "Name",
+          ],
+          "name": "ProductName",
+        },
+        {
+          "columns": [
+            "Description",
+          ],
+          "name": "ProductDescription",
+        },
+      ],
+      "name": "test_resources_migrate_Product",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Product",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Level": {
+          "name": "Level",
+          "nullable": true,
+          "type": "integer",
+        },
+        "People_ID": {
+          "length": 36,
+          "name": "People_ID",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "People_Name": {
+          "length": 100,
+          "name": "People_Name",
+          "nullable": true,
+          "type": "varchar",
+        },
+        "Title": {
+          "length": 255,
+          "name": "Title",
+          "nullable": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_Job",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_fr_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');",
+      "name": "localized_fr_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_fr_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_fr_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_de_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');",
+      "name": "localized_de_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_de_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_de_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+        "test_resources_migrate_Job_texts",
+      ],
+      "expression": "SELECT
+  L_0.ID,
+  coalesce(localized_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');",
+      "name": "localized_test_resources_migrate_Job",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_Job",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "localized_test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActiveJobs",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActiveJobs",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {
+        "Active": {
+          "default": false,
+          "name": "Active",
+          "nullable": true,
+          "type": "boolean",
+        },
+        "ID": {
+          "length": 36,
+          "name": "ID",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+        "Name": {
+          "length": 100,
+          "name": "Name",
+          "nullable": false,
+          "primary": true,
+          "type": "varchar",
+        },
+      },
+      "name": "test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_People",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_fr_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_fr_test_resources_migrate_People",
+        "localized_fr_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_fr_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_de_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_de_test_resources_migrate_People",
+        "localized_de_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_de_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_de_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;",
+      "name": "localized_test_resources_migrate_People",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_People",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "localized_test_resources_migrate_People",
+        "localized_test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "localized_test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "localized_test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+        "test_resources_migrate_Job",
+      ],
+      "expression": "SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));",
+      "name": "test_resources_migrate_PeopleWithJob",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_PeopleWithJob",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0;",
+      "name": "test_resources_migrate_AllPeoples",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_AllPeoples",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = FALSE;",
+      "name": "test_resources_migrate_InActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_InActivePeople",
+      "type": "view",
+    },
+  },
+  EntitySchema {
+    "@instanceof": Symbol(EntitySchema),
+    "options": {
+      "columns": {},
+      "deps": [
+        "test_resources_migrate_People",
+      ],
+      "expression": "SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;",
+      "name": "test_resources_migrate_ActivePeople",
+      "synchronize": true,
+      "tableName": "test_resources_migrate_ActivePeople",
+      "type": "view",
+    },
+  },
+]
+`;
+
 exports[`TypeORM Test Suite should support convert csn to table meta 1`] = `
 [
   Table {
@@ -3189,6 +5171,35 @@ FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_te
 `;
 
 exports[`TypeORM Test Suite should support migrate tables: 8->9 1`] = `[]`;
+
+exports[`TypeORM Test Suite should support migrate tables: 9->10 1`] = `
+[
+  {
+    "parameters": undefined,
+    "query": "CREATE TABLE \`test_resources_migrate_Product\` (\`ID\` varchar(36) NOT NULL, \`Name\` varchar(255) NULL, \`Price\` decimal(13,2) NULL, INDEX \`ProductName\` (\`Name\`), PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 10->11 1`] = `[]`;
+
+exports[`TypeORM Test Suite should support migrate tables: 11->12 1`] = `
+[
+  {
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_Product\` ADD \`Description\` varchar(500) NULL",
+  },
+]
+`;
+
+exports[`TypeORM Test Suite should support migrate tables: 12->13 1`] = `
+[
+  {
+    "parameters": undefined,
+    "query": "CREATE INDEX \`ProductDescription\` ON \`test_resources_migrate_Product\` (\`Description\`)",
+  },
+]
+`;
 
 exports[`TypeORM Test Suite should support sha256 hash: hash length 1`] = `64`;
 

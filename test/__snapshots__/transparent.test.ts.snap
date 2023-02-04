@@ -170,3 +170,11 @@ FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_te
 `;
 
 exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 8->9 1`] = `""`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 9->10 1`] = `"CREATE TABLE \`test_resources_migrate_Product\` (\`ID\` varchar(36) NOT NULL, \`Name\` varchar(255) NULL, \`Price\` decimal(13,2) NULL, INDEX \`ProductName\` (\`Name\`), PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 10->11 1`] = `""`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 11->12 1`] = `"ALTER TABLE \`test_resources_migrate_Product\` ADD \`Description\` varchar(500) NULL"`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 12->13 1`] = `"CREATE INDEX \`ProductDescription\` ON \`test_resources_migrate_Product\` (\`Description\`)"`;
