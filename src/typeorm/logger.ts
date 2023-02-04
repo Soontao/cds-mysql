@@ -5,9 +5,19 @@ import type { QueryRunner } from "typeorm";
 
 
 export const TypeORMLogger = {
+  /**
+   * lazy logger
+   * 
+   * @internal
+   * @private
+   */
+  _logger: undefined,
   get logger() {
-    const cds = cwdRequireCDS();
-    return cds.log("typeorm");
+    if (TypeORMLogger._logger === undefined) {
+      const cds = cwdRequireCDS();
+      TypeORMLogger._logger = cds.log("typeorm");
+    }
+    return TypeORMLogger._logger;
   },
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {
     TypeORMLogger.logger?.debug?.({ type: "query", query, parameters });
