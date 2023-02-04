@@ -33,7 +33,7 @@ function build(cqn: any, options?: any, csn?: any) {
   if (kind !== undefined) {
 
     if (kind === "CREATE" || kind === "DROP") {
-      throw cwdRequireCDS().error(`ERROR_NOT_SUPPORT_CQN_${kind}`);
+      throw cwdRequireCDS().error(`ERR_NOT_SUPPORT_CQN_${kind}`);
     }
 
     const builderName = `${capitalize(kind)}Builder`;

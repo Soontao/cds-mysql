@@ -1,5 +1,5 @@
 {
-  "version": 101,
+  "version": 102,
   "entities": [
     {
       "options": {
@@ -201,6 +201,53 @@
     },
     {
       "options": {
+        "name": "cds_xt_Extensions",
+        "tableName": "cds_xt_Extensions",
+        "synchronize": true,
+        "columns": {
+          "ID": {
+            "name": "ID",
+            "nullable": false,
+            "type": "varchar",
+            "primary": true,
+            "length": 36
+          },
+          "tag": {
+            "name": "tag",
+            "nullable": true,
+            "type": "text"
+          },
+          "csn": {
+            "name": "csn",
+            "nullable": true,
+            "type": "longtext"
+          },
+          "i18n": {
+            "name": "i18n",
+            "nullable": true,
+            "type": "longtext"
+          },
+          "sources": {
+            "name": "sources",
+            "nullable": true,
+            "type": "longblob"
+          },
+          "activated": {
+            "name": "activated",
+            "nullable": true,
+            "type": "text"
+          },
+          "timestamp": {
+            "name": "timestamp",
+            "nullable": true,
+            "type": "datetime",
+            "precision": 3
+          }
+        }
+      }
+    },
+    {
+      "options": {
         "name": "test_resources_fiori_db_Form",
         "tableName": "test_resources_fiori_db_Form",
         "synchronize": true,
@@ -305,5 +352,5 @@
       }
     }
   ],
-  "hash": "06962d18b51963e273375acc512ea8e96b69325620662a78d57b4cf9c2bc1877"
+  "hash": "c7f16bf48eb23fe3f5b52c53c53bfade82a3ce2f3a6532493b82d16cefa75e37"
 }

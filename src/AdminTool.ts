@@ -266,7 +266,10 @@ export class AdminTool {
       if (tenant !== TENANT_DEFAULT) { await this.createDatabase(tenant); }
       const migrateOptions = await this.getDataSourceOption(tenant);
 
-      if (this._options?.tenant?.deploy?.transparent === true) {
+      if (
+        this._options?.tenant?.deploy?.transparent === true &&
+        this.getAdminTenantName() !== tenant // t0 need to use old way to deploy
+      ) {
         this._logger.info("migrate with transparent approach");
         const migrations = migration_tool.parse(
           await fs.readFile(

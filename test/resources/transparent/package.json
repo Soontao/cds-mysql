@@ -21,7 +21,30 @@
           }
         }
       },
+      "extensibility": true,
+      "cds.xt.ModelProviderService": true,
+      "cds.xt.ExtensibilityService": {
+        "element-prefix": [
+          "x_",
+          "xx_",
+          "z_",
+          "zz_"
+        ],
+        "extension-allowlist": [
+          {
+            "for": [
+              "test.int"
+            ],
+            "kind": "entity",
+            "new-fields": 50
+          }
+        ]
+      },
+      "cds.xt.DeploymentService": true,
       "kinds": {
+        "cds.xt.DeploymentService": {
+          "model": "../../../mtxs/DeploymentService.cds"
+        },
         "mysql": {
           "impl": "../../../src/index"
         }

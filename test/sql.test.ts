@@ -332,8 +332,8 @@ describe("SQL Factory Test Suite", () => {
 
   it("should raise error when use create/drop entity", () => {
 
-    expect(() => toSQL(CREATE.entity(model.definitions["test.int.Card"]))).toThrowError("ERROR_NOT_SUPPORT_CQN_CREATE");
-    expect(() => toSQL(DROP.entity(model.definitions["test.int.Card"]))).toThrowError("ERROR_NOT_SUPPORT_CQN_DROP");
+    expect(() => toSQL(CREATE.entity(model.definitions["test.int.Card"]))).toThrowError("ERR_NOT_SUPPORT_CQN_CREATE");
+    expect(() => toSQL(DROP.entity(model.definitions["test.int.Card"]))).toThrowError("ERR_NOT_SUPPORT_CQN_DROP");
 
   });
 

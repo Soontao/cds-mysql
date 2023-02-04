@@ -80,7 +80,7 @@ export interface MysqlDatabaseOptions {
        * 
        * @default false
        */
-      transparent: boolean;
+      transparent?: boolean;
     };
     /**
      * tenant database name prefix

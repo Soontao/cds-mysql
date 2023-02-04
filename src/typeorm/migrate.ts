@@ -72,6 +72,7 @@ async function migrateMetadata(connectionOptions: DataSourceOptions): Promise<vo
   const ds = new CDSMySQLDataSource({
     ...connectionOptions,
     entities: CDSMysqlMetaTables,
+    logging: true,
     logger: TypeORMLogger,
   });
   await ds.initialize();
@@ -100,6 +101,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
 
   const ds = new CDSMySQLDataSource({
     ...connectionOptions,
+    logging: true,
     logger: TypeORMLogger,
   });
 

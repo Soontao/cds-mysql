@@ -234,7 +234,7 @@ module.exports = class DemoService extends cds.ApplicationService {
 it means:
 
 ```js
-cds.run(CREATE.entity(def)); // with throw error 'ERROR_NOT_SUPPORT_CQN_CREATE'
+cds.run(CREATE.entity(def)); // with throw error 'ERR_NOT_SUPPORT_CQN_CREATE'
 ```
 
 ### Large Blob Storage

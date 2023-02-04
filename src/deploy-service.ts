@@ -50,6 +50,9 @@ export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.Deplo
   ds.on(["upgrade", "extend"], async function (req) {
     const { tenant: t } = req.data;
     logger.info(req.event, "for tenant", t.green);
+    if (req.event === "extend" && db.options.tenant?.deploy?.transparent === true) {
+      return req.error(400 as any, "ERR_NOT_SUPPORT_EXTEND_WITH_TRANSPARENT_MIGRATION");
+    }
     return ds.deploy(t, { csn: await tool.csn4(t) });
   });
 

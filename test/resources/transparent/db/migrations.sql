@@ -53,3 +53,6 @@ CREATE VIEW `FioriService_Persons` AS SELECT
   Person_0.Address,
   Person_0.Country
 FROM test_resources_fiori_db_Person AS Person_0;
+
+-- version: 102 hash: c7f16bf48eb23fe3f5b52c53c53bfade82a3ce2f3a6532493b82d16cefa75e37 at: 2023-02-04T03:41:18.704Z
+CREATE TABLE `cds_xt_Extensions` (`ID` varchar(36) NOT NULL, `tag` text NULL, `csn` longtext NULL, `i18n` longtext NULL, `sources` longblob NULL, `activated` text NULL, `timestamp` datetime(3) NULL, PRIMARY KEY (`ID`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'
