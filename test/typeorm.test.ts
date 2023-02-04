@@ -1,5 +1,6 @@
-import { pick, range } from "@newdash/newdash";
+import { pick } from "@newdash/newdash";
 import { cwdRequireCDS } from "cds-internal-tool";
+import fs from "fs/promises";
 import path from "path";
 import { DataSourceOptions } from "typeorm";
 import { csnToEntity, entitySchemaToTable, migrate } from "../src/typeorm";
@@ -99,21 +100,19 @@ describe("TypeORM Test Suite", () => {
 
   });
 
+  it("should assert all migrate cds files generated entities", async () => {
+    const files = await fs.readdir(path.join(__dirname, "./resources/migrate"));
+    for (const file of files) {
+      const csn = await loadCSN(path.join("./resources/migrate", file));
+      expect(csnToEntity(csn)).toMatchSnapshot(`entities of file ${file}`);
+    }
+  });
+
   it("should support migrate tables", async () => {
 
     await cleanDB();
 
-    const CSNs = await Promise.all(
-      range(1, 10)
-        .map((idx) => `./resources/migrate/step-${idx}.cds`)
-        .map(loadCSN)
-    );
-
-    const entityList = CSNs.map(csnToEntity);
-
-    for (const entity of entityList) {
-      expect(entity).toMatchSnapshot();
-    }
+    const files = await fs.readdir(path.join(__dirname, "./resources/migrate"));
 
     const baseOption: DataSourceOptions = {
       ...getTestTypeORMOptions(),
@@ -123,10 +122,9 @@ describe("TypeORM Test Suite", () => {
     };
 
     // do migration one by one
-
-    for (let idx = 0; idx < entityList.length; idx++) {
-      const migrationId = `${idx}->${idx + 1}`;
-      const entities = entityList[idx];
+    for (let idx = 1; idx <= files.length; idx++) {
+      const migrationId = `${idx - 1}->${idx}`;
+      const entities = csnToEntity(await loadCSN(`./resources/migrate/step-${idx}.cds`));
       // get DDL from dry run
       const ddl = (await migrate({ ...baseOption, entities: entities }, true)).upQueries.map((query) =>
         pick(query, "query", "parameters")
