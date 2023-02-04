@@ -1,4 +1,4 @@
-# Extension Project of Integration Test Project
+# Extension Project of Fiori Test Project
 
 ```bash
 npx cds pull -u theo-on-tenant-2:pass --from localhost:4004

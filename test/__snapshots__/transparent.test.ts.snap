@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 0->1 1`] = `"CREATE TABLE \`test_resources_migrate_People\` (\`ID\` varchar(36) NOT NULL, \`Name\` varchar(100) NULL, PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 1->2 1`] = `
+"ALTER TABLE \`test_resources_migrate_People\` ADD \`Age\` int NULL
+ALTER TABLE \`test_resources_migrate_People\` DROP PRIMARY KEY
+ALTER TABLE \`test_resources_migrate_People\` ADD PRIMARY KEY (\`ID\`, \`Name\`)
+ALTER TABLE \`test_resources_migrate_People\` CHANGE \`Name\` \`Name\` varchar(100) NOT NULL"
+`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 2->3 1`] = `
+"ALTER TABLE \`test_resources_migrate_People\` ADD \`Active\` tinyint NULL DEFAULT 0
+CREATE VIEW \`test_resources_migrate_ActivePeople\` AS SELECT
+  People_0.ID,
+  People_0.Name,
+  People_0.Age,
+  People_0.Active
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;"
+`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 3->4 1`] = `
+"DROP VIEW \`test_resources_migrate_ActivePeople\`
+CREATE VIEW \`test_resources_migrate_InActivePeople\` AS SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = FALSE;
+CREATE VIEW \`test_resources_migrate_ActivePeople\` AS SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0
+WHERE People_0.Active = TRUE;
+CREATE VIEW \`test_resources_migrate_AllPeoples\` AS SELECT
+  ActivePeople_0.Name
+FROM test_resources_migrate_ActivePeople AS ActivePeople_0
+UNION SELECT
+  InActivePeople_1.Name
+FROM test_resources_migrate_InActivePeople AS InActivePeople_1;"
+`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 4->5 1`] = `
+"CREATE TABLE \`test_resources_migrate_Job\` (\`ID\` varchar(36) NOT NULL, \`Title\` varchar(255) NULL, \`Level\` int NULL, \`Active\` tinyint NULL DEFAULT 0, PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'
+CREATE VIEW \`test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;"
+`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 5->6 1`] = `
+"DROP VIEW \`test_resources_migrate_AllPeoples\`
+CREATE VIEW \`test_resources_migrate_AllPeoples\` AS SELECT
+  People_0.Name
+FROM test_resources_migrate_People AS People_0;"
+`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 6->7 1`] = `
+"DROP VIEW \`test_resources_migrate_ActiveJobs\`
+ALTER TABLE \`test_resources_migrate_Job\` ADD \`People_ID\` varchar(36) NULL
+ALTER TABLE \`test_resources_migrate_Job\` ADD \`People_Name\` varchar(100) NULL
+CREATE VIEW \`test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;
+CREATE VIEW \`test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (test_resources_migrate_People AS People_0 LEFT JOIN test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));"
+`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 7->8 1`] = `
+"CREATE TABLE \`test_resources_migrate_Job_texts\` (\`locale\` varchar(14) NOT NULL, \`ID\` varchar(36) NOT NULL, \`Title\` varchar(255) NULL, PRIMARY KEY (\`locale\`, \`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'
+CREATE VIEW \`localized_fr_test_resources_migrate_Job\` AS SELECT
+  L_0.ID,
+  coalesce(localized_fr_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_fr_1 ON localized_fr_1.ID = L_0.ID AND localized_fr_1.locale = 'fr');
+CREATE VIEW \`localized_fr_test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_fr_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;
+CREATE VIEW \`localized_de_test_resources_migrate_Job\` AS SELECT
+  L_0.ID,
+  coalesce(localized_de_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_de_1 ON localized_de_1.ID = L_0.ID AND localized_de_1.locale = 'de');
+CREATE VIEW \`localized_de_test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_de_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;
+CREATE VIEW \`localized_test_resources_migrate_Job\` AS SELECT
+  L_0.ID,
+  coalesce(localized_1.Title, L_0.Title) AS Title,
+  L_0.Level,
+  L_0.Active,
+  L_0.People_ID,
+  L_0.People_Name
+FROM (test_resources_migrate_Job AS L_0 LEFT JOIN test_resources_migrate_Job_texts AS localized_1 ON localized_1.ID = L_0.ID AND localized_1.locale = 'en');
+CREATE VIEW \`localized_test_resources_migrate_ActiveJobs\` AS SELECT
+  Job_0.ID,
+  Job_0.Title,
+  Job_0.Level,
+  Job_0.Active,
+  Job_0.People_ID,
+  Job_0.People_Name
+FROM localized_test_resources_migrate_Job AS Job_0
+WHERE Job_0.Active = TRUE;
+CREATE VIEW \`localized_fr_test_resources_migrate_People\` AS SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;
+CREATE VIEW \`localized_fr_test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_fr_test_resources_migrate_People AS People_0 LEFT JOIN localized_fr_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));
+CREATE VIEW \`localized_de_test_resources_migrate_People\` AS SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;
+CREATE VIEW \`localized_de_test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_de_test_resources_migrate_People AS People_0 LEFT JOIN localized_de_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));
+CREATE VIEW \`localized_test_resources_migrate_People\` AS SELECT
+  L.ID,
+  L.Name,
+  L.Active
+FROM test_resources_migrate_People AS L;
+CREATE VIEW \`localized_test_resources_migrate_PeopleWithJob\` AS SELECT
+  People_0.Name,
+  People_0.Active,
+  Job_1.Title,
+  Job_1.Level,
+  Job_1.Active AS JobActive
+FROM (localized_test_resources_migrate_People AS People_0 LEFT JOIN localized_test_resources_migrate_Job AS Job_1 ON ((Job_1.People_ID = People_0.ID) AND (Job_1.People_Name = People_0.Name)));"
+`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 8->9 1`] = `""`;

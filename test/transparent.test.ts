@@ -1,7 +1,10 @@
 /* eslint-disable max-len */
 import { setupTest } from "cds-internal-tool";
 import path from "node:path";
-import { createSh, doAfterAll } from "./utils";
+import { Query } from "typeorm/driver/Query";
+import { createSh, doAfterAll, loadCSN } from "./utils";
+import fs from "node:fs/promises";
+
 
 describe("transparent Test Suite", () => {
   const client = setupTest(__dirname, "./resources/transparent");
@@ -15,6 +18,21 @@ describe("transparent Test Suite", () => {
     expect(response.data).toMatch(/Persons/);
   });
 
+  it("should support generate transparent migration script", async () => {
+    const { build_migration_scripts_from_csn } = require("../src/typeorm/transparent");
+
+    const files = await fs.readdir(path.join(__dirname, "./resources/migrate"));
+
+    // do migration one by one
+    for (let idx = 1; idx <= files.length; idx++) {
+      const migration_id = `${idx - 1}->${idx}`;
+      const current_csn = await loadCSN(`./resources/migrate/step-${idx}.cds`);
+      const previous_csn = idx > 1 ? await loadCSN(`./resources/migrate/step-${idx - 1}.cds`) : undefined;
+      const queries: Array<Query> = await build_migration_scripts_from_csn(current_csn, previous_csn);
+      expect(queries.map(q => q.query).join("\n")).toMatchSnapshot(`transparent migration - ${migration_id}`);
+    }
+
+  });
 
   it("should raise error when extend extension", async () => {
 
