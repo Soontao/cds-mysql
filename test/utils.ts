@@ -112,11 +112,13 @@ export const cleanDB = async () => {
   }
 };
 
-export function createSh(options: SpawnOptionsWithoutStdio) {
+export function createSh(options: SpawnOptionsWithoutStdio & { stdPipe?: boolean }) {
   return function sh(...command: Array<string>) {
     const p = spawn(command[0], command.slice(1), options);
-    p.stdout.pipe(process.stdout);
-    p.stderr.pipe(process.stderr);
+    if (options.stdPipe !== false) {
+      p.stdout.pipe(process.stdout);
+      p.stderr.pipe(process.stderr);
+    }
     return new Promise((resolve, reject) => {
       p.on("error", reject);
       p.on("exit", resolve);

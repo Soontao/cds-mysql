@@ -6,6 +6,10 @@
         "kind": "mysql",
         "tenant": {
           "deploy": {
+            "eager": [
+              "default",
+              "e5f878d5-7985-407b-a1cb-87a8716f1904"
+            ],
             "transparent": true
           }
         },
@@ -18,6 +22,12 @@
         "users": {
           "alice": {
             "tenant": "default"
+          },
+          "theo-on-tenant-2": {
+            "tenant": "e5f878d5-7985-407b-a1cb-87a8716f1904",
+            "roles": [
+              "cds.ExtensionDeveloper"
+            ]
           }
         }
       },
@@ -33,7 +43,7 @@
         "extension-allowlist": [
           {
             "for": [
-              "test.int"
+              "test"
             ],
             "kind": "entity",
             "new-fields": 50
