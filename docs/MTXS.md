@@ -9,7 +9,7 @@
   - [Extensibility](#extensibility)
     - [Commands](#commands)
     - [Extensibility project - package json is required](#extensibility-project---package-json-is-required)
-  - [Known Issues](#known-issues)
+  - [Limitation](#limitation)
 
 ## Enablement
 
@@ -128,6 +128,6 @@ cds push # push & activate extension
 }
 ```
 
-## Known Issues
+## Limitation
 
-- extensibility is still not verified
+- `extensibility` does not work with `tranparent migration` 
