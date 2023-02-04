@@ -177,7 +177,7 @@ export class AdminTool {
    */
   public async runWithAdminConnection<T = any>(runner: (ds: DataSource) => Promise<T>): Promise<T> {
     const credential = await this.getDataSourceOption();
-    const ds = new CDSMySQLDataSource({
+    const ds = await CDSMySQLDataSource.createDataSource({
       ...credential,
       name: `admin-conn-${this._cds.utils.uuid()}`,
       entities: [],
@@ -187,7 +187,6 @@ export class AdminTool {
     } as any);
 
     try {
-      await ds.initialize();
       return await runner(ds);
     }
     catch (err) {

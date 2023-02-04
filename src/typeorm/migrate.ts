@@ -99,15 +99,13 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
     }
   }
 
-  const ds = new CDSMySQLDataSource({
+  const ds = await CDSMySQLDataSource.createDataSource({
     ...connectionOptions,
     logging: true,
     logger: TypeORMLogger,
   });
 
   try {
-
-    await ds.initialize();
 
     return await ds.transaction(async tx => {
       const [record] = await tx.query("SELECT ID, HASH, MIGRATED_AT FROM cds_mysql_migration_history ORDER BY MIGRATED_AT DESC LIMIT 1 FOR UPDATE");
@@ -163,7 +161,7 @@ export async function migrate(connectionOptions: DataSourceOptions, dryRun = fal
     throw error;
   }
   finally {
-    if (ds.isInitialized) {
+    if (ds?.isInitialized) {
       await ds.destroy();
     }
   }
