@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { CSN } from "cds-internal-tool";
+import { CSN, cwdRequireCDS } from "cds-internal-tool";
 import { EntitySchema, Table } from "typeorm";
 import { View } from "typeorm/schema-builder/view/View";
 import { entitySchemaToTable } from "./database";
@@ -37,7 +37,7 @@ export async function build_migration_scripts_from_entities(
   current_entities: Array<EntitySchema>,
   previous_entities?: Array<EntitySchema>,
 ) {
-
+  const cds = cwdRequireCDS();
   const last_version_tables: Array<Table> = [];
   const last_version_views: Array<View> = [];
 
@@ -55,6 +55,7 @@ export async function build_migration_scripts_from_entities(
   }
 
   const ds = new CDSMySQLDataSource({
+    name: `ds-internal-virtual-migration-${cds.utils.uuid()}`,
     type: "mysql",
     database: "__database_placeholder__",
     entities: current_entities,
@@ -73,7 +74,5 @@ export async function build_migration_scripts_from_entities(
   const builder = ds.driver.createSchemaBuilder();
   builder.queryRunner = queryRunner;
   await builder.executeSchemaSyncOperationsInProperOrder();
-
-  const queries = queryRunner.getMemorySql().upQueries.filter(query => query !== undefined);
-  return queries;
+  return queryRunner.getMemorySql().upQueries.filter(query => query !== undefined);;
 }
