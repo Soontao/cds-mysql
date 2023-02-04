@@ -2,7 +2,7 @@
 import { setupTest } from "cds-internal-tool";
 import path from "node:path";
 import { Query } from "typeorm/driver/Query";
-import { createSh, doAfterAll, loadCSN } from "./utils";
+import { createSh, doAfterAll, loadCSN, loadMigrateStepCSN } from "./utils";
 import fs from "node:fs/promises";
 
 
@@ -32,6 +32,15 @@ describe("transparent Test Suite", () => {
       expect(queries.map(q => q.query).join("\n")).toMatchSnapshot(`transparent migration - ${migration_id}`);
     }
 
+  });
+
+  it("should never drop column when only resize the column", async () => {
+    const { build_migration_scripts_from_csn } = require("../src/typeorm/transparent");
+    const queries: Array<Query> = await build_migration_scripts_from_csn(
+      await loadMigrateStepCSN(14), // new
+      await loadMigrateStepCSN(13), // old
+    );
+    expect(queries).toMatchSnapshot();
   });
 
   it("should raise error when extend extension", async () => {

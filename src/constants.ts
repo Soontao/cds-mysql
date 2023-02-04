@@ -1,4 +1,5 @@
 export const ANNOTATION_CDS_TYPEORM_CONFIG = "@cds.typeorm.config";
+export const ANNOTATION_CDS_ASSERT_UNIQUE = "@assert.unique";
 
 export const MYSQL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.u";
 export const MYSQL_DATE_TIME_FORMAT_WO_FRACTIONS = "yyyy-MM-dd HH:mm:ss";

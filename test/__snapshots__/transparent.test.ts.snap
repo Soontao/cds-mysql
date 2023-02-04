@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`transparent Test Suite should never drop column when only resize the column 1`] = `
+[
+  Query {
+    "@instanceof": Symbol(Query),
+    "parameters": undefined,
+    "query": "ALTER TABLE \`test_resources_migrate_Product\` MODIFY COLUMN \`Name\` varchar(40) NULL",
+  },
+]
+`;
+
 exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 0->1 1`] = `"CREATE TABLE \`test_resources_migrate_People\` (\`ID\` varchar(36) NOT NULL, \`Name\` varchar(100) NULL, PRIMARY KEY (\`ID\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"`;
 
 exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 1->2 1`] = `
@@ -178,3 +188,10 @@ exports[`transparent Test Suite should support generate transparent migration sc
 exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 11->12 1`] = `"ALTER TABLE \`test_resources_migrate_Product\` ADD \`Description\` varchar(500) NULL"`;
 
 exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 12->13 1`] = `"CREATE INDEX \`ProductDescription\` ON \`test_resources_migrate_Product\` (\`Description\`)"`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 13->14 1`] = `"ALTER TABLE \`test_resources_migrate_Product\` MODIFY COLUMN \`Name\` varchar(40) NULL"`;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 14->15 1`] = `
+"ALTER TABLE \`test_resources_migrate_Product\` MODIFY COLUMN \`Name\` varchar(50) NULL
+ALTER TABLE \`test_resources_migrate_Product\` CHANGE \`Price\` \`Price\` decimal(14,3) NULL"
+`;

@@ -4,7 +4,7 @@ import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupBy
 import MySQLParser, { MySQLParserListener, SqlMode, TableRefContext } from "ts-mysql-parser";
 import { EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
-import { ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
+import { ANNOTATION_CDS_ASSERT_UNIQUE, ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
 
 type TableName = string;
 
@@ -91,6 +91,16 @@ function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
     .filter(ele => ele?.virtual !== true && !["cds.Association", "cds.Composition"].includes(ele.type))
     .map(ele => buildColumn(ele)).reduce((pre, cur) => { pre[cur.name] = cur; return pre; }, {});
 
+  const uniqueConfig: { [constriantName: string]: Array<{ "=": string }> } = groupByKeyPrefix(entityDef, ANNOTATION_CDS_ASSERT_UNIQUE);
+  if (Object.keys(uniqueConfig).length > 0) {
+    schema.uniques = schema.uniques ?? [];
+    for (const [constriantName, columns] of Object.entries(uniqueConfig)) {
+      schema.uniques.push({
+        name: constriantName,
+        columns: columns.map(c => c["="]),
+      });
+    }
+  }
 
   const schemaConfig = groupByKeyPrefix(entityDef, ANNOTATION_CDS_TYPEORM_CONFIG) as Partial<EntitySchemaOptionsWithDeps>;
 
@@ -115,6 +125,8 @@ function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
       }
     }
   }
+
+
 
   if (schemaConfig !== undefined && Object.keys(schemaConfig).length > 0) {
     Object.assign(schema, schemaConfig);

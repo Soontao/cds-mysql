@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // @ts-nocheck
 import { sleep } from "@newdash/newdash";
 import { CSN, cwdRequireCDS } from "cds-internal-tool";
@@ -48,6 +49,8 @@ export const setupEnv = () => {
 };
 
 export const loadCSN = async (relativePath: string) => cwdRequireCDS().load(path.join(__dirname, relativePath));
+
+export const loadMigrateStepCSN = async (step: number) => loadCSN(`./resources/migrate/step-${step}.cds`);
 
 export const getTestTypeORMOptions = () => {
   const cds = cwdRequireCDS();

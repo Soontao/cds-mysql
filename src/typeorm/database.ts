@@ -38,8 +38,17 @@ export function entitySchemaToTable(entity: EntitySchema) {
         indices: Object.values(options?.indices ?? {}).map((index) => ({
           name: index.name,
           columnNames: index.columns as Array<string>,
-          // REVISIT: other options
-        }))
+          isUnique: index.unique,
+          isSpatial: index.spatial,
+          isFulltext: index.fulltext,
+          isNullFiltered: index.nullFiltered,
+        })),
+        uniques: Object.values(options.uniques ?? {}).map((unique) => ({
+          name: unique.name,
+          columnNames: unique.columns as any,
+          deferrable: unique.deferrable,
+        })),
+        // REVISIT: other options
       });
   }
 }

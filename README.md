@@ -74,11 +74,11 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
   - [x] migrate CSV on-demand (with option)
   - [x] CSV migration with hash check
   - [ ] database handlers for `SELECT` and `DELETE`
-  - [ ] care entity dependenceis while importing CSV file
+  - [ ] care entity dependenceis - the order of CSV import
 - [x] full text search
 - [x] schema migration optimization (ignore drop in some case)
   - [ ] ignore column length reduce and with warning
-  - [ ] model version, only incremental migration
+  - [x] model version, only incremental migration - `transparent migration`
 - [x] [`@Core.Media` attachment support](https://cap.cloud.sap/docs/guides/media-data)
 - [x] [localized data](https://cap.cloud.sap/docs/guides/localized-data)
 - [x] multi tenancy

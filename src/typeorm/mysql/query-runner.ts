@@ -1,5 +1,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable max-len */
+import { pick } from "@newdash/newdash/pick";
+import { isEqual } from "@newdash/newdash/isEqual";
 import { ObjectLiteral } from "typeorm/common/ObjectLiteral";
 import { MysqlQueryRunner } from "typeorm/driver/mysql/MysqlQueryRunner";
 import { Query } from "typeorm/driver/Query";
@@ -20,6 +22,8 @@ import { OrmUtils } from "typeorm/util/OrmUtils";
 import { VersionUtils } from "typeorm/util/VersionUtils";
 import { MYSQL_CHARSET, MYSQL_COLLATE } from "../../constants";
 import { equalWithoutCase } from "./utils";
+import { InstanceChecker } from "typeorm";
+
 
 /**
  * @internal
@@ -34,6 +38,38 @@ export class CDSMySQLQueryRunner extends MysqlQueryRunner {
     let sql = super.createTableSql(table, createForeignKeys).query;
     sql += ` CHARACTER SET '${MYSQL_CHARSET}' COLLATE '${MYSQL_COLLATE}'`;
     return new Query(sql);
+  }
+
+  async changeColumn(tableOrName: string | Table, oldColumnOrName: string | TableColumn, newColumn: TableColumn): Promise<void> {
+
+    if (typeof oldColumnOrName === "object") {
+      const PICK_PROPERTIES: Array<keyof TableColumn> = [
+        "isArray", "isGenerated", "isNullable", "isPrimary",
+        "isUnique", "type", "name", "default", "unsigned", "zerofill",
+      ];
+
+      // if only length change, do not drop column
+      if (
+        isEqual(pick(oldColumnOrName, PICK_PROPERTIES), pick(newColumn, PICK_PROPERTIES)) &&
+        oldColumnOrName.length !== newColumn.length
+      ) {
+        const table = InstanceChecker.isTable(tableOrName)
+          ? tableOrName
+          : await this.getCachedTable(tableOrName);
+
+        const upQueries = [
+          new Query(`ALTER TABLE ${this.escapePath(table)} MODIFY COLUMN \`${oldColumnOrName.name}\` ${this.buildCreateColumnSql(newColumn, false, true)}`)
+        ];
+        const downQueries = [
+          new Query(`ALTER TABLE ${this.escapePath(table)} MODIFY COLUMN \`${newColumn.name}\` ${this.buildCreateColumnSql(oldColumnOrName, false, true)}`)
+        ];
+
+        await this.executeQueries(upQueries, downQueries);
+        return;
+      }
+    }
+
+    return super.changeColumn(tableOrName, oldColumnOrName, newColumn);
   }
 
   /**

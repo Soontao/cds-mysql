@@ -7,7 +7,7 @@ import { csnToEntity, entitySchemaToTable, migrate } from "../src/typeorm";
 import { sha256 } from "../src/typeorm/csv";
 import { TypeORMLogger } from "../src/typeorm/logger";
 import { equalWithoutCase } from "../src/typeorm/mysql/utils";
-import { cleanDB, doAfterAll, getTestTypeORMOptions, loadCSN } from "./utils";
+import { cleanDB, doAfterAll, getTestTypeORMOptions, loadCSN, loadMigrateStepCSN } from "./utils";
 
 describe("TypeORM Test Suite", () => {
 
@@ -142,6 +142,22 @@ describe("TypeORM Test Suite", () => {
       expect(ddlAfterMigrate).toHaveLength(0);
     }
 
+  });
+
+  it("should support safe column-length-reduction", async () => {
+    const baseOption: DataSourceOptions = {
+      ...getTestTypeORMOptions(),
+      name: "migrate-test-02",
+      type: "mysql",
+      logging: false
+    };
+
+    // perform really migration
+    await migrate({ ...baseOption, entities: csnToEntity(await loadMigrateStepCSN(13)) });
+
+    const { upQueries } = await migrate({ ...baseOption, entities: csnToEntity(await loadMigrateStepCSN(14)) }, true);
+
+    expect(upQueries).toMatchSnapshot();
   });
 
   it("should support sha256 hash", async () => {

@@ -17,11 +17,11 @@ export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
    */
   protected async executeSchemaSyncOperationsInProperOrder(): Promise<void> {
     await this.dropOldViews();
-    // await this.dropOldForeignKeys();
+    await this.dropOldForeignKeys();
     await this.dropOldIndices();
     await this.dropOldChecks();
-    // await this.dropOldExclusions();
-    // await this.dropCompositeUniqueConstraints();
+    await this.dropOldExclusions();
+    await this.dropCompositeUniqueConstraints();
     await this.renameColumns();
     await this.createNewTables();
     // DO NOT drop old columns
@@ -31,9 +31,9 @@ export class CDSMySQLSchemaBuilder extends RdbmsSchemaBuilder {
     await this.updateExistColumns();
     await this.createNewIndices();
     await this.createNewChecks();
-    // await this.createNewExclusions();
-    // await this.createCompositeUniqueConstraints();
-    // await this.createForeignKeys();
+    await this.createNewExclusions();
+    await this.createCompositeUniqueConstraints();
+    await this.createForeignKeys();
     await this.createViews();
   }
 
