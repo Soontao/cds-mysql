@@ -290,25 +290,24 @@ NOTE: mtxs - `extensibility` **CAN NOT** work with `transparent migration`
 
 > support `UPSERT` with mysql `INSERT ... ON DUPLICATE KEY UPDATE` feature
 
-- only support by `DatabaseService`, there is no handler in `cds.ApplicationService`
+- ONLY could be handled by `DatabaseService`, there is no builtin handler are registered for `cds.ApplicationService`
 - `UPSERT` will not return the updated object
 - till now, there are some features not well-implemented by cds team, for example, not able to automatically rewrite `upsert` for `view`
 
 ```js
-const { UPSERT } = cds.ql;
-
 module.exports = class DemoService extends cds.ApplicationService {
   async _upsert(req) {
-    const { Products } = this.entities;
+    const Product = "test.upsert.Product";
     const { data } = req;
-    return cds.run(UPSERT.into(Products).entries(data));
+    await cds.run(cds.ql.UPSERT.into(Product).entries(data));
+    return cds.run(cds.ql.SELECT.one.from(Product).where({ ID: data.ID }));
   }
 };
 ```
 
 ### CREATE and DROP CQN are disabled
 
-> `CREATE` and `DROP` ql are **disabled** by `cds-mysql`.
+> `CREATE` and `DROP` ql are **DISABLED** by `cds-mysql`.
 
 it means:
 
@@ -318,7 +317,7 @@ cds.run(CREATE.entity(def)); // with throw error 'ERR_NOT_SUPPORT_CQN_CREATE'
 
 ### Large Blob Storage
 
-if you have the `blob` column and try to upload large file/binary, maybe will encounter the `ER_NET_PACKET_TOO_LARGE` server side error, you can [configure](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html) the `max_allowed_packet` in server side, or configure the global variable by `cds-mysql` (will be restore after mysql restart)
+if you have the `blob` column, and try to upload large file/binary, maybe will encounter the `ER_NET_PACKET_TOO_LARGE` server side error, you can [configure](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html) the `max_allowed_packet` in server side, or configure the global variable by `cds-mysql` (will be restore after mysql restart)
 
 ```json
 {
@@ -342,7 +341,7 @@ if you have the `blob` column and try to upload large file/binary, maybe will en
 
 ### Database Connection Pool
 
-> `cds-mysql` setup pool for **EACH** tenant, for more options of pool, please ref [opt section of generic-pool](https://www.npmjs.com/package/generic-pool)
+> `cds-mysql` setup pool for **EACH** tenant, for more options of pool, please ref [options section of generic-pool](https://www.npmjs.com/package/generic-pool)
 
 ```json
 {
