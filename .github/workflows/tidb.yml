@@ -41,6 +41,7 @@ jobs:
       - name: setup mysql user
         run: node ./docker/tidb/create_user.js
         env:
+          IS_TIDB: true
           MYSQL_PORT: 4000
 
       - name: test
