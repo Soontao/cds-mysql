@@ -11,6 +11,8 @@ import { CDSMySQLSchemaBuilder } from "./schema-builder";
 
 
 /**
+ * typeorm driver for cds-mysql
+ * 
  * @internal
  */
 export class CDSMySQLDriver extends MysqlDriver {
