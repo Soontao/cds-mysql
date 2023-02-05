@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.9.16](https://github.com/Soontao/cds-mysql/compare/v5.9.15...v5.9.16) (2023-02-05)
+
+
+### Bug Fixes
+
+* tidb drop column issue ([290e918](https://github.com/Soontao/cds-mysql/commit/290e91832cad0730d008d68699c1dddd98e63973))
+* type ([1eb8fef](https://github.com/Soontao/cds-mysql/commit/1eb8fef19ef1d5489847776cd5e2232b43b69124))
+
 ### [5.9.15](https://github.com/Soontao/cds-mysql/compare/v5.9.14...v5.9.15) (2022-06-30)
 
 
