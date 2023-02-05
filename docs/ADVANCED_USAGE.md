@@ -17,13 +17,16 @@
     - [Eager Tenant Deployment](#eager-tenant-deployment)
     - [Auto Incremental Key Aspect](#auto-incremental-key-aspect)
     - [PreDelivery Aspect for CSV migration](#predelivery-aspect-for-csv-migration)
-    - [Add Column Index](#add-column-index)
+    - [Column Index](#column-index)
   - [Configuration](#configuration)
     - [Configure database credential by environments variables](#configure-database-credential-by-environments-variables)
     - [Configure database credential by file](#configure-database-credential-by-file)
     - [Setup Database Credential for Cloud Foundry](#setup-database-credential-for-cloud-foundry)
   - [Database](#database)
     - [Database User](#database-user)
+  - [Limitation and Restriction](#limitation-and-restriction)
+    - [Database Technical Restrictions](#database-technical-restrictions)
+    - [`cds-mysql` Implementation Restrictions](#cds-mysql-implementation-restrictions)
 
 ## Concepts
 
@@ -458,9 +461,9 @@ NOTE: `cds-mysql` will reject db `DELETE` operations for `pre-delivery = true` r
 }
 ```
 
-### Add Column Index
+### Column Index
 
-> define entity with mysql built-in index
+> `cds-mysql` allow user define entity with mysql built-in index
 
 ```groovy
 @cds.typeorm.config : {indices : [{
@@ -472,6 +475,8 @@ entity Product : cuid {
   Price : Decimal(10, 2);
 }
 ```
+
+NOTE: `index` migration is not well-tested, carefully use that on your own risk.
 
 ## Configuration
 
@@ -537,3 +542,25 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' cert-name.pem
 for the database user which configured in credential, at least, it should have the permission to perform SQL and DML.
 
 if the `multi-tenancy` or `mtxs` is enabled, the user need the permission to `CREATE/DROP DATABASE` and other DDL permission.
+
+## Limitation and Restriction
+
+### Database Technical Restrictions
+
+> hard restrictions from database
+
+- the maximum length of a table name is 64 characters - so the `length of entity name with namespace` cannot exceed 64 chars
+- The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
+- upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html).
+- **MySQL** `5.6` does not support key length exceed `767` bytes
+- **MySQL** does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
+- **TiDB** does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so users cannot `modify the primary keys` when `clustered index is enabled`
+
+### `cds-mysql` Implementation Restrictions
+
+> some restrictions from `cds-mysql` implementation
+
+- `date` column not support default value `$now`
+- The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
+- The `Boolean` type is represented as `TINYINT(1)` in mysql server, as a result, `boolean default true/false` will be converted to `TINYINT DEFAULT 1/0`.
+- The `incrementID` aspect of `mysql`, does not work with `managed composition`, because `mysql` do not support `composite primary key` contains an `auto_increment` column

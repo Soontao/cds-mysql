@@ -60,6 +60,8 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
 
 ## [Advanced Documentation](./docs/ADVANCED_USAGE.md)
 
+please read the full long version [Advanced Documentation](./docs/ADVANCED_USAGE.md) to get more technical details.
+
 ## Feature and RoadMap
 
 - [x] fundamental `INSERT`/`UPDATE`/`DELETE`/`SELECT` query support
@@ -100,19 +102,6 @@ in addition, please check [cap-mysql-sflight](https://github.com/Soontao/cap-mys
   - [ ] `SKIP LOCKED` support
 - [ ] Schema Evoluation by typeorm migration
 - [x] better E2E document/sample - [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight)
-
-## Limitation and Known Issues
-
-- the maximum length of a table name is 64 characters - so the `length of entity name with namespace` cannot exceed 64 chars
-- mysql `5.6` does not support key length exceed `767` bytes
-- mysql does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
-- TiDB does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so users cannot `modify the primary keys` when `clustered index is enabled`
-- `date` column not support default value `$now`
-- upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html).
-- The internal representation of a MySQL table has a maximum row size limit of `65,535` bytes.
-- The default `varchar(5000)` will be converted to unlimited `text` type, so, **DO NOT** remember add length for the unlimited `String` fields.
-- The `Boolean` type is represented as `TINYINT(1)` in mysql server, as a result, `boolean default true/false` will be converted to `TINYINT DEFAULT 1/0`.
-- The `incrementID` aspect could not works well with `managed composition` because mysql do not support `composite primary key` contains an `auto_increment` column
 
 ## [CHANGELOG](./CHANGELOG.md)
 
