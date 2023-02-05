@@ -195,3 +195,8 @@ exports[`transparent Test Suite should support generate transparent migration sc
 "ALTER TABLE \`test_resources_migrate_Product\` MODIFY COLUMN \`Name\` varchar(50) NULL
 ALTER TABLE \`test_resources_migrate_Product\` CHANGE \`Price\` \`Price\` decimal(14,3) NULL"
 `;
+
+exports[`transparent Test Suite should support generate transparent migration script: transparent migration - 15->16 1`] = `
+"ALTER TABLE \`test_resources_migrate_Product\` CHANGE \`Name\` \`Name\` varchar(50) NULL DEFAULT 'unknown product'
+ALTER TABLE \`test_resources_migrate_Product\` CHANGE \`Price\` \`Price\` decimal(14,3) NULL DEFAULT '10.150'"
+`;
