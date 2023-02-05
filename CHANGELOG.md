@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.5.0-alpha.0](https://github.com/Soontao/cds-mysql/compare/v6.4.2...v6.5.0-alpha.0) (2023-02-05)
+
+
+### Features
+
+* [#216](https://github.com/Soontao/cds-mysql/issues/216) array type ([202556e](https://github.com/Soontao/cds-mysql/commit/202556e5c6595a11e4c25edb277eaed55e9e693f))
+* [#216](https://github.com/Soontao/cds-mysql/issues/216) csv improvement ([08c775b](https://github.com/Soontao/cds-mysql/commit/08c775b30dfd97623770565dbebd6ba91bbafb41))
+* [#217](https://github.com/Soontao/cds-mysql/issues/217) improve schema migration ([3b966db](https://github.com/Soontao/cds-mysql/commit/3b966db5362f869d19f5e0fb42a3fd7c59ab39f8))
+* [#217](https://github.com/Soontao/cds-mysql/issues/217) migrate with transparent approach ([26bce29](https://github.com/Soontao/cds-mysql/commit/26bce2969930206eaf49210f72bc8e067dcb4a81))
+* [#217](https://github.com/Soontao/cds-mysql/issues/217) transparent deploy improvement ([d2d2e94](https://github.com/Soontao/cds-mysql/commit/d2d2e941c4572fdbaca7d4609e134daa5e99b6bb))
+* [#221](https://github.com/Soontao/cds-mysql/issues/221) unit test for index ([0a31ca3](https://github.com/Soontao/cds-mysql/commit/0a31ca33d89c28b2fbf6767a1b2f7a527ddb6b00))
+* add mtxs support for transparent deployment ([afa372e](https://github.com/Soontao/cds-mysql/commit/afa372e8935ee5e0ba5e6c2e4c6c71244f36f0c1))
+* migration script generator ([89d751f](https://github.com/Soontao/cds-mysql/commit/89d751fbd345dc78c37e0c7b7d1026c26f413226))
+* partial support for schema evolution ([4795280](https://github.com/Soontao/cds-mysql/commit/479528094295739addca5a9b6986ead49402811c))
+* schema evolution ([2a92306](https://github.com/Soontao/cds-mysql/commit/2a92306b09b2c953896c32ccbe31978a74e52ecf))
+* support cds@6.5.0 ([90d9f75](https://github.com/Soontao/cds-mysql/commit/90d9f75cbcf99c43184ee2272134e61d1602e510))
+* timestamp for migration script ([d0a630d](https://github.com/Soontao/cds-mysql/commit/d0a630d84b3659359bfe4aae949e7dfe3f830467))
+* transparent migration test ([1beda3a](https://github.com/Soontao/cds-mysql/commit/1beda3abfbb808f61f2c2c4d24ef6042872aa2ab))
+
+
+### Bug Fixes
+
+* build script for migration version ([51d169f](https://github.com/Soontao/cds-mysql/commit/51d169fc053d4092e119bf308cbf51ce030c348b))
+* column modify for mariadb ([ecd8b34](https://github.com/Soontao/cds-mysql/commit/ecd8b34839854bf061089241e4413b7ef77d7fe8))
+* coverage ([3caadcc](https://github.com/Soontao/cds-mysql/commit/3caadcc2612a1a0712fff3d231321394289c4aa0))
+* **deps:** update dependency cds-internal-tool to v1.7.1 ([#227](https://github.com/Soontao/cds-mysql/issues/227)) ([b60c5e3](https://github.com/Soontao/cds-mysql/commit/b60c5e3fe831675d5979f3521bbf0c047d58e427))
+* issues ([3970f26](https://github.com/Soontao/cds-mysql/commit/3970f2683b3bde1db9a5dee87fd97d2847cda771))
+* nvarchar ([8f7c80f](https://github.com/Soontao/cds-mysql/commit/8f7c80f94b8d75561a00fa6bc49e59a3f8c38fd7))
+* sonar ([ccfb203](https://github.com/Soontao/cds-mysql/commit/ccfb203ed1d23bf93d0a223edc8755b024fbd630))
+
 ### [6.4.2](https://github.com/Soontao/cds-mysql/compare/v6.4.1...v6.4.2) (2023-01-27)
 
 
