@@ -75,7 +75,6 @@ please read the full long version [Advanced Documentation](./docs/ADVANCED_USAGE
 - [x] `preDelivery` CSV aspect
   - [x] migrate CSV on-demand (with option)
   - [x] CSV migration with hash check
-  - [ ] database handlers for `SELECT` and `DELETE`
   - [ ] care entity dependenceis - the order of CSV import
 - [x] full text search
 - [x] schema migration optimization (ignore drop in some case)
