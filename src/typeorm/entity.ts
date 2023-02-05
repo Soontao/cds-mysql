@@ -299,6 +299,7 @@ class CDSListener implements MySQLParserListener {
  */
 export function csnToEntity(model: CSN): Array<EntitySchema> {
   overwriteCDSCoreTypes();
+  const cds = cwdRequireCDS();
   const listener: CDSListener = new CDSListener({ model: cds.reflect(model) });
   const parser = new MySQLParser({ parserListener: listener });
   const statements = cds.compile.to.sql(model);
