@@ -19,6 +19,9 @@ module.exports = {
   ],
   testEnvironment: "node",
   testRegex: "/test/.*\\.test\\.ts$",
+  modulePathIgnorePatterns: [
+    "test/.*?/gen"
+  ],
   moduleFileExtensions: [
     "ts",
     "js",

@@ -53,11 +53,7 @@ describe("transparent Test Suite", () => {
     });
 
     await sh("npx", "cds", "pull", "-u", "theo-on-tenant-2:pass", "--from", client.defaults.baseURL);
-    await sh("npx", "cds", "build", "--for", "mtx-extension");
-    const code = await sh(
-      "npx", "cds", "push", "./gen/extension.tgz", "-u", "theo-on-tenant-2:pass", "--to",
-      client.defaults.baseURL
-    );
+    const code = await sh("npx", "cds", "push", "-u", "theo-on-tenant-2:pass", "--to", client.defaults.baseURL);
 
     expect(code).toBe(1); // should failed
 

@@ -1,0 +1,9 @@
+{
+  "build": {
+    "tasks": [
+      {
+        "for": "mtx-extension"
+      }
+    ]
+  }
+}
