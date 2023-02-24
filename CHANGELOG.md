@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.5.0](https://github.com/Soontao/cds-mysql/compare/v6.5.0-alpha.0...v6.5.0) (2023-02-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency typeorm to v0.3.12 ([c734689](https://github.com/Soontao/cds-mysql/commit/c734689bc1d52395dc06a383aba77637ccb795d7))
+
 ## [6.5.0-alpha.0](https://github.com/Soontao/cds-mysql/compare/v6.4.2...v6.5.0-alpha.0) (2023-02-05)
 
 
