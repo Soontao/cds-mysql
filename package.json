@@ -35,7 +35,7 @@
     "cds-internal-tool": "1.7.3",
     "colors": "1.4.0",
     "generic-pool": "3.9.0",
-    "glob": "9.0.2",
+    "glob": "9.1.0",
     "luxon": "3.2.1",
     "mysql2": "2.3.3",
     "ts-mysql-parser": "0.2.0",
