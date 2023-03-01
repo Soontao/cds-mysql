@@ -13,15 +13,6 @@ import { DEFAULT_CSV_IDENTITY_CONCURRENCY } from "../constants";
 import { adaptToMySQLDateTime } from "../conversion-pre";
 import { isPreDeliveryModel, last6Chars } from "../utils";
 
-export const pGlob = (pattern: string) => new Promise<Array<string>>((res, rej) => {
-  glob(pattern, (err, matches) => {
-    if (err) {
-      rej(err);
-    } else {
-      res(matches);
-    }
-  });
-});
 
 /**
  * get sha256 hash for a file content
@@ -87,7 +78,7 @@ export async function migrateData(
         // @ts-ignore
         uniq(model.$sources.map(path.dirname))
           .map((dir: string) => `${dir}/{data,csv,src/data}/**/*.csv`)
-          .map((pattern: string) => pGlob(pattern))
+          .map((pattern: string) => glob(pattern))
       )
     )
   );
