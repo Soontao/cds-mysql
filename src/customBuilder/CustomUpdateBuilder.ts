@@ -1,8 +1,5 @@
 import { CSN, cwdRequire, LinkedEntityDefinition } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
-import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
-import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
-import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 import { AnnotatedColumns } from "./types";
 
@@ -14,21 +11,6 @@ export class CustomUpdateBuilder extends UpdateBuilder {
     super(obj, options, csn);
     // overwrite quote function
     this._quoteElement = enhancedQuotingStyles.plain;
-  }
-
-  get ReferenceBuilder() {
-    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
-    return CustomReferenceBuilder;
-  }
-
-  get ExpressionBuilder() {
-    Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
-    return CustomExpressionBuilder;
-  }
-
-  get FunctionBuilder() {
-    Object.defineProperty(this, "FunctionBuilder", { value: CustomFunctionBuilder });
-    return CustomFunctionBuilder;
   }
 
   /**

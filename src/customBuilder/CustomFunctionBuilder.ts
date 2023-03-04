@@ -1,8 +1,5 @@
 import { CSN, cwdRequire } from "cds-internal-tool";
 import { func, ref, val } from "cds-internal-tool/lib/types/cxn";
-import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
-import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
-import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const { FunctionBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
@@ -31,20 +28,6 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     this._quoteElement = enhancedQuotingStyles.plain;
   }
 
-  get ExpressionBuilder() {
-    Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
-    return CustomExpressionBuilder;
-  }
-
-  get ReferenceBuilder() {
-    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
-    return CustomReferenceBuilder;
-  }
-
-  get SelectBuilder() {
-    Object.defineProperty(this, "SelectBuilder", { value: CustomSelectBuilder });
-    return CustomSelectBuilder;
-  }
 
   public build() {
     this._outputObj = { sql: [], values: [] };

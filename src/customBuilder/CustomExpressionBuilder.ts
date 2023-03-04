@@ -1,7 +1,4 @@
 import { CSN, cwdRequire } from "cds-internal-tool";
-import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
-import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
-import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const { ExpressionBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
@@ -24,21 +21,6 @@ export class CustomExpressionBuilder extends ExpressionBuilder {
       this._obj.xpr[2] = { ref: ["drafts", "DraftAdministrativeData_DraftUUID"] };
     }
     return super.build();
-  }
-
-  get ReferenceBuilder() {
-    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
-    return CustomReferenceBuilder;
-  }
-
-  get SelectBuilder() {
-    Object.defineProperty(this, "SelectBuilder", { value: CustomSelectBuilder });
-    return CustomSelectBuilder;
-  }
-
-  get FunctionBuilder() {
-    Object.defineProperty(this, "FunctionBuilder", { value: CustomFunctionBuilder });
-    return CustomFunctionBuilder;
   }
 
 };

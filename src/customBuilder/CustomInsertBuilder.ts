@@ -1,6 +1,5 @@
 import { CSN, cwdRequire, EntityDefinition, fuzzy } from "cds-internal-tool";
 import { PRE_CONVERSION_MAP } from "../conversion-pre";
-import { CustomSelectBuilder } from "./CustomSelectBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const { InsertBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
@@ -10,11 +9,6 @@ export class CustomInsertBuilder extends InsertBuilder {
     super(obj, options, csn);
     // overwrite quote function
     this._quoteElement = enhancedQuotingStyles.plain;
-  }
-
-  get SelectBuilder() {
-    Object.defineProperty(this, "SelectBuilder", { value: CustomSelectBuilder });
-    return CustomSelectBuilder;
   }
 
   private _extOutputObj = { columns: [] };

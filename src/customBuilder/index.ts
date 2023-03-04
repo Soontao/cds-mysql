@@ -1,40 +1,64 @@
-import { CustomDeleteBuilder } from "./CustomDeleteBuilder";
-import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
-import { CustomInsertBuilder } from "./CustomInsertBuilder";
-import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
-import { CustomSelectBuilder } from "./CustomSelectBuilder";
-import { CustomUpdateBuilder } from "./CustomUpdateBuilder";
-import { CustomUpsertBuilder } from "./CustomUpsertBuilder";
+import { CustomDeleteBuilder as DeleteBuilder } from "./CustomDeleteBuilder";
+import { CustomExpressionBuilder as ExpressionBuilder } from "./CustomExpressionBuilder";
+import { CustomInsertBuilder as InsertBuilder } from "./CustomInsertBuilder";
+import { CustomFunctionBuilder as FunctionBuilder } from "./CustomFunctionBuilder";
+import { CustomReferenceBuilder as ReferenceBuilder } from "./CustomReferenceBuilder";
+import { CustomSelectBuilder as SelectBuilder } from "./CustomSelectBuilder";
+import { CustomUpdateBuilder as UpdateBuilder } from "./CustomUpdateBuilder";
 
-const dependencies = {
-  get InsertBuilder() {
-    Object.defineProperty(dependencies, "InsertBuilder", { value: CustomInsertBuilder });
-    return CustomInsertBuilder;
-  },
-  get DeleteBuilder() {
-    Object.defineProperty(dependencies, "DeleteBuilder", { value: CustomDeleteBuilder });
-    return CustomDeleteBuilder;
-  },
-  get ExpressionBuilder() {
-    Object.defineProperty(dependencies, "ExpressionBuilder", { value: CustomExpressionBuilder });
-    return CustomExpressionBuilder;
-  },
-  get SelectBuilder() {
-    Object.defineProperty(dependencies, "SelectBuilder", { value: CustomSelectBuilder });
-    return CustomSelectBuilder;
-  },
-  get ReferenceBuilder() {
-    Object.defineProperty(dependencies, "ReferenceBuilder", { value: CustomReferenceBuilder });
-    return CustomReferenceBuilder;
-  },
-  get UpdateBuilder() {
-    Object.defineProperty(dependencies, "UpdateBuilder", { value: CustomUpdateBuilder });
-    return CustomUpdateBuilder;
-  },
-  get UpsertBuilder() {
-    Object.defineProperty(dependencies, "UpsertBuilder", { value: CustomUpsertBuilder });
-    return CustomUpsertBuilder;
-  },
+/**
+ * extend / mixin class
+ * 
+ * @param aClass 
+ * @returns 
+ */
+function extend<T extends any>(aClass: T) {
+  return {
+    with(properties: any): T {
+      for (const p in properties) {
+        Object.defineProperty((aClass as any).prototype, p, { value: properties[p] });
+      }
+      return aClass;
+    }
+  };
+}
+
+const customBuilder = {
+  ReferenceBuilder: extend(ReferenceBuilder).with({
+    FunctionBuilder
+  }),
+  ExpressionBuilder: extend(ExpressionBuilder).with({
+    ReferenceBuilder,
+    SelectBuilder,
+    FunctionBuilder
+  }),
+  FunctionBuilder: extend(FunctionBuilder).with({
+    ExpressionBuilder,
+    ReferenceBuilder,
+    SelectBuilder
+  }),
+  SelectBuilder: extend(SelectBuilder).with({
+    ExpressionBuilder,
+    ReferenceBuilder,
+    FunctionBuilder,
+    SelectBuilder
+  }),
+  InsertBuilder: extend(InsertBuilder).with({
+    SelectBuilder,
+  }),
+  UpsertBuilder: extend(InsertBuilder).with({
+    SelectBuilder,
+  }),
+  UpdateBuilder: extend(UpdateBuilder).with({
+    ReferenceBuilder,
+    ExpressionBuilder,
+    FunctionBuilder,
+  }),
+  DeleteBuilder: extend(DeleteBuilder).with({
+    ReferenceBuilder,
+    ExpressionBuilder,
+    FunctionBuilder,
+  })
 };
 
-export default dependencies;
+export default customBuilder;

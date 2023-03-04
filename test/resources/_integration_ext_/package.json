@@ -1,4 +1,1 @@
-{
-  "name": "ext-1",
-  "dependencies": {}
-}
+{"name":"ext-1","dependencies":{},"cds":{"extends":"_base"}}

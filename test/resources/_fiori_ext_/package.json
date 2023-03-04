@@ -1,4 +1,1 @@
-{
-  "name": "fiori-ext-1",
-  "dependencies": {}
-}
+{"name":"fiori-ext-1","dependencies":{},"cds":{"extends":"_base"}}

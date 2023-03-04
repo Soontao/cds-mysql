@@ -1,7 +1,4 @@
 import { CSN, cwdRequire, cwdRequireCDS, Definition } from "cds-internal-tool";
-import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
-import { CustomFunctionBuilder } from "./CustomFunctionBuilder";
-import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const { SelectBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
@@ -28,26 +25,6 @@ export class CustomSelectBuilder extends (SelectBuilder as any) {
     super(obj, options, csn);
     // overwrite quote function
     this._quoteElement = enhancedQuotingStyles.plain;
-  }
-
-  get ReferenceBuilder() {
-    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
-    return CustomReferenceBuilder;
-  }
-
-  get ExpressionBuilder() {
-    Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
-    return CustomExpressionBuilder;
-  }
-
-  get FunctionBuilder() {
-    Object.defineProperty(this, "FunctionBuilder", { value: CustomFunctionBuilder });
-    return CustomFunctionBuilder;
-  }
-
-  get SelectBuilder() {
-    Object.defineProperty(this, "SelectBuilder", { value: CustomSelectBuilder });
-    return CustomSelectBuilder;
   }
 
   /**

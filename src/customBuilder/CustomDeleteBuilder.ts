@@ -1,6 +1,4 @@
 import { CSN, cwdRequire } from "cds-internal-tool";
-import { CustomExpressionBuilder } from "./CustomExpressionBuilder";
-import { CustomReferenceBuilder } from "./CustomReferenceBuilder";
 import { enhancedQuotingStyles } from "./replacement/quotingStyles";
 
 const { DeleteBuilder } = cwdRequire("@sap/cds/libx/_runtime/db/sql-builder");
@@ -11,16 +9,6 @@ export class CustomDeleteBuilder extends DeleteBuilder {
     super(obj, options, csn);
     // overwrite quote function
     this._quoteElement = enhancedQuotingStyles.plain;
-  }
-
-  get ReferenceBuilder() {
-    Object.defineProperty(this, "ReferenceBuilder", { value: CustomReferenceBuilder });
-    return CustomReferenceBuilder;
-  }
-
-  get ExpressionBuilder() {
-    Object.defineProperty(this, "ExpressionBuilder", { value: CustomExpressionBuilder });
-    return CustomExpressionBuilder;
   }
 
   _from() {
