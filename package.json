@@ -15,10 +15,11 @@
     "prebuild": "npm run install:dev",
     "test": "jest --passWithNoTests --runInBand --forceExit",
     "build": "tsc",
-    "bench": "node bench/benchmark.js ",
+    "bench": "node bench/benchmark.js",
     "postbuild": "tsc --noEmit --p tsconfig.lib.json",
     "lint": "eslint src/** --fix",
     "release": "npx standard-version --no-verify",
+    "alpha-release": "npx standard-version --prerelease alpha --no-verify",
     "coverage": "npm test -- --coverage --no-cache"
   },
   "repository": {
