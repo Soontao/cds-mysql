@@ -44,6 +44,7 @@ must use proper version of `cds-mysql` with `@sap/cds` sdk
 | 6.3.x            | 6.3.x             |
 | 6.4.x            | 6.4.x             |
 | 6.5.x            | 6.5.x             |
+| 6.6.x            | 6.6.x             |
 
 ### Configurations Overview
 
