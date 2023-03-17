@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "charset": "UTF-8",
     "newLine": "lf",
     "target": "ES2021",
     "module": "CommonJS",
