@@ -99,7 +99,6 @@ please read the full long version [Advanced Documentation](./docs/ADVANCED_USAGE
 - [x] SELECT [`FOR UPDATE`](https://cap.cloud.sap/docs/node.js/cds-ql?q=forUpdate#select-forUpdate)/`LOCK IN SHARE MODE`
   - [ ] `NOWAIT` support
   - [ ] `SKIP LOCKED` support
-- [ ] Schema Evoluation by typeorm migration
 - [x] better E2E document/sample - [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight)
 
 ## [CHANGELOG](./CHANGELOG.md)
