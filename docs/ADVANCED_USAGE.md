@@ -45,6 +45,7 @@ must use proper version of `cds-mysql` with `@sap/cds` sdk
 | 6.4.x            | 6.4.x             |
 | 6.5.x            | 6.5.x             |
 | 6.6.x            | 6.6.x             |
+| 6.7.x            | 6.7.x             |
 
 ### Configurations Overview
 
@@ -84,28 +85,28 @@ interface MysqlDatabaseOptions {
     deploy?: {
       /**
        * auto migrate database schema when connect to it (create pool),
-       * 
+       *
        * @default true
        */
       auto?: boolean;
       /**
-       * eager deploy tenant id list 
-       * 
+       * eager deploy tenant id list
+       *
        * schema sync of these tenants will be performed when server startup
-       * 
+       *
        * @default ['default']
        */
       eager?: Array<string> | string;
 
       /**
        * eager deploy will also include tenants from cds.env.requires.auth.users
-       * 
+       *
        * @default false
        */
       withMockUserTenants?: boolean;
       /**
        * transparent migrate, require to use `cds-mysql-build` to generate migrations.sql
-       * 
+       *
        * @default false
        */
       transparent?: boolean;
@@ -121,7 +122,7 @@ interface MysqlDatabaseOptions {
   connection?: {
     /**
      * `max_allowed_packet` size of mysql database, when create the pool of tenant, `cds-mysql` will try to set the global `max_allowed_packet` variable
-     * 
+     *
      * The value should be a multiple of 1024; non-multiples are rounded down to the nearest multiple.
      */
     maxallowedpacket?: number | boolean;
@@ -136,7 +137,7 @@ interface MysqlDatabaseOptions {
   csv?: {
     /**
      * migrate CSV on deployment
-     * 
+     *
      * @default false
      */
     migrate?: boolean;
@@ -146,21 +147,21 @@ interface MysqlDatabaseOptions {
        * `cds-mysql` will parallel to query record by keys,
        *  to check the record is existed or not
        */
-      concurrency?: number
-    }
+      concurrency?: number;
+    };
     exist?: {
       /**
        * when `cds-mysql` found the record is existed in database
-       * 
-       * update or skip that. 
-       * 
+       *
+       * update or skip that.
+       *
        * @default false
        */
       update?: boolean;
     };
     /**
      * enhanced csv processing for `preDelivery` aspect
-     * 
+     *
      * @default false
      */
     enhancedProcessing: boolean;
