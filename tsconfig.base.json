@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "newLine": "lf",
-    "target": "ES2022",
+    "target": "ES2021",
     "module": "CommonJS",
     "allowJs": true,
     "sourceMap": true,
