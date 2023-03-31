@@ -1,6 +1,6 @@
 {
   "name": "cds-mysql",
-  "version": "6.6.0-alpha.0",
+  "version": "6.7.0",
   "main": "lib/index.js",
   "cds.main": "./index.cds",
   "description": "mysql database adapter for cds",
