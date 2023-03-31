@@ -83,9 +83,9 @@ export class MySQLDatabaseService extends BaseService {
 
   private _tool: AdminTool;
 
-  options: MysqlDatabaseOptions;
+  declare public options: MysqlDatabaseOptions;
 
-  model: LinkedModel;
+  declare public model: LinkedModel;
 
   private _queries: any;
 
