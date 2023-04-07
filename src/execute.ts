@@ -102,7 +102,7 @@ function executeSelectCQN(
 ) {
   if (hasExpand(query)) {
     // expand: '**' or '*3' is handled by new impl
-    if (query.SELECT.columns.some(c => c.expand && typeof c.expand[0] === 'string' && /^\*{1}[\d|*]+/.test(c.expand[0]))) {
+    if (query.SELECT.columns.some(c => c.expand && typeof c.expand[0] === "string" && /^\*{1}[\d|*]+/.test(c.expand[0]))) {
       return expandV2(model, dbc, query, user, locale, txTimestamp, executeSelectCQN);
     }
     return _processExpand(model, dbc, query, user, locale, txTimestamp);
