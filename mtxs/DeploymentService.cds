@@ -28,7 +28,8 @@ service cds.xt.DeploymentService {
    */
 
                    @open
-  action   extend( @mandatory tenant : String);
+  action   extend( @mandatory tenant : String, csvs : {}); // REVISIT: csvs, better use options
+
 
                     @open
   action   upgrade( @mandatory tenant : String, options : {});
@@ -39,6 +40,8 @@ service cds.xt.DeploymentService {
   // REVISIT: Do we need this for job orchstration via CLI use?
   //action updateAll(options:{});
 
-  function getTables( @mandatory tenant : String)                                 returns array of String;
-  function getColumns(  @mandatory  tenant : String,  @mandatory  table : String) returns array of String;
+  // REVISIT: only needed for t0 upgrade heuristics. Can they be replaced?
+  function getTables( @mandatory tenant : String)                                              returns array of String;
+  function getColumns(  @mandatory  tenant : String,  @mandatory  table : String, params : {}) returns array of String;
+
 }

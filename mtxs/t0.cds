@@ -20,7 +20,7 @@ entity Jobs {
 }
 
 entity Tasks {
-  key job_ID    : UUID;
+  key job       : Association to Jobs;
   key ID        : UUID; // REVISIT: cuid from cds/common?
       tenant    : TenantID;
       op        : String(255);
@@ -28,8 +28,6 @@ entity Tasks {
       status    : Status default #RUNNING;
       createdAt : Timestamp @cds.on.insert: $now;
       database  : String(255);
-      job       : Association to Jobs
-                    on job.ID = $self.job_ID;
 }
 
 type Status   : String(10) enum {
