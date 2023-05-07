@@ -34,18 +34,19 @@
 
 must use proper version of `cds-mysql` with `@sap/cds` sdk
 
-| @sap/cds version | cds-mysql version |
-| ---------------- | ----------------- |
-| 5.8.x            | 5.9.x             |
-| 5.9.x            | 5.9.x             |
-| 6.0.x            | 6.0.x             |
-| 6.1.x            | 6.1.x             |
-| 6.2.x            | 6.2.x             |
-| 6.3.x            | 6.3.x             |
-| 6.4.x            | 6.4.x             |
-| 6.5.x            | 6.5.x             |
-| 6.6.x            | 6.6.x             |
-| 6.7.x            | 6.7.x             |
+| @sap/cds version | @sap/cds-mtxs version | cds-mysql version |
+| ---------------- | --------------------- | ----------------- |
+| 5.8.x            |                       | 5.9.x             |
+| 5.9.x            |                       | 5.9.x             |
+| 6.0.x            |                       | 6.0.x             |
+| 6.1.x            |                       | 6.1.x             |
+| 6.2.x            |                       | 6.2.x             |
+| 6.3.x            |                       | 6.3.x             |
+| 6.4.x            |                       | 6.4.x             |
+| 6.5.x            |                       | 6.5.x             |
+| 6.6.x            |                       | 6.6.x             |
+| 6.7.x            | 1.7.x                 | 6.7.x             |
+| 6.8.x            | 1.8.x                 | 6.8.x             |
 
 ### Configurations Overview
 
