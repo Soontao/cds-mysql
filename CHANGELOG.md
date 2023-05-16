@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.8.0](https://github.com/Soontao/cds-mysql/compare/v6.7.0...v6.8.0) (2023-05-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @newdash/newdash to v5.22.0 ([5791593](https://github.com/Soontao/cds-mysql/commit/5791593347c1546b6587fc3f7e93d9d8c8f449a5))
+* **deps:** update dependency glob to v10 ([04df1af](https://github.com/Soontao/cds-mysql/commit/04df1af1776ee2d4fe0504a79584bfba21da492e))
+* **deps:** update dependency glob to v10.1.0 ([2586164](https://github.com/Soontao/cds-mysql/commit/2586164f145a37131f8d0f3fb850bb07c28aa018))
+* **deps:** update dependency glob to v10.2.1 ([65976c2](https://github.com/Soontao/cds-mysql/commit/65976c276443d694c77a4cd03af80eb20243a93d))
+* **deps:** update dependency glob to v10.2.2 ([8a72701](https://github.com/Soontao/cds-mysql/commit/8a727019c3099a8e1563dc10d81b4b140e10e3f3))
+* **deps:** update dependency glob to v10.2.3 ([572f0a8](https://github.com/Soontao/cds-mysql/commit/572f0a876397763116f7b63b7431a0a1c6aa27d6))
+* **deps:** update dependency glob to v10.2.4 ([340efa9](https://github.com/Soontao/cds-mysql/commit/340efa9b3e4deeacd6f3979620e70128c1fe1d0a))
+* **deps:** update dependency glob to v9.3.4 ([#282](https://github.com/Soontao/cds-mysql/issues/282)) ([105941a](https://github.com/Soontao/cds-mysql/commit/105941addfbb1c0e329180cc6cd6099fbf018896))
+* **deps:** update dependency glob to v9.3.5 ([f9889e8](https://github.com/Soontao/cds-mysql/commit/f9889e86f02d1858fb75a64bcaccc842572f78bf))
+* **deps:** update dependency typeorm to v0.3.13 ([7088825](https://github.com/Soontao/cds-mysql/commit/7088825d8b6b003fefb078a51debf49329921fd2))
+* **deps:** update dependency typeorm to v0.3.14 ([556d236](https://github.com/Soontao/cds-mysql/commit/556d236fecccc1f81be09111bc1bbeaceea39751))
+* **deps:** update dependency typeorm to v0.3.15 ([2f1fecc](https://github.com/Soontao/cds-mysql/commit/2f1fecced1efc3785eb771c16314631ad48a98af))
+* **deps:** update dependency typeorm to v0.3.16 ([fa86fa3](https://github.com/Soontao/cds-mysql/commit/fa86fa3692685de24edbc1f555fd704b9285d254))
+* lint ([705ddcd](https://github.com/Soontao/cds-mysql/commit/705ddcd44684e1a7c238149bcac67a437723c00f))
+
 ## [6.7.0](https://github.com/Soontao/cds-mysql/compare/v6.5.0...v6.7.0) (2023-03-31)
 
 
