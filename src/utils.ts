@@ -42,10 +42,10 @@ export const getIncrementalKey = memorized((entityDef: any): any | undefined => 
 /**
  * check the given entity has `preDelivery` aspect or not
  */
-export const isPreDeliveryModel = memorized((entifyDef: LinkedEntityDefinition) => {
+export const isPreDeliveryModel = memorized((entityDef: LinkedEntityDefinition) => {
   return (
-    entifyDef?.includes?.includes?.("preDelivery") &&
-    entifyDef?.elements?.["PreDelivery"]?.type === "cds.Boolean"
+    entityDef?.includes?.includes?.("preDelivery") &&
+    entityDef?.elements?.["PreDelivery"]?.type === "cds.Boolean"
   );
 });
 

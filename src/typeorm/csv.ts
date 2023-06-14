@@ -162,7 +162,7 @@ export async function migrateData(
       /**
        * the entity has `preDelivery` `aspect` or not
        */
-      const withPrelivery = isPreDeliveryModel(entityModel);
+      const withPreDelivery = isPreDeliveryModel(entityModel);
       const CSV = cwdRequire("@sap/cds/lib/compile/etc/csv");
       const entires: Array<Array<string>> = CSV.read(csvFile);
       const tableName = entityName.replace(/\./g, "_");
@@ -202,7 +202,7 @@ export async function migrateData(
 
       // if entity has preDelivery aspect but not provide PreDelivery column value 
       if (
-        withPrelivery &&
+        withPreDelivery &&
         !headers.includes(TABLE_COLUMN_PRE_DELIVERY)
       ) {
         headers.push(TABLE_COLUMN_PRE_DELIVERY);
@@ -246,7 +246,7 @@ export async function migrateData(
           "columns", transformColumnsIndex,
           "in entity", entityName.green, "need to be transformed"
         );
-        transform(rows, transformColumnsIndex); // TODO: cache transoformed data for each csv file.
+        transform(rows, transformColumnsIndex); // TODO: cache transformed data for each csv file.
       }
 
       // >> database operation

@@ -91,12 +91,12 @@ function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
     .filter(ele => ele?.virtual !== true && !["cds.Association", "cds.Composition"].includes(ele.type))
     .map(ele => buildColumn(ele)).reduce((pre, cur) => { pre[cur.name] = cur; return pre; }, {});
 
-  const uniqueConfig: { [constriantName: string]: Array<{ "=": string }> } = groupByKeyPrefix(entityDef, ANNOTATION_CDS_ASSERT_UNIQUE);
+  const uniqueConfig: { [constraintName: string]: Array<{ "=": string }> } = groupByKeyPrefix(entityDef, ANNOTATION_CDS_ASSERT_UNIQUE);
   if (Object.keys(uniqueConfig).length > 0) {
     schema.uniques = schema.uniques ?? [];
-    for (const [constriantName, columns] of Object.entries(uniqueConfig)) {
+    for (const [constraintName, columns] of Object.entries(uniqueConfig)) {
       schema.uniques.push({
-        name: constriantName,
+        name: constraintName,
         columns: columns.map(c => c["="]),
       });
     }
