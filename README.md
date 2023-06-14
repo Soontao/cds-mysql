@@ -17,7 +17,7 @@
 firstly, install npm packages
 
 ```bash
-npm i cds-mysql mysql2@2
+npm i cds-mysql mysql2
 ```
 
 setup the `mysql` database driver for cds -> edit the `package.json` > `cds` node (or `.cdsrc.json`)
