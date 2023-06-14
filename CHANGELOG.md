@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.8.1](https://github.com/Soontao/cds-mysql/compare/v6.8.0...v6.8.1) (2023-06-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency glob to v10.2.5 ([df5bbbd](https://github.com/Soontao/cds-mysql/commit/df5bbbd241e0bb058ab72ac09d5709cad1c8aae5))
+* **deps:** update dependency glob to v10.2.6 ([ec22ad5](https://github.com/Soontao/cds-mysql/commit/ec22ad5947027c2384f91a3bd59f7b262e47c5e7))
+* **deps:** update dependency glob to v10.2.7 ([a4951ff](https://github.com/Soontao/cds-mysql/commit/a4951ff1e2a1bca75df2b8b204ac3b624a71f30b))
+* typo ([40cd0ad](https://github.com/Soontao/cds-mysql/commit/40cd0adca03314dcc319a7f1b8fa68334b17432b))
+
 ## [6.8.0](https://github.com/Soontao/cds-mysql/compare/v6.7.0...v6.8.0) (2023-05-16)
 
 
