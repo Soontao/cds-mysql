@@ -2,7 +2,7 @@
 
 exports[`SQL Factory Test Suite should support apply function to query: default 1`] = `
 {
-  "sql": "SELECT max(SELECT v FROM a) AS "v" FROM DUMMY",
+  "sql": "SELECT max ( SELECT v FROM a ) AS "v" FROM DUMMY",
   "values": [],
 }
 `;
@@ -46,7 +46,7 @@ exports[`SQL Factory Test Suite should support build a simple SELECT query: defa
 
 exports[`SQL Factory Test Suite should support build ref with function: default 1`] = `
 {
-  "sql": "SELECT count(?) AS "$count" FROM v WHERE v.d = CONCAT(v.a, v.b)",
+  "sql": "SELECT count ( ? ) AS "$count" FROM v WHERE v.d = CONCAT( v.a, v.b )",
   "values": [
     1,
   ],
@@ -62,14 +62,14 @@ exports[`SQL Factory Test Suite should support build sql with 2 parameter 1`] = 
 
 exports[`SQL Factory Test Suite should support count distinct: default 1`] = `
 {
-  "sql": "SELECT count(DISTINCT v) FROM v",
+  "sql": "SELECT count ( DISTINCT   v ) FROM v",
   "values": [],
 }
 `;
 
 exports[`SQL Factory Test Suite should support count distinct: default 2`] = `
 {
-  "sql": "SELECT count(DISTINCT v.a) FROM v",
+  "sql": "SELECT count ( DISTINCT   v.a ) FROM v",
   "values": [],
 }
 `;
@@ -92,7 +92,7 @@ exports[`SQL Factory Test Suite should support delete: delete where 1`] = `
 
 exports[`SQL Factory Test Suite should support delete: delete where func 1`] = `
 {
-  "sql": "DELETE FROM a WHERE CONCAT(a.a, a.c) = ?",
+  "sql": "DELETE FROM a WHERE CONCAT( a.a, a.c ) = ?",
   "values": [
     "long string",
   ],
@@ -238,7 +238,7 @@ exports[`SQL Factory Test Suite should support insert with select query: with co
 
 exports[`SQL Factory Test Suite should support query with aggregation: default 1`] = `
 {
-  "sql": "SELECT count(?) AS "total" FROM t1",
+  "sql": "SELECT count ( ? ) AS "total" FROM t1",
   "values": [
     1,
   ],
@@ -274,7 +274,7 @@ exports[`SQL Factory Test Suite should support select for update: share lock 1`]
 
 exports[`SQL Factory Test Suite should support select sub query with alias: default 1`] = `
 {
-  "sql": "SELECT count(?) AS "cc" FROM (SELECT * FROM foo LIMIT 1000 OFFSET ?) AS t_1 LIMIT 1000 OFFSET ?",
+  "sql": "SELECT count ( ? ) AS "cc" FROM (SELECT * FROM foo LIMIT 1000 OFFSET ?) AS t_1 LIMIT 1000 OFFSET ?",
   "values": [
     1,
     0,
@@ -285,7 +285,7 @@ exports[`SQL Factory Test Suite should support select sub query with alias: defa
 
 exports[`SQL Factory Test Suite should support select sub query with alias: with alias 1`] = `
 {
-  "sql": "SELECT count(?) AS "cc" FROM (SELECT * FROM foo not_important_t_1 LIMIT 1000 OFFSET ?) AS not_important_t_1 LIMIT 1000 OFFSET ?",
+  "sql": "SELECT count ( ? ) AS "cc" FROM (SELECT * FROM foo not_important_t_1 LIMIT 1000 OFFSET ?) AS not_important_t_1 LIMIT 1000 OFFSET ?",
   "values": [
     1,
     0,
@@ -317,7 +317,7 @@ exports[`SQL Factory Test Suite should support select with complex where: defaul
 
 exports[`SQL Factory Test Suite should support select with groupBy: default 1`] = `
 {
-  "sql": "SELECT count(?) AS "total", c1, c2 FROM foo GROUP BY c1, c2",
+  "sql": "SELECT count ( ? ) AS "total", c1, c2 FROM foo GROUP BY c1, c2",
   "values": [
     1,
   ],

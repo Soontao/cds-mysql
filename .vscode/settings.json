@@ -41,7 +41,6 @@
     "SMALLDECIMAL",
     "SMALLINT",
     "Theo",
-    "TIDB",
     "TINYINT",
     "topsort",
     "typeorm",
