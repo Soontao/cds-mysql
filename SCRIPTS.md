@@ -8,6 +8,13 @@ connect to k8s mysql service
 kubectl port-forward service/ccds-test-mysql 33306:3306
 ```
 
+## docker
+
+```bash
+docker run --name mariadbtest -e MYSQL_ROOT_PASSWORD=mypass -p 33306:3306 -d docker.io/library/mariadb:10.8
+docker exec -i mariadbtest mysql -uroot -pmypass -e "CREATE DATABASE IF NOT EXISTS 'cds_admin';CREATE USER IF NOT EXISTS 'cds_admin'@'%' IDENTIFIED BY 'cds_admin';GRANT ALL PRIVILEGES ON *.* TO 'cds_admin'@'%' WITH GRANT OPTION;"
+```
+
 ## Env File
 
 ```env
