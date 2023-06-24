@@ -20,16 +20,16 @@ describe("Tenant Test Suite", () => {
 
   it("should support multi-tenancy", async () => {
     let response = await client.post(
-      "/bank/Peoples",
+      "/odata/v4/bank/Peoples",
       { Name: "Theo in Defualt Tenant" },
       {
         auth: { username: "alice", password: "admin" }
       }
     );
     expect(response.status).toBe(201);
-    response = await client.get("/bank/Peoples/$count");
+    response = await client.get("/odata/v4/bank/Peoples/$count");
     expect(response.data).toBe(1);
-    response = await client.get("/bank/Peoples", { auth: t2User });
+    response = await client.get("/odata/v4/bank/Peoples", { auth: t2User });
     expect(response.data.value.length).toBe(0);
   });
 
@@ -66,7 +66,7 @@ describe("Tenant Test Suite", () => {
   });
 
   it("should support add extension fields", async () => {
-    const { data: m1 } = await client.get("/bank/$metadata", { auth: t2User });
+    const { data: m1 } = await client.get("/odata/v4/bank/$metadata", { auth: t2User });
     expect(m1).not.toMatch(/zz_ExtValue/);
     expect(m1).not.toMatch(/zz_ChineseName/);
 
@@ -81,7 +81,7 @@ describe("Tenant Test Suite", () => {
 
     await sleep(10000); // wait cache expired
 
-    const { status, data } = await client.get("/bank/$metadata", { auth: t2User });
+    const { status, data } = await client.get("/odata/v4/bank/$metadata", { auth: t2User });
     expect(status).toMatchInlineSnapshot(`200`);
     expect(data).toMatch(/zz_ExtValue/);
     expect(data).toMatch(/zz_ChineseName/);

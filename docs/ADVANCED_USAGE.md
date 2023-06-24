@@ -47,6 +47,7 @@ must use proper version of `cds-mysql` with `@sap/cds` sdk
 | 6.6.x            |                       | 6.6.x             |
 | 6.7.x            | 1.7.x                 | 6.7.x             |
 | 6.8.x            | 1.8.x                 | 6.8.x             |
+| 7.0.x            | 1.9.x                 | 7.0.x             |
 
 ### Configurations Overview
 
@@ -557,7 +558,6 @@ if the `multi-tenancy` or `mtxs` is enabled, the user need the permission to `CR
 - upload attachment maybe will meet `max_allowed_packet` issue, [it can be configured on server side](https://dev.mysql.com/doc/refman/8.0/en/packet-too-large.html).
 - **MySQL** `5.6` does not support key length exceed `767` bytes
 - **MySQL** does not support [entities with parameters](https://cap.cloud.sap/docs/cds/cdl?q=parameter#exposed-entities)
-- **TiDB** does not support `DROP PRIMARY KEY` for [clustered index](https://docs.pingcap.com/tidb/dev/clustered-indexes), so users cannot `modify the primary keys` when `clustered index is enabled`
 
 ### `cds-mysql` Implementation Restrictions
 

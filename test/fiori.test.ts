@@ -79,7 +79,7 @@ describe("fiori draft Test Suite", () => {
     expect(draftItemResponse.status).toBe(200);
 
     draftItemResponse = await client.post(`/fiori/Forms(ID=${ID},IsActiveEntity=false)/draftActivate`);
-    expect(draftItemResponse.status).toBe(201);
+    expect(draftItemResponse.status).toBe(200);
 
 
   });

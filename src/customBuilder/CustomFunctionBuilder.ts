@@ -28,18 +28,7 @@ export class CustomFunctionBuilder extends FunctionBuilder {
     this._quoteElement = enhancedQuotingStyles.plain;
   }
 
-
-  public build() {
-    this._outputObj = { sql: [], values: [] };
-    this._handleFunction();
-    // SELECT count ( 1 ) AS "total" FROM People ALIAS_1:
-    // ERROR: FUNCTION cds_admin.count does not exist in: 
-    // TiDB will throw error: SELECT count ( 1 );
-    this._outputObj.sql = this._outputObj.sql.join(""); // overwrite standard ' ', to adapt the TiDB
-    return this._outputObj;
-  }
-
-  private _handleFunction() {
+  _handleFunction() {
     const functionName = this._functionName();
     const args = this._functionArgs();
 

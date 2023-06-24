@@ -22,7 +22,7 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
   });
 
   it("should get error when create duplicated record", async () => {
-    const { status, data } = await client.post("/app/Peoples", {
+    const { status, data } = await client.post("/odata/v4/app/Peoples", {
       ID: 1, Name: "1"
     });
     expect({ status }).toMatchSnapshot();
@@ -30,25 +30,25 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
   });
 
   it("should support automatically migrate csv data", async () => {
-    const response = await client.get("/app/$metadata");
+    const response = await client.get("/odata/v4/app/$metadata");
     expect(response.status).toBe(200);
     expect(response.data).toMatch(/Peoples/);
-    const p1r = await client.get("/app/Peoples(1)");
+    const p1r = await client.get("/odata/v4/app/Peoples(1)");
     expect(p1r.status).toBe(200);
     expect(p1r.data.Name).toBe("Theo 1");
-    const { data } = await client.get("/app/Peoples");
+    const { data } = await client.get("/odata/v4/app/Peoples");
     expect(data).toMatchSnapshot();
 
   });
 
   it("should be empty when default value input", async () => {
-    const { data, status } = await client.get("/app/Areas");
+    const { data, status } = await client.get("/odata/v4/app/Areas");
     expect(status).toBe(200);
     expect(data.value).toHaveLength(0);
   });
 
   it("should match the first record by axios client", async () => {
-    const t1r = await client.get("/app/TypeEntity(1)");
+    const t1r = await client.get("/odata/v4/app/TypeEntity(1)");
     expect(t1r.data).toMatchSnapshot();
   });
 
@@ -58,12 +58,12 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
   });
 
   it("should match the second record by axios client", async () => {
-    const { data } = await client.get("/app/TypeEntity(2)");
+    const { data } = await client.get("/odata/v4/app/TypeEntity(2)");
     expect(data).toMatchSnapshot();
   });
 
   it("should support ISO format date string", async () => {
-    const { data } = await client.get("/app/TypeEntity(3)");
+    const { data } = await client.get("/odata/v4/app/TypeEntity(3)");
     expect(data).toMatchSnapshot();
   });
 
@@ -74,29 +74,29 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
   });
 
   it("should support search", async () => {
-    const res1 = await client.get("/app/Houses?$search=Chengdu");
+    const res1 = await client.get("/odata/v4/app/Houses?$search=Chengdu");
     expect(res1.status).toBe(200);
     expect(res1.data).toMatchSnapshot();
 
-    const res2 = await client.get("/app/Houses?$search=2357853");
+    const res2 = await client.get("/odata/v4/app/Houses?$search=2357853");
     expect(res2.data).toMatchSnapshot();
 
   });
 
   it("should support filter by datetime", async () => {
-    const res = await client.get("/app/TypeEntity?$filter=Sign eq 2022-06-13T12:35:10Z");
+    const res = await client.get("/odata/v4/app/TypeEntity?$filter=Sign eq 2022-06-13T12:35:10Z");
     expect(res.status).toBe(200);
     expect(res.data?.value?.[0]?.ID).toBe(3);
   });
 
   it("should support filter by datetimeoffset", async () => {
-    const res = await client.get("/app/TypeEntity?$filter=SignTmp eq 2022-06-12T12:35:10.000Z");
+    const res = await client.get("/odata/v4/app/TypeEntity?$filter=SignTmp eq 2022-06-12T12:35:10.000Z");
     expect(res.status).toBe(200);
     expect(res.data?.value?.[0]?.ID).toBe(3);
   });
 
   it("should support filter by datetimeoffset with timezone", async () => {
-    const res = await client.get("/app/TypeEntity?$filter=SignTmp eq 2022-06-12T20:35:10.000+08:00");
+    const res = await client.get("/odata/v4/app/TypeEntity?$filter=SignTmp eq 2022-06-12T20:35:10.000+08:00");
     expect(res.status).toBe(200);
     expect(res.data?.value?.[0]?.ID).toBe(3);
   });
@@ -110,7 +110,7 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
 
   for (const aggregation of ["sum", "min", "max", "average", "countdistinct"]) {
     it(`should support simple ${aggregation} aggregation`, async () => {
-      const res1 = await client.get(`/app/Houses?$apply=aggregate(price with ${aggregation} as ${aggregation}_price)`);
+      const res1 = await client.get(`/odata/v4/app/Houses?$apply=aggregate(price with ${aggregation} as ${aggregation}_price)`);
       expect(res1.status).toBe(200);
       expect(res1.data).toMatchSnapshot();
     });
@@ -129,18 +129,18 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
   });
 
   it("should not be empty when migrated to v2", async () => {
-    const { data, status } = await client.get("/app/Areas");
+    const { data, status } = await client.get("/odata/v4/app/Areas");
     expect(status).toBe(200);
     expect(data.value).toMatchSnapshot();
   });
 
   it("should update house after migrated to v2", async () => {
-    const { data, status } = await client.get("/app/Houses(97dc9bc4-f61e-11ec-b939-0242ac120002)");
+    const { data, status } = await client.get("/odata/v4/app/Houses(97dc9bc4-f61e-11ec-b939-0242ac120002)");
     expect({ data, status }).toMatchSnapshot();
   });
 
   it("should support delete pre-deliver data", async () => {
-    const { data, status } = await client.delete(`/app/Houses(97dc9da4-f61e-11ec-b939-0242ac120002)`);
+    const { data, status } = await client.delete(`/odata/v4/app/Houses(97dc9da4-f61e-11ec-b939-0242ac120002)`);
     expect({ data, status }).toMatchSnapshot();
   });
 

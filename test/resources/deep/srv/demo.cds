@@ -1,7 +1,7 @@
 namespace test.resources.deep.srv;
 
 
-@path : '/deep'
+@path: '/deep'
 service DeepService {
 
   define entity Person {

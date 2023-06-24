@@ -10,7 +10,7 @@ describe("Upsert Test Suite", () => {
   afterAll(doAfterAll);
 
   it("should support basic query", async () => {
-    const response = await client.get("/demo/Products");
+    const response = await client.get("/odata/v4/demo/Products");
     expect(response.data.value.length).toBe(0);
   });
 
@@ -18,11 +18,11 @@ describe("Upsert Test Suite", () => {
     const ID = cds.utils.uuid();
     const Name = createRandomName();
     const Name2 = createRandomName();
-    const response1 = await client.post("/demo/Upsert", {
+    const response1 = await client.post("/odata/v4/demo/Upsert", {
       ID, Name
     });
     expect(response1.status).toBe(200);
-    const response2 = await client.post("/demo/Upsert", {
+    const response2 = await client.post("/odata/v4/demo/Upsert", {
       ID, Name: Name2
     });
     expect(response2.status).toBe(200);

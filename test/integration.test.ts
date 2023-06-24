@@ -14,18 +14,18 @@ describe("Integration Test Suite", () => {
   afterAll(doAfterAll);
 
   it("should support basic query", async () => {
-    const response = await client.get("/bank/Peoples");
+    const response = await client.get("/odata/v4/bank/Peoples");
     expect(response.data.value.length).toBe(0);
   });
 
   it("should support consume CAP API with rest call", async () => {
 
-    const { data: created } = await client.post("/bank/Peoples", { Name: "Theo Sun", Age: 21 });
+    const { data: created } = await client.post("/odata/v4/bank/Peoples", { Name: "Theo Sun", Age: 21 });
     expect(created.ID).not.toBeUndefined();
-    const response = await client.get("/bank/Peoples/$count");
+    const response = await client.get("/odata/v4/bank/Peoples/$count");
     expect(response.data).toBe(1);
-    await client.patch(`/bank/Peoples(${created.ID})`, { Age: 25 });
-    const { data: retrieveResult } = await client.get(`/bank/Peoples(${created.ID})`);
+    await client.patch(`/odata/v4/bank/Peoples(${created.ID})`, { Age: 25 });
+    const { data: retrieveResult } = await client.get(`/odata/v4/bank/Peoples(${created.ID})`);
     expect(retrieveResult.Age).toBe(25);
 
   });
@@ -34,7 +34,7 @@ describe("Integration Test Suite", () => {
 
     const name = createRandomName();
     const addr = createRandomName();
-    const { data: created } = await client.post("/bank/Peoples", {
+    const { data: created } = await client.post("/odata/v4/bank/Peoples", {
       Name: name,
       Age: 21,
       Detail: {
@@ -43,7 +43,7 @@ describe("Integration Test Suite", () => {
       }
     });
 
-    const { data: retrievedItem } = await client.get(`/bank/Peoples(${created.ID})?$expand=Detail`);
+    const { data: retrievedItem } = await client.get(`/odata/v4/bank/Peoples(${created.ID})?$expand=Detail`);
 
     expect(retrievedItem.Name).toBe(name);
     expect(retrievedItem.Detail.Address).toBe(addr);
@@ -54,7 +54,7 @@ describe("Integration Test Suite", () => {
 
     const name = createRandomName();
     const addr = createRandomName();
-    const { data: createdPeople } = await client.post("/bank/Peoples", {
+    const { data: createdPeople } = await client.post("/odata/v4/bank/Peoples", {
       Name: name,
       Age: 21,
       RegisterDate: "2000-01-01",
@@ -71,23 +71,23 @@ describe("Integration Test Suite", () => {
 
     // test with odata function
     const { data: retrievedItem } = await client.get(
-      `/bank/Peoples?$filter=year(RegisterDate) eq 2000 and substring(Name,0,4) eq '${name.substring(0, 4)}'`
+      `/odata/v4/bank/Peoples?$filter=year(RegisterDate) eq 2000 and substring(Name,0,4) eq '${name.substring(0, 4)}'`
     );
     expect(retrievedItem?.value?.[0]?.Name).toBe(name);
 
     const concatR1 = await client.get(
-      `/bank/Peoples?$filter=concat(Name,'1') eq '${name}1'`
+      `/odata/v4/bank/Peoples?$filter=concat(Name,'1') eq '${name}1'`
     );
 
     expect(concatR1.status).toBe(200);
     expect(concatR1.data.value).toHaveLength(1);
 
     const { data: retrievedItem2 } = await client.get(
-      `/bank/Peoples?$filter=contains(Name,'${name.substring(0, 4)}')`
+      `/odata/v4/bank/Peoples?$filter=contains(Name,'${name.substring(0, 4)}')`
     );
     expect(retrievedItem2?.value?.[0]?.Name).toBe(name);
 
-    const { data: createdCard } = await client.post("/bank/Cards", {
+    const { data: createdCard } = await client.post("/odata/v4/bank/Cards", {
       People_ID: createdPeople?.ID,
       Number: "Card Number 01",
       ExampleDT1: null,
@@ -97,11 +97,11 @@ describe("Integration Test Suite", () => {
 
     expect(createdCard.Active).toBeFalsy();
 
-    const { data: createdPeopleCards } = await client.get(`/bank/Peoples(${createdPeople.ID})/Cards`);
+    const { data: createdPeopleCards } = await client.get(`/odata/v4/bank/Peoples(${createdPeople.ID})/Cards`);
 
     expect(createdPeopleCards.value).toHaveLength(1);
 
-    const { data: createdCard2 } = await client.post("/bank/Cards", {
+    const { data: createdCard2 } = await client.post("/odata/v4/bank/Cards", {
       People_ID: createdPeople?.ID,
       Number: "Card Number 02",
       ExampleDT1: null,
@@ -110,7 +110,7 @@ describe("Integration Test Suite", () => {
 
     expect(createdCard2.Active).toBeTruthy();
 
-    const { data: { value: queryCards } } = await client.get("/bank/Cards?$filter=Active eq true");
+    const { data: { value: queryCards } } = await client.get("/odata/v4/bank/Cards?$filter=Active eq true");
 
     expect(queryCards).toHaveLength(1);
 
@@ -123,7 +123,7 @@ describe("Integration Test Suite", () => {
     const name = createRandomName();
     const addr = createRandomName();
 
-    const { data: createdPeople } = await client.post("/bank/Peoples", {
+    const { data: createdPeople } = await client.post("/odata/v4/bank/Peoples", {
       Name: name,
       Age: 23,
       RegisterDate: "2000-01-01",
@@ -135,7 +135,7 @@ describe("Integration Test Suite", () => {
 
     expect(createdPeople?.Detail?.ID).not.toBeUndefined();
 
-    const attachmentUri = `/bank/Details(${createdPeople.Detail.ID})/Attachment`;
+    const attachmentUri = `/odata/v4/bank/Details(${createdPeople.Detail.ID})/Attachment`;
 
     // TODO: add validation for max_allowed_packet
     const data = randomBytes(1024 * 1024);
@@ -151,7 +151,7 @@ describe("Integration Test Suite", () => {
   // debug: node_modules/@sap/cds/lib/compile/etc/_localized.js
   it("should support localized data", async () => {
     // TODO: document about the https://cap.cloud.sap/docs/guides/localized-data
-    const PRODUCTS = "/bank/Products";
+    const PRODUCTS = "/odata/v4/bank/Products";
     const apple_en = "Apple";
     const apple_fr = "Pomme 🍎";
 
@@ -171,12 +171,10 @@ describe("Integration Test Suite", () => {
       }
     });
 
-    const { data: data2 } = await client.request({ url: `${PRODUCTS}(${data.ID})`, method: "get" });
+    const { data: data2 } = await client.get(`${PRODUCTS}(${data.ID})`);
     expect(data2.Name).toBe(apple_en);
 
-    const { data: data3 } = await client.request({
-      url: `${PRODUCTS}(${data.ID})`,
-      method: "get",
+    const { data: data3 } = await client.get(`${PRODUCTS}(${data.ID})`, {
       headers: {
         "accept-language": "fr"
       }
@@ -191,9 +189,9 @@ describe("Integration Test Suite", () => {
   });
 
   it("should support create animal with incremental ID", async () => {
-    let res = await client.get("/bank/DummyAnimals", { validateStatus: () => true });
+    let res = await client.get("/odata/v4/bank/DummyAnimals", { validateStatus: () => true });
     expect(res.status).toBe(200);
-    res = await client.post("/bank/DummyAnimals",
+    res = await client.post("/odata/v4/bank/DummyAnimals",
       { Name: "horse 1" },
       { validateStatus: () => true }
     );
@@ -212,7 +210,7 @@ describe("Integration Test Suite", () => {
 
   it("should support create temporal data", async () => {
 
-    await client.post("/bank/ExchangeRates", {
+    await client.post("/odata/v4/bank/ExchangeRates", {
       Source_code: "USD",
       Target_code: "CNY",
       Rate: 123.22,
@@ -221,7 +219,7 @@ describe("Integration Test Suite", () => {
     });
 
 
-    await client.post("/bank/ExchangeRates", {
+    await client.post("/odata/v4/bank/ExchangeRates", {
       Source_code: "USD",
       Target_code: "CNY",
       Rate: 123.21,
@@ -229,7 +227,7 @@ describe("Integration Test Suite", () => {
       validTo: DateTime.utc().startOf("day").plus({ days: 2 }).toISO()
     });
 
-    const { data } = await client.get("/bank/ExchangeRates");
+    const { data } = await client.get("/odata/v4/bank/ExchangeRates");
     expect(data).toMatchObject({
       value: [
         { "Rate": 123.21 }
@@ -240,7 +238,7 @@ describe("Integration Test Suite", () => {
 
   it("should support wide datetime zero", async () => {
 
-    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/bank/Cards", {
+    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/odata/v4/bank/Cards", {
       ExampleDT1: "0000-01-01T00:00:00Z",
       ExampleDT2: "0000-01-01T00:00:00Z",
       ExampleTS1: "0000-01-01T00:00:00Z",
@@ -252,7 +250,7 @@ describe("Integration Test Suite", () => {
   });
   it("should support wide datetime max", async () => {
 
-    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/bank/Cards", {
+    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/odata/v4/bank/Cards", {
       ExampleDT1: "9999-12-31T23:59:59Z",
       ExampleDT2: "9999-12-31T23:59:59Z",
       ExampleTS1: "9999-12-31T23:59:59.999Z",
@@ -266,7 +264,7 @@ describe("Integration Test Suite", () => {
 
   it("should support datetime with fraction seconds", async () => {
 
-    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/bank/Cards", {
+    const { data: { ExampleDT1, ExampleDT2, ExampleTS1, ExampleTS2 } } = await client.post("/odata/v4/bank/Cards", {
       ExampleDT1: "1234-11-31T12:59:59Z",
       ExampleDT2: "2345-05-31T23:13:59Z",
       ExampleTS1: "3455-03-31T23:13:43.032Z",
@@ -279,7 +277,7 @@ describe("Integration Test Suite", () => {
 
   it("should support select forUpdate", async () => {
 
-    const { data: createdCard } = await client.post("/bank/Cards", {
+    const { data: createdCard } = await client.post("/odata/v4/bank/Cards", {
       Number: "Card Number 03",
       ExampleDT1: null,
       Credit: 0,
@@ -289,12 +287,12 @@ describe("Integration Test Suite", () => {
     expect(createdCard.ID).not.toBeUndefined();
 
     await Promise.all(
-      Array(10).fill(0).map(() => client.post("/bank/AddOneCreditToCard", {
+      Array(10).fill(0).map(() => client.post("/odata/v4/bank/AddOneCreditToCard", {
         ID: createdCard.ID
       }))
     );
 
-    const s = await client.get(`/bank/Cards(${createdCard.ID})`);
+    const s = await client.get(`/odata/v4/bank/Cards(${createdCard.ID})`);
     expect(s.data.Credit).toBe(10);
   });
 

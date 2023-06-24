@@ -2,7 +2,7 @@
 
 exports[`SQL Factory Test Suite should support apply function to query: default 1`] = `
 {
-  "sql": "SELECT max(SELECT v FROM a) AS "v" FROM DUMMY",
+  "sql": "SELECT max ( SELECT v FROM a ) AS "v" FROM DUMMY",
   "values": [],
 }
 `;
@@ -27,9 +27,10 @@ exports[`SQL Factory Test Suite should support build a SELECT FOR UPDATE query: 
 
 exports[`SQL Factory Test Suite should support build a complex SELECT projection: default 1`] = `
 {
-  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People WHERE Name = ? AND Age <= 15 AND RegisterDate BETWEEN ? AND ?",
+  "sql": "SELECT Name, Age, RegisterDate FROM test_int_People WHERE Name = ? AND Age <= ? AND RegisterDate BETWEEN ? AND ?",
   "values": [
     "Theo",
+    15,
     "2022-11-17",
     "2022-11-17",
   ],
@@ -45,8 +46,10 @@ exports[`SQL Factory Test Suite should support build a simple SELECT query: defa
 
 exports[`SQL Factory Test Suite should support build ref with function: default 1`] = `
 {
-  "sql": "SELECT count(1) AS "$count" FROM v WHERE v.d = CONCAT(v.a, v.b)",
-  "values": [],
+  "sql": "SELECT count ( ? ) AS "$count" FROM v WHERE v.d = CONCAT( v.a, v.b )",
+  "values": [
+    1,
+  ],
 }
 `;
 
@@ -59,14 +62,14 @@ exports[`SQL Factory Test Suite should support build sql with 2 parameter 1`] = 
 
 exports[`SQL Factory Test Suite should support count distinct: default 1`] = `
 {
-  "sql": "SELECT count(DISTINCT v) FROM v",
+  "sql": "SELECT count ( DISTINCT   v ) FROM v",
   "values": [],
 }
 `;
 
 exports[`SQL Factory Test Suite should support count distinct: default 2`] = `
 {
-  "sql": "SELECT count(DISTINCT v.a) FROM v",
+  "sql": "SELECT count ( DISTINCT   v.a ) FROM v",
   "values": [],
 }
 `;
@@ -80,14 +83,16 @@ exports[`SQL Factory Test Suite should support delete: delete all 1`] = `
 
 exports[`SQL Factory Test Suite should support delete: delete where 1`] = `
 {
-  "sql": "DELETE FROM a WHERE v = 1",
-  "values": [],
+  "sql": "DELETE FROM a WHERE v = ?",
+  "values": [
+    1,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support delete: delete where func 1`] = `
 {
-  "sql": "DELETE FROM a WHERE CONCAT(a.a, a.c) = ?",
+  "sql": "DELETE FROM a WHERE CONCAT( a.a, a.c ) = ?",
   "values": [
     "long string",
   ],
@@ -215,57 +220,77 @@ exports[`SQL Factory Test Suite should support insert with select query: default
 
 exports[`SQL Factory Test Suite should support insert with select query: with columns 1`] = `
 {
-  "sql": "INSERT INTO b ( c1, c2 ) SELECT c1, c2 FROM a WHERE b = 1",
-  "values": [],
+  "sql": "INSERT INTO b ( c1, c2 ) SELECT c1, c2 FROM a WHERE b = ?",
+  "values": [
+    1,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support insert with select query: with condition 1`] = `
 {
-  "sql": "INSERT INTO b SELECT * FROM a WHERE b = 1",
-  "values": [],
+  "sql": "INSERT INTO b SELECT * FROM a WHERE b = ?",
+  "values": [
+    1,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support query with aggregation: default 1`] = `
 {
-  "sql": "SELECT count(1) AS "total" FROM t1",
-  "values": [],
+  "sql": "SELECT count ( ? ) AS "total" FROM t1",
+  "values": [
+    1,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select for update: for update lock 1`] = `
 {
-  "sql": "SELECT * FROM A WHERE b = 1 FOR UPDATE",
-  "values": [],
+  "sql": "SELECT * FROM A WHERE b = ? FOR UPDATE",
+  "values": [
+    1,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select for update: for update lock not supported 1`] = `
 {
-  "sql": "SELECT * FROM A WHERE c = 2 FOR UPDATE",
-  "values": [],
+  "sql": "SELECT * FROM A WHERE c = ? FOR UPDATE",
+  "values": [
+    2,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select for update: share lock 1`] = `
 {
-  "sql": "SELECT * FROM A WHERE a = 1 LOCK IN SHARE MODE",
-  "values": [],
+  "sql": "SELECT * FROM A WHERE a = ? LOCK IN SHARE MODE",
+  "values": [
+    1,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select sub query with alias: default 1`] = `
 {
-  "sql": "SELECT count(1) AS "cc" FROM (SELECT * FROM foo LIMIT 1000 OFFSET 0) AS t_1 LIMIT 1000 OFFSET 0",
-  "values": [],
+  "sql": "SELECT count ( ? ) AS "cc" FROM (SELECT * FROM foo LIMIT 1000 OFFSET ?) AS t_1 LIMIT 1000 OFFSET ?",
+  "values": [
+    1,
+    0,
+    0,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select sub query with alias: with alias 1`] = `
 {
-  "sql": "SELECT count(1) AS "cc" FROM (SELECT * FROM foo not_important_t_1 LIMIT 1000 OFFSET 0) AS not_important_t_1 LIMIT 1000 OFFSET 0",
-  "values": [],
+  "sql": "SELECT count ( ? ) AS "cc" FROM (SELECT * FROM foo not_important_t_1 LIMIT 1000 OFFSET ?) AS not_important_t_1 LIMIT 1000 OFFSET ?",
+  "values": [
+    1,
+    0,
+    0,
+  ],
 }
 `;
 
@@ -278,19 +303,24 @@ exports[`SQL Factory Test Suite should support select where exists: default 1`] 
 
 exports[`SQL Factory Test Suite should support select with complex where: default 1`] = `
 {
-  "sql": "SELECT * FROM Foo WHERE name LIKE ? AND ( kind IN ( ? , ? ) OR ratio BETWEEN 0 AND 10 OR stock >= 25 )",
+  "sql": "SELECT * FROM Foo WHERE name LIKE ? AND ( kind IN ( ? , ? ) OR ratio BETWEEN ? AND ? OR stock >= ? )",
   "values": [
     "%foo%",
     "k1",
     "k2",
+    0,
+    10,
+    25,
   ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select with groupBy: default 1`] = `
 {
-  "sql": "SELECT count(1) AS "total", c1, c2 FROM foo GROUP BY c1, c2",
-  "values": [],
+  "sql": "SELECT count ( ? ) AS "total", c1, c2 FROM foo GROUP BY c1, c2",
+  "values": [
+    1,
+  ],
 }
 `;
 
@@ -303,22 +333,28 @@ exports[`SQL Factory Test Suite should support select with join: default 1`] = `
 
 exports[`SQL Factory Test Suite should support select with order by and limit: default 1`] = `
 {
-  "sql": "SELECT * FROM foo LIMIT 10 OFFSET 5",
-  "values": [],
+  "sql": "SELECT * FROM foo LIMIT 10 OFFSET ?",
+  "values": [
+    5,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select with order by and limit: default 2`] = `
 {
-  "sql": "SELECT * FROM boo ORDER BY c1 ASC LIMIT 5 OFFSET 3",
-  "values": [],
+  "sql": "SELECT * FROM boo ORDER BY c1 ASC LIMIT 5 OFFSET ?",
+  "values": [
+    3,
+  ],
 }
 `;
 
 exports[`SQL Factory Test Suite should support select with order by and limit: default 3`] = `
 {
-  "sql": "SELECT * FROM boo ORDER BY c2 DESC, c1 ASC LIMIT 5 OFFSET 3",
-  "values": [],
+  "sql": "SELECT * FROM boo ORDER BY c2 DESC, c1 ASC LIMIT 5 OFFSET ?",
+  "values": [
+    3,
+  ],
 }
 `;
 

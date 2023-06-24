@@ -10,17 +10,4 @@ export class CustomExpressionBuilder extends ExpressionBuilder {
     // overwrite quote function
     this._quoteElement = enhancedQuotingStyles.plain;
   }
-
-  build() {
-    // REVISIT: try to remove this later, maybe has already been fixed by cds runtime
-    // fix upper case DRAFTS table issue
-    if (
-      this._obj?.xpr instanceof Array &&
-      this._obj?.xpr?.[2] === "drafts.DraftAdministrativeData_DraftUUID"
-    ) {
-      this._obj.xpr[2] = { ref: ["drafts", "DraftAdministrativeData_DraftUUID"] };
-    }
-    return super.build();
-  }
-
 };

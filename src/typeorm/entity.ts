@@ -76,9 +76,10 @@ class CDSListener implements MySQLParserListener {
 
 function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
 
-  const name = entityDef.drafts === undefined ?
-    entityDef.name.replace(/\./g, "_") :
-    entityDef.drafts.name.replace(/\./g, "_");
+  // drafts
+  entityDef = entityDef.drafts ?? entityDef;
+
+  const name = entityDef.name.replace(/\./g, "_")
 
   const schema: Partial<EntitySchemaOptionsWithDeps> = {
     name,
