@@ -1,5 +1,6 @@
 using {test.resources.fiori.db} from '../db/db.cds';
 
+@path: '/fiori'
 service FioriService {
 
   @odata.draft.enabled
