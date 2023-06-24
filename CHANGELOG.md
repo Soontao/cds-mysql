@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/Soontao/cds-mysql/compare/v6.8.1...v7.0.0) (2023-06-24)
+
+
+### Features
+
+* cds 7 support ([#351](https://github.com/Soontao/cds-mysql/issues/351)) ([6eb6e08](https://github.com/Soontao/cds-mysql/commit/6eb6e08c380029f018243e84863485c7e838d417))
+
+
+### Bug Fixes
+
+* **deps:** update dependency glob to v10.3.0 ([df7bcf6](https://github.com/Soontao/cds-mysql/commit/df7bcf65101e817c91fb32f6f97ecce576cb5c98))
+* **deps:** update dependency mysql2 to v3.4.0 ([bfca73e](https://github.com/Soontao/cds-mysql/commit/bfca73e6211f3dc01f8f9c1e8af66c4dfe8c8a7b))
+* **deps:** update dependency typeorm to v0.3.17 ([53d34b9](https://github.com/Soontao/cds-mysql/commit/53d34b97ae2dc9bbb440ac14dd6ce2b3f791bca2))
+
 ### [6.8.1](https://github.com/Soontao/cds-mysql/compare/v6.8.0...v6.8.1) (2023-06-14)
 
 
