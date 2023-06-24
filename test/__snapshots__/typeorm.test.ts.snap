@@ -5264,18 +5264,8 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_For
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.HasActiveEntity element definition 1`] = `
 {
-  "default": false,
   "name": "HasActiveEntity",
-  "nullable": false,
-  "type": "boolean",
-}
-`;
-
-exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.HasDraftEntity element definition 1`] = `
-{
-  "default": false,
-  "name": "HasDraftEntity",
-  "nullable": false,
+  "nullable": true,
   "type": "boolean",
 }
 `;
@@ -5287,16 +5277,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_For
   "nullable": false,
   "primary": true,
   "type": "varchar",
-}
-`;
-
-exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Forms_drafts.IsActiveEntity element definition 1`] = `
-{
-  "default": true,
-  "name": "IsActiveEntity",
-  "nullable": false,
-  "primary": true,
-  "type": "boolean",
 }
 `;
 
@@ -5363,18 +5343,8 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
 
 exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.HasActiveEntity element definition 1`] = `
 {
-  "default": false,
   "name": "HasActiveEntity",
-  "nullable": false,
-  "type": "boolean",
-}
-`;
-
-exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.HasDraftEntity element definition 1`] = `
-{
-  "default": false,
-  "name": "HasDraftEntity",
-  "nullable": false,
+  "nullable": true,
   "type": "boolean",
 }
 `;
@@ -5386,16 +5356,6 @@ exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Per
   "nullable": false,
   "primary": true,
   "type": "varchar",
-}
-`;
-
-exports[`TypeORM Test Suite should support convert cuid aspect: FioriService_Persons_drafts.IsActiveEntity element definition 1`] = `
-{
-  "default": true,
-  "name": "IsActiveEntity",
-  "nullable": false,
-  "primary": true,
-  "type": "boolean",
 }
 `;
 
