@@ -43,9 +43,7 @@ export function getMySQLCredential(tenant: string): import("mysql2").ConnectionO
   } as any;
 }
 
-export async function getDataSourceOption(
-  tenant: string = TENANT_DEFAULT
-): Promise<DataSourceOptions> {
+export async function getDataSourceOption(tenant = TENANT_DEFAULT): Promise<DataSourceOptions> {
   const credentials = getMySQLCredential(tenant);
   return Object.assign(
     {},

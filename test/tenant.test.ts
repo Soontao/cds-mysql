@@ -3,7 +3,6 @@ import { createSh, doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 import path from "node:path";
 import { sleep } from "@newdash/newdash";
-import { getColumns, getTables, getTenantDatabaseName } from "../src/admin-tool";
 
 jest.setTimeout(60 * 1000); // 1 minutes
 
@@ -16,6 +15,9 @@ describe("Tenant Test Suite", () => {
   const t2User = { username: "theo-on-tenant-2", password: "any" };
 
   const cds = cwdRequireCDS();
+
+  const { getColumns, getTables, getTenantDatabaseName } = require("../src/admin-tool");
+
   afterAll(doAfterAll);
 
   it("should support multi-tenancy", async () => {

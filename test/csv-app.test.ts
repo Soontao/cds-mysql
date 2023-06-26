@@ -2,7 +2,6 @@
 import { doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
 import path from "path";
-import { deployCSV } from "../src/admin-tool";
 
 
 describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
@@ -10,6 +9,9 @@ describe(`CSV App Test Suite - Feature (big js enabled)`, () => {
   const client = setupTest(__dirname, "./resources/csv-app");
 
   const cds = cwdRequireCDS();
+
+  const { deployCSV } = require("../src/admin-tool");
+
   cds.env.features.bigjs = true;
 
   const { SELECT } = cds.ql;
