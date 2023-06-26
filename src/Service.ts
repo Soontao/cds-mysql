@@ -1,10 +1,9 @@
 /* eslint-disable max-len */
 import { uniq } from "@newdash/newdash/uniq";
 import {
-  CDS,
-  CSN, cwdRequire,
-  cwdRequireCDS, EventContext,
-  EventNames, LinkedModel, Logger, Service
+  CSN,
+  EventContext,
+  LinkedModel, Logger
 } from "cds-internal-tool";
 import "colors";
 import { Pool } from "generic-pool";
@@ -18,23 +17,18 @@ import execute from "./execute";
 import { _disable_deletion_for_pre_delivery } from "./handlers";
 import { create_pool } from "./pool";
 import { ConnectionWithPool, MysqlDatabaseOptions } from "./types";
-import { checkCdsVersion } from "./utils";
-
-
-const BaseService: typeof Service<EventNames, MysqlDatabaseOptions> = cwdRequire("@sap/cds/libx/_runtime/sqlite/Service");
+import { checkCdsVersion, lazy } from "./utils";
 
 /**
  * MySQL Database Adapter for SAP CAP Framework
  * 
  */
-export class MySQLDatabaseService extends BaseService {
+export class MySQLDatabaseService extends lazy.BaseService {
 
   constructor(...args: any[]) {
     super(...args);
 
     checkCdsVersion();
-
-    const cds = this._cds = cwdRequireCDS();
 
     // REVISIT: official db api
     this._execute = execute;
@@ -54,15 +48,14 @@ export class MySQLDatabaseService extends BaseService {
       execute.sql
     );
 
-    this._logger = cds.log("db|mysql");
+    this._logger = lazy.cds.log("db|mysql");
 
     if (this.options?.credentials === undefined) {
-      throw cds.error("mysql credentials not found");
+      throw lazy.cds.error("mysql credentials not found");
     }
 
   }
 
-  private _cds: CDS;
 
 
   declare public options: MysqlDatabaseOptions;
@@ -109,7 +102,7 @@ export class MySQLDatabaseService extends BaseService {
 
     if (tenant?.deploy?.auto !== false) {
 
-      const cds = this._cds;
+      const cds = lazy.cds;
       let tenantsToBeDeployed = tenant?.deploy?.eager ?? [TENANT_DEFAULT];
 
       if (typeof tenantsToBeDeployed === "string") { tenantsToBeDeployed = [tenantsToBeDeployed]; }
@@ -143,7 +136,7 @@ export class MySQLDatabaseService extends BaseService {
   }
 
   private async _initializeTenant(tenant: string = TENANT_DEFAULT) {
-    const { "cds.xt.DeploymentService": ds } = this._cds.services;
+    const { "cds.xt.DeploymentService": ds } = lazy.cds.services;
     if (ds === undefined) {
       await tool.syncTenant(tenant);
       return;
@@ -168,7 +161,7 @@ export class MySQLDatabaseService extends BaseService {
         "tenant", tenant,
         "is not found in database, did you forgot to subscribe that?"
       );
-      throw this._cds.error(`tenant '${tenant}' database is not found, maybe forgot to setup?`);
+      throw lazy.cds.error(`tenant '${tenant}' database is not found, maybe forgot to setup?`);
     }
     if (!this._pools.has(tenant)) {
       this._pools.set(
@@ -252,8 +245,8 @@ export class MySQLDatabaseService extends BaseService {
    * @returns 
    */
   private _implDeploymentService() {
-    this._cds.once("served", () => {
-      const { "cds.xt.DeploymentService": ds } = this._cds.services;
+    lazy.cds.once("served", () => {
+      const { "cds.xt.DeploymentService": ds } = lazy.cds.services;
       if (ds !== undefined) {
         return _impl_deployment_service(ds);
       }

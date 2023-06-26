@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { cwdRequireCDS, groupByKeyPrefix, LinkedEntityDefinition, memorized, mustBeArray } from "cds-internal-tool";
+import { cwdRequire, cwdRequireCDS, EventNames, groupByKeyPrefix, LinkedEntityDefinition, memorized, mustBeArray, Service } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG, MIGRATION_VERSION_PREFIX } from "./constants";
 import { Migration, MysqlDatabaseOptions, Query } from "./types";
 
@@ -28,7 +28,10 @@ export const lazy = {
    */
   get logger() {
     return lazy.cds.log("db|mysql");
-  }
+  },
+  get BaseService(): typeof Service<EventNames, MysqlDatabaseOptions> {
+    return cwdRequire("@sap/cds/libx/_runtime/sqlite/Service");
+  },
 };
 
 /**
