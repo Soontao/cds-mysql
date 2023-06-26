@@ -2,7 +2,7 @@
 
 import { cwdRequireCDS, groupByKeyPrefix, LinkedEntityDefinition, memorized, mustBeArray } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG, MIGRATION_VERSION_PREFIX } from "./constants";
-import { Migration, Query } from "./types";
+import { Migration, MysqlDatabaseOptions, Query } from "./types";
 
 export const lazy = {
   /**
@@ -17,6 +17,15 @@ export const lazy = {
   get env() {
     return lazy.cds.env;
   },
+  /**
+   * database options
+   */
+  get db_options() {
+    return lazy.env.requires.db as MysqlDatabaseOptions;
+  },
+  /**
+   * logger
+   */
   get logger() {
     return lazy.cds.log("db|mysql");
   }

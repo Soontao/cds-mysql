@@ -8,16 +8,12 @@ import { migrate, migrateData } from "./typeorm";
 import { csnToEntity } from "./typeorm/entity";
 import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
-import { MysqlDatabaseOptions } from "./types";
 import fs from "fs/promises";
 import { migration_tool, lazy } from "./utils";
 
-function _db_options() {
-  return lazy.env.requires.db as MysqlDatabaseOptions;
-}
 
 export function getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
-  const options = _db_options();
+  const options = lazy.db_options;
   const tenantDatabaseName = formatTenantDatabaseName(
     options?.credentials,
     options?.tenant?.prefix,
@@ -35,9 +31,15 @@ export function getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
   return tenantDatabaseName;
 }
 
+/**
+ * get mysql credential for tenant
+ * 
+ * @param tenant 
+ * @returns 
+ */
 export function getMySQLCredential(tenant: string): import("mysql2").ConnectionOptions {
   return {
-    ..._db_options().credentials,
+    ...lazy.db_options.credentials,
     dateStrings: true,
     database: getTenantDatabaseName(tenant),
   } as any;
@@ -217,7 +219,7 @@ export async function deploy(model: CSN, tenant: string = TENANT_DEFAULT) {
 
     if (tenant !== TENANT_DEFAULT) { await createDatabase(tenant); }
     const migrateOptions = await getDataSourceOption(tenant);
-    const options = _db_options();
+    const options = lazy.db_options;
     if (
       options?.tenant?.deploy?.transparent === true &&
       getAdminTenantName() !== tenant // t0 need to use old way to deploy

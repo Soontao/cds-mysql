@@ -45,3 +45,13 @@ export const DEFAULT_CSV_IDENTITY_CONCURRENCY = 10;
 export const DEFAULT_MAX_ALLOWED_PACKED_MB = 512;
 
 export const MIGRATION_VERSION_PREFIX = "-- version: ";
+
+export const DEFAULT_POOL_OPTIONS = Object.freeze({
+  min: 1,
+  acquireTimeoutMillis: DEFAULT_CONNECTION_ACQUIRE_TIMEOUT,
+  max: DEFAULT_TENANT_CONNECTION_POOL_SIZE,
+  maxWaitingClients: MAX_QUEUE_SIZE,
+  evictionRunIntervalMillis: CONNECTION_IDLE_CHECK_INTERVAL,
+  idleTimeoutMillis: DEFAULT_CONNECTION_IDLE_TIMEOUT,
+  testOnBorrow: true,
+});
