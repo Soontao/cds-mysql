@@ -4,8 +4,6 @@ import { DEFAULT_MAX_ALLOWED_PACKED_MB, DEFAULT_POOL_OPTIONS, MYSQL_COLLATE } fr
 import { lazy } from "./utils";
 import { ConnectionOptions, createConnection } from "mysql2/promise";
 
-
-
 /**
  * @private
  * @internal
@@ -24,13 +22,13 @@ async function _setup_packet_size(tenantCredential: ConnectionOptions, tenant: s
 
     const conn = await createConnection(tenantCredential);
 
-    this._logger.info("setup global max_allowed_packet", realPacketSize, "for tenant", tenant);
+    lazy.logger.info("setup global max_allowed_packet", realPacketSize, "for tenant", tenant);
 
     try {
       await conn.query(`SET GLOBAL max_allowed_packet=${realPacketSize}`);
     }
     catch (error) {
-      this._logger.warn("set max_allowed_packet failed", error);
+      lazy.logger.warn("set max_allowed_packet failed", error);
     }
     finally {
       await conn.end();
@@ -59,7 +57,7 @@ export async function create_pool(tenant?: string) {
     charset: MYSQL_COLLATE
   };
 
-  this._logger.info(
+  lazy.logger.info(
     "creating connection pool for tenant",
     tenant,
     "with option",
@@ -75,7 +73,7 @@ export async function create_pool(tenant?: string) {
         .query("SELECT 1")
         .then(() => true)
         .catch((err) => {
-          this._logger.error("validate connection failed:", err);
+          lazy.logger.error("validate connection failed:", err);
           return false;
         }),
       destroy: async (conn) => {
