@@ -6,6 +6,7 @@
 import { BuiltInServices, cwdRequireCDS, Request } from "cds-internal-tool";
 import "colors";
 import type { MySQLDatabaseService } from "./Service";
+import * as tool from "./admin-tool";
 
 
 export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.DeploymentService"]) {
@@ -15,7 +16,6 @@ export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.Deplo
   const { DELETE, UPSERT } = cds.ql;
 
   const db = cds.db as any as MySQLDatabaseService;
-  const tool = db.getAdminTool();
 
   ds.on("subscribe", async (req) => {
     const { tenant: t, options, metadata } = req.data;

@@ -10,7 +10,7 @@ import "colors";
 import { createPool, Options as PoolOptions, Pool } from "generic-pool";
 import { Connection, createConnection } from "mysql2/promise";
 import { ConnectionOptions } from "mysql2/typings/mysql";
-import { AdminTool } from "./AdminTool";
+import * as tool from "./admin-tool";
 import {
   CONNECTION_IDLE_CHECK_INTERVAL,
   DEFAULT_CONNECTION_ACQUIRE_TIMEOUT,
@@ -76,12 +76,10 @@ export class MySQLDatabaseService extends BaseService {
       throw cds.error("mysql credentials not found");
     }
 
-    this._tool = new AdminTool(this.options);
   }
 
   private _cds: CDS;
 
-  private _tool: AdminTool;
 
   declare public options: MysqlDatabaseOptions;
 
@@ -163,7 +161,7 @@ export class MySQLDatabaseService extends BaseService {
   private async _initializeTenant(tenant: string = TENANT_DEFAULT) {
     const { "cds.xt.DeploymentService": ds } = this._cds.services;
     if (ds === undefined) {
-      await this._tool.syncTenant(tenant);
+      await tool.syncTenant(tenant);
       return;
     }
     await ds.tx((tx) => tx.subscribe(
@@ -181,7 +179,7 @@ export class MySQLDatabaseService extends BaseService {
    * @param tenant
    */
   private async _getPool(tenant = TENANT_DEFAULT): Promise<Pool<Connection>> {
-    if (!(await this._tool.hasTenantDatabase(tenant))) {
+    if (!(await tool.hasTenantDatabase(tenant))) {
       this._logger.error(
         "tenant", tenant,
         "is not found in database, did you forgot to subscribe that?"
@@ -202,7 +200,7 @@ export class MySQLDatabaseService extends BaseService {
   }
 
   private async _createPoolFor(tenant?: string) {
-    const credential = this._tool.getMySQLCredential(tenant);
+    const credential = tool.getMySQLCredential(tenant);
 
     const poolOptions = {
       ...DEFAULT_POOL_OPTIONS,
@@ -362,7 +360,7 @@ export class MySQLDatabaseService extends BaseService {
    * @returns 
    */
   async deploy(model: CSN, options?: { tenant: string }) {
-    await this._tool.deploy(model, options?.tenant);
+    await tool.deploy(model, options?.tenant);
   }
 
   /**
@@ -371,7 +369,7 @@ export class MySQLDatabaseService extends BaseService {
    * @returns 
    */
   public getAdminTool() {
-    return this._tool;
+    return tool;
   }
 
 }
