@@ -2,7 +2,7 @@
 
 import { cwdRequire, cwdRequireCDS, EventNames, groupByKeyPrefix, LinkedEntityDefinition, memorized, mustBeArray, Service } from "cds-internal-tool";
 import { ANNOTATION_CDS_TYPEORM_CONFIG, MIGRATION_VERSION_PREFIX } from "./constants";
-import { Migration, MysqlDatabaseOptions, Query } from "./types";
+import type { Migration, MysqlDatabaseOptions, Query } from "./types";
 
 export const lazy = {
   /**

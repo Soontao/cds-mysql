@@ -3,14 +3,24 @@ import { CSN, LinkedModel } from "cds-internal-tool";
 import path from "path";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { TENANT_DEFAULT } from "./constants";
-import { formatTenantDatabaseName } from "./tenant";
-import { migrate, migrateData } from "./typeorm";
+import { migrate, migrateData } from "./typeorm/migrate";
 import { csnToEntity } from "./typeorm/entity";
 import { TypeORMLogger } from "./typeorm/logger";
 import { CDSMySQLDataSource } from "./typeorm/mysql";
 import fs from "fs/promises";
 import { migration_tool, lazy } from "./utils";
+import { MySQLCredential } from "./types";
 
+export function formatTenantDatabaseName(
+  credentials: MySQLCredential,
+  tenant_db_prefix = "tenant_db",
+  tenant: string = TENANT_DEFAULT
+) {
+  if (tenant === TENANT_DEFAULT) {
+    return credentials?.database ?? credentials?.user;
+  }
+  return [tenant_db_prefix, "_", tenant].join("").replace(/[\W]+/g, "_");;
+}
 
 export function getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
   const options = lazy.db_options;

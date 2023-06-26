@@ -6,7 +6,6 @@ import path from "path";
 import { spawn, SpawnOptionsWithoutStdio } from "child_process";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { MYSQL_CHARSET } from "../src/constants";
-import { formatTenantDatabaseName } from "../src/tenant";
 
 require("dotenv").config();
 
@@ -94,6 +93,7 @@ export const cleanDB = async () => {
   try {
     await ds.initialize();
     for (const tenant of [undefined, "t0", "t1", "t2", "t192", "e5f878d5-7985-407b-a1cb-87a8716f1904"]) {
+      const { formatTenantDatabaseName } = require("../src/admin-tool");
       const database = formatTenantDatabaseName(cds.env.requires.db.credentials, undefined, tenant);
       const results = await ds.query(`SHOW DATABASES LIKE '${database}'`);
       if (results.length === 0) {

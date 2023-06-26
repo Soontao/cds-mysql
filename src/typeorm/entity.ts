@@ -1,15 +1,13 @@
 /* eslint-disable max-len */
 import { alg, Graph } from "@newdash/graphlib";
-import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix, Logger } from "cds-internal-tool";
+import { CSN, cwdRequireCDS, ElementDefinition, EntityDefinition, fuzzy, groupByKeyPrefix } from "cds-internal-tool";
 import MySQLParser, { MySQLParserListener, SqlMode, TableRefContext } from "ts-mysql-parser";
 import { EntitySchema, EntitySchemaColumnOptions } from "typeorm";
 import { EntitySchemaOptions } from "typeorm/entity-schema/EntitySchemaOptions";
 import { ANNOTATION_CDS_ASSERT_UNIQUE, ANNOTATION_CDS_TYPEORM_CONFIG } from "../constants";
+import { lazy } from "../utils";
 
 type TableName = string;
-
-const logger: Logger = cwdRequireCDS().log("mysql|db|typeorm|entity");
-
 
 interface EntitySchemaOptionsWithDeps extends EntitySchemaOptions<any> {
   /**
@@ -113,7 +111,7 @@ function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
           if (typeof indexColumnName === "string") {
             const columnEle = fuzzy.findElement(entityDef, indexColumnName);
             if (columnEle === undefined) {
-              logger.error(
+              lazy.logger.error(
                 "entity", entityDef.name,
                 "index", indexConfig.name,
                 "column", indexColumnName,
@@ -155,14 +153,14 @@ function buildView(name: string, stat: string): EntitySchemaOptions<any> {
   const parser = new MySQLParser({ parserListener: listener, mode: SqlMode.AnsiQuotes });
   const result = parser.parse(stat);
   if (result.lexerError) {
-    logger.error(
+    lazy.logger.error(
       "prase statement", stat,
       "failed, error", result.lexerError.message
     );
     throw TypeError("parse DDL statement failed");
   }
   if (result.parserError) {
-    logger.error(
+    lazy.logger.error(
       "prase statement", stat,
       "failed, error", result.parserError.message
     );
@@ -203,7 +201,7 @@ function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
     column.type = buildInTypes["cds.LargeString"].toLowerCase() as any;
   }
   else if (!(eleDef.type in buildInTypes)) {
-    logger.error("cds type", eleDef.type, "is not supported");
+    lazy.logger.error("cds type", eleDef.type, "is not supported");
   }
   else {
     column.type = buildInTypes[eleDef.type].toLowerCase();
@@ -262,7 +260,7 @@ function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
 
   if (eleDef.default?.func !== undefined) {
     if (column.type === "date" && String(eleDef.default?.func).toLowerCase() === "now") {
-      logger?.debug(
+      lazy.logger?.debug(
         `column(${column.name}) default value skipped, because for 'date' datatype, mysql not support the default value '${eleDef.default?.func}()'`
       );
     } else {
@@ -318,7 +316,7 @@ export function csnToEntity(model: CSN): Array<EntitySchema> {
       case "view":
         return new EntitySchema(buildView(name, statement));
       default:
-        logger.error("unknown DDL type", statement);
+        lazy.logger.error("unknown DDL type", statement);
         break;
     }
   });
