@@ -15,7 +15,7 @@ const cds = cwdRequireCDS();
  * @param next 
  * @returns 
  */
-export async function _disable_deletion_for_predelivery(this: MySQLDatabaseService, req: Request, next: NextFunction) {
+export async function _disable_deletion_for_pre_delivery(this: MySQLDatabaseService, req: Request, next: NextFunction) {
   if (
     typeof req.query === "object" &&
     !(req.query instanceof Array) &&

@@ -23,7 +23,7 @@ import {
 } from "./constants";
 import { _impl_deployment_service } from "./deploy-service";
 import execute from "./execute";
-import { _disable_deletion_for_predelivery } from "./handlers";
+import { _disable_deletion_for_pre_delivery } from "./handlers";
 import { ConnectionWithPool, MysqlDatabaseOptions } from "./types";
 import { checkCdsVersion } from "./utils";
 
@@ -116,7 +116,7 @@ export class MySQLDatabaseService extends BaseService {
   private _registerCSVHandlers() {
     if (this.options?.csv?.enhancedProcessing === true) {
       this._logger.info("enhanced csv processing enabled");
-      this.on("DELETE", _disable_deletion_for_predelivery);
+      this.on("DELETE", _disable_deletion_for_pre_delivery);
     }
   }
 
