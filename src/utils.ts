@@ -4,6 +4,23 @@ import { cwdRequireCDS, groupByKeyPrefix, LinkedEntityDefinition, memorized, mus
 import { ANNOTATION_CDS_TYPEORM_CONFIG, MIGRATION_VERSION_PREFIX } from "./constants";
 import { Migration, Query } from "./types";
 
+export const lazy = {
+  /**
+   * cds facade
+   */
+  get cds() {
+    return cwdRequireCDS();
+  },
+  /**
+   * cds config
+   */
+  get env() {
+    return lazy.cds.env;
+  },
+  get logger() {
+    return lazy.cds.log("db|mysql");
+  }
+};
 
 /**
  * check cds version, if cds version is not match the `cds-mysql` required version, will throw error
