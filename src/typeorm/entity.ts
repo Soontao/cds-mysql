@@ -79,7 +79,7 @@ function buildEntity(entityDef: EntityDefinition): EntitySchemaOptionsWithDeps {
   // drafts
   entityDef = entityDef.drafts ?? entityDef;
 
-  const name = entityDef.name.replace(/\./g, "_")
+  const name = entityDef.name.replace(/\./g, "_");
 
   const schema: Partial<EntitySchemaOptionsWithDeps> = {
     name,

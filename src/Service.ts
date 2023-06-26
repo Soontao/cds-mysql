@@ -363,13 +363,4 @@ export class MySQLDatabaseService extends BaseService {
     await tool.deploy(model, options?.tenant);
   }
 
-  /**
-   * get database admin tool
-   * 
-   * @returns 
-   */
-  public getAdminTool() {
-    return tool;
-  }
-
 }

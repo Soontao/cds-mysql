@@ -1,9 +1,9 @@
 
 import { createSh, doAfterAll } from "./utils";
 import { cwdRequireCDS, setupTest } from "cds-internal-tool";
-import type MySQLDatabaseService from "../src";
 import path from "node:path";
 import { sleep } from "@newdash/newdash";
+import { getColumns, getTables, getTenantDatabaseName } from "../src/admin-tool";
 
 jest.setTimeout(60 * 1000); // 1 minutes
 
@@ -57,11 +57,9 @@ describe("Tenant Test Suite", () => {
   });
 
   it("should support get tables/columns", async () => {
-    const db: MySQLDatabaseService = cds.db as any;
-    const tool = db.getAdminTool();
-    const tables = await tool.getTables(NEW_TENANT_ID);
+    const tables = await getTables(NEW_TENANT_ID);
     expect(tables.length).toBeGreaterThan(0);
-    const columns = await tool.getColumns(tables[0], NEW_TENANT_ID);
+    const columns = await getColumns(tables[0], NEW_TENANT_ID);
     expect(columns.length).toBeGreaterThan(0);
   });
 
@@ -89,9 +87,7 @@ describe("Tenant Test Suite", () => {
 
   it("should raise error when tenant-id too long", () => {
 
-    const db: MySQLDatabaseService = cds.db as any;
-    const tool = db.getAdminTool();
-    expect(() => tool.getTenantDatabaseName(cds.utils.uuid() + cds.utils.uuid()))
+    expect(() => getTenantDatabaseName(cds.utils.uuid() + cds.utils.uuid()))
       .toThrowError("TENANT_DATABASE_NAME_TOO_LONG");
 
   });

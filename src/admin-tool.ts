@@ -19,7 +19,7 @@ function _options() {
   return cds.env.requires.db as MysqlDatabaseOptions;
 }
 
-function getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
+export function getTenantDatabaseName(tenant: string = TENANT_DEFAULT) {
   const options = _options();
   const tenantDatabaseName = formatTenantDatabaseName(
     options?.credentials,
