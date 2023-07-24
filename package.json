@@ -8,7 +8,7 @@
     "cds-mysql-build": "./bin/build"
   },
   "scripts": {
-    "install:dev": "bash install_no_trace_deps.sh",
+    "install:dev": "node install_optional_deps.js",
     "pretest": "npm run install:dev",
     "prelint": "npm run install:dev",
     "prebench": "npm run install:dev",
