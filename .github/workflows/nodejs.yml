@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - "*"
-  # daily check at 01:00 AM
   schedule:
     - cron: "32 11 * * *"
 
@@ -26,7 +25,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [18.x, 20.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +33,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
 
       - run: npm i -g npm
 
@@ -52,4 +51,3 @@ jobs:
           CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cds_admin
-
