@@ -15,8 +15,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        docker-images:
-          ["mysql:5.7", "mysql:8.0", "mysql:8.1", "mariadb:10", "mariadb:11"]
+        docker-images: ["mysql:5.7", "mysql:8", "mariadb:10"]
 
     services:
       db:

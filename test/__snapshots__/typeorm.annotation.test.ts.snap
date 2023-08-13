@@ -16,7 +16,7 @@ exports[`TypeORM Annotation Test Suite should support index for model 1`] = `
           "length": 255,
           "name": "Name",
           "nullable": true,
-          "type": "varchar",
+          "type": "nvarchar",
         },
       },
       "indices": [

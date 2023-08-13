@@ -33,7 +33,7 @@ const buildInTypes = {
   "cds.Boolean": "BOOLEAN",
   "cds.UUID": "VARCHAR",
 
-  "cds.String": "VARCHAR",
+  "cds.String": "NVARCHAR",
   "cds.Binary": "VARBINARY",
   "cds.LargeBinary": "LONGBLOB",
   "cds.LargeString": "LONGTEXT",
@@ -43,6 +43,7 @@ const buildInTypes = {
   "cds.hana.REAL": "REAL",
   "cds.hana.NCHAR": "NCHAR",
   "cds.hana.VARCHAR": "VARCHAR",
+  "cds.hana.NVARCHAR": "NVARCHAR",
   "cds.hana.CHAR": "CHAR",
   "cds.hana.CLOB": "CLOB",
   "cds.hana.LargeString": "LONGTEXT",

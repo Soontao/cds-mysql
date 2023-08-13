@@ -74,7 +74,7 @@ please read the full long version [Advanced Documentation](./docs/ADVANCED_USAGE
 - [x] `preDelivery` CSV aspect
   - [x] migrate CSV on-demand (with option)
   - [x] CSV migration with hash check
-  - [ ] care entity dependenceis - the order of CSV import
+  - [ ] care entity dependencies - the order of CSV import
 - [x] full text search
 - [x] schema migration optimization (ignore drop in some case)
   - [ ] ignore column length reduce and with warning
@@ -89,7 +89,7 @@ please read the full long version [Advanced Documentation](./docs/ADVANCED_USAGE
     - [x] extensibility (`pull`/`push`)
 - [x] `$expand` navigation
 - [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
-- [x] test with `mariadb 10/11`, `mysql 5.7/8.0/8.1`
+- [x] test with `mariadb 10`, `mysql 5/8`
 - [x] initial data provision by `CSV`
   - [x] better migration type/column/name adaption
 - [x] mysql index
