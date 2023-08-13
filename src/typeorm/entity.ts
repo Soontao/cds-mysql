@@ -213,8 +213,7 @@ function buildColumn(eleDef: ElementDefinition): EntitySchemaColumnOptions {
   }
 
   if (eleDef.type === "cds.String" && eleDef.length === undefined) {
-    column.type = "text";
-    column.length = undefined;
+    column.length = cds.env.cdsc.defaultStringLength ?? 255;
   }
 
   // ref: https://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html

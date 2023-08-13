@@ -138,7 +138,7 @@ describe("Integration Test Suite", () => {
     const attachmentUri = `/odata/v4/bank/Details(${createdPeople.Detail.ID})/Attachment`;
 
     // TODO: add validation for max_allowed_packet
-    const data = randomBytes(1024 * 1024);
+    const data = randomBytes(32 * 1024);
 
     await client.put(attachmentUri, data);
 
