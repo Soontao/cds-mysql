@@ -89,7 +89,7 @@ please read the full long version [Advanced Documentation](./docs/ADVANCED_USAGE
     - [x] extensibility (`pull`/`push`)
 - [x] `$expand` navigation
 - [x] `$filter` with canonical functions (`concat`/`contains`/`substring`)
-- [x] test with `mariadb 10.4`, `mysql 5.6/5.7/8`
+- [x] test with `mariadb 10/11`, `mysql 5.7/8.0/8.1`
 - [x] initial data provision by `CSV`
   - [x] better migration type/column/name adaption
 - [x] mysql index

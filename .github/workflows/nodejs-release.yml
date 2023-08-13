@@ -11,7 +11,7 @@ jobs:
 
     services:
       mysql:
-        image: mariadb:10.11
+        image: mariadb:10
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
@@ -20,18 +20,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
           registry-url: https://registry.npmjs.org/
-          cache: 'npm'
+          cache: "npm"
 
       - run: npm i -g npm
 
       - run: npm ci
-          
+
       - run: npm shrinkwrap
 
       - name: setup mysql user

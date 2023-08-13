@@ -3,10 +3,10 @@ name: database-test
 on:
   push:
     branches:
-      - '*'
+      - "*"
   pull_request:
     branches:
-      - '*'
+      - "*"
 
 jobs:
   database-test:
@@ -16,15 +16,7 @@ jobs:
       max-parallel: 4
       matrix:
         docker-images:
-          [
-            'mysql:5.6',
-            'mysql:5.7',
-            'mysql:8.0',
-            'mariadb:10.5',
-            'mariadb:10.8',
-            'mariadb:10.9',
-            'mariadb:10.10',
-          ]
+          ["mysql:5.7", "mysql:8.0", "mysql:8.1", "mariadb:10", "mariadb:11"]
 
     services:
       db:
@@ -41,7 +33,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: 'npm'
+          cache: "npm"
 
       - run: npm i -g npm
 
@@ -54,7 +46,7 @@ jobs:
         run: npm run test
         env:
           CI: true
-          CDS_REQUIRES_DB_CREDENTIALS_HOST: '127.0.0.1'
+          CDS_REQUIRES_DB_CREDENTIALS_HOST: "127.0.0.1"
           CDS_REQUIRES_DB_CREDENTIALS_PORT: 3306
           CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
