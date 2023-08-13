@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.0](https://github.com/Soontao/cds-mysql/compare/v7.0.0...v7.1.0) (2023-08-13)
+
+
+### Features
+
+* adapt cds 7.1 ([75474af](https://github.com/Soontao/cds-mysql/commit/75474af332148373f10e873aa767a6f8854b5111))
+* cds plugin tech ([af21595](https://github.com/Soontao/cds-mysql/commit/af215955be64c78b8183a1d55ab261ae7c78a070))
+
+
+### Bug Fixes
+
+* **deps:** update dependency cds-internal-tool to v1.7.4 ([0776d90](https://github.com/Soontao/cds-mysql/commit/0776d90e362fd24e015b293dda6361bf12302cf4))
+* **deps:** update dependency glob to v10.3.1 ([32c55e8](https://github.com/Soontao/cds-mysql/commit/32c55e80b3ec8889a8a67d0a0eaf74c0124ca8f9))
+* **deps:** update dependency glob to v10.3.2 ([972b714](https://github.com/Soontao/cds-mysql/commit/972b714d323f738649026ebb4efe5443a3370402))
+* **deps:** update dependency glob to v10.3.3 ([8921625](https://github.com/Soontao/cds-mysql/commit/89216255278787b9c2debd27a0b1a801f252b9b7))
+* **deps:** update dependency luxon to v3.4.0 ([acee8df](https://github.com/Soontao/cds-mysql/commit/acee8dfba8c2b13bf2b50bffe9bbd3c7b25cd0f7))
+* **deps:** update dependency mysql2 to v3.4.1 ([7eb2e5b](https://github.com/Soontao/cds-mysql/commit/7eb2e5b0539e2ff711eba6ab72285fea14fe2288))
+* **deps:** update dependency mysql2 to v3.4.2 ([f41b604](https://github.com/Soontao/cds-mysql/commit/f41b604201e533d8494eb25aa72f923276e9d8e8))
+* **deps:** update dependency mysql2 to v3.4.3 ([8c3c313](https://github.com/Soontao/cds-mysql/commit/8c3c3139dd812ab387d24146b229db50b5ed2e82))
+* **deps:** update dependency mysql2 to v3.4.4 ([7ae1859](https://github.com/Soontao/cds-mysql/commit/7ae1859254d491f7a3514b92c96e8c4aab83d7d0))
+* **deps:** update dependency mysql2 to v3.4.5 ([29379e9](https://github.com/Soontao/cds-mysql/commit/29379e98e5431dcf254937eac21892ef9abb6c3f))
+* **deps:** update dependency mysql2 to v3.5.0 ([719c500](https://github.com/Soontao/cds-mysql/commit/719c5006e146dadc4edef7d5291c4e1ccfcf7e77))
+* **deps:** update dependency mysql2 to v3.5.1 ([b82c007](https://github.com/Soontao/cds-mysql/commit/b82c0071a2cc2994f73edbd4f01b89daac126343))
+* **deps:** update dependency mysql2 to v3.5.2 ([0ae8bdc](https://github.com/Soontao/cds-mysql/commit/0ae8bdcdb8a46af0ec03a79974abc9fd6e30c2ee))
+* **deps:** update dependency mysql2 to v3.6.0 ([f086cb4](https://github.com/Soontao/cds-mysql/commit/f086cb48cb9b55c15000674944fd99a7071d4d04))
+* pool ([c21e902](https://github.com/Soontao/cds-mysql/commit/c21e90283b53b67e7dcf502ff744c112499698f8))
+* rm mysql 5.6 support ([3e5f70a](https://github.com/Soontao/cds-mysql/commit/3e5f70a9341c2f665f2217a1974604f7d40f99e5))
+* ut ([239d362](https://github.com/Soontao/cds-mysql/commit/239d362432326082de4095f149a58d6931933f39))
+* version ([849c1be](https://github.com/Soontao/cds-mysql/commit/849c1be92ad305031c6781337a9f98e2e7a000c5))
+
 ## [7.0.0](https://github.com/Soontao/cds-mysql/compare/v6.8.1...v7.0.0) (2023-06-24)
 
 
