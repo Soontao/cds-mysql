@@ -14,7 +14,7 @@ entity Jobs {
       op        : String(255);
       error     : String(255);
       result    : LargeString;
-      createdAt : Timestamp @cds.on.insert: $now;
+      createdAt : Timestamp;
       tasks     : Composition of many Tasks
                     on tasks.job = $self;
 }
@@ -26,7 +26,7 @@ entity Tasks {
       op        : String(255);
       error     : String(255);
       status    : Status default #RUNNING;
-      createdAt : Timestamp @cds.on.insert: $now;
+      createdAt : Timestamp;
       database  : String(255);
 }
 
