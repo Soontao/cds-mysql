@@ -198,7 +198,7 @@ export async function syncTenant(tenant: string, csn?: CSN) {
   }
 
   // if has tenant database & mtxs is enabled
-  if (await hasTenantDatabase(tenant) && ("lazy.cds.xt.ModelProviderService" in lazy.cds.services)) {
+  if (await hasTenantDatabase(tenant) && ("cds.xt.ModelProviderService" in lazy.cds.services)) {
     await deploy(await csn4(tenant), tenant);
     return;
   }
