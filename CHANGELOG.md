@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.1.1](https://github.com/Soontao/cds-mysql/compare/v7.1.0...v7.1.1) (2023-08-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency luxon to v3.4.1 ([9829e29](https://github.com/Soontao/cds-mysql/commit/9829e29cabedd67b10cdbedab2c4a8232dd4b5d9))
+* misspelling ([0f7ff98](https://github.com/Soontao/cds-mysql/commit/0f7ff9870985869b6f1d5d1c98518d1d8a719129))
+
 ## [7.1.0](https://github.com/Soontao/cds-mysql/compare/v7.0.0...v7.1.0) (2023-08-13)
 
 
