@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const { spawn } = require("child_process");
 const fs = require("fs");
-const { platform } = require("os");
 const path = require("path");
 
 if (!fs.existsSync(path.join(__dirname, "./node_modules/@sap/cds"))) {
@@ -14,7 +13,7 @@ if (!fs.existsSync(path.join(__dirname, "./node_modules/@sap/cds"))) {
   const p = spawn(
     `npm i --no-save express ${deps.join(" ")}`,
     {
-      shell: platform == "win32"
+      shell: true
     }
   );
   p.stdout.pipe(process.stdout);
