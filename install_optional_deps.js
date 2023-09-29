@@ -14,7 +14,7 @@ if (!fs.existsSync(path.join(__dirname, "./node_modules/@sap/cds"))) {
   const p = spawn(
     `npm i --no-save express ${deps.join(" ")}`,
     {
-      shell: platform() !== "win32",
+      shell: platform == "win32"
     }
   );
   p.stdout.pipe(process.stdout);
