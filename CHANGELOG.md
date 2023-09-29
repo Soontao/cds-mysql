@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.2.0](https://github.com/Soontao/cds-mysql/compare/v7.1.1...v7.2.0) (2023-09-29)
+
+
+### Features
+
+* cds@7.2 support ([f07cbce](https://github.com/Soontao/cds-mysql/commit/f07cbce53867234f4522c6ab92e7a85e28289bf0))
+
+
+### Bug Fixes
+
+* **deps:** update dependency glob to v10.3.10 ([ff20a76](https://github.com/Soontao/cds-mysql/commit/ff20a76aa8bd5007a93fff66467b5615bcbe5148))
+* **deps:** update dependency glob to v10.3.4 ([099c569](https://github.com/Soontao/cds-mysql/commit/099c5696589ac418216c2a83c642686433104b65))
+* **deps:** update dependency glob to v10.3.5 ([961ac34](https://github.com/Soontao/cds-mysql/commit/961ac34cee60b4ac8769f037d8e365eeeaaa2eae))
+* **deps:** update dependency glob to v10.3.6 ([a78c3c4](https://github.com/Soontao/cds-mysql/commit/a78c3c4e190f9ae740c530faa93d12128ff9472f))
+* **deps:** update dependency glob to v10.3.7 ([ed531d8](https://github.com/Soontao/cds-mysql/commit/ed531d8892ed0f7e70ca7379efeb6bdcbccb390c))
+* **deps:** update dependency glob to v10.3.9 ([d2ef282](https://github.com/Soontao/cds-mysql/commit/d2ef2823ce276123e1b89797fe008923c511ddfd))
+* **deps:** update dependency luxon to v3.4.2 ([e9fb3c1](https://github.com/Soontao/cds-mysql/commit/e9fb3c1c002233e4ee57fb1530d045292d8518f2))
+* **deps:** update dependency luxon to v3.4.3 ([eec9630](https://github.com/Soontao/cds-mysql/commit/eec9630affc0724d25f9bc89b51439537f902455))
+* **deps:** update dependency mysql2 to v3.6.1 ([aa2d895](https://github.com/Soontao/cds-mysql/commit/aa2d895556f872c82937272bae7f8a978f749f17))
+
 ### [7.1.1](https://github.com/Soontao/cds-mysql/compare/v7.1.0...v7.1.1) (2023-08-26)
 
 
