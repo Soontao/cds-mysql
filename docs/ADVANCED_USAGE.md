@@ -49,7 +49,7 @@ must use proper version of `cds-mysql` with `@sap/cds` sdk
 | 6.8.x            | 1.8.x                 | 6.8.x             |
 | 7.0.x            | 1.9.x                 | 7.0.x             |
 | 7.1.x            | 1.10.x                | 7.1.x             |
-| ^7.2.x           | ^1.11.x               | 7.2.x             |
+| 7.2.x            | 1.11.x                | 7.2.x             |
 
 ### Configurations Overview
 
