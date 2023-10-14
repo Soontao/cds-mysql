@@ -130,4 +130,4 @@ cds push # push & activate extension
 
 ## Limitation
 
-- `extensibility` does not work with `tranparent migration` 
+- `extensibility` does not work with `transparent migration` 

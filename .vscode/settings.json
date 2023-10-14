@@ -22,6 +22,7 @@
     "CURDATE",
     "datetime",
     "dayofmonth",
+    "devcontainers",
     "fiori",
     "hana",
     "havings",
@@ -35,6 +36,7 @@
     "Metadatas",
     "Millis",
     "mtxs",
+    "multitenancy",
     "newdash",
     "nocheck",
     "NOWAIT",
@@ -50,6 +52,7 @@
     "ulonglong",
     "Unlocalized",
     "upsert",
+    "VARBINARY",
     "varchar",
     "VCAP"
   ],
