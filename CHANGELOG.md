@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.0](https://github.com/Soontao/cds-mysql/compare/v7.2.1...v7.3.0) (2023-10-20)
+
+
+### Features
+
+* support new job service/extensibility service ([54adcd4](https://github.com/Soontao/cds-mysql/commit/54adcd4ed5c60489405520550d46c3b16db64421))
+
+
+### Bug Fixes
+
+* **deps:** update dependency mysql2 to v3.6.2 ([08b28b9](https://github.com/Soontao/cds-mysql/commit/08b28b9d59b4e15a3c108f0c719896641306849b))
+
 ### [7.2.1](https://github.com/Soontao/cds-mysql/compare/v7.2.0...v7.2.1) (2023-10-06)
 
 
