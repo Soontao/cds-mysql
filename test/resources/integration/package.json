@@ -17,6 +17,7 @@
           }
         }
       },
+      "multitenancy": true,
       "extensibility": true,
       "cds.xt.ModelProviderService": true,
       "cds.xt.ExtensibilityService": {
@@ -37,6 +38,7 @@
         ]
       },
       "cds.xt.DeploymentService": true,
+      "cds.xt.SaasProvisioningService": true,
       "kinds": {
         "cds.xt.DeploymentService": {
           "model": "../../../mtxs/DeploymentService.cds"

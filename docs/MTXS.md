@@ -20,10 +20,12 @@
 {
   "cds": {
     "requires": {
+      "multitenancy": true,
       "extensibility": true,
       "cds.xt.ModelProviderService": true,
       "cds.xt.ExtensibilityService": true,
       "cds.xt.DeploymentService": true,
+      "cds.xt.SaasProvisioningService": true,
       "kinds": {
         "cds.xt.DeploymentService": {
           "model": "cds-mysql/mtxs/DeploymentService.cds"

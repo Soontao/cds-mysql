@@ -8,7 +8,7 @@
           "deploy": {
             "eager": [
               "default",
-              "e5f878d5-7985-407b-a1cb-87a8716f1904"
+              "15a1fbc8-79c0-4324-ba79-e96d359e60bd"
             ],
             "transparent": true
           }
@@ -24,13 +24,14 @@
             "tenant": "default"
           },
           "theo-on-tenant-2": {
-            "tenant": "e5f878d5-7985-407b-a1cb-87a8716f1904",
+            "tenant": "15a1fbc8-79c0-4324-ba79-e96d359e60bd",
             "roles": [
               "cds.ExtensionDeveloper"
             ]
           }
         }
       },
+      "multitenancy": true,
       "extensibility": true,
       "cds.xt.ModelProviderService": true,
       "cds.xt.ExtensibilityService": {
@@ -51,6 +52,7 @@
         ]
       },
       "cds.xt.DeploymentService": true,
+      "cds.xt.SaasProvisioningService": true,
       "kinds": {
         "cds.xt.DeploymentService": {
           "model": "../../../mtxs/DeploymentService.cds"

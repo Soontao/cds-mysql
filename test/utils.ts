@@ -92,7 +92,7 @@ export const cleanDB = async () => {
 
   try {
     await ds.initialize();
-    for (const tenant of [undefined, "t0", "t1", "t2", "t192", "e5f878d5-7985-407b-a1cb-87a8716f1904"]) {
+    for (const tenant of [undefined, "t0", "t1", "t2", "t192", "e5f878d5-7985-407b-a1cb-87a8716f1904", "15a1fbc8-79c0-4324-ba79-e96d359e60bd"]) {
       const { formatTenantDatabaseName } = require("../src/admin-tool");
       const database = formatTenantDatabaseName(cds.env.requires.db.credentials, undefined, tenant);
       const results = await ds.query(`SHOW DATABASES LIKE '${database}'`);

@@ -87,6 +87,7 @@ export class MySQLDatabaseService extends lazy.BaseService {
     this._registerCSVHandlers();
     await super.init();
     this._implDeploymentService();
+    this._implExtensibilityService();
     this._registerEagerDeploy();
   }
 
@@ -251,6 +252,17 @@ export class MySQLDatabaseService extends lazy.BaseService {
         return _impl_deployment_service(ds);
       }
     });
+  }
+
+  private _implExtensibilityService() {
+    if (this.options.tenant?.deploy?.transparent === true) {
+      lazy.cds.once("served", () => {
+        const { "cds.xt.ExtensibilityService": es } = lazy.cds.services;
+        if (es !== undefined) {
+          es.before("push", req => req.error(400 as any, "ERR_NOT_SUPPORT_EXTEND_WITH_TRANSPARENT_MIGRATION"));
+        }
+      });
+    }
   }
 
   /**

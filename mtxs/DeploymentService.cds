@@ -13,35 +13,35 @@ service cds.xt.DeploymentService {
    * options Additional subscription options
    */
 
-                      @open
+  @open
   action   subscribe( @mandatory tenant : String, metadata : {}, options : {});
 
   /**
    * Unsubscribe tenant @param tenant Tenant to unsubscribe
    */
 
-                        @open
+  @open
   action   unsubscribe( @mandatory tenant : String, options : {});
 
   /**
    * Extend tenant @param tenant Tenant to extend
    */
 
-                   @open
+  @open
   action   extend( @mandatory tenant : String, csvs : {}); // REVISIT: csvs, better use options
 
 
-                    @open
+  @open
   action   upgrade( @mandatory tenant : String, options : {});
 
-                   @open
+  @open
   action   deploy( @mandatory tenant : String, options : {});
 
   // REVISIT: Do we need this for job orchstration via CLI use?
   //action updateAll(options:{});
 
   // REVISIT: only needed for t0 upgrade heuristics. Can they be replaced?
-  function getTables( @mandatory tenant : String)                                              returns array of String;
-  function getColumns(  @mandatory  tenant : String,  @mandatory  table : String, params : {}) returns array of String;
+  function getTables( @mandatory tenant : String)                                          returns array of String;
+  function getColumns( @mandatory tenant : String, @mandatory table : String, params : {}) returns array of String;
 
 }
