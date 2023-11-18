@@ -4,13 +4,16 @@ namespace cds.xt;
 type TenantID : String(80);
 
 entity Tenants {
-  key ID       : TenantID;
-      metadata : String;
+  key ID         : TenantID;
+      metadata   : String;
+      createdAt  : Timestamp  @cds.on.insert: $now;
+      modifiedAt : Timestamp  @cds.on.insert: $now  @cds.on.update: $now;
+
 }
 
 entity Jobs {
   key ID        : UUID; // REVISIT: cuid from cds/common?
-      status    : Status default #RUNNING;
+      status    : Status default #QUEUED;
       op        : String(255);
       error     : String(255);
       result    : LargeString;
@@ -25,7 +28,7 @@ entity Tasks {
       tenant    : TenantID;
       op        : String(255);
       error     : String(255);
-      status    : Status default #RUNNING;
+      status    : Status default #QUEUED;
       createdAt : Timestamp;
       database  : String(255);
 }
