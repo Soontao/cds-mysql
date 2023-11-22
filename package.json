@@ -58,6 +58,15 @@
     "ts-node": "10.9.1",
     "typescript": "5.3.2"
   },
+  "cds": {
+    "requires": {
+      "kinds": {
+        "mysql": {
+          "impl": "cds-mysql"
+        }
+      }
+    }
+  },
   "optionalDependencies": {
     "fsevents": "^2.3.3"
   },

@@ -27,11 +27,6 @@ setup the `mysql` database driver for cds -> edit the `package.json` > `cds` nod
   "requires": {
     "db": {
       "kind": "mysql"
-    },
-    "kinds": {
-      "mysql": {
-        "impl": "cds-mysql"
-      }
     }
   }
 }
