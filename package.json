@@ -43,6 +43,7 @@
     "typeorm": "0.3.17"
   },
   "devDependencies": {
+    "@cap-js/db-service": "^1.4.0",
     "@types/generic-pool": "3.1.11",
     "@types/glob": "8.1.0",
     "@types/jest": "29.5.10",

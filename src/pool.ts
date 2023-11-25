@@ -48,7 +48,7 @@ export async function create_pool(tenant?: string) {
 
   const poolOptions = {
     ...DEFAULT_POOL_OPTIONS,
-    ...lazy.db_options
+    ...lazy.db_options.pool
   };
 
   const tenantCredential = {

@@ -32,6 +32,9 @@ export const lazy = {
   get BaseService(): typeof Service<EventNames, MysqlDatabaseOptions> {
     return cwdRequire("@sap/cds/libx/_runtime/sqlite/Service");
   },
+  get SQLService(): typeof Service<EventNames, MysqlDatabaseOptions> {
+    return cwdRequire("@cap-js/db-service").SQLService;
+  },
 };
 
 /**
