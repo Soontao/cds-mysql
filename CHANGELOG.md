@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.4.0](https://github.com/Soontao/cds-mysql/compare/v7.3.0...v7.4.0) (2023-11-25)
+
+
+### Features
+
+* support cds 7.4 ([#479](https://github.com/Soontao/cds-mysql/issues/479)) ([97d9bb8](https://github.com/Soontao/cds-mysql/commit/97d9bb8175ce7fd5993632d415fdb2f51d164035))
+
+
+### Bug Fixes
+
+* **deps:** update dependency luxon to v3.4.4 ([d95bf09](https://github.com/Soontao/cds-mysql/commit/d95bf098d3f7ef930b0e19771709c8e8a31e9cb4))
+* **deps:** update dependency mysql2 to v3.6.3 ([e531652](https://github.com/Soontao/cds-mysql/commit/e531652f5593c7a8991fdb3a05ead950865c1d58))
+* **deps:** update dependency mysql2 to v3.6.4 ([549e1dd](https://github.com/Soontao/cds-mysql/commit/549e1dd4f251d6018f0b118366737f2c48241390))
+* **deps:** update dependency mysql2 to v3.6.5 ([13491a0](https://github.com/Soontao/cds-mysql/commit/13491a0af1a72b72e988d43b9f36d7a551211f0a))
+
 ## [7.3.0](https://github.com/Soontao/cds-mysql/compare/v7.2.1...v7.3.0) (2023-10-20)
 
 
