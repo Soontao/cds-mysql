@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.4.1](https://github.com/Soontao/cds-mysql/compare/v7.4.0...v7.4.1) (2023-12-22)
+
 ## [7.4.0](https://github.com/Soontao/cds-mysql/compare/v7.3.0...v7.4.0) (2023-11-25)
 
 
