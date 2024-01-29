@@ -5168,6 +5168,7 @@ exports[`TypeORM Test Suite should support convert csn to table meta 1`] = `
         "zerofill": false,
       },
     ],
+    "comment": undefined,
     "database": undefined,
     "engine": undefined,
     "exclusions": [],
