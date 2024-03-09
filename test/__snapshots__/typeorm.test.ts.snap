@@ -5168,6 +5168,7 @@ exports[`TypeORM Test Suite should support convert csn to table meta 1`] = `
         "zerofill": false,
       },
     ],
+    "comment": undefined,
     "database": undefined,
     "engine": undefined,
     "exclusions": [],
@@ -5503,7 +5504,7 @@ exports[`TypeORM Test Suite should support convert different prop type to Entity
 
 exports[`TypeORM Test Suite should support convert different prop type to EntitySchema: test_property_type_People.Credit element definition 1`] = `
 {
-  "default": 1,
+  "default": "1.0",
   "name": "Credit",
   "nullable": true,
   "precision": 10,
@@ -6032,7 +6033,7 @@ exports[`TypeORM Test Suite should support migrate different prop type to mysql 
 [
   {
     "parameters": undefined,
-    "query": "CREATE TABLE \`test_property_type_People\` (\`Name\` varchar(20) NOT NULL DEFAULT 'Unknown', \`Age\` int NULL DEFAULT '10', \`Credit\` decimal(10,2) NULL DEFAULT '1.00', \`FullEmployee\` tinyint NULL DEFAULT 0, \`Active\` tinyint NULL DEFAULT 1, \`BirthDay\` date NOT NULL, \`BirthDateTime\` datetime NULL, \`Type\` varchar(10) NOT NULL, \`Avatar\` varbinary(255) NULL, \`Picture\` longtext NULL, \`rank\` longtext NULL, \`UInt8Property\` tinyint NULL, \`Int16Property\` smallint NULL, \`Int32Property\` int NULL, \`Int64Property\` bigint NULL, \`Integer64Property\` bigint NULL, \`Create\` tinyint NULL DEFAULT 0, \`Key\` int NOT NULL, \`DoubleProperty\` double NULL, \`StringWithoutLength\` varchar(255) NULL, \`LargeBinaryValue\` longblob NULL, \`Date1\` date NULL, \`Date2\` date NULL, \`DateTime1\` datetime NULL DEFAULT NOW(), \`DateTime2\` datetime NULL DEFAULT CURRENT_TIMESTAMP(), PRIMARY KEY (\`Name\`, \`Type\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
+    "query": "CREATE TABLE \`test_property_type_People\` (\`Name\` varchar(20) NOT NULL DEFAULT 'Unknown', \`Age\` int NULL DEFAULT '10', \`Credit\` decimal(10,2) NULL DEFAULT '1.0', \`FullEmployee\` tinyint NULL DEFAULT 0, \`Active\` tinyint NULL DEFAULT 1, \`BirthDay\` date NOT NULL, \`BirthDateTime\` datetime NULL, \`Type\` varchar(10) NOT NULL, \`Avatar\` varbinary(255) NULL, \`Picture\` longtext NULL, \`rank\` longtext NULL, \`UInt8Property\` tinyint NULL, \`Int16Property\` smallint NULL, \`Int32Property\` int NULL, \`Int64Property\` bigint NULL, \`Integer64Property\` bigint NULL, \`Create\` tinyint NULL DEFAULT 0, \`Key\` int NOT NULL, \`DoubleProperty\` double NULL, \`StringWithoutLength\` varchar(255) NULL, \`LargeBinaryValue\` longblob NULL, \`Date1\` date NULL, \`Date2\` date NULL, \`DateTime1\` datetime NULL DEFAULT NOW(), \`DateTime2\` datetime NULL DEFAULT CURRENT_TIMESTAMP(), PRIMARY KEY (\`Name\`, \`Type\`)) ENGINE=InnoDB CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'",
   },
 ]
 `;

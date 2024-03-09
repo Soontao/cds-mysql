@@ -35,7 +35,7 @@ export class MySQLDatabaseService extends lazy.BaseService {
 
     // REVISIT: official db api
     this._insert = this._queries.insert(execute.insert);
-    this._read = this._queries.read(execute.select, execute.stream);
+    this._read = this._queries.read(execute.select, execute.stream, execute.convert);
     this._update = this._queries.update(execute.update, execute.select);
     this._delete = this._queries.delete(execute.delete, execute.update);
 

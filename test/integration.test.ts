@@ -142,9 +142,9 @@ describe("Integration Test Suite", () => {
 
     await client.put(attachmentUri, data);
 
-    const { data: buff } = await client.get(attachmentUri, { responseType: "arraybuffer" });
-
-    expect(buff).toStrictEqual(data);
+    const response = await client.get(attachmentUri, { responseType: "arraybuffer" });
+    expect(response.status).not.toEqual(500);
+    expect(response.data).toStrictEqual(data);
 
   });
 

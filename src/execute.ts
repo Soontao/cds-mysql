@@ -15,6 +15,7 @@ const cds = cwdRequireCDS();
 const LOG = cds.log("db|mysql|sql");
 const DEBUG = cds.debug("db|mysql");
 const coloredTxCommands = cwdRequire("@sap/cds/libx/_runtime/db/utils/coloredTxCommands");
+const { convertStream } = cwdRequire("@sap/cds/libx/_runtime/db/utils/stream");
 
 const { getPostProcessMapper, postProcess } = cwdRequire("@sap/cds/libx/_runtime/db/data-conversion/post-processing");
 const {
@@ -199,21 +200,24 @@ async function executeInsertSQL(
   }
 }
 
-function _convertStreamValues(values) {
+async function _convertStreamValues(values: Array<any>) {
   let any;
-  values.forEach((v, i) => {
-    if (v && typeof v.pipe === "function") {
-      any = values[i] = new Promise((resolve) => {
+  for (let i = 0; i < values.length; i++) {
+    const v = values[i];
+    if (v instanceof Readable) {
+      any = values[i] = new Promise(resolve => {
         const chunks = [];
-        v.on("data", (chunk) => chunks.push(chunk));
+        v.on("data", chunk => chunks.push(chunk));
         v.on("end", () => resolve(Buffer.concat(chunks)));
         v.on("error", () => {
           v.removeAllListeners("error");
           v.push(null);
         });
       });
+    } else if (Array.isArray(v)) {
+      values[i] = await _convertStreamValues(v);
     }
-  });
+  }
   return any ? Promise.all(values) : values;
 }
 
@@ -294,11 +298,16 @@ function executeGenericCQN(
   return executePlainSQL(dbc, sql, values);
 }
 
-async function executeSelectStreamCQN(model, dbc, query, user, locale, txTimestamp) {
+async function executeSelectStreamCQN({ model, dbc, query, user, locale, txTimestamp }) {
   const result = await executeSelectCQN(model, dbc, query, user, locale, txTimestamp);
 
   if (result == null || result.length === 0) {
     return;
+  }
+
+  if (!cds.env.features.stream_compat) {
+    convertStream(query.SELECT.columns, query.target, result, query.SELECT.one);
+    return result;
   }
 
   let val = Array.isArray(result) ? Object.values(result[0])[0] : Object.values(result)[0];
@@ -326,6 +335,7 @@ export default {
   update: executeUpdateCQN,
   select: executeSelectCQN,
   stream: executeSelectStreamCQN,
+  convert: convertStream,
   cqn: executeGenericCQN,
   sql: executePlainSQL
 };
