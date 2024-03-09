@@ -4,8 +4,8 @@
   "editor.useTabStops": true,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": false
+    "source.fixAll": "explicit",
+    "source.organizeImports": "never"
   },
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features",
