@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.7.1](https://github.com/Soontao/cds-mysql/compare/v7.7.0...v7.7.1) (2024-03-22)
+
+
+### Bug Fixes
+
+* deprecated user.tenant ([8a3e061](https://github.com/Soontao/cds-mysql/commit/8a3e061a6301758b788f99d9bc11a312854f6d92))
+
 ## [7.7.0](https://github.com/Soontao/cds-mysql/compare/v7.6.0...v7.7.0) (2024-03-09)
 
 
