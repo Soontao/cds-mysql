@@ -187,7 +187,7 @@ export class MySQLDatabaseService extends lazy.BaseService {
   public async acquire(context: EventContext): Promise<ConnectionWithPool>;
 
   public async acquire(arg: any) {
-    const tenant = (typeof arg === "string" ? arg : arg?.user?.tenant) ?? TENANT_DEFAULT;
+    const tenant = (typeof arg === "string" ? arg : arg?.tenant) ?? TENANT_DEFAULT;
     const pool = await this._getPool(tenant);
     // REVISIT: priority maybe for http request
     // REVISIT: retry connection
