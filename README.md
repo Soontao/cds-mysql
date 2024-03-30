@@ -44,10 +44,10 @@ CDS_REQUIRES_DB_CREDENTIALS_PASSWORD= # db user pwd!
 now, start the cds server (`npx cds-serve`), everything is ready!
 
 > [!TIP]
-> read more about [database configuration](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables).
+> read more about how to config [database credential](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables).
 
 > [!TIP]
-> read more about [database user](./docs/ADVANCED_USAGE.md#database).
+> read more about how to setup [database user](./docs/ADVANCED_USAGE.md#database).
 
 ---
 
@@ -95,6 +95,8 @@ please read the full long version [Advanced Documentation](./docs/ADVANCED_USAGE
   - [ ] `NOWAIT` support
   - [ ] `SKIP LOCKED` support
 - [x] better E2E document/sample - [cap-mysql-sflight](https://github.com/Soontao/cap-mysql-sflight)
+- [ ] adapt new cds-dbs layer
+- [ ] real stream adoption for binary
 
 ## [CHANGELOG](./CHANGELOG.md)
 
