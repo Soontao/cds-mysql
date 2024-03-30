@@ -13,35 +13,26 @@ service cds.xt.DeploymentService {
    * options Additional subscription options
    */
 
-  @open
-  action   subscribe( @mandatory tenant : String, metadata : {}, options : {});
+  action   subscribe( @mandatory tenant : String, @open metadata : {}, @open options : {});
 
   /**
    * Unsubscribe tenant @param tenant Tenant to unsubscribe
    */
 
-  @open
-  action   unsubscribe( @mandatory tenant : String, options : {});
+  action   unsubscribe( @mandatory tenant : String, @open options : {});
 
   /**
    * Extend tenant @param tenant Tenant to extend
    */
 
-  @open
-  action   extend( @mandatory tenant : String, csvs : {}); // REVISIT: csvs, better use options
+  action   extend( @mandatory tenant : String, @open csvs : {}); // REVISIT: csvs, better use options
 
 
-  @open
-  action   upgrade( @mandatory tenant : String, options : {});
-
-  @open
-  action   deploy( @mandatory tenant : String, options : {});
-
-  // REVISIT: Do we need this for job orchstration via CLI use?
-  //action updateAll(options:{});
-
+  action   upgrade( @mandatory tenant : String, @open options : {});
+  action   deploy( @mandatory tenant : String, @open options : {});
   // REVISIT: only needed for t0 upgrade heuristics. Can they be replaced?
-  function getTables( @mandatory tenant : String)                                          returns array of String;
-  function getColumns( @mandatory tenant : String, @mandatory table : String, params : {}) returns array of String;
-
+  function getTables( @mandatory tenant : String)                                                returns array of String;
+  function getColumns( @mandatory tenant : String, @mandatory table : String, @open params : {}) returns array of String;
+  function getTenants( @open options : {})                                                       returns array of String;
+  function getContainers( @open options : {})                                                    returns array of String;
 }

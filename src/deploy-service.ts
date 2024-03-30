@@ -58,6 +58,12 @@ export async function _impl_deployment_service(ds: BuiltInServices["cds.xt.Deplo
   // since mtxs@1.4.0
   ds.on("getColumns" as any, req => tool.getColumns(req.data.table, req.data.tenant));
 
+
+  // since mtxs@1.17.0
+  ds.on("getContainers" as any, async () => {
+    throw new Error("Not implemented");
+  });
+
   await tool.deployT0();
 
   // workaround for MySQL:
