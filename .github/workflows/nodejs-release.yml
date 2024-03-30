@@ -43,6 +43,8 @@ jobs:
           CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cds_admin
+      
+      - run: npm run build
 
       - run: rm -rf node_modules
 
@@ -50,7 +52,7 @@ jobs:
 
       - run: npm shrinkwrap
 
-      - name: npm auth & publish
-        run: npm run build && npm publish
+      - name: npm publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.Z_NPM_TOKEN}}
