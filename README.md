@@ -44,7 +44,7 @@ CDS_REQUIRES_DB_CREDENTIALS_PASSWORD= # db user pwd!
 now, start the cds server (`npx cds-serve`), everything is ready!
 
 > [!TIP]
-> read more about how to config [database credential](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables).
+> read more about how to config [database credential](./docs/ADVANCED_USAGE.md#configure-database-credential-by-environments-variables).
 
 > [!TIP]
 > read more about how to setup [database user](./docs/ADVANCED_USAGE.md#database).
