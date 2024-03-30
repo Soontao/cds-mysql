@@ -24,15 +24,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 20.x
           registry-url: https://registry.npmjs.org/
           cache: "npm"
 
       - run: npm i -g npm
-
-      - run: npm ci
-
-      - run: npm shrinkwrap
+      
+      - run: npm i
 
       - name: setup mysql user
         run: node ./docker/create_user.js
@@ -46,6 +44,12 @@ jobs:
           CDS_REQUIRES_DB_CREDENTIALS_DATABASE: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_USER: cds_admin
           CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cds_admin
+
+      - run: rm -rf node_modules
+
+      - run: node overwrite_package_json.js
+
+      - run: npm shrinkwrap
 
       - name: npm auth & publish
         run: npm run build && npm publish

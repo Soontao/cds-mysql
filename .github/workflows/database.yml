@@ -36,7 +36,7 @@ jobs:
 
       - run: npm i -g npm
 
-      - run: npm ci
+      - run: npm i
 
       - name: setup mysql user
         run: node ./docker/create_user.js

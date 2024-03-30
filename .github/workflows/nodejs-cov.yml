@@ -31,9 +31,7 @@ jobs:
           node-version: 18.x
           cache: "npm"
 
-      - run: npm i -g npm
-
-      - run: npm ci
+      - run: npm i
 
       - name: setup mysql user
         run: node ./docker/create_user.js
