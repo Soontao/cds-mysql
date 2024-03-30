@@ -11,3 +11,8 @@ test
 docker
 bench
 docs
+.devcontainer
+.whitesource
+SCRIPTS.md
+overwrite_package_json.js
+renovate.json
