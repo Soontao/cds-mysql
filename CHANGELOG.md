@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.8.1](https://github.com/Soontao/cds-mysql/compare/v7.8.0...v7.8.1) (2024-03-30)
+
+
+### Bug Fixes
+
+* release script ([5b2b55d](https://github.com/Soontao/cds-mysql/commit/5b2b55d22cf3aae1b1b1257ab31c411d709dd168))
+
 ## [7.8.0](https://github.com/Soontao/cds-mysql/compare/v7.7.2...v7.8.0) (2024-03-30)
 
 ### [7.7.2](https://github.com/Soontao/cds-mysql/compare/v7.7.1...v7.7.2) (2024-03-30)
