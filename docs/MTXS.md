@@ -50,55 +50,7 @@ Please ref [here](../SCRIPTS.md#user-creation) to get an example to create user.
 
 ## Tenant Users
 
-> CDS Built-In Mocked Users
-
-```json
-{
-  "alice": {
-    "tenant": "t1",
-    "roles": ["cds.Subscriber", "admin"]
-  },
-  "bob": {
-    "tenant": "t1",
-    "roles": ["cds.ExtensionDeveloper", "cds.UIFlexDeveloper"]
-  },
-  "carol": {
-    "tenant": "t1",
-    "roles": [
-      "cds.Subscriber",
-      "admin",
-      "cds.ExtensionDeveloper",
-      "cds.UIFlexDeveloper"
-    ]
-  },
-  "dave": {
-    "tenant": "t1",
-    "roles": ["cds.Subscriber", "admin"],
-    "features": []
-  },
-  "erin": {
-    "tenant": "t2",
-    "roles": [
-      "cds.Subscriber",
-      "admin",
-      "cds.ExtensionDeveloper",
-      "cds.UIFlexDeveloper"
-    ]
-  },
-  "fred": {
-    "tenant": "t2",
-    "features": ["isbn"]
-  },
-  "me": {
-    "tenant": "t1",
-    "features": ["*"]
-  },
-  "yves": {
-    "roles": ["internal-user"]
-  },
-  "*": true
-}
-```
+> [CDS Built-In Mocked Users](https://cap.cloud.sap/docs/node.js/authentication#mock-users)
 
 ## Extensibility
 
@@ -111,7 +63,7 @@ cds build # build local extensions to TAR
 cds push # push & activate extension
 ```
 
-### Extensibility project - package json is required 
+### Extensibility project - package json is required
 
 > the `name` is very important to determine the extension is existed one or not
 
@@ -132,4 +84,4 @@ cds push # push & activate extension
 
 ## Limitation
 
-- `extensibility` does not work with `transparent migration` 
+- `extensibility` does not work with `transparent migration`

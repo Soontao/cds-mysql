@@ -21,7 +21,6 @@ npm i cds-mysql mysql2
 
 setup the `mysql` database driver for cds -> edit the `package.json` > `cds` node (or `.cdsrc.json`)
 
-
 ```json
 {
   "requires": {
@@ -34,19 +33,21 @@ setup the `mysql` database driver for cds -> edit the `package.json` > `cds` nod
 
 create an `.env` file and put that into your local CDS project, then fill the database credential
 
-```environment
+```bash
 CDS_REQUIRES_DB_CREDENTIALS_HOST=127.0.0.1
 CDS_REQUIRES_DB_CREDENTIALS_PORT=3306
-CDS_REQUIRES_DB_CREDENTIALS_DATABASE=cds_admin
-CDS_REQUIRES_DB_CREDENTIALS_USER=cds_admin
-CDS_REQUIRES_DB_CREDENTIALS_PASSWORD=cds_admin
+CDS_REQUIRES_DB_CREDENTIALS_DATABASE= # db name
+CDS_REQUIRES_DB_CREDENTIALS_USER= # db user
+CDS_REQUIRES_DB_CREDENTIALS_PASSWORD= # db user pwd!
 ```
 
-now, start the cds server (`npx cds run`), everything is ready! 
+now, start the cds server (`npx cds-serve`), everything is ready!
 
-read more about [database configuration](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables). 
+> [!TIP]
+> read more about [database configuration](./docs/ADVANCED_USAGE.md#config-database-credential-by-environments-variables).
 
-read more about [database user](./docs/ADVANCED_USAGE.md#database). 
+> [!TIP]
+> read more about [database user](./docs/ADVANCED_USAGE.md#database).
 
 ---
 
