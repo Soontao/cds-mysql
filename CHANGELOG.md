@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.8.2](https://github.com/Soontao/cds-mysql/compare/v7.8.1...v7.8.2) (2024-04-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency mysql2 to v3.9.4 ([3fcde5a](https://github.com/Soontao/cds-mysql/commit/3fcde5a7632ab760fc8f95107381613de878ed12))
+* **deps:** update dependency mysql2 to v3.9.5 ([443a03b](https://github.com/Soontao/cds-mysql/commit/443a03b2669c9f34b83b1a7c0c4db3ebd5aec673))
+* **deps:** update dependency mysql2 to v3.9.6 ([faf5cc8](https://github.com/Soontao/cds-mysql/commit/faf5cc8ccc827f2537489bc09ab70dd8c9a57325))
+* **deps:** update dependency mysql2 to v3.9.7 ([f543922](https://github.com/Soontao/cds-mysql/commit/f543922c61703559c47cff4d67f7c2723db3a988))
+
 ### [7.8.1](https://github.com/Soontao/cds-mysql/compare/v7.8.0...v7.8.1) (2024-03-30)
 
 
