@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.9.0](https://github.com/Soontao/cds-mysql/compare/v7.8.2...v7.9.0) (2024-05-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @newdash/newdash to v5.22.1 ([acc265f](https://github.com/Soontao/cds-mysql/commit/acc265fe1ca16f09bc8f208ab25be784a537775c))
+
 ### [7.8.2](https://github.com/Soontao/cds-mysql/compare/v7.8.1...v7.8.2) (2024-04-24)
 
 
