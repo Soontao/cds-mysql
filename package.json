@@ -46,7 +46,7 @@
     "@types/generic-pool": "3.8.1",
     "@types/jest": "29.5.12",
     "@types/luxon": "3.4.2",
-    "@types/node": "20.16.4",
+    "@types/node": "20.16.5",
     "@typescript-eslint/eslint-plugin": "8.4.0",
     "@typescript-eslint/parser": "8.4.0",
     "axios": "1.7.7",
