@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/generic-pool": "3.8.1",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.13",
     "@types/luxon": "3.4.2",
     "@types/node": "20.16.5",
     "@typescript-eslint/eslint-plugin": "8.5.0",
