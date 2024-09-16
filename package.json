@@ -38,7 +38,7 @@
     "generic-pool": "3.9.0",
     "glob": "11.0.0",
     "luxon": "3.5.0",
-    "mysql2": "3.11.2",
+    "mysql2": "3.11.3",
     "ts-mysql-parser": "0.2.0",
     "typeorm": "0.3.20"
   },
