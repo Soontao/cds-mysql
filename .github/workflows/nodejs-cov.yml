@@ -47,4 +47,4 @@ jobs:
           CDS_REQUIRES_DB_CREDENTIALS_PASSWORD: cds_admin
 
       - name: upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
