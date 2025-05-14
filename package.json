@@ -40,7 +40,7 @@
     "luxon": "3.6.1",
     "mysql2": "3.14.1",
     "ts-mysql-parser": "0.2.0",
-    "typeorm": "0.3.23"
+    "typeorm": "0.3.24"
   },
   "devDependencies": {
     "@types/generic-pool": "3.8.3",
