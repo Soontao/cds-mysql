@@ -53,7 +53,7 @@
     "benchmark": "2.1.4",
     "eslint": "9.29.0",
     "jest": "29.7.0",
-    "ts-jest": "29.3.4",
+    "ts-jest": "29.4.0",
     "ts-node": "10.9.2",
     "typescript": "5.8.3"
   },
