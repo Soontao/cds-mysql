@@ -37,7 +37,7 @@
     "colors": "1.4.0",
     "generic-pool": "3.9.0",
     "glob": "11.0.3",
-    "luxon": "3.6.1",
+    "luxon": "3.7.1",
     "mysql2": "3.14.1",
     "ts-mysql-parser": "0.2.0",
     "typeorm": "0.3.25"
